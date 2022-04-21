@@ -1,0 +1,24 @@
+import { MikroOrmModuleOptions as Options } from '@mikro-orm/nestjs';
+import { LoadStrategy } from '@mikro-orm/core';
+import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
+
+const config: Options = {
+  type: 'mysql',
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: '',
+  dbName: 'telemeddb',
+  entities: ['dist/**/*.entity.js'],
+  entitiesTs: ['src/**/*.entity.ts'],
+  metadataProvider: TsMorphMetadataProvider,
+  debug: true,
+  loadStrategy: LoadStrategy.JOINED,
+  registerRequestContext: false,
+  migrations: {
+    path: 'dist/migrations',
+    pathTs: 'src/migrations',
+  },
+};
+
+export default config;
