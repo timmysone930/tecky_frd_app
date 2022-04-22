@@ -1,19 +1,17 @@
 import React from 'react'
-import { View, SafeAreaView, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
 import { DrListCard } from '../components/doctor/DrListCard';
 import { InfoCardComponent } from '../components/doctor/InfoCardComponent';
 import { Button } from 'react-native-paper';
 // Need to be removed; only for testing
 import { FakeDrDATA } from './DrListPage';
-
-const windowHeight = Dimensions.get('window').height;
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const DrInfo: React.FC = (props: any) => {
-    // To get the FlatList data id
+    // To get the param passing from the previous screen
     const { id } = props.route.params;
     // Need to be removed; only for testing(will be replaced by fetch)
     let userData: any = {}
-    // const id = '1'
     FakeDrDATA.map((item) => {
         if (item['id'] === id) {
             userData = item
@@ -32,13 +30,14 @@ export const DrInfo: React.FC = (props: any) => {
                 </View>
                 <InfoCardComponent title={'醫療服務包括'} array={userData.service} />
                 <InfoCardComponent title={'專業資格'} array={userData.qualifications} />
-            </ScrollView>
-            <View>
-                <Button mode="contained" color='#325C80' onPress={() => props.navigation.navigate('預約')} style={styles.button} disabled={userData.roster ? false : true}>
-                    線上視像諮詢
+                <Button mode="contained" color='#325C80' onPress={() => props.navigation.navigate({
+                    name: '預約醫生',
+                    params: { id:id },
+                })} style={styles.button} disabled={userData.roster ? false : true}> 
+                線上視像諮詢
                 </Button>
-            </View>
-        </SafeAreaView>
+            </ScrollView>
+        </SafeAreaView >
     )
 }
 

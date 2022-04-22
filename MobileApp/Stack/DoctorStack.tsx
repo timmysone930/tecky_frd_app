@@ -22,7 +22,7 @@ export const InnerDoctorStacks = () => {
     return (
         <InnerDoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} initialRouteName="醫生詳情">
             <InnerDoctorStack.Screen name="醫生詳情" component={DrInfo} />
-            <InnerDoctorStack.Screen name="預約" component={ReservationPage} />
+            <InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} />
         </InnerDoctorStack.Navigator>
     )
 }

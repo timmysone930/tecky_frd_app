@@ -16,9 +16,13 @@ export const FakeDrDATA = [
         gender: '男',
         type: '中醫',
         pic: require(`../images/profilePic/test-01.jpg`),
-        service:['超聲波掃描', '電腦掃描', 'X 光檢查'],
-        qualifications:['專業證書課程', '特許公認會計師','證券及期貨從業員資格','專業證書課程', '特許公認會計師','證券及期貨從業員資格'],
-        roster:true,
+        service: ['超聲波掃描', '電腦掃描', 'X 光檢查'],
+        qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格', '專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
+        roster: true,
+        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 2, date: '2022-05-05', time: ['13:00 - 13:30', '14:30 - 15:00', '16:00 - 16:30'] },
+        { id: 3, date: '2022-05-07', time: ['09:00 - 10:30', '12:30 - 14:00', '17:00 - 17:30'] },
+        ],
     },
     {
         id: '2',
@@ -27,9 +31,13 @@ export const FakeDrDATA = [
         gender: '女',
         type: '西醫',
         pic: require(`../images/profilePic/test-02.jpg`),
-        service:['超聲波掃描', '電腦掃描 (Computed Tomography，簡稱CT) 是利用X 光穿透人體後', 'X 光檢查'],
-        qualifications:['專業證書課程', '特許公認會計師'],
-        roster:false,
+        service: ['超聲波掃描', '電腦掃描 (Computed Tomography，簡稱CT) 是利用X 光穿透人體後', 'X 光檢查'],
+        qualifications: ['專業證書課程', '特許公認會計師'],
+        roster: false,
+        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 2, date: '2022-05-15', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 3, date: '2022-05-17', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        ],
     },
     {
         id: '3',
@@ -38,9 +46,13 @@ export const FakeDrDATA = [
         gender: '男',
         type: '心臟科',
         pic: '',
-        service:['超聲波掃描', 'X 光檢查'],
-        qualifications:['專業證書課程'],
-        roster:true,
+        service: ['超聲波掃描', 'X 光檢查'],
+        qualifications: ['專業證書課程'],
+        roster: true,        
+        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        ],
     },
     {
         id: '4',
@@ -49,9 +61,13 @@ export const FakeDrDATA = [
         gender: '男',
         type: '物理治療',
         pic: require(`../images/profilePic/test-02.jpg`),
-        service:['超聲波掃描'],
-        qualifications:['專業證書課程', '特許公認會計師','證券及期貨從業員資格'],
-        roster:true,
+        service: ['超聲波掃描'],
+        qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
+        roster: true,
+        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        ],
     },
     {
         id: '5',
@@ -60,9 +76,13 @@ export const FakeDrDATA = [
         gender: '女',
         type: '耳鼻喉科',
         pic: require(`../images/profilePic/test-01.jpg`),
-        service:['超聲波掃描', 'X 光檢查'],
-        qualifications:['專業證書課程', '特許公認會計師','證券及期貨從業員資格'],
-        roster:true,
+        service: ['超聲波掃描', 'X 光檢查'],
+        qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
+        roster: true,
+        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        ],
     },
     {
         id: '6',
@@ -71,9 +91,13 @@ export const FakeDrDATA = [
         gender: '女',
         type: '精神及心理治療',
         pic: require(`../images/profilePic/test-01.jpg`),
-        service:['超聲波掃描', 'X 光檢查'],
-        qualifications:['專業證書課程', '特許公認會計師','證券及期貨從業員資格'],
-        roster:true,
+        service: ['超聲波掃描', 'X 光檢查'],
+        qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
+        roster: true,
+        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+        ],
     },
 
 ];
@@ -81,10 +105,12 @@ export const FakeDrDATA = [
 
 // html and style for FlatList
 const Item = (props: any) => (
-    <TouchableOpacity style={styles.drListCard} onPress={() => { props.navigate.navigation.navigate('醫生相關', {
-        screen: '醫生詳情',
-        params: { id:props.id },
-      }) }}>
+    <TouchableOpacity style={styles.drListCard} onPress={() => {
+        props.navigate.navigation.navigate('醫生相關', {
+            screen: '醫生詳情',
+            params: { id: props.id },
+        })
+    }}>
         <DrListCard props={props} />
     </TouchableOpacity>
 );
@@ -105,7 +131,7 @@ export const DrList: React.FC = (prop: any) => {
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-            <SearchComponent  placeholder={"搜索醫生，科目，疾病"}/>
+            <SearchComponent placeholder={"搜索醫生，科目，疾病"} />
             <View style={[backgroundStyle, { flex: 1 }]}>
                 <FlatList
                     data={FakeDrDATA}
