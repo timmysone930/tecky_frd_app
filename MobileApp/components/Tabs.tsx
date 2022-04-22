@@ -1,29 +1,16 @@
 import React from 'react'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-
-// pages && components
-import { Home } from '../pages/Home';
-import { Doctor } from '../pages/Doctor';
-import { DrList } from '../pages/DrList';
-import { DrInfo } from '../pages/DrInfo';
 
 import {
   Image
 } from 'react-native';
 
+// pages && components
+import { Home } from '../pages/Home';
+import { Doctor } from '../pages/DoctorPage';
+import { DoctorStacks } from '../Stack/DoctorStack';
 
-const DoctorStack = createStackNavigator();
-
-const DoctorStacks = () => {
-  return (
-    <DoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} >
-      <DoctorStack.Screen name="搜尋醫生" component={Doctor} options={{ headerShown: true }} />
-      <DoctorStack.Screen name="醫生列表" component={DrList} />
-    </DoctorStack.Navigator>
-  )
-}
 
 
 // Bottom Tabs

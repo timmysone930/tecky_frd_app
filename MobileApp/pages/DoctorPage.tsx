@@ -8,6 +8,7 @@ import {
 import { DrTypeCard } from '../components/doctor/DrTypeCard';
 
 export const Doctor = (props:any) => {
+    // Set background to white
     const backgroundStyle = {
         backgroundColor:'white',
     };
