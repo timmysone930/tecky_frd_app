@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, Button, Alert,TouchableOpacity } from 'react-native'
-import { DrListCard } from '../components/doctor/DrListCard';
+import { DrListCard } from '../../components/doctor/DrListCard';
 import { useForm, Controller } from "react-hook-form";
-import { PickerComponent } from '../components/PickerComponent';
+import { PickerComponent } from '../../components/PickerComponent';
 
 // Need to be removed; only for testing
 import { FakeDrDATA } from './DrListPage';

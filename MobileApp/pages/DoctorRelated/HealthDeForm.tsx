@@ -1,12 +1,13 @@
 import React from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-import { DatePickerComponent } from '../components/PickerComponent';
 import { RadioButton } from 'react-native-paper';
-import { BottomLineComponent } from '../components/SearchComponent';
-import { MultiCheckBoxComponent } from '../components/MultiCheckBoxComponent';
+import { BottomLineComponent } from '../../components/SearchComponent';
+import { DatePickerComponent } from '../../components/PickerComponent';
+import { MultiCheckBoxComponent } from '../../components/MultiCheckBoxComponent';
 
-export const PolicyPage: React.FC = (props: any) => {
+
+export const HealthDeForm: React.FC = (props: any) => {
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
@@ -45,8 +46,8 @@ export const PolicyPage: React.FC = (props: any) => {
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
                 <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
-                    onPress={() => props.navigation.navigate({ name: '健康申報表' })}>
-                    <Text style={styles.buttonText}>我已了解</Text></TouchableOpacity>
+                    onPress={() => props.navigation.navigate({ name: '服務條款' })}>
+                    <Text style={styles.buttonText}>下一步</Text></TouchableOpacity>
             </View>
         </SafeAreaView>
     )

@@ -2,12 +2,12 @@ import React from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { Doctor } from '../pages/DoctorPage';
-import { DrList } from '../pages/DrListPage';
-import { DrInfo } from '../pages/DrInfoPage';
-import { ReservationPage } from '../pages/ReservationPage';
-import { ReserveIDCardPage } from '../pages/ReserveIDCardPage';
-import { HealthDeForm } from '../pages/HealthDeForm';
-import { PolicyPage } from '../pages/PolicyPage';
+import { ReservationPage } from '../pages/DoctorRelated/ReservationPage';
+import { ReserveIDCardPage } from '../pages/DoctorRelated/ReserveIDCardPage';
+import { PolicyPage } from '../pages/DoctorRelated/PolicyPage';
+import { DrList } from '../pages/DoctorRelated/DrListPage';
+import { DrInfo } from '../pages/DoctorRelated/DrInfoPage';
+import { HealthDeForm } from '../pages/DoctorRelated/HealthDeForm';
 
 const DoctorStack = createStackNavigator();
 

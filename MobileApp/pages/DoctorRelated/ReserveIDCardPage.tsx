@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, Image, Button, Modal, TouchableWithoutFeedback } from 'react-native'
 // react-native-image-picker
-import { CameraModalComponent } from '../components/ModalComponent';
+import { CameraModalComponent } from '../../components/ModalComponent';
 
 
 
@@ -28,7 +28,7 @@ export const ReserveIDCardPage: React.FC = (props: any) => {
                     <Text style={styles.subTitle}>請上傳你的身份證照片正面</Text>
                     {/* Modal for camera */}
                     <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.uploadBtn}>
-                        <Image source={require('../images/btn_IDCard.jpg')} style={{ width: 380, height: 200 }} resizeMode="contain" resizeMethod="scale" />
+                        <Image source={require('../../images/btn_IDCard.jpg')} style={{ width: 380, height: 200 }} resizeMode="contain" resizeMethod="scale" />
                         {/* <Text style={styles.uploadBtnText}>上傳照片</Text> */}
                     </TouchableOpacity>
                     <CameraModalComponent modalVisible={modalVisible} setModalVisible={onSetModalVisible} setResponse={onSetResponse} />
