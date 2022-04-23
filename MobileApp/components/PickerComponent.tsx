@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
-import { Alert, Button, StyleSheet, Text, Modal, View, TouchableWithoutFeedback } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Alert, Button, StyleSheet, Text, Modal, View, TouchableWithoutFeedback, TouchableOpacity, TouchableHighlight } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 // normal picker
 import { Picker } from '@react-native-picker/picker';
 // Modal picker
 import ModalSelector from 'react-native-modal-selector'
-import { useForm } from "react-hook-form";
 // Date
 export const DatePickerComponent = () => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -146,7 +144,7 @@ export const PickerComponent = (props: any) => {
                                     {pickerFunction}
                                 </Picker>
                                 {/* Submit the picker */}
-                                <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={styles.modalButton}>
+                                <TouchableOpacity onPressOut={() => setModalVisible(!modalVisible)} style={styles.modalButton}>
                                     <Text style={styles.textStyle}>Submit</Text>
                                 </TouchableOpacity>
                             </View>

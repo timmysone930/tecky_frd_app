@@ -23,7 +23,7 @@ export const ReservationPage = (props: any) => {
     setSelectTimeValue('請選擇應診時間');
     setValue("reservedDate", itemValue)
   };
-// Time value change function
+  // Time value change function
   const onTimeValueChange = (itemValue: any, itemIndex: any) => {
     setSelectTimeValue(itemValue);
     setValue("reservedTime", itemValue)
@@ -65,6 +65,10 @@ export const ReservationPage = (props: any) => {
             )}
             name="reservedTime"
           />
+          <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop:5, marginBottom:10, }}>
+            <Text style={styles.subTitle}>問診費用： $100.00</Text>
+            <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
+          </View>
 
           <Text style={styles.subTitle}>應診者姓名</Text>
           <Controller control={control} rules={{ required: true, }}
@@ -116,6 +120,14 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '600',
     marginTop: 5,
+  },
+  infoText: {
+    color: '#C32D3A',
+    fontSize: 12,
+    fontWeight: '400',
+    marginTop: 5,
+    marginBottom: 15,
   }
+
 
 });

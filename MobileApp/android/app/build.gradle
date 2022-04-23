@@ -289,8 +289,6 @@ dependencies {
     } else {
         implementation jscFlavor
     }
-    // react-native-datetimepicker
-    implementation project(':@react-native-community_datetimepicker')
 }
 
 if (isNewArchitectureEnabled()) {
