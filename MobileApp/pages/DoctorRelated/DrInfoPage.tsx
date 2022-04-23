@@ -1,11 +1,10 @@
 import React from 'react'
-import { View, SafeAreaView, ScrollView, StyleSheet } from 'react-native';
-import { DrListCard } from '../components/doctor/DrListCard';
-import { InfoCardComponent } from '../components/doctor/InfoCardComponent';
+import { View, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
+import { DrListCard } from '../../components/doctor/DrListCard';
+import { InfoCardComponent } from '../../components/doctor/InfoCardComponent';
 // Need to be removed; only for testing
 import { FakeDrDATA } from './DrListPage';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const DrInfo: React.FC = (props: any) => {
     // To get the param passing from the previous screen

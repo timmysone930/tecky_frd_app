@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, Button, Alert } from 'react-native'
-import { DrListCard } from '../components/doctor/DrListCard';
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, Button, Alert,TouchableOpacity } from 'react-native'
+import { DrListCard } from '../../components/doctor/DrListCard';
 import { useForm, Controller } from "react-hook-form";
-import { OnlyPickerComponent, PickerComponent, TimePickerComponent } from '../components/PickerComponent';
+import { PickerComponent } from '../../components/PickerComponent';
 
 // Need to be removed; only for testing
 import { FakeDrDATA } from './DrListPage';
@@ -10,7 +10,7 @@ import { FakeDrDATA } from './DrListPage';
 export const ReservationPage = (props: any) => {
   // Form element
   const { control, handleSubmit, formState: { errors }, setValue } = useForm({
-    defaultValues: { Name: '', reservedDate: '', reservedTime: '' }
+    defaultValues: { name: '', reservedDate: '', reservedTime: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '' }
   });
   const onSubmit = (data: any) => Alert.alert(JSON.stringify(data));
   // Date Selector
@@ -27,6 +27,16 @@ export const ReservationPage = (props: any) => {
   const onTimeValueChange = (itemValue: any, itemIndex: any) => {
     setSelectTimeValue(itemValue);
     setValue("reservedTime", itemValue)
+  };
+
+  // 身份證明文件
+  const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
+  // id selector
+  const [selectIDValue, setSelectIDValue] = useState('香港身份證');
+  // id value change function
+  const onIDValueChange = (itemValue: any, itemIndex: any) => {
+    setSelectIDValue(itemValue);
+    setValue("idType", itemValue)
   };
 
   // To get the param passing from the previous screen
@@ -65,7 +75,7 @@ export const ReservationPage = (props: any) => {
             )}
             name="reservedTime"
           />
-          <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop:5, marginBottom:10, }}>
+          <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop: 5, marginBottom: 10, }}>
             <Text style={styles.subTitle}>問診費用： $100.00</Text>
             <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
           </View>
@@ -75,14 +85,54 @@ export const ReservationPage = (props: any) => {
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
             )}
-            name="Name"
+            name="name"
           />
           {/* 必須填寫提示 */}
-          {errors.Name && <Text style={styles.warning}>* 此項必須填寫</Text>}
+          {errors.name && <Text style={styles.warning}>* 此項必須填寫</Text>}
+          <Text style={styles.subTitle}>身份證明文件</Text>
+          <Controller control={control}
+            render={({ field: { value } }) => (
+              <PickerComponent data={idTypeArr} mode='id' onChange={onIDValueChange} selectedValue={selectIDValue}
+                dateValue={selectedValue} placeholder={'請選擇身份證明文件'} />
+            )}
+            name="idType"
+          />
+          <Controller control={control} rules={{ required: true, }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="身份證明文件號碼" placeholderTextColor="#737474" />
+            )}
+            name="idNumber"
+          />
+          {/* 必須填寫提示 */}
+          {errors.idNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
+          <Text style={styles.subTitle}>緊急聯絡人</Text>
+          <Controller control={control} rules={{ required: true, }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人姓名" placeholderTextColor="#737474" />
+            )}
+            name="EmergencyContactName"
+          />
+          {/* 必須填寫提示 */}
+          {errors.EmergencyContactName && <Text style={styles.warning}>* 此項必須填寫</Text>}
+          <Controller control={control} rules={{ required: true, }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話" placeholderTextColor="#737474" />
+            )}
+            name="EmergencyContactPhone"
+          />
+          {/* 必須填寫提示 */}
+          {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
           <Button title='Submit' onPress={handleSubmit(onSubmit)} />
-
         </View>
       </ScrollView>
+      {/* Button to go back and next page */}
+      <View style={{flexDirection:'row'}}>
+            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({name: '主頁'})}>
+              <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
+            <TouchableOpacity style={[styles.button,{backgroundColor:'#325C80'}]} 
+            onPress={() => props.navigation.navigate({name: '上傳身份證明文件'})}>
+            <Text style={styles.buttonText}>下一步</Text></TouchableOpacity>
+      </View>
     </SafeAreaView >
   )
 }
@@ -119,7 +169,7 @@ const styles = StyleSheet.create({
     color: '#225D66',
     fontSize: 17,
     fontWeight: '600',
-    marginTop: 5,
+    marginTop: 8,
   },
   infoText: {
     color: '#C32D3A',
@@ -127,7 +177,16 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: 5,
     marginBottom: 15,
+  },
+  button:{
+    width:'50%',
+    backgroundColor:'#6d7f99',
+    paddingVertical:16,
+  },
+  buttonText:{
+    color:'white',
+    textAlign:'center',
+    fontSize:16,
   }
-
 
 });

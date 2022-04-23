@@ -1,8 +1,9 @@
 import React from 'react'
+import { StyleSheet, View } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 
 // Search Component
-export const SearchComponent = (props:any) => {
+export const SearchComponent = (props: any) => {
     const [searchQuery, setSearchQuery] = React.useState('');
     const onChangeSearch = (query: any) => setSearchQuery(query);
 
@@ -17,3 +18,15 @@ export const SearchComponent = (props:any) => {
         />
     );
 };
+
+// Bottom Line Component
+export const BottomLineComponent = () => (
+    <View style={styles.bottomLine} />)
+
+const styles = StyleSheet.create({
+    bottomLine: {
+        borderBottomColor: '#B5B5B5',
+        borderBottomWidth: 0.8,
+        marginBottom: 20,
+    }
+});

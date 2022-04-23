@@ -1,12 +1,12 @@
 import React from 'react'
 
 import {
-    View, Text, SafeAreaView, FlatList, StyleSheet, Image
+    View, Text, SafeAreaView, FlatList, StyleSheet, Image,TouchableOpacity
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 // Component
-import { DrListCard } from '../components/doctor/DrListCard';
-import { SearchComponent } from '../components/SearchComponent';
+import { DrListCard } from '../../components/doctor/DrListCard';
+import { SearchComponent } from '../../components/SearchComponent';
+
 // Need to be removed; only for testing
 export const FakeDrDATA = [
     {
@@ -15,7 +15,7 @@ export const FakeDrDATA = [
         address: 'Room 11, ABC centre, Kowloon Bay, Kowloon, Hong Kong, ...',
         gender: '男',
         type: '中醫',
-        pic: require(`../images/profilePic/test-01.jpg`),
+        pic: require(`../../images/profilePic/test-01.jpg`),
         service: ['超聲波掃描', '電腦掃描', 'X 光檢查'],
         qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格', '專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
         roster: true,
@@ -30,7 +30,7 @@ export const FakeDrDATA = [
         address: '2715-16, 27/F, ONE MIDTOWN11 Hoi Shing Rd, Tsuen Wan',
         gender: '女',
         type: '西醫',
-        pic: require(`../images/profilePic/test-02.jpg`),
+        pic: require(`../../images/profilePic/test-02.jpg`),
         service: ['超聲波掃描', '電腦掃描 (Computed Tomography，簡稱CT) 是利用X 光穿透人體後', 'X 光檢查'],
         qualifications: ['專業證書課程', '特許公認會計師'],
         roster: false,
@@ -60,7 +60,7 @@ export const FakeDrDATA = [
         address: 'Room 11, ABC centre, Kowloon Bay,Kowloon',
         gender: '男',
         type: '物理治療',
-        pic: require(`../images/profilePic/test-02.jpg`),
+        pic: require(`../../images/profilePic/test-02.jpg`),
         service: ['超聲波掃描'],
         qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
         roster: true,
@@ -75,7 +75,7 @@ export const FakeDrDATA = [
         address: 'Room 11, ABC centre, Kowloon Bay,Kowloon',
         gender: '女',
         type: '耳鼻喉科',
-        pic: require(`../images/profilePic/test-01.jpg`),
+        pic: require(`../../images/profilePic/test-01.jpg`),
         service: ['超聲波掃描', 'X 光檢查'],
         qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
         roster: true,
@@ -90,7 +90,7 @@ export const FakeDrDATA = [
         address: 'Room 11, ABC centre, Kowloon Bay,Kowloon',
         gender: '女',
         type: '精神及心理治療',
-        pic: require(`../images/profilePic/test-01.jpg`),
+        pic: require(`../../images/profilePic/test-01.jpg`),
         service: ['超聲波掃描', 'X 光檢查'],
         qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
         roster: true,
