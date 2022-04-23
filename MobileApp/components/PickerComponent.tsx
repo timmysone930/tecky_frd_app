@@ -19,7 +19,6 @@ export const DatePickerComponent = () => {
     };
 
     const handleConfirm = (date: any) => {
-        console.warn("A date has been picked: ", date);
         console.log(date.toLocaleString())
         const selectedDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
         setDateTitle(selectedDate)
@@ -115,6 +114,9 @@ export const PickerComponent = (props: any) => {
         }else{
             pickerPlaceholder =<Picker.Item label={`請先選擇應診日期`} value="請先選擇應診日期" />
         }
+    }else if(props.mode === 'id'){
+        pickerFunction = data.map((item: any, idx: Number) => (<Picker.Item label={`${item}`} value={`${item}`} key={`picker_date_${idx}`} />))
+
     }
 
     return (
@@ -187,7 +189,7 @@ const styles = StyleSheet.create({
         borderColor: '#737474',
         padding: 10,
         borderWidth: 0.7,
-        marginVertical: 8,
+        marginVertical: 12,
     },
     picker: {
         marginVertical: 8,

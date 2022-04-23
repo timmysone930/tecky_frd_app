@@ -1,9 +1,9 @@
 import React from 'react'
 
 import {
-    View, Text, SafeAreaView, FlatList, StyleSheet, Image
+    View, Text, SafeAreaView, FlatList, StyleSheet, Image,TouchableOpacity
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 // Component
 import { DrListCard } from '../components/doctor/DrListCard';
 import { SearchComponent } from '../components/SearchComponent';
