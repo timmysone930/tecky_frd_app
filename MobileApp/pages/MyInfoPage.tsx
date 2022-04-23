@@ -5,7 +5,7 @@ import {
     ScrollView,
 } from 'react-native';
 
-export const MyInfoPage = (props:any) => {
+export const MyInfoPage = ({navigation}:any) => {
 
     const listItems = ["帳戶資料", "預約記錄", "藥單記錄", "送藥地址"] ;
     // Set background to white
@@ -17,7 +17,7 @@ export const MyInfoPage = (props:any) => {
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
                 {/* List component */}
                 {listItems.map((item, key) => (
-                    <TouchableHighlight underlayColor={"rgba(0, 0, 0, 0.4)"} key={key} onPress={() => props.navigation.navigate(item)}>
+                    <TouchableHighlight underlayColor={"rgba(0, 0, 0, 0.4)"} key={key} onPress={() => navigation.navigate(item)}>
                         <View style={[styles.MyInfoButton]}>
                             <Text style={[styles.TextStyle]}>{item}</Text>
                         </View>
