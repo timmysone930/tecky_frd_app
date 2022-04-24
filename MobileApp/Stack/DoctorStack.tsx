@@ -8,6 +8,7 @@ import { PolicyPage } from '../pages/DoctorRelated/PolicyPage';
 import { DrList } from '../pages/DoctorRelated/DrListPage';
 import { DrInfo } from '../pages/DoctorRelated/DrInfoPage';
 import { HealthDeForm } from '../pages/DoctorRelated/HealthDeForm';
+import { ConfirmResPage } from '../pages/DoctorRelated/ConfirmResPage';
 
 const DoctorStack = createStackNavigator();
 
@@ -28,7 +29,8 @@ export const InnerDoctorStacks = () => {
             <InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} />
             <InnerDoctorStack.Screen name="上傳身份證明文件" component={ReserveIDCardPage} />
             <InnerDoctorStack.Screen name="健康申報表" component={HealthDeForm} />
-            <InnerDoctorStack.Screen name="服務條款" component={PolicyPage} />
+            <InnerDoctorStack.Screen name="預約須知" component={PolicyPage} />
+            <InnerDoctorStack.Screen name="確認預約資料" component={ConfirmResPage} />
         </InnerDoctorStack.Navigator>
     )
 }

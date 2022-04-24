@@ -1,18 +1,25 @@
 import React, { useState } from 'react'
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, Button, Alert,TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { useForm, Controller } from "react-hook-form";
 import { PickerComponent } from '../../components/PickerComponent';
+import { useSelector } from 'react-redux';
+import { store } from '../../redux/store';
+import { setFormData} from '../../redux/slice';
 
 // Need to be removed; only for testing
 import { FakeDrDATA } from './DrListPage';
 
 export const ReservationPage = (props: any) => {
   // Form element
-  const { control, handleSubmit, formState: { errors }, setValue } = useForm({
+  const { control, handleSubmit, formState: { errors }, setValue} = useForm({
     defaultValues: { name: '', reservedDate: '', reservedTime: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '' }
   });
-  const onSubmit = (data: any) => Alert.alert(JSON.stringify(data));
+  // Form data submit and navigate
+  const onSubmit = (data: any) => {
+    props.navigation.navigate({ name: '上傳身份證明文件' })
+    store.dispatch(setFormData(data))
+  }
   // Date Selector
   const [selectedValue, setSelectedValue] = useState('請選擇應診日期');
   // Time Selector
@@ -39,8 +46,8 @@ export const ReservationPage = (props: any) => {
     setValue("idType", itemValue)
   };
 
-  // To get the param passing from the previous screen
-  const { id } = props.route.params;
+  // selected doctor id
+  const id = useSelector((state: any) => state.setDoctorID.id);
   // Need to be removed; only for testing(will be replaced by fetch)
   let userData: any = {}
   FakeDrDATA.map((item) => {
@@ -59,22 +66,27 @@ export const ReservationPage = (props: any) => {
         {/* Booking */}
         <View style={styles.pageMargin}>
           <Text style={styles.subTitle}>應診日期</Text>
-          <Controller control={control}
+          <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
               <PickerComponent data={userData.availableDate} mode='date' onChange={onValueChange} selectedValue={selectedValue}
                 dateValue={selectedValue} placeholder={'請選擇應診日期'} />
             )}
             name="reservedDate"
           />
+          {/* 必須填寫提示 */}
+          {errors.reservedDate && <Text style={styles.warning}>* 此項必須選擇</Text>}
 
           <Text style={styles.subTitle}>應診時間</Text>
-          <Controller control={control}
+          <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
               <PickerComponent data={userData.availableDate} mode='time' onChange={onTimeValueChange} selectedValue={selectTimeValue}
                 dateValue={selectedValue} placeholder={'請選擇應診時間'} />
             )}
             name="reservedTime"
           />
+          {/* 必須填寫提示 */}
+          {errors.reservedTime && <Text style={styles.warning}>* 此項必須選擇</Text>}
+
           <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop: 5, marginBottom: 10, }}>
             <Text style={styles.subTitle}>問診費用： $100.00</Text>
             <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
@@ -122,16 +134,17 @@ export const ReservationPage = (props: any) => {
           />
           {/* 必須填寫提示 */}
           {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
-          <Button title='Submit' onPress={handleSubmit(onSubmit)} />
         </View>
       </ScrollView>
       {/* Button to go back and next page */}
-      <View style={{flexDirection:'row'}}>
-            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({name: '主頁'})}>
-              <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
-            <TouchableOpacity style={[styles.button,{backgroundColor:'#325C80'}]} 
-            onPress={() => props.navigation.navigate({name: '上傳身份證明文件'})}>
-            <Text style={styles.buttonText}>下一步</Text></TouchableOpacity>
+      <View style={{ flexDirection: 'row' }}>
+        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
+          <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
+        <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
+          // onPress={() => props.navigation.navigate({ name: '上傳身份證明文件' })}
+          onPress={handleSubmit(onSubmit)}
+        >
+          <Text style={styles.buttonText}>下一步</Text></TouchableOpacity>
       </View>
     </SafeAreaView >
   )
@@ -178,15 +191,15 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 15,
   },
-  button:{
-    width:'50%',
-    backgroundColor:'#6d7f99',
-    paddingVertical:16,
+  button: {
+    width: '50%',
+    backgroundColor: '#6d7f99',
+    paddingVertical: 16,
   },
-  buttonText:{
-    color:'white',
-    textAlign:'center',
-    fontSize:16,
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 16,
   }
 
 });

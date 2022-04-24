@@ -3,8 +3,6 @@ import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, Ima
 // react-native-image-picker
 import { CameraModalComponent } from '../../components/ModalComponent';
 
-
-
 export const ReserveIDCardPage: React.FC = (props: any) => {
     // white background
     const backgroundStyle = {

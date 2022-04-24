@@ -6,9 +6,9 @@ import { Picker } from '@react-native-picker/picker';
 // Modal picker
 import ModalSelector from 'react-native-modal-selector'
 // Date
-export const DatePickerComponent = () => {
+export const DatePickerComponent = (props:any) => {
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [DateTitle, setDateTitle] = useState('選擇日期');
+    // const [DateTitle, setDateTitle] = useState('選擇日期');
 
     const showDatePicker = () => {
         setDatePickerVisibility(true);
@@ -19,14 +19,14 @@ export const DatePickerComponent = () => {
     };
 
     const handleConfirm = (date: any) => {
-        console.log(date.toLocaleString())
         const selectedDate = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
-        setDateTitle(selectedDate)
+        props.setDateTitle(selectedDate)
+        // setDateTitle(selectedDate)
         hideDatePicker();
     };
     return (
         <View>
-            <TouchableOpacity style={styles.input} onPress={showDatePicker} ><Text>{DateTitle}</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.input} onPress={showDatePicker} ><Text>{props.DateTitle}</Text></TouchableOpacity>
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"
@@ -172,9 +172,6 @@ export const OnlyPickerComponent = (props: any) => {
             selectedValue={props.selectedValue}
             mode={'dropdown'}
             style={styles.picker}
-            // onValueChange={(itemValue, itemIndex) =>
-            //     setSelectedValue(itemValue)
-            // }
             onValueChange={props.onChange}
         >
             <Picker.Item label={`${props.placeholder}`} value="Unknown" />
