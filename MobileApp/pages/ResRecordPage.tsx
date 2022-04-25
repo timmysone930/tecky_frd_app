@@ -35,7 +35,7 @@ export const ResRecordPage = (props: any) => {
     };
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-            <ReservationRecord data={FakeData} changePage={() => { props.navigation.navigate("主頁") }} />
+            <ReservationRecord data={FakeData} changePage={() => { props.navigation.navigate("預約詳情界面") }} />
         </SafeAreaView>
     )
 }

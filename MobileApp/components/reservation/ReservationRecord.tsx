@@ -56,14 +56,4 @@ const styles = StyleSheet.create({
     color:'#626262',
     marginBottom:5,
   },
-  orderStatus: {
-    height: 40, 
-    width: 80,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  orderStatusFont: {
-    color: "#fff",
-    fontSize: 20
-  },
 })
