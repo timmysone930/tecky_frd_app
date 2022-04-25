@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
     viewContainer: {
-      padding: 20
+      padding: 20,
     },
     box: {
       flexDirection: "row",
@@ -60,5 +60,29 @@ export const styles = StyleSheet.create({
       paddingVertical: 10,
       marginVertical: 20,
       marginHorizontal: 90,
-    }
+    },
+
+    JCCenter: {
+      justifyContent: "center"
+    },
+
+    AICenter: {
+      alignItems: "center"
+    },
+
+    flexRow: {
+      flexDirection: "row"
+    },
+
+    textCenter: {
+      textAlign: "center"
+    },
+
+    mb_10: {
+      marginBottom: 10
+    },
+
+    mt_10: {
+      marginTop: 10
+    },
   })

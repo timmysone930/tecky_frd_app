@@ -1,7 +1,7 @@
 import React from 'react'
 import { FlatList, View, Text, TouchableOpacity } from 'react-native';
 import { DisplayOrderStatus } from "./DisplayOrderStatus"
-import { styles } from "../../pages/PrescriptionRecords/css/prescriptionPageCSS"
+import { styles } from "../../pages/PrescriptionRecords/styles/prescriptionPageStyles"
 
 interface Props {
   data: Array<{
