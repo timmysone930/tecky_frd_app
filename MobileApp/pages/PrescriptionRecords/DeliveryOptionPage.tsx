@@ -116,7 +116,7 @@ const DisplayDeliveryOption = (props:any) => {
             </Text>
             <Button mode="contained" color='#325C80' onPress={()=> console.log({deliveryOption, pickUpClinic})} disabled={false}> 
                 <Text>
-                    前往付款
+                    確定及付款
                 </Text>
             </Button>
         </View>
