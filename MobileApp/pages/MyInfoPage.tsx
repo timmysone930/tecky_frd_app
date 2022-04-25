@@ -39,6 +39,6 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     TextStyle: {
-        fontSize: 25
+        fontSize: 23
     }
 })

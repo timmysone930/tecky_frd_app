@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import {
-  View, ScrollView, Text, SafeAreaView, FlatList, StyleSheet, Image, Button, Touchable
+  View, ScrollView, Text, SafeAreaView, FlatList, StyleSheet, Image, Touchable
 } from 'react-native';
+import { Button } from 'react-native-paper';
 
 const FakeData = {
     pres_code: "RM220319001",
@@ -31,10 +32,10 @@ const FakeData = {
     contact_number: "1234 5678"
 }
 
-import { styles } from './styles/prescriptionPageStyles';
+// import { styles } from './styles/prescriptionPageStyles';
 import { DisplayOrderStatus } from '../../components/prescription/DisplayOrderStatus';
 import { PayButton } from "../../components/prescription/PayButton"
-
+import { styles } from "../../styles/GeneralStyles"
 interface Props {
     data: any,
     changePage: () => void
@@ -53,7 +54,7 @@ function RenderDetail (props: Props) {
     return (
         <View style={[styles.viewContainer]}>
             <View style={[styles.RowCenterBetween, styles.mb_10]}>
-               <Text style={[styles.prescriptionCode]}>{props.data.pres_code}</Text>
+               <Text style={[styles.title]}>{props.data.pres_code}</Text>
                <DisplayOrderStatus orderStatus={props.data.order_status}/>
             </View>
             {
@@ -63,13 +64,17 @@ function RenderDetail (props: Props) {
                     </Text>
                 ))
             }
-            <View style={[styles.costDisplay]}>
-                <Text style={[styles.costDisplay]}>
+            <View style={[styles.costDisplay, styles.mb_10]}>
+                <Text style={[styles.costDisplay, styles.title]}>
                     藥費合共：{props.data.cost}
                 </Text>
             </View>
-            <PayButton title="前往付款" onPressFunction={props.changePage}/>
-            <Text style={[{ fontSize: 22}, styles.mb_10]}>
+            <Button mode="contained" color='#325C80' onPress={props.changePage} disabled={false}> 
+                <Text>
+                    前往付款
+                </Text>
+            </Button>
+            <Text style={[{ fontSize: 22}, styles.mb_10, styles.mt_30 , styles.title]}>
                 藥物明細：
             </Text>
             {
@@ -79,10 +84,10 @@ function RenderDetail (props: Props) {
                     </Text>
                 ))
             }
-            <Text style={[styles.contentFont, styles.textCenter, styles.mb_10, styles.mt_10]}>
+            <Text style={[styles.subTitle, styles.textCenter, styles.mt_10]}>
                 請依照指示及療程服藥。
             </Text>
-            <Text style={[styles.contentFont, styles.textCenter, styles.mb_10]}>
+            <Text style={[styles.subTitle, styles.textCenter, styles.mb_10]}>
                 如布疑問請致電 {props.data.contact_number} 查詢。 
             </Text>
         </View>

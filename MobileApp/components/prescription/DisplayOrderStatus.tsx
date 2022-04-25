@@ -1,6 +1,6 @@
 import React from "react"
 import { View, Text } from "react-native"
-import { styles } from "../../pages/PrescriptionRecords/styles/prescriptionPageStyles"
+import { styles } from "../../styles/RecordListStyle"
 
 interface Props {
     orderStatus: string
@@ -18,8 +18,8 @@ export const DisplayOrderStatus = (props: Props) => {
       <>    
         {Object.keys(statusColor).map((key)=> (
           props.orderStatus == key && 
-          <View key={key} style={[styles.orderStatus, {backgroundColor: statusColor[key]}]}>
-            <Text style={[styles.orderStatusFont]}>{key}</Text>
+          <View key={key} style={[styles.resStatus, {backgroundColor: statusColor[key]}]}>
+            <Text style={[styles.resStatusFont]}>{key}</Text>
           </View>
         ))}
       </>

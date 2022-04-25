@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View, Button } from 'react-native';
-import { styles } from './styles/prescriptionPageStyles';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { Button } from 'react-native-paper';
+import { styles } from '../../styles/GeneralStyles';
 import { RadioButton } from 'react-native-paper';
 import { Picker } from '@react-native-picker/picker';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { FakeDrDATA } from '../DoctorRelated/DrListPage';
 
 const FakeData = {
@@ -56,7 +58,7 @@ const DisplayDeliveryOption = (props:any) => {
 
     return (
         <View style={[styles.viewContainer]}>
-            <Text style={[styles.prescriptionCode, styles.mb_10]}>
+            <Text style={[styles.title, styles.mb_10]}>
                 藥單編號: {props.data.pres_code}
             </Text>
             <View>
@@ -86,9 +88,12 @@ const DisplayDeliveryOption = (props:any) => {
                             <Picker.Item label={item.district+"分店"} value={item.district} key={item.district}/>
                         ))}
                     </Picker>
-                    <Text style={[styles.mb_10]}>
-                        {pickUpClinic.addr}
-                    </Text>
+                    <View style={[styles.flexRow]}>
+                        <Icon name="map-marker" size={20} color="#325C80" />
+                        <Text style={[styles.mb_10, styles.mh_10]}>
+                            {pickUpClinic.addr}
+                        </Text>
+                    </View>
                 </View>
 
                 {/* Select Method: 上門送藥 */}
@@ -106,7 +111,14 @@ const DisplayDeliveryOption = (props:any) => {
                     <AddressForm inputData={props.addressFormData} enabled={deliveryOption === 'deliver'}/>
                 </View>
             </View>
-            <Button title="Submit" onPress={()=> console.log({deliveryOption, pickUpClinic})} />
+            <Text style={[styles.mt_10, styles.mb_10]}>
+                付款前，請詳細核對送貨地址。
+            </Text>
+            <Button mode="contained" color='#325C80' onPress={()=> console.log({deliveryOption, pickUpClinic})} disabled={false}> 
+                <Text>
+                    前往付款
+                </Text>
+            </Button>
         </View>
     )
 }
@@ -164,12 +176,13 @@ const AddressForm = (props: any) => {
     const areaSelection = areas
     return (
         <>
-            <Text style={[styles.contentFont, styles.mb_10]}>收貨聯絡人</Text>
+            <Text style={[styles.subTitle, styles.mb_10]}>收貨聯絡人</Text>
             <TextInput editable={props.enabled} label={"聯絡人"} value={input.name} onChangeText={text => setInput({...input, name: text})}/>
             <TextInput editable={props.enabled} label={"聯絡電話"} value={input.phone} onChangeText={text => setInput({...input, phone: text})}/>
-            <Text style={[styles.contentFont, styles.mb_10, styles.mt_10]}>收貨地址</Text>
+            <Text style={[styles.subTitle, styles.mb_10, styles.mt_10]}>收貨地址</Text>
         
             <Picker
+                style={[{backgroundColor:"#e7e7e7"}]}
                 enabled={props.enabled}
                 selectedValue={input.area}
                 onValueChange={(itemValue, itemIndex) =>
@@ -184,6 +197,7 @@ const AddressForm = (props: any) => {
             </Picker>
 
             <Picker
+                style={[{backgroundColor:"#e7e7e7"}]}
                 enabled={props.enabled}
                 selectedValue={input.district}
                 onValueChange={(itemValue, itemIndex) =>
@@ -222,10 +236,6 @@ const AddressForm = (props: any) => {
             <TextInput editable={props.enabled} label={"座"} value={input.addr.block} onChangeText={text => setInput({...input, addr:{block:text}})}/>
             <TextInput editable={props.enabled} label={"樓層"} value={input.addr.floor} onChangeText={text => setInput({...input, addr:{floor:text}})}/>
             <TextInput editable={props.enabled} label={"室"} value={input.addr.flat} onChangeText={text => setInput({...input, addr:{flat:text}})}/>
-
-            <Text style={[styles.mt_10, styles.mb_10]}>
-                付款前，請詳細核對送貨地址。
-            </Text>
         </>
     )
 }

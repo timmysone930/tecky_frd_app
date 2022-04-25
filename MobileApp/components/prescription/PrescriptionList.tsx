@@ -1,7 +1,7 @@
 import React from 'react'
 import { FlatList, View, Text, TouchableOpacity } from 'react-native';
 import { DisplayOrderStatus } from "./DisplayOrderStatus"
-import { styles } from "../../pages/PrescriptionRecords/styles/prescriptionPageStyles"
+import { styles } from "../../styles/RecordListStyle"
 
 interface Props {
   data: Array<{
@@ -24,8 +24,8 @@ export const PrescriptionList = (props: Props) => {
               onPress={props.changePage}
               >
                 <View>
-                  <Text style={[styles.prescriptionCode]}>{item.pres_code}</Text>
-                  <Text style={[styles.contentFont]}>醫生: {item.doctor}</Text>                   
+                  <Text style={[styles.resCode]}>{item.pres_code}</Text>
+                  <Text style={[styles.resDoctor]}>醫生: {item.doctor}</Text>                   
                   <Text style={[styles.contentFont]}>開藥日期: {item.created_at}</Text>                   
                 </View>
                 <View>
