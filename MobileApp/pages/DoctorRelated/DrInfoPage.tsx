@@ -3,6 +3,8 @@ import { View, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 're
 import { Button } from 'react-native-paper';
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { InfoCardComponent } from '../../components/doctor/InfoCardComponent';
+import { setDoctorID } from '../../redux/slice';
+import { store } from '../../redux/store';
 // Need to be removed; only for testing
 import { FakeDrDATA } from './DrListPage';
 
@@ -29,10 +31,9 @@ export const DrInfo: React.FC = (props: any) => {
                 </View>
                 <InfoCardComponent title={'醫療服務包括'} array={userData.service} />
                 <InfoCardComponent title={'專業資格'} array={userData.qualifications} />
-                <Button mode="contained" color='#325C80' onPress={() => props.navigation.navigate({
+                <Button mode="contained" color='#325C80' onPress={() => {props.navigation.navigate({
                     name: '預約醫生',
-                    params: { id:id },
-                })} style={styles.button} disabled={userData.roster ? false : true}> 
+                }), store.dispatch(setDoctorID({id:id}))}} style={styles.button} disabled={userData.roster ? false : true}> 
                 線上視像諮詢
                 </Button>
             </ScrollView>
