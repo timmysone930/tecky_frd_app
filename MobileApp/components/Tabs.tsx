@@ -8,9 +8,9 @@ import {
 
 // pages && components
 import { Home } from '../pages/Home';
-import { Doctor } from '../pages/DoctorPage';
 import { DoctorStacks } from '../Stack/DoctorStack';
 import { MyInfoStacks } from '../Stack/MyInfoStack';
+import { ResRecordStacks } from '../Stack/ResRecordStack';
 
 
 // Bottom Tabs
@@ -29,7 +29,7 @@ export const Tabs = () => {
       tabBarIcon:({color})=>(<Image style={{ tintColor:color, width:19}} resizeMode="contain" source={require("../images/icons/search.png")} />),
     }} 
       />
-      <Tab.Screen name="預約詳情" component={Doctor} options={{ tabBarLabel: '預約', tabBarIcon: ({ color }) => (<Image style={{ tintColor: color, width: 19 }} resizeMode="contain" source={require("../images/icons/calendar.png")} />) }} />
+      <Tab.Screen name="預約詳情" component={ResRecordStacks} options={{headerShown:false,tabBarLabel: '預約', tabBarIcon: ({ color }) => (<Image style={{ tintColor: color, width: 19 }} resizeMode="contain" source={require("../images/icons/calendar.png")} />) }} />
       <Tab.Screen name="我的資料" component={MyInfoStacks} options={{headerShown: false, tabBarLabel: '我的', tabBarIcon: ({ color }) => (<Image style={{ tintColor: color, width: 19 }} resizeMode="contain" source={require("../images/icons/person-circle.png")} />) }} />
     </Tab.Navigator>
   )

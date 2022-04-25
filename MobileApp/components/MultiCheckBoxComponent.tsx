@@ -1,7 +1,7 @@
 import React from 'react'
 import { View } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import { setHealthFormData } from '../redux/slice';
+import { setHealthFormMultiBox } from '../redux/slice';
 import { store } from '../redux/store';
 import { useSelector } from 'react-redux';
 
@@ -25,22 +25,22 @@ export const MultiCheckBoxComponent = () => {
     const [checked, setChecked] = React.useState(false);
     const onPressChecked = () => {
         setChecked(!checked);
-        store.dispatch(setHealthFormData({ selectedFever: checked }))
+        store.dispatch(setHealthFormMultiBox({ selectedFever: checked }))
     }
     const [checked2, setChecked2] = React.useState(false);
     const onPressChecked2 = () => {
         setChecked2(!checked2);
-        store.dispatch(setHealthFormData({ selectedCough: checked2 }))
+        store.dispatch(setHealthFormMultiBox({ selectedCough: checked2 }))
     }
     const [checked3, setChecked3] = React.useState(false);
     const onPressChecked3 = () => {
         setChecked3(!checked3);
-        store.dispatch(setHealthFormData({ selectedDiarrhea: checked3 }))
+        store.dispatch(setHealthFormMultiBox({ selectedDiarrhea: checked3 }))
     }
     const [checked4, setChecked4] = React.useState(false);
     const onPressChecked4 = () => {
         setChecked4(!checked4);
-        store.dispatch(setHealthFormData({ selectedInfluenza: checked4 }))
+        store.dispatch(setHealthFormMultiBox({ selectedInfluenza: checked4 }))
     }
     return (
         <View>

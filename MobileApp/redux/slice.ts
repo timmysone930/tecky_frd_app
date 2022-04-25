@@ -18,11 +18,12 @@ export const { setDoctorID } = doctorIDSlice.actions
 export const reserveFormSlice = createSlice({
     name: 'reserveForm',
     initialState: {
-        name: '', reservedDate: '', reservedTime: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: ''
+        name: '', reservedDate: '', reservedTime: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '',
+        leaveHK: '', Countries: '', backDate: '', selectedFever: false, selectedCough: false, selectedDiarrhea: false, selectedInfluenza: false,
     },
     reducers: {
         setFormData: (state, action) => {
-            const { name, reservedDate, reservedTime, idType, idNumber, EmergencyContactName, EmergencyContactPhone } = action.payload
+            const { name, reservedDate, reservedTime, idType, idNumber, EmergencyContactName, EmergencyContactPhone, } = action.payload
             state.name = name
             state.reservedDate = reservedDate
             state.reservedTime = reservedTime
@@ -31,24 +32,13 @@ export const reserveFormSlice = createSlice({
             state.EmergencyContactName = EmergencyContactName
             state.EmergencyContactPhone = EmergencyContactPhone
         },
-    }
-})
-
-export const { setFormData } = reserveFormSlice.actions
-// get health declaration form detail
-export const healthFormSlice = createSlice({
-    name: 'healthForm',
-    initialState: {
-        leaveHK: '', Countries: '', backDate: '', selectedFever: false, selectedCough: false, selectedDiarrhea: false,selectedInfluenza: false,
-    },
-    reducers: {
-        setHealthFormData: (state, action) => {
+        setHealthFormMultiBox: (state, action) => {
             state.selectedFever = action.payload.selectedFever
             state.selectedCough = action.payload.selectedCough
             state.selectedDiarrhea = action.payload.selectedDiarrhea
             state.selectedInfluenza = action.payload.selectedInfluenza
         },
-        setHealthFormInfo: (state, action) =>{
+        setHealthFormInfo: (state, action) => {
             state.leaveHK = action.payload.leaveHK
             state.Countries = action.payload.Countries
             state.backDate = action.payload.backDate
@@ -56,4 +46,4 @@ export const healthFormSlice = createSlice({
     }
 })
 
-export const { setHealthFormData, setHealthFormInfo } = healthFormSlice.actions
+export const { setFormData, setHealthFormMultiBox, setHealthFormInfo } = reserveFormSlice.actions
