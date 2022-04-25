@@ -9,6 +9,8 @@ import { DrList } from '../pages/DoctorRelated/DrListPage';
 import { DrInfo } from '../pages/DoctorRelated/DrInfoPage';
 import { HealthDeForm } from '../pages/DoctorRelated/HealthDeForm';
 import { ConfirmResPage } from '../pages/DoctorRelated/ConfirmResPage';
+import { PaymentPage} from '../pages/PaymentPage';
+import { ConfirmPaymentPage } from '../pages/ConfirmPaymentPage';
 
 const DoctorStack = createStackNavigator();
 
@@ -17,6 +19,7 @@ export const DoctorStacks = () => {
         <DoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} >
             <DoctorStack.Screen name="搜尋醫生" component={Doctor} options={{ headerShown: true }} />
             <DoctorStack.Screen name="醫生列表" component={DrList} />
+            <DoctorStack.Screen name="預約確認" component={ConfirmPaymentPage} options={{ headerShown: false,  animationEnabled:false}}/>
         </DoctorStack.Navigator>
     )
 }
@@ -31,6 +34,7 @@ export const InnerDoctorStacks = () => {
             <InnerDoctorStack.Screen name="健康申報表" component={HealthDeForm} />
             <InnerDoctorStack.Screen name="預約須知" component={PolicyPage} />
             <InnerDoctorStack.Screen name="確認預約資料" component={ConfirmResPage} />
+            <InnerDoctorStack.Screen name="付款" component={PaymentPage} />
         </InnerDoctorStack.Navigator>
     )
 }

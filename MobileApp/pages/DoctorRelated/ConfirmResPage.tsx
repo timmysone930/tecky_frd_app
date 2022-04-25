@@ -4,8 +4,6 @@ import { DrListCard } from '../../components/doctor/DrListCard';
 import { BottomLineComponent } from '../../components/SearchComponent';
 import { FakeDrDATA } from './DrListPage';
 import { useSelector } from 'react-redux';
-// import { store } from '../../redux/store';
-// import {setDoctorID, setFormData } from '../../redux/slice';
 
 export const ConfirmResPage: React.FC = (props: any) => {
     // white background
@@ -64,7 +62,7 @@ export const ConfirmResPage: React.FC = (props: any) => {
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
                 <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
-                    onPress={() => props.navigation.navigate({ name: '健康申報表' })}>
+                    onPress={() => props.navigation.navigate({ name: '付款' })}>
                     <Text style={styles.buttonText}>前往付款</Text></TouchableOpacity>
             </View>
         </SafeAreaView>

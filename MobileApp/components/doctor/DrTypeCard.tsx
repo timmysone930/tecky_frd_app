@@ -30,7 +30,7 @@ export const DrTypeCard = (props:any) => {
             < View style={{ flexWrap: 'wrap', flexDirection: 'row', marginHorizontal: 15,}}>
                 {
                     tipsArr.map((item, idx) => (
-                        <TouchableHighlight key={`dr_type_${idx}`} style={styles.drTypeCard}  onPress={() => {props.props.navigation.navigate('醫生列表')}} activeOpacity={1} underlayColor="#3F0075" onHideUnderlay={() => setIsPress(0)}
+                        <TouchableHighlight key={`dr_type_${idx}`} style={styles.drTypeCard}  onPress={() => {props.props.navigation.navigate('醫生列表')}} activeOpacity={1} underlayColor="#6d7f99" onHideUnderlay={() => setIsPress(0)}
                             onShowUnderlay={() => { setIsPress(idx + 1) }}>
                             <>
                                 <Image resizeMode='contain' style={isPress === (idx + 1) ? styles.drTypeIconAfterPressed : styles.drTypeIconBeforePressed} source={require('../../images/icons/clipboard-heart.png')} />
@@ -60,15 +60,15 @@ const styles = StyleSheet.create({
     drTypeCard: {
         marginTop: 15,
         marginLeft: 7,
-        backgroundColor: '#DBDBDB',
+        backgroundColor: '#F4F4F4',
         width: "31%",
         height: windowHeight/5,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 6,
         shadowColor: Colors.shadow,
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.1,
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
         shadowRadius: 2,
     },
     // Card text color
