@@ -10,8 +10,6 @@ export const ConfirmPaymentPage = (props: any) => {
     const backgroundStyle = {
         backgroundColor: 'white',
     };
-    // Radio Button
-    const [radioValue, setRadioValue] = React.useState('PayPal');
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <View style={{paddingTop:windowHeight*(1/7)}}>

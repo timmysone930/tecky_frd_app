@@ -12,6 +12,8 @@ import { DoctorStacks } from '../Stack/DoctorStack';
 import { MyInfoStacks } from '../Stack/MyInfoStack';
 import { ResRecordStacks } from '../Stack/ResRecordStack';
 
+// import icon for FontAwesome
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 // Bottom Tabs
 const Tab = createBottomTabNavigator();
@@ -22,15 +24,16 @@ export const Tabs = () => {
       <Tab.Screen name="主頁" component={Home} options={{
         headerStyle: { backgroundColor: 'white' },
         headerTitle: () => (<Image style={{ width: 80, height: 40 }} source={require("../images/logo.png")} />),
-        tabBarIcon: ({ color }) => (<Image style={{ tintColor: color, width: 19 }} resizeMode="contain" source={require("../images/icons/house-door.png")} />)
+        tabBarIcon: ({ color }) => (<Icon name="home" size={22} color={color} />
+        )
       }} />
       <Tab.Screen name="醫生" component={DoctorStacks}
       options={{headerShown: false,tabBarLabel: '醫生', 
-      tabBarIcon:({color})=>(<Image style={{ tintColor:color, width:19}} resizeMode="contain" source={require("../images/icons/search.png")} />),
+      tabBarIcon:({color})=>(<Icon name="search" size={22} color={color} />),
     }} 
       />
-      <Tab.Screen name="預約Tab" component={ResRecordStacks} options={{headerShown:false,tabBarLabel: '預約', tabBarIcon: ({ color }) => (<Image style={{ tintColor: color, width: 19 }} resizeMode="contain" source={require("../images/icons/calendar.png")} />) }} />
-      <Tab.Screen name="我的資料" component={MyInfoStacks} options={{headerShown: false, tabBarLabel: '我的', tabBarIcon: ({ color }) => (<Image style={{ tintColor: color, width: 19 }} resizeMode="contain" source={require("../images/icons/person-circle.png")} />) }} />
+      <Tab.Screen name="預約Tab" component={ResRecordStacks} options={{headerShown:false,tabBarLabel: '預約', tabBarIcon: ({ color }) => (<Icon name="calendar" size={22} color={color} />) }} />
+      <Tab.Screen name="我的資料" component={MyInfoStacks} options={{headerShown: false, tabBarLabel: '我的', tabBarIcon: ({ color }) => (<Icon name="user-circle-o" size={22} color={color} />) }} />
     </Tab.Navigator>
   )
 }

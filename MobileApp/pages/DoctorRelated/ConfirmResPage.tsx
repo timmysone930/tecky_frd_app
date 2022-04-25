@@ -48,12 +48,6 @@ export const ConfirmResPage: React.FC = (props: any) => {
                     <Text style={styles.subTitle}>{formData.idType}</Text>
                     <Text style={styles.subTitle}>{formData.idNumber}</Text>
                     </View>
-                        {/* <Text style={styles.subTitle}>問診費用： $100.00</Text>
-                        <Text style={styles.subTitle}>選擇日期： 2022年5月5日</Text>
-                        <Text style={styles.subTitle}>選擇時間： 16:30 - 17:00</Text>
-                    <Text style={styles.subTitle}>應診者姓名： $100.00</Text>
-                    <Text style={styles.subTitle}>身份證類型： 2022年5月5日</Text>
-                    <Text style={styles.subTitle}>身份證編號： 16:30 - 17:00</Text> */}
                     <BottomLineComponent />
                 </View>
             </ScrollView>

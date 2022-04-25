@@ -4,8 +4,9 @@ import { SafeAreaView } from 'react-native';
 import { ReservationRecord } from '../components/reservation/ReservationRecord';
 
 // Fake Data for development
-const FakeData = [
+export const FakeRecordData = [
     {
+        id:1,
         record_code: "RM220319001",
         doctor: "陳大文 Chan Tai Man",
         res_date: "2022年3月19日",
@@ -13,6 +14,7 @@ const FakeData = [
         res_status: "已完成",
     },
     {
+        id:2,
         record_code: "RM222329012",
         doctor: "陳大文 Chan Tai Man",
         res_date: "2022年3月12日",
@@ -20,6 +22,7 @@ const FakeData = [
         res_status: "待診中"
     },
     {
+        id:3,
         record_code: "RM220315012",
         doctor: "陳大文 Chan Tai Man",
         res_date: "2022年3月6日",
@@ -35,7 +38,9 @@ export const ResRecordPage = (props: any) => {
     };
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-            <ReservationRecord data={FakeData} changePage={() => { props.navigation.navigate("預約詳情界面") }} />
+            <ReservationRecord data={FakeRecordData}  props={props} />
         </SafeAreaView>
     )
 }
+
+
