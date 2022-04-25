@@ -1,19 +1,20 @@
 import React from 'react';
-import { TouchableHighlight, Text } from 'react-native';
-import { styles } from '../../pages/PrescriptionRecords/styles/prescriptionPageStyles';
+import { Button } from 'react-native-paper';
+import { Text } from 'react-native';
+import { styles } from '../../styles/GeneralStyles';
 
 interface Props {
     title: string,
+    disabled: boolean,
     onPressFunction: ()=> void,
 }
 
-export const PayButton = (props:any) => {
+export const PayButton = (props:Props) => {
     return (
-        <TouchableHighlight 
-            style={[styles.payButton , {marginBottom:40}]} 
-            onPress={props.onPressFunction}
-        >
-            <Text style={{fontSize: 22, color: "white"}}>{props.title}</Text>
-        </TouchableHighlight>
+        <Button mode="contained" color='#325C80' onPress={props.onPressFunction} disabled={false}> 
+            <Text style={[styles.payButton]}>
+                {props.title}
+            </Text>
+        </Button>
     );
 }

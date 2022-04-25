@@ -1,10 +1,8 @@
-import React, { useState } from 'react'
-import {
-  View, ScrollView, Text, SafeAreaView, FlatList, StyleSheet, Image, Touchable
-} from 'react-native';
-import { Button } from 'react-native-paper';
+import React from 'react'
+import { View, ScrollView, Text, SafeAreaView } from 'react-native';
+import { styles } from "../../styles/GeneralStyles"
 
-const FakeData = {
+export const FakeData = {
     pres_code: "RM220319001",
     prescription_details: [
         "acetaminophen: 3粒 (止痛)",
@@ -21,7 +19,16 @@ const FakeData = {
     area: "",
     district: "",
     addr: "",
-    pick_up_store: "",
+    pick_up_store: [
+        {
+            district: "馬鞍山",
+            addr: "Room 11, ABC centre, Kowloon Bay, Kowloon"  
+        },
+        {
+            district: "青衣",
+            addr: "Room 2, DEF centre, Tsing Yi, NT"
+        }
+    ],
     remark: "",
     doctor: "陳大文 Chan Tai Man",
     profession: "表列中醫",
@@ -29,61 +36,45 @@ const FakeData = {
     patient_name: "張中和",
     patient_id: "A123456(7)",
     cost: "$300",
-    contact_number: "1234 5678"
+    contact_number: "1234 5678",
 }
 
-// import { styles } from './styles/prescriptionPageStyles';
-import { DisplayOrderStatus } from '../../components/prescription/DisplayOrderStatus';
-import { PayButton } from "../../components/prescription/PayButton"
-import { styles } from "../../styles/GeneralStyles"
+// Component
+import { PrescriptionBasicInfo } from '../../components/prescription/PrescriptionBasicInfo';
+import { PrescriptionDetail } from '../../components/prescription/PrescriptionDetail';
+import { CostDisplay } from '../../components/prescription/CostDisplay'
+import { PayButton } from '../../components/prescription/PayButton'
+
 interface Props {
     data: any,
     changePage: () => void
 }
 
 function RenderDetail (props: Props) {
-    const contentItemToDisplay:any = {
-        "醫生": "doctor" , 
-        "專科": "profession", 
-        "開藥日期": "created_at", 
-        "療程": "course_of_treatment", 
-        "應診者": "patient_name", 
-        "身份證": "patient_id"
-    };
-
     return (
         <View style={[styles.viewContainer]}>
-            <View style={[styles.RowCenterBetween, styles.mb_10]}>
-               <Text style={[styles.title]}>{props.data.pres_code}</Text>
-               <DisplayOrderStatus orderStatus={props.data.order_status}/>
-            </View>
-            {
-                Object.keys(contentItemToDisplay).map((key)=>(
-                    <Text style={[styles.contentFont, styles.mb_10]} key={key}>
-                        {key}：{props.data[contentItemToDisplay[key]]}
-                    </Text>
-                ))
-            }
-            <View style={[styles.costDisplay, styles.mb_10]}>
-                <Text style={[styles.costDisplay, styles.title]}>
-                    藥費合共：{props.data.cost}
-                </Text>
-            </View>
-            <Button mode="contained" color='#325C80' onPress={props.changePage} disabled={false}> 
-                <Text>
-                    前往付款
-                </Text>
-            </Button>
-            <Text style={[{ fontSize: 22}, styles.mb_10, styles.mt_30 , styles.title]}>
-                藥物明細：
-            </Text>
-            {
-                props.data.prescription_details.map((item: string)=>(
-                    <Text key={item} style={[styles.contentFont, styles.mb_10]}>
-                        {props.data.prescription_details.indexOf(item) + 1}. {item}
-                    </Text>
-                ))
-            }
+
+            {/* Component */}
+            <PrescriptionBasicInfo 
+                doctor={props.data.doctor}
+                profession={props.data.profession}
+                created_at={props.data.created_at}
+                course_of_treatment={props.data.course_of_treatment}
+                patient_name={props.data.patient_name}
+                patient_id={props.data.patient_id}
+                orderStatusShow={true}
+                pres_code={props.data.pres_code}
+                order_status={props.data.order_status}
+            />
+
+            {/* Component */}
+            <CostDisplay cost={props.data.cost}/>
+
+            <PayButton title={"前往付款"} disabled={false} onPressFunction={props.changePage}/>
+
+            {/* Component */}
+            <PrescriptionDetail prescription_details={props.data.prescription_details}/>
+
             <Text style={[styles.subTitle, styles.textCenter, styles.mt_10]}>
                 請依照指示及療程服藥。
             </Text>
@@ -94,14 +85,12 @@ function RenderDetail (props: Props) {
     )
 }
 
-function PrescriptionDetailPage({navigation}:any) {
+export function PrescriptionDetailPage({navigation}:any) {
     return (
         <SafeAreaView>
             <ScrollView>
-                <RenderDetail data={FakeData} changePage={()=>{navigation.navigate("藥單付款-step1")}}/>
+                <RenderDetail data={FakeData} changePage={()=>{navigation.navigate("地址確認")}}/>
             </ScrollView>
         </SafeAreaView>
     );
 }
-
-export default PrescriptionDetailPage;

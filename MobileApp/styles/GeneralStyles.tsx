@@ -32,7 +32,6 @@ export const styles = StyleSheet.create({
       color: '#225D66',
       fontSize: 17,
       fontWeight: '600',
-      marginTop: 8,
     },
     infoText: {
       color: '#C32D3A',
@@ -51,6 +50,11 @@ export const styles = StyleSheet.create({
       textAlign: 'center',
       fontSize: 16,
     },
+    contentText: {
+        color: '#3B3B3B',
+        fontSize: 17,
+        fontWeight: '500',
+    },
 
     //additional
 
@@ -66,95 +70,102 @@ export const styles = StyleSheet.create({
     },
     viewContainer: {
         padding: 20,
-      },
-      box: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        borderBottomColor: 'rgba(0, 0, 0, 0.4)',
-        borderBottomWidth: 1,
-        padding: 12
-      },
-    
-      prescriptionCode: {
-        fontSize: 25, 
-        fontWeight: "bold"
-      },
-    
-      orderStatus: {
-        height: 40, 
-        width: 80,
-        justifyContent: "center",
-        alignItems: "center"
-      },
-    
-      orderStatusFont: {
-        color: "#fff",
-        fontSize: 20
-      },
-  
-      contentFont: {
-        fontSize: 20
-      },
-  
-      RowCenterBetween: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-      },
-  
-      costDisplay: {
-        flexDirection: "row",
-        justifyContent: "center",
-        fontSize: 30,
-        marginTop: 10,
-      },
-  
-      payButton: {
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        fontSize: 20,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: "#00cc00",
-        paddingVertical: 10,
-        marginVertical: 20,
-        marginHorizontal: 90,
-      },
-  
-      JCCenter: {
-        justifyContent: "center"
-      },
-  
-      AICenter: {
-        alignItems: "center"
-      },
-  
-      flexRow: {
-        flexDirection: "row"
-      },
-  
-      textCenter: {
-        textAlign: "center"
-      },
-  
-      mb_10: {
-        marginBottom: 10
-      },
+    },
+    box: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomColor: 'rgba(0, 0, 0, 0.4)',
+    borderBottomWidth: 1,
+    padding: 12
+    },
 
-      mb_30: {
-        marginBottom: 30
-      },
-  
-      mt_10: {
-        marginTop: 10
-      },
+    prescriptionCode: {
+    fontSize: 25, 
+    fontWeight: "bold"
+    },
 
-      mt_30: {
-        marginTop: 30
-      },
-      mh_10: {
-          marginHorizontal: 10
-      }
+    orderStatus: {
+    height: 40, 
+    width: 80,
+    justifyContent: "center",
+    alignItems: "center"
+    },
+
+    orderStatusFont: {
+    color: "#fff",
+    fontSize: 20
+    },
+
+    contentFont: {
+    fontSize: 20
+    },
+
+    RowCenterBetween: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    },
+
+    costDisplay: {
+    flexDirection: "row",
+    justifyContent: "center",
+    fontSize: 30,
+    marginTop: 10,
+    },
+
+    payButton: {
+    fontSize: 20,
+    },
+
+    JCCenter: {
+    justifyContent: "center"
+    },
+
+    AICenter: {
+    alignItems: "center"
+    },
+
+    flexRow: {
+    flexDirection: "row"
+    },
+
+    flexEnd: {
+    flexDirection: "row",
+    justifyContent: "flex-end"  
+    },
+
+    textCenter: {
+    textAlign: "center"
+    },
+
+    mb_10: {
+    marginBottom: 10
+    },
+
+    mb_30: {
+    marginBottom: 30
+    },
+
+    mt_10: {
+    marginTop: 10
+    },
+
+    mt_30: {
+    marginTop: 30
+    },
+
+    mh_10: {
+        marginHorizontal: 10
+    },
+
+    mv_10: {
+        marginVertical: 10
+    },
+
+    bottomLine: {
+    borderBottomColor: '#B5B5B5',
+    borderBottomWidth: 0.8,
+    }
+
 });
