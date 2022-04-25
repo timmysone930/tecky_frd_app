@@ -9,7 +9,7 @@ export const ReservationRecord = (props: any) => {
       <FlatList data={props.data}
         renderItem={
           ({item})=> (
-              <TouchableOpacity  style={[styles.box]} onPress={props.changePage} >
+              <TouchableOpacity  style={[styles.box]} onPress={() => { props.props.navigation.navigate("預約詳情界面",{screen:"預約詳情", params: { id: item.id }}) }} >
                 <View>
                   <Text style={[styles.resCode]}>{item.record_code}</Text>
                   <Text style={[styles.resDoctor]}>醫生: {item.doctor}</Text>                   
@@ -55,15 +55,5 @@ const styles = StyleSheet.create({
     fontWeight:'500',
     color:'#626262',
     marginBottom:5,
-  },
-  orderStatus: {
-    height: 40, 
-    width: 80,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  orderStatusFont: {
-    color: "#fff",
-    fontSize: 20
   },
 })

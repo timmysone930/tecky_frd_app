@@ -10,7 +10,7 @@ import { DrInfo } from '../pages/DoctorRelated/DrInfoPage';
 import { HealthDeForm } from '../pages/DoctorRelated/HealthDeForm';
 import { ConfirmResPage } from '../pages/DoctorRelated/ConfirmResPage';
 import { PaymentPage} from '../pages/PaymentPage';
-import { ConfirmPaymentPage } from '../pages/ConfirmPaymentPage';
+import { ConfirmPaymentPage } from '../pages/ConfirmedPaymentPage';
 
 const DoctorStack = createStackNavigator();
 

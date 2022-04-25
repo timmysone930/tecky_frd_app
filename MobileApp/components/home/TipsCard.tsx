@@ -8,7 +8,6 @@ import {
     TouchableHighlight,
 } from 'react-native';
 
-
 export const TipsCard = () => {
     // Tips Card isPress Status
     const [isPress, setIsPress] = React.useState(0);
@@ -16,7 +15,6 @@ export const TipsCard = () => {
     const tipsArr = ['癌症檢查', '心臟疾病', '疫苗注射', '體重控制', '健康貼士'];
     // Tips Card Icon
     const iconArr = [require('../../images/icons/ribbon.png'), require('../../images/icons/clipboard-heart.png'), require('../../images/icons/injection.png'), require('../../images/icons/weight.png'), require('../../images/icons/heart-pulse.png')]
-    
     return (
         <>
        {/* Tips Card Title */}
