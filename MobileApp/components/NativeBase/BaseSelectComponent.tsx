@@ -21,7 +21,11 @@ export const BaseSelectComponent = (props: any) => {
         }
     } else if (props.mode === 'id') {
         selectFunction = data.map((item: any, idx: Number) => (
-            <Select.Item label={`${item}`} value={`${item}`} key={`picker_date_${idx}`} />
+            <Select.Item label={`${item}`} value={`${item}`} key={`picker_id_${idx}`} />
+        ))
+    }else if(props.mode === 'other'){
+        selectFunction = data.map((item: any, idx: Number) => (
+            <Select.Item label={`${item}`} value={`${item}`} key={`picker_other_${idx}`} />
         ))
     }
 

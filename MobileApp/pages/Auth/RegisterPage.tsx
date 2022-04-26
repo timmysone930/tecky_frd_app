@@ -1,91 +1,187 @@
-import { Box, Center, CheckIcon, FormControl, Select, WarningOutlineIcon } from 'native-base';
+import { Checkbox} from 'native-base';
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form';
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { View,Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
+import { DatePickerComponent } from '../../components/PickerComponent';
+import { BottomLineComponent } from '../../components/SearchComponent';
+import { checkStatus } from '../../redux/slice';
+import { store } from '../../redux/store';
 
 export const RegisterPage = (props: any) => {
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
     };
-
     // Form element
-    const { control, handleSubmit, formState: { errors }, setValue } = useForm({
-        defaultValues: { phoneNo: '', loginSMS: '' }
+    const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
+        defaultValues: {
+            regTitle: '', regName: '', regIDType: '', regIDNumber: '', regBDay: '請選擇你的生日日期', regEmail: '', regPhone: '', regSMS: '',
+            regPolicyOne: [], regPolicyTwo: []
+        }
     });
-
-    let [service, setService] = React.useState("");
+    // 稱謂
+    const titleArr = ['先生', '小姐', '女士']
+    // 身份證明文件
+    const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
+    // id value change function
+    const onIDValueChange = (itemValue: any) => {
+        setValue("regIDType", itemValue)
+    };
+    // Date value change function
+    const onDateChange = (itemValue: any) => {
+        setValue("regBDay", itemValue)
+    };
+    // Title value change function
+    const onTitleChange = (itemValue: any) => {
+        setValue("regTitle", itemValue)
+    };
+    // Multi Box     
+    const [groupValues, setGroupValues] = React.useState([]);
+    const [groupValues2, setGroupValues2] = React.useState([]);
+    const onSubmit = (data: any) => {
+        store.dispatch(checkStatus({status:true}))
+        props.navigation.navigate({ name: '注冊成功' })
+    }
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-            <ScrollView>
-
+            <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
                 <View style={styles.pageMargin}>
-                    <Text style={styles.subTitle}>電話號碼:</Text>
+                    <Text style={styles.subTitle}>稱謂</Text>
                     <Controller control={control} rules={{ required: true, }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput keyboardType={'numeric'} textContentType={'telephoneNumber'} style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請輸入你登記的電話號碼" placeholderTextColor="#737474" />
+                        render={({ field: { value } }) => (
+                            <BaseSelectComponent placeholder={'請選擇應診時間'} data={titleArr} onChange={onTitleChange} mode='other'
+                                selectedValue={getValues('regTitle')} dateValue={''}
+                            />
                         )}
-                        name="phoneNo"
+                        name="regTitle"
                     />
                     {/* 必須填寫提示 */}
-                    {errors.phoneNo && <Text style={styles.warning}>* 此項必須填寫</Text>}
-                    <Text style={styles.subTitle}>獲取一次性短訊驗證碼</Text>
+                    {errors.regTitle && <Text style={styles.warning}>* 此項必須選擇</Text>}
+
+                    <Text style={styles.subTitle}>姓名<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
+                    <Controller control={control} rules={{ required: true, }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
+                        )}
+                        name="regName"
+                    />
+                    {/* 必須填寫提示 */}
+                    {errors.regName && <Text style={styles.warning}>* 此項必須填寫</Text>}
+
+                    <Text style={styles.subTitle}>身份證明文件類別<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
+                    <Controller control={control} rules={{ required: true, }}
+                        render={({ field: { value } }) => (
+                            <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
+                                selectedValue={getValues('regIDType')} dateValue={''}
+                            />
+                        )}
+                        name="regIDType"
+                    />
+                    {errors.regIDType && <Text style={styles.warning}>* 此項必須選擇</Text>}
+                    <Text style={styles.subTitle}>身份證明文件號碼<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
+                    <Controller control={control} rules={{ required: true, }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="身份證明文件號碼" placeholderTextColor="#737474" />
+                        )}
+                        name="regIDNumber"
+                    />
+                    {/* 必須填寫提示 */}
+                    {errors.regIDNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
+
+                    <Text style={styles.subTitle}>生日日期</Text>
+                    <Controller control={control}
+                        render={({ field: { value } }) => (
+                            <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('regBDay')} />
+                        )}
+                        name="regBDay"
+                    />
+
+                    <Text style={styles.subTitle}>電郵地址<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
+                    <Controller control={control} rules={{ required: true, }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫收發通知用的電郵地址" placeholderTextColor="#737474" />
+                        )}
+                        name="regEmail"
+                    />
+                    {/* 必須填寫提示 */}
+                    {errors.regEmail && <Text style={styles.warning}>* 此項必須填寫</Text>}
+
+                    <Text style={styles.subTitle}>流動電話號碼<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
+                    <Controller control={control} rules={{ required: true, }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫收發通知用的電郵地址" placeholderTextColor="#737474" />
+                        )}
+                        name="regPhone"
+                    />
+                    {/* 必須填寫提示 */}
+                    {errors.regPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
+
+                    <Text style={styles.subTitle}>輸入驗證碼<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
                         <Controller control={control} rules={{ required: true, }}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <TextInput keyboardType={'numeric'} style={[styles.input, { width: '74%', flex: 1 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請輸入短訊驗證碼" placeholderTextColor="#737474" />
                             )}
-                            name="loginSMS"
+                            name="regSMS"
                         />
                         <TouchableOpacity style={styles.btnPhone} onPress={() => { }}>
                             <Text style={styles.btnPhoneText}>驗證碼</Text>
                         </TouchableOpacity>
-
-                        {errors.loginSMS && <Text style={styles.warning}>* 此項必須填寫</Text>}
                     </View>
-                    <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={() => { }}>
-                        <Text style={styles.buttonText}>登入</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate({ name: '預約須知' }) }}>
-                        <Text style={styles.buttonText}>立即注冊</Text>
-                    </TouchableOpacity>
+                    {errors.regSMS && <Text style={styles.warning}>* 此項必須填寫</Text>}
+
+                    <Controller control={control} rules={{ required: true, }}
+                        render={({ field: { value } }) => (
+                            <Checkbox.Group onChange={values => {
+                                setGroupValues(values || []);
+                                setValue('regPolicyOne', values || [])
+                            }} value={groupValues} accessibilityLabel="agree policy" mt={1}>
+                                <Checkbox value='policyOne' mt={4} mb={3} mr={12} >
+                                    <Text style={styles.policyText}>本人確認已經閲讀、明白及接納《個人私隱政策聲明》，並且同意德信醫療按照《個人資料收集聲明》
+                                所述的方式和用途使用閣下的個人資料。</Text></Checkbox>
+                            </Checkbox.Group>
+                        )}
+                        name="regPolicyOne"
+                    />
+                    {errors.regPolicyOne && <Text style={styles.warning}>* 此項必須選擇</Text>}
+                    <Controller control={control} rules={{ required: true, }}
+                        render={({ field: { value } }) => (
+                            <Checkbox.Group onChange={values => {
+                                setGroupValues2(values || []);
+                                setValue('regPolicyTwo', values || [])
+                            }} value={groupValues2} accessibilityLabel="agree policy" mt={1}>
+                                <Checkbox value='policyTwo' mt={4} mb={3} mr={12}>
+                                    <Text style={styles.policyText}>
+                                    本人同意德信醫療就《個人資料收集聲明》所述的通訊、推廣及市場促銷活動使用及轉移本人的個人資料。
+                                    </Text>
+                                    </Checkbox>
+                            </Checkbox.Group>
+                        )}
+                        name="regPolicyTwo"
+                    />
+                    {errors.regPolicyTwo && <Text style={styles.warning}>* 此項必須選擇</Text>}
+
+
                 </View>
-                <Center>
-                    <FormControl w="3/4" maxW="300" isRequired isInvalid>
-                        <FormControl.Label>Choose service</FormControl.Label>
-                        <Select selectedValue={service} minWidth="200" accessibilityLabel="Choose Service" placeholder="Choose Service" _selectedItem={{
-                            bg: "teal.600",
-                            endIcon: <CheckIcon size="5" />
-                        }} mt={1} onValueChange={itemValue => setService(itemValue)}>
-                            <Select.Item label="UX Research" value="ux" />
-                            <Select.Item label="Web Development" value="web" />
-                            <Select.Item label="Cross Platform Development" value="cross" />
-                            <Select.Item label="UI Designing" value="ui" />
-                            <Select.Item label="Backend Development" value="backend" />
-                        </Select>
-                    </FormControl>
-                </Center>
+                <BottomLineComponent />
+                {/* Button to go back and next page */}
+
+                <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
+                    onPress={handleSubmit(onSubmit)}
+                >
+                    <Text style={styles.buttonText}>繼續</Text></TouchableOpacity>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
 
 const styles = StyleSheet.create({
-    logoStyle: {
-        marginVertical: 20,
-        paddingLeft: '25%',
-    },
     pageMargin: {
         padding: 15,
-    },
-    subTitle: {
-        color: '#225D66',
-        fontSize: 15,
-        fontWeight: '600',
-        marginTop: 20,
     },
     input: {
         borderColor: '#737474',
@@ -97,6 +193,32 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'red',
         marginLeft: 5,
+    },
+    subTitle: {
+        color: '#225D66',
+        fontSize: 17,
+        fontWeight: '600',
+        marginTop: 8,
+    },
+    infoText: {
+        color: '#C32D3A',
+        fontSize: 12,
+        fontWeight: '400',
+        marginTop: 5,
+        marginBottom: 15,
+    },
+    button: {
+        // width: '50%',
+        backgroundColor: '#6d7f99',
+        paddingVertical: 16,
+        marginHorizontal:20,
+        marginBottom: 100,
+        borderRadius: 4,
+    },
+    buttonText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 16,
     },
     btnPhone: {
         backgroundColor: 'red',
@@ -110,16 +232,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 13,
     },
-    button: {
-        backgroundColor: '#6d7f99',
-        paddingVertical: 12,
-        marginTop: 20,
-        marginBottom: 2,
-        borderRadius: 4,
+    policyText:{
+        fontSize:12,
+        marginRight:12,
+        color:'#2E2E2E',
     },
-    buttonText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 16,
-    },
-})
+
+});

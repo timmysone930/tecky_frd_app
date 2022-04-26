@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         color: "#3482F1",
         fontWeight: "500",
         textAlign: "center",
-        fontSize: 19,
+        fontSize: 18,
         margin: 10,
         paddingHorizontal: 100,
         paddingVertical: 4,

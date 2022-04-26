@@ -19,7 +19,7 @@ export const reserveFormSlice = createSlice({
     name: 'reserveForm',
     initialState: {
         name: '', reservedDate: '', reservedTime: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '',
-        leaveHK: '', Countries: '', backDate: '', selectedFever: false, selectedCough: false, selectedDiarrhea: false, selectedInfluenza: false,
+        leaveHK: '', Countries: '', backDate: '', symptoms:[],
     },
     reducers: {
         setFormData: (state, action) => {
@@ -33,10 +33,7 @@ export const reserveFormSlice = createSlice({
             state.EmergencyContactPhone = EmergencyContactPhone
         },
         setHealthFormMultiBox: (state, action) => {
-            state.selectedFever = action.payload.selectedFever
-            state.selectedCough = action.payload.selectedCough
-            state.selectedDiarrhea = action.payload.selectedDiarrhea
-            state.selectedInfluenza = action.payload.selectedInfluenza
+            state.symptoms = action.payload.symptoms
         },
         setHealthFormInfo: (state, action) => {
             state.leaveHK = action.payload.leaveHK
@@ -55,6 +52,7 @@ export const userStatusSlice = createSlice({
     },
     reducers: {
         checkStatus: (state, action) => {
+            state.isLogin = action.payload.status
         }
     }
 })

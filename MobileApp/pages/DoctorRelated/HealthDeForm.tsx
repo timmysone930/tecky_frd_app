@@ -4,27 +4,22 @@ import { useForm, Controller } from "react-hook-form";
 import { RadioButton } from 'react-native-paper';
 import { BottomLineComponent } from '../../components/SearchComponent';
 import { DatePickerComponent } from '../../components/PickerComponent';
-import { MultiCheckBoxComponent } from '../../components/MultiCheckBoxComponent';
 import { store } from '../../redux/store';
 import { setHealthFormInfo } from '../../redux/slice';
+import { BaseCheckBoxComponent } from '../../components/NativeBase/BaseCheckBoxComponent';
 
 export const HealthDeForm: React.FC = (props: any) => {
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
     };
-    // Radio Button
-    const [radioValue, setRadioValue] = React.useState('');
-    // Date Selector
-    const [DateTitle, setSelectedDate] = React.useState('選擇日期');
     // Date value change function
     const onDateChange = (itemValue: any, itemIndex: any) => {
-        setSelectedDate(itemValue);
         setValue("backDate", itemValue)
     };
     // Form element
-    const { control, handleSubmit, formState: { errors }, setValue } = useForm({
-        defaultValues: { Countries: '', leaveHK: '', backDate: '' }
+    const { control, handleSubmit, formState: { errors }, setValue,getValues } = useForm({
+        defaultValues: { Countries: '', leaveHKRadio: '', backDate: '選擇日期' }
     });
     const onSubmit = (data: any) => {
         props.navigation.navigate({ name: '預約須知' })
@@ -37,15 +32,15 @@ export const HealthDeForm: React.FC = (props: any) => {
                     <Text style={styles.subTitle}>過去14日內曾否離開過香港？</Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (
-                            <RadioButton.Group onValueChange={value => { setRadioValue(value), setValue("leaveHK", value) }} value={radioValue}>
+                            <RadioButton.Group onValueChange={value => {setValue("leaveHKRadio", value) }} value={getValues('leaveHKRadio')}>
                                 <RadioButton.Item label="是" value="yes" mode='android' color='#6d7f99' />
                                 <RadioButton.Item label="否" value="no" mode='android' color='#6d7f99' />
                             </RadioButton.Group>
                         )}
-                        name="leaveHK"
+                        name="leaveHKRadio"
                     />
                     {/* 必須填寫提示 */}
-                    {errors.leaveHK && <Text style={styles.warning}>* 此項必須選擇</Text>}
+                    {errors.leaveHKRadio && <Text style={styles.warning}>* 此項必須選擇</Text>}
                     <BottomLineComponent />
                     <Text style={styles.subTitle}>過去14日內曾離開香港到過的國家和城市？</Text>
                     <Controller control={control} render={({ field: { onChange, onBlur, value } }) => (
@@ -55,14 +50,14 @@ export const HealthDeForm: React.FC = (props: any) => {
                     <Text style={styles.subTitle}>你回到香港的日期？</Text>
                     <Controller control={control}
                         render={({ field: { value } }) => (
-                            <DatePickerComponent setDateTitle={onDateChange} DateTitle={DateTitle} />
+                            <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('backDate')} />
                         )}
                         name="backDate"
                     />
 
                     <View style={{ marginTop: 10 }}><BottomLineComponent /></View>
                     <Text style={styles.subTitle}>你是否有以下的病徵？</Text>
-                    <MultiCheckBoxComponent />
+                    <BaseCheckBoxComponent data={['發燒','咳嗽、呼吸困難或咽喉痛','腹瀉或嘔吐','流感症狀']}/>
                     <BottomLineComponent />
 
                 </View>

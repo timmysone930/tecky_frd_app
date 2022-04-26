@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { useForm, Controller } from "react-hook-form";
@@ -12,8 +12,8 @@ import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectCompo
 
 export const ReservationPage = (props: any) => {
   // Form element
-  const { control, handleSubmit, formState: { errors }, setValue} = useForm({
-    defaultValues: { name: '', reservedDate: '', reservedTime: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '' }
+  const { control, handleSubmit, formState: { errors }, setValue, getValues} = useForm({
+    defaultValues: { name: '', reservedDate: '請選擇應診日期', reservedTime: '請選擇應診時間', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '' }
   });
   // Form data submit and navigate
   const onSubmit = (data: any) => {
@@ -22,27 +22,23 @@ export const ReservationPage = (props: any) => {
   }
   // Date Selector
   const [selectedValue, setSelectedValue] = useState('請選擇應診日期');
-  // Time Selector
-  const [selectTimeValue, setSelectTimeValue] = useState('請選擇應診時間');
+
   // Date value change function
   const onValueChange = (itemValue: any, itemIndex: any) => {
     setSelectedValue(itemValue);
-    setSelectTimeValue('請選擇應診時間');
     setValue("reservedDate", itemValue)
+    setValue("reservedTime", '請選擇應診時間')
   };
+
   // Time value change function
   const onTimeValueChange = (itemValue: any, itemIndex: any) => {
-    setSelectTimeValue(itemValue);
     setValue("reservedTime", itemValue)
   };
 
   // 身份證明文件
   const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
-  // id selector
-  const [selectIDValue, setSelectIDValue] = useState('香港身份證');
   // id value change function
   const onIDValueChange = (itemValue: any, itemIndex: any) => {
-    setSelectIDValue(itemValue);
     setValue("idType", itemValue)
   };
 
@@ -69,7 +65,7 @@ export const ReservationPage = (props: any) => {
           <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
                 <BaseSelectComponent placeholder={'請選擇應診日期'} data={userData.availableDate} onChange={onValueChange} mode='date'
-                  selectedValue={selectedValue} dateValue={selectedValue}
+                  selectedValue={getValues('reservedDate')} dateValue={getValues('reservedDate')}
                 />
             )}
             name="reservedDate"
@@ -81,7 +77,7 @@ export const ReservationPage = (props: any) => {
           <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
                 <BaseSelectComponent placeholder={'請選擇應診時間'} data={userData.availableDate} onChange={onTimeValueChange} mode='time'
-                selectedValue={selectTimeValue} dateValue={selectedValue}
+                selectedValue={getValues('reservedTime')} dateValue={getValues('reservedDate')}
               />
             )}
             name="reservedTime"
@@ -107,7 +103,7 @@ export const ReservationPage = (props: any) => {
           <Controller control={control}
             render={({ field: { value } }) => (
                 <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
-                selectedValue={selectIDValue} dateValue={selectedValue}
+                selectedValue={getValues('idType')} dateValue={''}
               />
             )}
             name="idType"
@@ -144,7 +140,6 @@ export const ReservationPage = (props: any) => {
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
           <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
         <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
-          // onPress={() => props.navigation.navigate({ name: '上傳身份證明文件' })}
           onPress={handleSubmit(onSubmit)}
         >
           <Text style={styles.buttonText}>下一步</Text></TouchableOpacity>
