@@ -10,6 +10,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@native-base/icons": "^0.0.11",
     "@react-native-community/datetimepicker": "^6.1.2",
     "@react-native-masked-view/masked-view": "^0.2.6",
     "@react-native-picker/picker": "^2.4.1",
@@ -20,6 +21,7 @@
     "@reduxjs/toolkit": "^1.8.1",
     "@types/react-native-vector-icons": "^6.4.10",
     "@types/react-redux": "^7.1.24",
+    "native-base": "^3.4.3",
     "react": "17.0.2",
     "react-hook-form": "^7.30.0",
     "react-native": "0.68.1",
@@ -30,6 +32,7 @@
     "react-native-paper": "^4.12.0",
     "react-native-safe-area-context": "^4.2.4",
     "react-native-screens": "^3.13.1",
+    "react-native-svg": "^12.3.0",
     "react-native-vector-icons": "^9.1.0",
     "react-redux": "^8.0.1",
     "redux": "^4.2.0"

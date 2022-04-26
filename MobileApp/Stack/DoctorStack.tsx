@@ -16,7 +16,7 @@ const DoctorStack = createStackNavigator();
 
 export const DoctorStacks = () => {
     return (
-        <DoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} >
+        <DoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} >
             <DoctorStack.Screen name="搜尋醫生" component={Doctor} options={{ headerShown: true }} />
             <DoctorStack.Screen name="醫生列表" component={DrList} />
             <DoctorStack.Screen name="預約確認" component={ConfirmPaymentPage} options={{ headerShown: false,  animationEnabled:false}}/>

@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { useForm, Controller } from "react-hook-form";
-import { PickerComponent } from '../../components/PickerComponent';
 import { useSelector } from 'react-redux';
 import { store } from '../../redux/store';
 import { setFormData} from '../../redux/slice';
 
 // Need to be removed; only for testing
 import { FakeDrDATA } from './DrListPage';
+import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
 
 export const ReservationPage = (props: any) => {
   // Form element
@@ -68,8 +68,9 @@ export const ReservationPage = (props: any) => {
           <Text style={styles.subTitle}>應診日期</Text>
           <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
-              <PickerComponent data={userData.availableDate} mode='date' onChange={onValueChange} selectedValue={selectedValue}
-                dateValue={selectedValue} placeholder={'請選擇應診日期'} />
+                <BaseSelectComponent placeholder={'請選擇應診日期'} data={userData.availableDate} onChange={onValueChange} mode='date'
+                  selectedValue={selectedValue} dateValue={selectedValue}
+                />
             )}
             name="reservedDate"
           />
@@ -79,8 +80,9 @@ export const ReservationPage = (props: any) => {
           <Text style={styles.subTitle}>應診時間</Text>
           <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
-              <PickerComponent data={userData.availableDate} mode='time' onChange={onTimeValueChange} selectedValue={selectTimeValue}
-                dateValue={selectedValue} placeholder={'請選擇應診時間'} />
+                <BaseSelectComponent placeholder={'請選擇應診時間'} data={userData.availableDate} onChange={onTimeValueChange} mode='time'
+                selectedValue={selectTimeValue} dateValue={selectedValue}
+              />
             )}
             name="reservedTime"
           />
@@ -104,8 +106,9 @@ export const ReservationPage = (props: any) => {
           <Text style={styles.subTitle}>身份證明文件</Text>
           <Controller control={control}
             render={({ field: { value } }) => (
-              <PickerComponent data={idTypeArr} mode='id' onChange={onIDValueChange} selectedValue={selectIDValue}
-                dateValue={selectedValue} placeholder={'請選擇身份證明文件'} />
+                <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
+                selectedValue={selectIDValue} dateValue={selectedValue}
+              />
             )}
             name="idType"
           />

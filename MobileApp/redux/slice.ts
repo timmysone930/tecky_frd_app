@@ -47,3 +47,15 @@ export const reserveFormSlice = createSlice({
 })
 
 export const { setFormData, setHealthFormMultiBox, setHealthFormInfo } = reserveFormSlice.actions
+// to check user auth & status
+export const userStatusSlice = createSlice({
+    name: 'userStatus',
+    initialState: {
+        isLogin: false,
+    },
+    reducers: {
+        checkStatus: (state, action) => {
+        }
+    }
+})
+export const { checkStatus } = userStatusSlice.actions
