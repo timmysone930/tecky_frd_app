@@ -10,6 +10,6 @@ export const userStatusSlice = createSlice({
         checkStatus: (state, action) => {
             state.isLogin = action.payload.status
         },
-    }
+    },
 })
 export const { checkStatus } = userStatusSlice.actions

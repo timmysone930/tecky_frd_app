@@ -121,6 +121,7 @@ export const DrList: React.FC = (prop: any) => {
     const backgroundStyle = {
         backgroundColor: 'white',
     };
+
     // For FlatList
     const renderItem = (props: any) => (
         <Item name={props.item.name} address={props.item.address}

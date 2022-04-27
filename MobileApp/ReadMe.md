@@ -7,6 +7,11 @@ cd ios
 pod install
 cd ..
 ```
+#### Setup before start program
+```bash
+touch .env
+```
+
 
 #### Start program
 ```bash

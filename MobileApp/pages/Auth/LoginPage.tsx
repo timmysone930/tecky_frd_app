@@ -1,7 +1,9 @@
+import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
+import { useLoginByPhoneMutation } from '../../API/AuthAPI';
 import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 
@@ -19,8 +21,15 @@ export const LoginPage = (props: any) => {
     // GET previous page 
     const previousPage = useSelector((state: any) => state.setDoctorID.currentPage);
 
+    const [loginByPhone] = useLoginByPhoneMutation();
     // login
-    const onLoginPress = () => {
+    const onLoginPress = async (inputData: any) => {
+        const data:{'phone':number, 'smsCode':string} = {
+            "phone": inputData.phoneNo,
+            "smsCode": inputData.loginSMS
+        }
+        const res:QueryReturnValue = await loginByPhone(data)
+        console.log(res['error'])
         store.dispatch(checkStatus({ status: true }))
         if(previousPage === ''){
             props.navigation.navigate({ name: '預約Tab',})
@@ -60,7 +69,7 @@ export const LoginPage = (props: any) => {
 
                         {errors.loginSMS && <Text style={styles.warning}>* 此項必須填寫</Text>}
                     </View>
-                    <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={onLoginPress}>
+                    <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={handleSubmit(onLoginPress)}>
                         <Text style={styles.buttonText}>登入</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate({ name: '注冊界面' }) }}>

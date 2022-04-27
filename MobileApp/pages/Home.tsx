@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import {
     SafeAreaView,
@@ -6,6 +6,7 @@ import {
     View,
     Image,
 } from 'react-native';
+import { useGetDoctorListQuery } from '../API/DoctorAPI';
 
 import { NewsCard } from '../components/home/NewsCard';
 import { TipsCard } from '../components/home/TipsCard';
@@ -14,6 +15,17 @@ export const Home = () => {
     const backgroundStyle = {
         backgroundColor:'white',
     };
+
+    const {
+        data, isLoading, isSuccess, isError, error } = useGetDoctorListQuery()
+    if(isLoading){
+        console.log("HI")
+        console.log(JSON.stringify(data))
+    }else{
+        console.log("BYE")
+        console.log(JSON.stringify(data))
+    }
+    
     return (
         <SafeAreaView style={backgroundStyle}>
             <ScrollView
