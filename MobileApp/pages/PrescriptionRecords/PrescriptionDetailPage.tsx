@@ -1,6 +1,13 @@
 import React from 'react'
 import { View, ScrollView, Text, SafeAreaView } from 'react-native';
+import { useSelector } from 'react-redux';
 import { styles } from "../../styles/GeneralStyles"
+
+// Component
+import { PrescriptionBasicInfo } from '../../components/prescription/PrescriptionBasicInfo';
+import { PrescriptionDetail } from '../../components/prescription/PrescriptionDetail';
+import { CostDisplay } from '../../components/prescription/CostDisplay'
+import { PayButton } from '../../components/prescription/PayButton'
 
 export const FakeData = {
     pres_code: "RM220319001",
@@ -21,12 +28,16 @@ export const FakeData = {
     addr: "",
     pick_up_store: [
         {
+            clinic_code: "123",
+            area: "新界",
             district: "馬鞍山",
-            addr: "Room 11, ABC centre, Kowloon Bay, Kowloon"  
+            addr: "ABC 大廈 10樓 10室",
         },
         {
+            clinic_code: "456",
+            area: "新界",
             district: "青衣",
-            addr: "Room 2, DEF centre, Tsing Yi, NT"
+            addr: "CDE 大廈 20樓 3室",
         }
     ],
     remark: "",
@@ -39,57 +50,46 @@ export const FakeData = {
     contact_number: "1234 5678",
 }
 
-// Component
-import { PrescriptionBasicInfo } from '../../components/prescription/PrescriptionBasicInfo';
-import { PrescriptionDetail } from '../../components/prescription/PrescriptionDetail';
-import { CostDisplay } from '../../components/prescription/CostDisplay'
-import { PayButton } from '../../components/prescription/PayButton'
-
-interface Props {
-    data: any,
-    changePage: () => void
-}
-
-function RenderDetail (props: Props) {
-    return (
-        <View style={[styles.viewContainer]}>
-
-            {/* Component */}
-            <PrescriptionBasicInfo 
-                doctor={props.data.doctor}
-                profession={props.data.profession}
-                created_at={props.data.created_at}
-                course_of_treatment={props.data.course_of_treatment}
-                patient_name={props.data.patient_name}
-                patient_id={props.data.patient_id}
-                orderStatusShow={true}
-                pres_code={props.data.pres_code}
-                order_status={props.data.order_status}
-            />
-
-            {/* Component */}
-            <CostDisplay cost={props.data.cost}/>
-
-            <PayButton title={"前往付款"} disabled={false} onPressFunction={props.changePage}/>
-
-            {/* Component */}
-            <PrescriptionDetail prescription_details={props.data.prescription_details}/>
-
-            <Text style={[styles.subTitle, styles.textCenter, styles.mt_10]}>
-                請依照指示及療程服藥。
-            </Text>
-            <Text style={[styles.subTitle, styles.textCenter, styles.mb_10]}>
-                如布疑問請致電 {props.data.contact_number} 查詢。 
-            </Text>
-        </View>
-    )
-}
-
 export function PrescriptionDetailPage({navigation}:any) {
+
+    const prescriptionCode = useSelector((state: any) => state.getPrescriptionCode).prescriptionCode ;
+    
+    const fetchData = FakeData
+
     return (
         <SafeAreaView>
             <ScrollView>
-                <RenderDetail data={FakeData} changePage={()=>{navigation.navigate("地址確認")}}/>
+                <View style={[styles.viewContainer]}>
+
+                    {/* Component */}
+                    <PrescriptionBasicInfo 
+                        pres_code={prescriptionCode}
+                        doctor={fetchData.doctor}
+                        profession={fetchData.profession}
+                        created_at={fetchData.created_at}
+                        course_of_treatment={fetchData.course_of_treatment}
+                        patient_name={fetchData.patient_name}
+                        patient_id={fetchData.patient_id}
+                        orderStatusShow={true}
+                        order_status={fetchData.order_status}
+                    />
+
+                    {/* Component */}
+                    <CostDisplay cost={fetchData.cost}/>
+
+                    <PayButton title={"前往付款"} disabled={false} onPressFunction={()=>{navigation.navigate("地址確認")}}/>
+
+                    {/* Component */}
+                    <PrescriptionDetail prescription_details={fetchData.prescription_details}/>
+
+                    <Text style={[styles.subTitle, styles.textCenter, styles.mt_10]}>
+                        請依照指示及療程服藥。
+                    </Text>
+                    <Text style={[styles.subTitle, styles.textCenter, styles.mb_10]}>
+                        如布疑問請致電 {fetchData.contact_number} 查詢。 
+                    </Text>
+                    
+                </View>
             </ScrollView>
         </SafeAreaView>
     );

@@ -1,6 +1,8 @@
 import React from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
+//Redux
+import { useSelector } from 'react-redux';
 
 // Component
 import { PrescriptionBasicInfo } from '../../components/prescription/PrescriptionBasicInfo';
@@ -16,34 +18,40 @@ import { FakeAddr } from './DeliveryOptionPage';
 const deliveryOption = 'pick-up'
 
 export const PrescriptionPaymentConfirm = (props:any) => {
+
+    const fetchData = FakeData;
+    const inputAddress =  FakeAddr[0]
+    const deliveryMethod = useSelector((state:any)=>state.getPrescriptionPaymentPreset).deliveryMethod
+    const pickUpStore = useSelector((state:any)=>state.getPrescriptionPaymentPreset).pickUpStore
+    const deliverAddress = useSelector((state:any)=>state.getPrescriptionPaymentPreset).deliverAddress
     return (
         <SafeAreaView>
             <ScrollView>
                 <View style={[styles.pageMargin]}>
                     {/* Component */}
                     <PrescriptionBasicInfo 
-                        doctor={FakeData.doctor}
-                        profession={FakeData.profession}
-                        created_at={FakeData.created_at}
-                        course_of_treatment={FakeData.course_of_treatment}
-                        patient_name={FakeData.patient_name}
-                        patient_id={FakeData.patient_id}
+                        doctor={fetchData.doctor}
+                        profession={fetchData.profession}
+                        created_at={fetchData.created_at}
+                        course_of_treatment={fetchData.course_of_treatment}
+                        patient_name={fetchData.patient_name}
+                        patient_id={fetchData.patient_id}
                         orderStatusShow={false}
-                        pres_code={FakeData.pres_code}
-                        order_status={FakeData.order_status}
+                        pres_code={fetchData.pres_code}
+                        order_status={fetchData.order_status}
                     />
                     {/* Component */}
-                    <PrescriptionDetail prescription_details={FakeData.prescription_details}/>
+                    <PrescriptionDetail prescription_details={fetchData.prescription_details}/>
                     <View style={[styles.flexEnd, styles.mb_30, styles.bottomLine]}>
                         {/* Component */}
-                        <CostDisplay cost={FakeData.cost}/>
+                        <CostDisplay cost={fetchData.cost}/>
                     </View>
                     <View style={[styles.flexRow]}>
                         <Text style={[{width: 95}, styles.contentText]}>
                             取藥方式: 
                         </Text>
                         <Text style={[styles.subTitle]}>
-                            {deliveryOption === 'pick-up'? "分店自取": "上門送藥"}
+                            {deliveryMethod === 'pick-up'? "分店自取": "上門送藥"}
                         </Text>
                     </View>
                     <View style={[styles.flexRow, styles.mb_30]}>
@@ -51,21 +59,37 @@ export const PrescriptionPaymentConfirm = (props:any) => {
                             送藥地址: 
                         </Text>
                         <View>
-                            <Text style={[styles.subTitle, styles.mt_30]}>
-                                {FakeAddr[0].name}&nbsp;
-                                {FakeAddr[0].phone}
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {FakeAddr[0].area}&nbsp;
-                                {FakeAddr[0].district}&nbsp;
-                                {FakeAddr[0].addr.street}
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {FakeAddr[0].addr.estate}&nbsp;
-                                {FakeAddr[0].addr.block}座&nbsp;
-                                {FakeAddr[0].addr.floor}樓&nbsp;
-                                {FakeAddr[0].addr.flat}室&nbsp;
-                            </Text>
+                            {
+                                deliveryMethod === "pick-up" &&
+                                <>
+                                    <Text style={[styles.subTitle, styles.mt_30]}>
+                                        {pickUpStore.area} {pickUpStore.district} 
+                                    </Text>
+                                    <Text style={[styles.subTitle]}>
+                                        {pickUpStore.addr}
+                                    </Text>
+                                </>
+                            }
+                            {
+                                deliveryMethod === "deliver" &&
+                                <>
+                                    <Text style={[styles.subTitle, styles.mt_30]}>
+                                        {inputAddress.name}&nbsp;
+                                        {inputAddress.phone}
+                                    </Text>
+                                    <Text style={[styles.subTitle]}>
+                                        {deliverAddress.area}&nbsp;
+                                        {deliverAddress.district}&nbsp;
+                                        {deliverAddress.addr.street}
+                                    </Text>
+                                    <Text style={[styles.subTitle]}>
+                                        {deliverAddress.addr.estate}&nbsp;
+                                        {deliverAddress.addr.block}座&nbsp;
+                                        {deliverAddress.addr.floor}樓&nbsp;
+                                        {deliverAddress.addr.flat}室&nbsp;
+                                    </Text>
+                                </>
+                            }
                         </View>
                     </View>
                     <PayButton title={"確定並付款"} disabled={false} onPressFunction={()=>console.log("pay")}/>

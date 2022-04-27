@@ -5,6 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 // Screen component
 import { PrescriptionListPage } from '../pages/PrescriptionRecords/PrescriptionListPage';
 import { PrescriptionStacks } from './PrescriptionStack';
+import { UserAddressStacks } from './UserAddressStack';
+
 
 const MyInfoStack = createStackNavigator();
 
@@ -15,7 +17,7 @@ export const MyInfoStacks = () => {
             <MyInfoStack.Screen name="帳戶資料" component={PrescriptionListPage} />
             <MyInfoStack.Screen name="預約記錄" component={PrescriptionListPage} />
             <MyInfoStack.Screen name="藥單記錄" component={PrescriptionStacks} options={{ headerShown: false }}/>
-            <MyInfoStack.Screen name="送藥地址" component={PrescriptionListPage} />
+            <MyInfoStack.Screen name="送藥地址" component={UserAddressStacks} options={{ headerShown: false }}/>
         </MyInfoStack.Navigator>
     )
 }

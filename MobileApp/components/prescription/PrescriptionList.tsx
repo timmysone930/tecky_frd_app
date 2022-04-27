@@ -2,6 +2,9 @@ import React from 'react'
 import { FlatList, View, Text, TouchableOpacity } from 'react-native';
 import { DisplayOrderStatus } from "./DisplayOrderStatus"
 import { styles } from "../../styles/RecordListStyle"
+//Redux
+import { store } from '../../redux/store';
+import { setPrescriptionCode } from '../../redux/slice';
 
 interface Props {
   data: Array<{
@@ -10,7 +13,8 @@ interface Props {
     created_at: string,
     order_status: string
   }>,
-  changePage: ()=> void,
+  changePage: string,
+  navigation: any
 }
 
 export const PrescriptionList = (props: Props) => {
@@ -20,8 +24,11 @@ export const PrescriptionList = (props: Props) => {
         renderItem={
           ({item})=> (
               <TouchableOpacity 
-              style={[styles.box]}
-              onPress={props.changePage}
+                style={[styles.box]}
+                onPress={()=>{
+                  store.dispatch(setPrescriptionCode({prescriptionCode: item.pres_code}))
+                  props.navigation.navigate(props.changePage)
+                }}
               >
                 <View>
                   <Text style={[styles.resCode]}>{item.pres_code}</Text>

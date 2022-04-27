@@ -139,6 +139,10 @@ export const styles = StyleSheet.create({
     textAlign: "center"
     },
 
+    testRight: {
+      textAlign: "right"
+    },
+
     mb_10: {
     marginBottom: 10
     },

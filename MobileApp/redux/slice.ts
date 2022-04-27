@@ -14,6 +14,7 @@ export const doctorIDSlice = createSlice({
     }
 })
 export const { setDoctorID } = doctorIDSlice.actions
+
 // get reservation form detail
 export const reserveFormSlice = createSlice({
     name: 'reserveForm',
@@ -44,6 +45,7 @@ export const reserveFormSlice = createSlice({
 })
 
 export const { setFormData, setHealthFormMultiBox, setHealthFormInfo } = reserveFormSlice.actions
+
 // to check user auth & status
 export const userStatusSlice = createSlice({
     name: 'userStatus',
@@ -57,3 +59,57 @@ export const userStatusSlice = createSlice({
     }
 })
 export const { checkStatus } = userStatusSlice.actions
+
+// Get the code of prescription the user currently checking
+export const prescriptionCheckingSlice = createSlice({
+    name: "prescriptionChecking",
+    initialState: {
+        prescriptionCode: ""
+    },
+    reducers: {
+        setPrescriptionCode: (state, action) => {
+            state.prescriptionCode = action.payload.prescriptionCode
+        }
+    }
+})
+
+export const { setPrescriptionCode } = prescriptionCheckingSlice.actions
+
+// Store the dato before the prescription payment process
+export const prescriptionPaymentPresetSlice = createSlice({
+    name: "deliveryMethod",
+    initialState: {
+        deliveryMethod: "",
+        pickUpStore: {},
+        deliverAddress: {}
+    },
+    reducers: {
+        setPrescriptionPaymentPreset: (state, action) => {
+            const {deliveryMethod, pickUpStore, deliverAddress} = action.payload
+            state.deliveryMethod = deliveryMethod
+            state.pickUpStore = pickUpStore
+            state.deliverAddress = deliverAddress
+        }
+    }
+})
+
+export const { setPrescriptionPaymentPreset } = prescriptionPaymentPresetSlice.actions
+
+// Deal with the address data storing
+export const addressDataSlice = createSlice({
+    name: "addressData",
+    initialState: {
+        addressWannaDeleteID: "",
+        addressEditContent: null
+    },
+    reducers: {
+        setAddressWannaDeleteID: (state, action) => {
+            state.addressWannaDeleteID = action.payload.addressWannaDeleteID
+        },
+        setAddressEditContent: (state, action) => {
+            state.addressEditContent = action.payload.addressEditContent
+        }
+    }
+})
+
+export const { setAddressWannaDeleteID, setAddressEditContent } = addressDataSlice.actions

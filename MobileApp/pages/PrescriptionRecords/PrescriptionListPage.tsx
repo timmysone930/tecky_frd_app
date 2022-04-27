@@ -46,7 +46,11 @@ export const PrescriptionListPage = ({navigation}:any) => {
 
   return (
       <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-        <PrescriptionList data={FakeData} changePage={()=>{navigation.navigate("藥單詳情")}}/>
+        <PrescriptionList 
+          data={FakeData} 
+          changePage={"藥單詳情"}
+          navigation={navigation}
+        />
       </SafeAreaView>
   )
 }
