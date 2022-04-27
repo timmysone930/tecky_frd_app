@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
-import { doctorIDSlice, reserveFormSlice, userStatusSlice} from './slice'
+import { userStatusSlice } from './AuthSlice'
+import { doctorIDSlice, reserveFormSlice} from './slice'
 
 export const store = configureStore({
   reducer: {

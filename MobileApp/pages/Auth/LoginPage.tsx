@@ -1,8 +1,11 @@
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form';
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput,ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { useSelector } from 'react-redux';
+import { checkStatus } from '../../redux/AuthSlice';
+import { store } from '../../redux/store';
 
-export const LoginPage = (props:any) => {
+export const LoginPage = (props: any) => {
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
@@ -12,6 +15,19 @@ export const LoginPage = (props:any) => {
     const { control, handleSubmit, formState: { errors }, setValue } = useForm({
         defaultValues: { phoneNo: '', loginSMS: '' }
     });
+
+    // GET previous page 
+    const previousPage = useSelector((state: any) => state.setDoctorID.currentPage);
+
+    // login
+    const onLoginPress = () => {
+        store.dispatch(checkStatus({ status: true }))
+        if(previousPage === ''){
+            props.navigation.navigate({ name: '預約Tab',})
+        }else{
+            props.navigation.navigate({ name: '相關醫生', })
+        }
+    }
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
@@ -44,10 +60,10 @@ export const LoginPage = (props:any) => {
 
                         {errors.loginSMS && <Text style={styles.warning}>* 此項必須填寫</Text>}
                     </View>
-                    <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={() => { }}>
+                    <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={onLoginPress}>
                         <Text style={styles.buttonText}>登入</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate({ name: '注冊界面' })}}>
+                    <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate({ name: '注冊界面' }) }}>
                         <Text style={styles.buttonText}>立即注冊</Text>
                     </TouchableOpacity>
                 </View>

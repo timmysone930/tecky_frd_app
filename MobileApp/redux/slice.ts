@@ -4,12 +4,13 @@ import { createSlice } from '@reduxjs/toolkit'
 export const doctorIDSlice = createSlice({
     name: 'doctorID',
     initialState: {
-        id: '',
+        id: '', currentPage:'',
     },
     reducers: {
         setDoctorID: (state, action) => {
-            const { id } = action.payload
+            const { id, currentPage } = action.payload
             state.id = id
+            state.currentPage = currentPage
         }
     }
 })
@@ -44,16 +45,3 @@ export const reserveFormSlice = createSlice({
 })
 
 export const { setFormData, setHealthFormMultiBox, setHealthFormInfo } = reserveFormSlice.actions
-// to check user auth & status
-export const userStatusSlice = createSlice({
-    name: 'userStatus',
-    initialState: {
-        isLogin: false,
-    },
-    reducers: {
-        checkStatus: (state, action) => {
-            state.isLogin = action.payload.status
-        }
-    }
-})
-export const { checkStatus } = userStatusSlice.actions

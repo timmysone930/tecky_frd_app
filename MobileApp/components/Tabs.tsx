@@ -12,11 +12,10 @@ import { DoctorStacks } from '../Stack/DoctorStack';
 import { MyInfoStacks } from '../Stack/MyInfoStack';
 import { ResRecordStacks } from '../Stack/ResRecordStack';
 import { useSelector } from 'react-redux';
+import { LoginStacks } from '../Stack/LoginStack';
 
 // import icon for FontAwesome
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { LoginPage } from '../pages/Auth/LoginPage';
-import { LoginStacks } from '../Stack/LoginStack';
 
 // Bottom Tabs
 const Tab = createBottomTabNavigator();
@@ -25,7 +24,6 @@ export const Tabs = () => {
   
   // get user status
   const isLogin = useSelector((state: any) => state.getUserStatus.isLogin);
-  console.log(isLogin)
   return (
     <Tab.Navigator initialRouteName="主頁" screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }}>
       <Tab.Screen name="主頁" component={Home} options={{

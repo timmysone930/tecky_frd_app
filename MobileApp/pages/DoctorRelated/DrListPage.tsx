@@ -106,7 +106,7 @@ export const FakeDrDATA = [
 // html and style for FlatList
 const Item = (props: any) => (
     <TouchableOpacity style={styles.drListCard} onPress={() => {
-        props.navigate.navigation.navigate('醫生相關', {
+        props.navigate.navigation.navigate('相關醫生', {
             screen: '醫生詳情',
             params: { id: props.id },
         })

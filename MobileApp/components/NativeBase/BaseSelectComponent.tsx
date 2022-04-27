@@ -30,10 +30,10 @@ export const BaseSelectComponent = (props: any) => {
     }
 
     return (
-        <Select minWidth="200" accessibilityLabel={props.placeholder} placeholder={props.placeholder} _selectedItem={{
+        <Select minWidth="120" accessibilityLabel={props.placeholder} placeholder={props.placeholder} _selectedItem={{
             bg: "teal.600",
             endIcon: <CheckIcon size={5} />
-        }} mt="2" mb='1' fontSize="sm" borderColor="#737474" onValueChange={props.onChange}>
+        }} mt="1.5" mb='1'fontSize="sm" borderColor="#737474" onValueChange={props.onChange} flex={1} borderRadius="3" borderWidth='0.7'>
 
         {selectFunction}
         </Select>

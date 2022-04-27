@@ -20,6 +20,9 @@ export const ResRecordDeail = (props: any) => {
         }
     })
 
+    const rowTitleArr = ['預約編號：', '預約醫生：', '預約日期：', '預約時間：']
+    const rowCellArr = [userData.record_code, userData.doctor, userData.res_date, userData.res_time]
+
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
@@ -30,20 +33,13 @@ export const ResRecordDeail = (props: any) => {
                     purus auctor malesuada.
                 </Text>
                 <BottomLineComponent />
-                <View style={[backgroundStyle, { flex: 1, marginBottom: 15, padding: 15, paddingTop: 25, flexDirection: 'row', }]}>
-                    <View>
-                        <Text style={styles.contentText}>預約編號：</Text>
-                        <Text style={styles.contentText}>預約醫生：</Text>
-                        <Text style={styles.contentText}>預約日期：</Text>
-                        <Text style={styles.contentText}>預約時間：</Text>
-                    </View>
-                    <View style={{ marginLeft: 10, }}>
-                        <Text style={styles.subTitle}>{userData.record_code}</Text>
-                        <Text style={styles.subTitle}>{userData.doctor}</Text>
-                        <Text style={styles.subTitle}>{userData.res_date}</Text>
-                        <Text style={styles.subTitle}>{userData.res_time}</Text>
-                    </View>
-                </View>
+                {rowTitleArr.map((item, idx) => (
+                        <View style={[backgroundStyle,{flexDirection:'row', marginBottom: 1, marginHorizontal:15,}]} key={`confirm_row_${idx}`}>
+                            <View style={{flex:1.3}}><Text style={styles.rowTitle}>{item}</Text></View>
+                            <View style={{flex:3}}><Text style={styles.rowCellText}>{rowCellArr[idx]}</Text></View>
+                        </View>
+                        ))}
+                {/* </View> */}
                 {userData.res_status !== '已完成' ?
                     <TouchableOpacity disabled={userData.res_status === '待診中' ? false : true} style={userData.res_status === '待診中' ? styles.button : styles.disableButton} onPress={() => props.navigation.navigate({ name: '主頁' })}>
                         <Text style={styles.buttonText}>開始診症</Text></TouchableOpacity> :
@@ -85,18 +81,24 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
     },
-    contentText: {
-        color: '#3B3B3B',
-        marginVertical: 10,
-        fontSize: 17,
-        fontWeight: '500',
-        marginTop: 8,
-        marginBottom: 15,
-    },
     warning: {
         fontSize: 14,
         color: 'red',
         textAlign:'center',
         marginVertical: 20,
       },
+      rowTitle: {
+        color: '#3B3B3B',
+        fontSize: 17,
+        fontWeight: '500',
+        marginTop: 12,
+        marginBottom: 15,
+    },
+    rowCellText: {
+        color: '#225D66',
+        fontSize: 17,
+        fontWeight: '600',
+        marginTop: 10,
+        marginBottom: 15,
+    },
 });

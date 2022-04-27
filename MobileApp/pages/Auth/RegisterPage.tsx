@@ -1,11 +1,11 @@
-import { Checkbox} from 'native-base';
+import { Checkbox } from 'native-base';
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form';
-import { View,Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
 import { DatePickerComponent } from '../../components/PickerComponent';
 import { BottomLineComponent } from '../../components/SearchComponent';
-import { checkStatus } from '../../redux/slice';
+import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 
 export const RegisterPage = (props: any) => {
@@ -16,12 +16,14 @@ export const RegisterPage = (props: any) => {
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: {
-            regTitle: '', regName: '', regIDType: '', regIDNumber: '', regBDay: '請選擇你的生日日期', regEmail: '', regPhone: '', regSMS: '',
+            regTitle: '', regName: '', regIDType: '', regIDNumber: '', regBDay: '請選擇你的生日日期', regEmail: '', phoneCode: '', regPhone: '', regSMS: '',
             regPolicyOne: [], regPolicyTwo: []
         }
     });
     // 稱謂
     const titleArr = ['先生', '小姐', '女士']
+    // 稱謂
+    const phoneCodeArr = ['852', '853', '86']
     // 身份證明文件
     const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
     // id value change function
@@ -36,11 +38,15 @@ export const RegisterPage = (props: any) => {
     const onTitleChange = (itemValue: any) => {
         setValue("regTitle", itemValue)
     };
+    // Title value change function
+    const onPhoneCodeChange = (itemValue: any) => {
+        setValue("phoneCode", itemValue)
+    };
     // Multi Box     
     const [groupValues, setGroupValues] = React.useState([]);
     const [groupValues2, setGroupValues2] = React.useState([]);
     const onSubmit = (data: any) => {
-        store.dispatch(checkStatus({status:true}))
+        store.dispatch(checkStatus({ status: true }))
         props.navigation.navigate({ name: '注冊成功' })
     }
 
@@ -51,7 +57,7 @@ export const RegisterPage = (props: any) => {
                     <Text style={styles.subTitle}>稱謂</Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (
-                            <BaseSelectComponent placeholder={'請選擇應診時間'} data={titleArr} onChange={onTitleChange} mode='other'
+                            <BaseSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
                                 selectedValue={getValues('regTitle')} dateValue={''}
                             />
                         )}
@@ -108,13 +114,24 @@ export const RegisterPage = (props: any) => {
                     {/* 必須填寫提示 */}
                     {errors.regEmail && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
-                    <Text style={styles.subTitle}>流動電話號碼<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
-                    <Controller control={control} rules={{ required: true, }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫收發通知用的電郵地址" placeholderTextColor="#737474" />
-                        )}
-                        name="regPhone"
-                    />
+                    <Text style={styles.subTitle}>流動電話號碼<Text style={{ color: 'red', fontSize: 12, }}> *</Text></Text>
+                    <View style={{ flexDirection: 'row', }}>
+                        <Controller control={control} rules={{ required: true, }}
+                            render={({ field: { value } }) => (
+                                <BaseSelectComponent placeholder={'電話區號 '} data={phoneCodeArr} onChange={onPhoneCodeChange} mode='other'
+                                    selectedValue={getValues('phoneCode')} dateValue={''} 
+                                />
+                            )}
+                            name="phoneCode"
+                        />
+                        <Controller control={control} rules={{ required: true, }}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <TextInput keyboardType={'numeric'}  style={[styles.input,{marginLeft:10, flex: 1.5}]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫電話號碼" placeholderTextColor="#737474" />
+                            )}
+                            name="regPhone"
+                        />
+
+                    </View>
                     {/* 必須填寫提示 */}
                     {errors.regPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
@@ -141,7 +158,7 @@ export const RegisterPage = (props: any) => {
                             }} value={groupValues} accessibilityLabel="agree policy" mt={1}>
                                 <Checkbox value='policyOne' mt={4} mb={3} mr={12} >
                                     <Text style={styles.policyText}>本人確認已經閲讀、明白及接納《個人私隱政策聲明》，並且同意德信醫療按照《個人資料收集聲明》
-                                所述的方式和用途使用閣下的個人資料。</Text></Checkbox>
+                                        所述的方式和用途使用閣下的個人資料。</Text></Checkbox>
                             </Checkbox.Group>
                         )}
                         name="regPolicyOne"
@@ -155,9 +172,9 @@ export const RegisterPage = (props: any) => {
                             }} value={groupValues2} accessibilityLabel="agree policy" mt={1}>
                                 <Checkbox value='policyTwo' mt={4} mb={3} mr={12}>
                                     <Text style={styles.policyText}>
-                                    本人同意德信醫療就《個人資料收集聲明》所述的通訊、推廣及市場促銷活動使用及轉移本人的個人資料。
+                                        本人同意德信醫療就《個人資料收集聲明》所述的通訊、推廣及市場促銷活動使用及轉移本人的個人資料。
                                     </Text>
-                                    </Checkbox>
+                                </Checkbox>
                             </Checkbox.Group>
                         )}
                         name="regPolicyTwo"
@@ -193,6 +210,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'red',
         marginLeft: 5,
+        marginBottom:5,
     },
     subTitle: {
         color: '#225D66',
@@ -211,7 +229,7 @@ const styles = StyleSheet.create({
         // width: '50%',
         backgroundColor: '#6d7f99',
         paddingVertical: 16,
-        marginHorizontal:20,
+        marginHorizontal: 20,
         marginBottom: 100,
         borderRadius: 4,
     },
@@ -232,10 +250,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 13,
     },
-    policyText:{
-        fontSize:12,
-        marginRight:12,
-        color:'#2E2E2E',
+    policyText: {
+        fontSize: 12,
+        marginRight: 12,
+        color: '#2E2E2E',
     },
 
 });

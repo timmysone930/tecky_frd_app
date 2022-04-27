@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { useForm, Controller } from "react-hook-form";
 import { useSelector } from 'react-redux';
@@ -54,7 +54,11 @@ export const ReservationPage = (props: any) => {
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
-      <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
+          <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white'}}>
         {/* Doctor Info */}
         <View style={styles.drListCard}>
           <DrListCard props={userData} />
@@ -127,16 +131,18 @@ export const ReservationPage = (props: any) => {
           {errors.EmergencyContactName && <Text style={styles.warning}>* 此項必須填寫</Text>}
           <Controller control={control} rules={{ required: true, }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話" placeholderTextColor="#737474" />
+              <TextInput keyboardType={'numeric'}  style={[styles.input,{marginBottom:45}]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話" placeholderTextColor="#737474" />
             )}
             name="EmergencyContactPhone"
           />
           {/* 必須填寫提示 */}
           {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
         </View>
+        
       </ScrollView>
+      </KeyboardAvoidingView>
       {/* Button to go back and next page */}
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row'}}>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
           <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
         <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
@@ -149,6 +155,9 @@ export const ReservationPage = (props: any) => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   drListCard: {
     padding: 15,
     paddingTop: 25,
