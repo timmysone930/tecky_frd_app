@@ -9,8 +9,10 @@ import { DrList } from '../pages/DoctorRelated/DrListPage';
 import { DrInfo } from '../pages/DoctorRelated/DrInfoPage';
 import { HealthDeForm } from '../pages/DoctorRelated/HealthDeForm';
 import { ConfirmResPage } from '../pages/DoctorRelated/ConfirmResPage';
-import { PaymentPage} from '../pages/PaymentPage';
+import { PaymentPage } from '../pages/PaymentPage';
 import { ConfirmPaymentPage } from '../pages/ConfirmedPaymentPage';
+import { useSelector } from 'react-redux';
+import { LoginStacks } from './LoginStack';
 
 const DoctorStack = createStackNavigator();
 
@@ -19,22 +21,28 @@ export const DoctorStacks = () => {
         <DoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} >
             <DoctorStack.Screen name="搜尋醫生" component={Doctor} options={{ headerShown: true }} />
             <DoctorStack.Screen name="醫生列表" component={DrList} />
-            <DoctorStack.Screen name="預約確認" component={ConfirmPaymentPage} options={{ headerShown: false,  animationEnabled:false}}/>
+            {/* <DoctorStack.Screen name="預約確認" component={ConfirmPaymentPage} options={{ headerShown: false, animationEnabled: false }} /> */}
         </DoctorStack.Navigator>
     )
 }
 
 const InnerDoctorStack = createStackNavigator();
 export const InnerDoctorStacks = () => {
+    // get user status
+    const isLogin = useSelector((state: any) => state.getUserStatus.isLogin);
     return (
         <InnerDoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} initialRouteName="醫生詳情">
             <InnerDoctorStack.Screen name="醫生詳情" component={DrInfo} />
-            <InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} />
+            {isLogin?<InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} options={{headerShown: true }}/>:
+            <InnerDoctorStack.Screen name="預約醫生" component={LoginStacks} options={{headerShown: false }}/>
+            }
+            {/* <InnerDoctorStack.Screen name="預約醫生" component={isLogin ? ReservationPage : LoginStacks} options={{headerShown: false }}/> */}
             <InnerDoctorStack.Screen name="上傳身份證明文件" component={ReserveIDCardPage} />
             <InnerDoctorStack.Screen name="健康申報表" component={HealthDeForm} />
             <InnerDoctorStack.Screen name="預約須知" component={PolicyPage} />
             <InnerDoctorStack.Screen name="確認預約資料" component={ConfirmResPage} />
             <InnerDoctorStack.Screen name="付款" component={PaymentPage} />
+            <InnerDoctorStack.Screen name="預約確認" component={ConfirmPaymentPage} options={{ headerShown: false, animationEnabled: false }} />
         </InnerDoctorStack.Navigator>
     )
 }

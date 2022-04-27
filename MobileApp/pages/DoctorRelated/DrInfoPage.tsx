@@ -23,6 +23,7 @@ export const DrInfo: React.FC = (props: any) => {
     const backgroundStyle = {
         backgroundColor: 'white',
     };
+
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
@@ -33,7 +34,9 @@ export const DrInfo: React.FC = (props: any) => {
                 <InfoCardComponent title={'專業資格'} array={userData.qualifications} />
                 <Button mode="contained" color='#325C80' onPress={() => {props.navigation.navigate({
                     name: '預約醫生',
-                }), store.dispatch(setDoctorID({id:id}))}} style={styles.button} disabled={userData.roster ? false : true}> 
+                }), 
+                store.dispatch(setDoctorID({id:id, currentPage:'預約醫生'}),
+                )}} style={styles.button} disabled={userData.roster ? false : true}> 
                 線上視像諮詢
                 </Button>
             </ScrollView>

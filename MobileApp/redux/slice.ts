@@ -4,12 +4,13 @@ import { createSlice } from '@reduxjs/toolkit'
 export const doctorIDSlice = createSlice({
     name: 'doctorID',
     initialState: {
-        id: '',
+        id: '', currentPage:'',
     },
     reducers: {
         setDoctorID: (state, action) => {
-            const { id } = action.payload
+            const { id, currentPage } = action.payload
             state.id = id
+            state.currentPage = currentPage
         }
     }
 })

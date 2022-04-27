@@ -19,7 +19,7 @@ const App = () => {
         <NavigationContainer>
           <Stack.Navigator initialRouteName='返回' screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }}>
             <Stack.Screen name="返回" component={Tabs} options={{ headerShown: false }} />
-            <Stack.Screen name="醫生相關" component={InnerDoctorStacks} options={{ headerShown: false }} />
+            <Stack.Screen name="相關醫生" component={InnerDoctorStacks} options={{ headerShown: false }} />
             <Stack.Screen name="注冊界面" component={InnerLoginStacks} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>

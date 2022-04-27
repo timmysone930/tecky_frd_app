@@ -9,7 +9,7 @@ const ResRecordStack = createStackNavigator();
 
 export const ResRecordStacks = () => {
     return (
-        <ResRecordStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} >
+        <ResRecordStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} initialRouteName="預約記錄">
             <ResRecordStack.Screen name="預約記錄" component={ResRecordPage} options={{ headerShown: true }} />
             <ResRecordStack.Screen name="預約詳情界面" component={InnerResRecordStacks} options={{ headerShown: false }} />
         </ResRecordStack.Navigator>
