@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ScrollView, Text, SafeAreaView } from 'react-native';
+import { View, ScrollView, Text, SafeAreaView, Linking } from 'react-native';
 import { useSelector } from 'react-redux';
 import { styles } from "../../styles/GeneralStyles"
 
@@ -85,7 +85,10 @@ export function PrescriptionDetailPage({navigation}:any) {
                     <Text style={[styles.subTitle, styles.textCenter, styles.mt_10]}>
                         請依照指示及療程服藥。
                     </Text>
-                    <Text style={[styles.subTitle, styles.textCenter, styles.mb_10]}>
+                    <Text 
+                        onPress={()=>{Linking.openURL(`tel:${fetchData.contact_number}`);} }
+                        style={[styles.subTitle, styles.textCenter, styles.mb_10]}
+                    >
                         如布疑問請致電 {fetchData.contact_number} 查詢。 
                     </Text>
                     

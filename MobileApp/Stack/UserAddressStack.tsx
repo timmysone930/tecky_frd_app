@@ -8,7 +8,7 @@ const UserAddressStack = createStackNavigator();
 
 export const UserAddressStacks = () => {
     return (
-        <UserAddressStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} >
+        <UserAddressStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} >
             <UserAddressStack.Screen name="我的地址" component={UserAddressPage} options={{ headerShown: true }} />
             <UserAddressStack.Screen name="編輯地址" component={EditAddressPage} options={{ headerShown: true }} />
         </UserAddressStack.Navigator>

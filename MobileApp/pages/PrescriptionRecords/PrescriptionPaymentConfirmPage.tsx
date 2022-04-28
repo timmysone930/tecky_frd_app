@@ -17,7 +17,7 @@ import { FakeAddr } from './DeliveryOptionPage';
 // Selected from last page --> 'pick-up'||'deliver'
 const deliveryOption = 'pick-up'
 
-export const PrescriptionPaymentConfirm = (props:any) => {
+export const PrescriptionPaymentConfirm = ({navigation}:any) => {
 
     const fetchData = FakeData;
     const inputAddress =  FakeAddr[0]
@@ -92,7 +92,7 @@ export const PrescriptionPaymentConfirm = (props:any) => {
                             }
                         </View>
                     </View>
-                    <PayButton title={"確定並付款"} disabled={false} onPressFunction={()=>console.log("pay")}/>
+                    <PayButton title={"確定並付款"} disabled={false} onPressFunction={()=> navigation.navigate("藥單付款")}/>
                 </View>
             </ScrollView>
         </SafeAreaView>

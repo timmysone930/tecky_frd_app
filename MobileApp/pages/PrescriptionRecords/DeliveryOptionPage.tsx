@@ -62,17 +62,25 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
     // pickUpClinic: The selected pick-up store
     const [pickUpClinic, setPickUpClinic] = useState({
-        clinic_code: fetchData.pick_up_store[0].clinic_code,
-        area: fetchData.pick_up_store[0].area,
-        district: fetchData.pick_up_store[0].district,
-        addr: fetchData.pick_up_store[0].addr
+        clinic_code: "",
+        area: "",
+        district: "",
+        addr: ""
     })
 
     // input: Customer's address for delivery
     const defaultInput = FakeAddr.filter((obj:any) => obj.is_default == true)[0]
     const [input, setInput] = useState(defaultInput)
+    const [formFilled, setFormFilled] = useState(false)
 
     const submitHandler = () => {
+        if (pickUpClinic.clinic_code == "" && deliveryOption == "pick-up") {
+            return
+        }
+        if (!formFilled && deliveryOption == "deliver") {
+            return
+        }
+        if (deliveryOption == "pick-up")
         store.dispatch(setPrescriptionPaymentPreset({
             deliveryMethod: deliveryOption, 
             pickUpStore: pickUpClinic, 
@@ -112,7 +120,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                             供自取分店
                         </Text>
                         
-                        <FormControl isRequired isDisabled={deliveryOption === 'deliver'}>
+                        <FormControl isRequired isDisabled={deliveryOption === 'deliver'} isInvalid={pickUpClinic.clinic_code == "" && deliveryOption == "pick-up"}>
                             {/* <FormControl.Label>分店自取</FormControl.Label> */}
                             <Select 
                                 accessibilityLabel="請選擇自取分店" 
@@ -164,13 +172,14 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                         </Radio>
 
                     </Radio.Group>
+
                     {
                         input == null && 
                         <>
-                            <Text style={[styles.subTitle, styles.mt_10, styles.textCenter]}>
+                            <Text style={[styles.subTitle, styles.mv_10, styles.textCenter]}>
                                 沒有地址記錄
                             </Text>
-                            <Button size={"lg"} onPress={() => navigation.navigate("付款確認")}>
+                            <Button size={"lg"} onPress={() => navigation.navigate("送藥地址", {screen: "編輯地址"})}>
                                 新增地址
                             </Button>
                         </>
@@ -186,6 +195,8 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                 district={input.district}
                                 addr={input.addr}
                                 enabled={deliveryOption === 'deliver'}
+                                allFilled={formFilled}
+                                setAllFilled={setFormFilled}
                                 input={input}
                                 setInput={setInput}
                             />
@@ -196,6 +207,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                         付款前，請詳細核對送貨地址。
                     </Text>
                     <PayButton title={"確定及付款"} disabled={false} onPressFunction={submitHandler}/>
+
 
                 </View>
             </ScrollView>

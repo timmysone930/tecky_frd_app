@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
 // Native-base
-import { Radio, Text, View, Button, ScrollView, AlertDialog, useToast } from 'native-base';
+import { Radio, Text, View, Button, ScrollView, AlertDialog, useToast, Spinner } from 'native-base';
 
 // Redux
 import { store } from '../../redux/store';
@@ -149,9 +149,6 @@ export function UserAddressPage({navigation}:any) {
         })
     }
 
-
-
-
     return (
         <SafeAreaView>
             <View >
@@ -168,7 +165,13 @@ export function UserAddressPage({navigation}:any) {
                     >
                         {
                             fetchAddressArr.map((address) => 
-                                <View key={address.id} marginBottom={10}>
+                                <View 
+                                    key={address.id} 
+                                    marginBottom={10} 
+                                    borderBottomColor={'gray.600'} 
+                                    borderBottomWidth={'0.5'} 
+                                    paddingBottom={'5'}
+                                >
                                     <Radio value={address.id} my={1}>
                                         <View>
                                             <Text style={[styles.subTitle]} marginX={10} textAlign={"right"}>
@@ -187,7 +190,7 @@ export function UserAddressPage({navigation}:any) {
                                     </Text>
 
                                     {/* [ 編輯, 刪除 ] button */}
-                                    <View flexDirection={'row'} justifyContent={'flex-end'} alignItems={'center'}>
+                                    <View flexDirection={'row'} justifyContent={'flex-end'} alignItems={'center'} marginTop={3}>
                                         <Button padding={1} height={10} width={100} marginX={5} size={"lg"} onPress={editButtonHandler(address)}>
                                             編輯
                                         </Button>
@@ -205,9 +208,9 @@ export function UserAddressPage({navigation}:any) {
                 </ScrollView>
 
 
-                <View>
+                <View borderTopColor={'gray.600'} borderTopWidth={'0.5'}>
                     {/* 為預設送藥地址 - 說明 */}
-                    <View alignItems={'flex-end'} marginY={3} marginBottom={6}>
+                    <View alignItems={'center'} marginY={3} marginBottom={6}>
                         <Radio.Group name="demo" defaultValue='demo'><Radio value="demo" my={1}>
                             <Text style={[styles.subTitle]} marginRight={2}>
                                 為預設送藥地址
@@ -217,8 +220,7 @@ export function UserAddressPage({navigation}:any) {
 
                     {/* [ + 新增送貨地址 ] button */}
                     <Button 
-                        backgroundColor={"#245c84"}
-                        alignSelf={'flex-end'} 
+                        alignSelf={'center'} 
                         marginX={2}
                         padding={1} 
                         height={10} 

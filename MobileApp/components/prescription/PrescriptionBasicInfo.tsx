@@ -3,17 +3,23 @@ import { View, Text } from 'react-native';
 import { DisplayOrderStatus } from '../prescription/DisplayOrderStatus'
 import { styles } from '../../styles/GeneralStyles' 
 
-interface Props {
-    doctor: string,
-    profession: string,
-    created_at: string,
-    course_of_treatment: string,
-    patient_name: string,
-    patient_id: string,
-    pres_code: string,
-    orderStatusShow: boolean,
-    order_status: string
-}
+// props.data = {
+//     _title: _content,
+//     ...,
+//     ...,
+//     ...
+// }
+
+// Example
+// props.data = {
+//      "醫生": "doctor" , 
+//      "專科": "profession", 
+//      "開藥日期": "created_at", 
+//      "療程": "course_of_treatment", 
+//      "應診者": "patient_name", 
+//      "身份證": "patient_id"
+// }
+
 
 export const PrescriptionBasicInfo = (props: any) => {
     
@@ -33,7 +39,7 @@ export const PrescriptionBasicInfo = (props: any) => {
                {props.orderStatusShow && <DisplayOrderStatus orderStatus={props.order_status}/>}
             </View>
             <View>
-                <View>
+
                     {
                         Object.keys(contentItemToDisplay).map((key)=>(
                             <View style={[styles.flexRow, styles.mv_10]} key={key}>
@@ -46,7 +52,7 @@ export const PrescriptionBasicInfo = (props: any) => {
                             </View>
                         ))
                     }                
-                </View>
+
             </View>
         </>
     );

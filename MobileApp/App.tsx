@@ -7,6 +7,7 @@ import { InnerDoctorStacks } from './Stack/DoctorStack';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
 import { InnerLoginStacks } from './Stack/LoginStack';
+import { InnerPrescriptionStacks } from './Stack/PrescriptionStack';
 
 import { NativeBaseProvider } from 'native-base';
 
@@ -21,6 +22,7 @@ const App = () => {
             <Stack.Screen name="返回" component={Tabs} options={{ headerShown: false }} />
             <Stack.Screen name="相關醫生" component={InnerDoctorStacks} options={{ headerShown: false }} />
             <Stack.Screen name="注冊界面" component={InnerLoginStacks} options={{ headerShown: false }} />
+            <Stack.Screen name="藥單付款" component={InnerPrescriptionStacks} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </NativeBaseProvider>

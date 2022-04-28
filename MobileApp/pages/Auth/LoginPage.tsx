@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import { useLoginByPhoneMutation } from '../../API/AuthAPI';
 import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
+// Native-base
+import { useToast } from 'native-base';
 
 export const LoginPage = (props: any) => {
     // white background
@@ -23,6 +25,7 @@ export const LoginPage = (props: any) => {
 
     const [loginByPhone] = useLoginByPhoneMutation();
     // login
+    const toast = useToast()
     const onLoginPress = async (inputData: any) => {
         const data:{'phone':number, 'smsCode':string} = {
             "phone": inputData.phoneNo,
@@ -36,6 +39,9 @@ export const LoginPage = (props: any) => {
         }else{
             props.navigation.navigate({ name: '相關醫生', })
         }
+        toast.show({
+            description: "成功登入"
+        })
     }
 
     return (

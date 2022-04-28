@@ -29,15 +29,17 @@ export function EditAddressPage({navigation}:any) {
         is_default: false
     }
 
+    const [formFilled, setFormFilled] = useState(false)
+
     const [input, setInput] = (addressContent == null)? useState(blacnkContent) : useState(addressContent)
     
-    // Save Successful Toast
-    const saveSuccess = useToast();
+    // Toast: Save Successful
+    const toast = useToast();
 
     const save = () => {
-        
         navigation.navigate("我的地址")
-        saveSuccess.show({
+
+        toast.show({
             description: "儲存成功"
         })
     }
@@ -52,6 +54,8 @@ export function EditAddressPage({navigation}:any) {
                         area={input.area}
                         district={input.district}
                         addr={input.addr}
+                        allFilled={formFilled}
+                        setAllFilled={setFormFilled}
                         enabled={true}
                         input={input}
                         setInput={setInput}
@@ -59,7 +63,6 @@ export function EditAddressPage({navigation}:any) {
                 </View>
 
                 <Button 
-                    backgroundColor={"#245c84"}
                     alignSelf={'center'} 
                     marginX={2}
                     marginBottom={5}
