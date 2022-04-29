@@ -1,14 +1,23 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { doctorIDSlice,
+         reserveFormSlice, 
+         prescriptionCheckingSlice, 
+         prescriptionPaymentPresetSlice, 
+         addressDataSlice
+       } from './slice'
 import { authAPI } from '../API/AuthAPI'
 import { doctorAPI } from '../API/DoctorAPI'
 import { userStatusSlice } from './AuthSlice'
-import { doctorIDSlice, reserveFormSlice } from './slice'
+
 
 export const store = configureStore({
   reducer: {
     setDoctorID: doctorIDSlice.reducer,
     getFormData: reserveFormSlice.reducer,
     getUserStatus: userStatusSlice.reducer,
+    getPrescriptionCode: prescriptionCheckingSlice.reducer,
+    getPrescriptionPaymentPreset: prescriptionPaymentPresetSlice.reducer,
+    getAddressData: addressDataSlice.reducer,
     [doctorAPI.reducerPath]: doctorAPI.reducer,
     [authAPI.reducerPath]: authAPI.reducer,
   },

@@ -40,8 +40,8 @@ export const Tabs = () => {
           tabBarIcon: ({ color }) => (<Icon name="search" size={21} color={color} />),
         }}
       />
-      <Tab.Screen name="預約Tab" component={isLogin? ResRecordStacks: LoginStacks} options={{headerShown: false, tabBarLabel: '預約', tabBarIcon: ({ color }) => (<Icon name="calendar" size={21} color={color} />) }} /> 
-      <Tab.Screen name="我的資料" component={MyInfoStacks} options={{ headerShown: false, tabBarLabel: '我的', tabBarIcon: ({ color }) => (<Icon name="user-circle-o" size={21} color={color} />) }} />
+      <Tab.Screen name="預約Tab" component={isLogin? ResRecordStacks: LoginStacks} options={{headerShown: false, tabBarLabel: '預約', tabBarIcon: ({ color }) => (<Icon name="calendar" size={22} color={color} />) }} /> 
+      <Tab.Screen name="我的資料" component={isLogin? MyInfoStacks: LoginStacks} options={{ headerShown: false, tabBarLabel: '我的', tabBarIcon: ({ color }) => (<Icon name="user-circle-o" size={22} color={color} />) }} />
     </Tab.Navigator>
   )
 }

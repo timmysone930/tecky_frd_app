@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { useGetLoginSMSByQueryQuery, useGetLoginSMSMutation, useLoginByPhoneMutation } from '../../API/AuthAPI';
 import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
+// Native-base
+import { useToast } from 'native-base';
 
 
 const getSMS = async () => {
@@ -55,7 +57,8 @@ export const LoginPage = (props: any) => {
         }
     }
     const [loginByPhone] = useLoginByPhoneMutation();
-    // // login
+    // login
+    const toast = useToast()
     const onLoginPress = async (inputData: any) => {
         const data: { 'phone': number, 'smsCode': string } = {
             "phone": inputData.phoneNo,
@@ -64,12 +67,15 @@ export const LoginPage = (props: any) => {
         const res: QueryReturnValue = await loginByPhone(data)
         console.log(res)
         console.log(res['error'])
-        // store.dispatch(checkStatus({ status: true }))
-        // if(previousPage === ''){
-        //     props.navigation.navigate({ name: '預約Tab',})
-        // }else{
-        //     props.navigation.navigate({ name: '相關醫生', })
-        // }
+        store.dispatch(checkStatus({ status: true }))
+        if(previousPage === ''){
+            props.navigation.navigate({ name: '預約Tab',})
+        }else{
+            props.navigation.navigate({ name: '相關醫生', })
+        }
+        toast.show({
+            description: "成功登入"
+        })
     }
 
     return (
