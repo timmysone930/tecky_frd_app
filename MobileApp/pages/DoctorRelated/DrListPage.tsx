@@ -1,11 +1,15 @@
 import React from 'react'
 
 import {
-    View, Text, SafeAreaView, FlatList, StyleSheet, Image,TouchableOpacity
+    View, Text, SafeAreaView, FlatList, StyleSheet, Image, TouchableOpacity
 } from 'react-native';
+// API route
+import { useGetDoctorListQuery } from '../../API/DoctorAPI';
 // Component
 import { DrListCard } from '../../components/doctor/DrListCard';
+import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
 import { SearchComponent } from '../../components/SearchComponent';
+
 
 // Need to be removed; only for testing
 export const FakeDrDATA = [
@@ -24,82 +28,6 @@ export const FakeDrDATA = [
         { id: 3, date: '2022-05-07', time: ['09:00 - 10:30', '12:30 - 14:00', '17:00 - 17:30'] },
         ],
     },
-    {
-        id: '2',
-        name: '何家家 Ho Kar Ka',
-        address: '2715-16, 27/F, ONE MIDTOWN11 Hoi Shing Rd, Tsuen Wan',
-        gender: '女',
-        type: '西醫',
-        pic: require(`../../images/profilePic/test-02.jpg`),
-        service: ['超聲波掃描', '電腦掃描 (Computed Tomography，簡稱CT) 是利用X 光穿透人體後', 'X 光檢查'],
-        qualifications: ['專業證書課程', '特許公認會計師'],
-        roster: false,
-        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 2, date: '2022-05-15', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 3, date: '2022-05-17', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        ],
-    },
-    {
-        id: '3',
-        name: '何家瑜 Ho Kar Yu',
-        address: 'Room 11, ABC centre, Kowloon Bay,Kowloon',
-        gender: '男',
-        type: '心臟科',
-        pic: '',
-        service: ['超聲波掃描', 'X 光檢查'],
-        qualifications: ['專業證書課程'],
-        roster: true,        
-        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        ],
-    },
-    {
-        id: '4',
-        name: '何家瑜 Ho Kar Yu',
-        address: 'Room 11, ABC centre, Kowloon Bay,Kowloon',
-        gender: '男',
-        type: '物理治療',
-        pic: require(`../../images/profilePic/test-02.jpg`),
-        service: ['超聲波掃描'],
-        qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
-        roster: true,
-        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        ],
-    },
-    {
-        id: '5',
-        name: '何家瑜 Ho Kar Yu',
-        address: 'Room 11, ABC centre, Kowloon Bay,Kowloon',
-        gender: '女',
-        type: '耳鼻喉科',
-        pic: require(`../../images/profilePic/test-01.jpg`),
-        service: ['超聲波掃描', 'X 光檢查'],
-        qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
-        roster: true,
-        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        ],
-    },
-    {
-        id: '6',
-        name: '何家瑜 Ho Kar Yu',
-        address: 'Room 11, ABC centre, Kowloon Bay,Kowloon',
-        gender: '女',
-        type: '精神及心理治療',
-        pic: require(`../../images/profilePic/test-01.jpg`),
-        service: ['超聲波掃描', 'X 光檢查'],
-        qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
-        roster: true,
-        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        ],
-    },
-
 ];
 
 
@@ -108,7 +36,8 @@ const Item = (props: any) => (
     <TouchableOpacity style={styles.drListCard} onPress={() => {
         props.navigate.navigation.navigate('相關醫生', {
             screen: '醫生詳情',
-            params: { id: props.id },
+            params: { id: props.id, docData:{name:props.name, gender:props.gender,specialties:props.specialties, id:props.doctor_code, doctor_des:props.doctor_des,
+            img:props.img, name_en:props.name_en, area:props.area, clinic_address:props.clinic_address,district:props.district, spec_name:props.spec_name} },
         })
     }}>
         <DrListCard props={props} />
@@ -121,12 +50,24 @@ export const DrList: React.FC = (prop: any) => {
     const backgroundStyle = {
         backgroundColor: 'white',
     };
-
+    const { mode } = prop.route.params;
+    let data;
+    let isLoading;
+    let isSuccess;
+    let isError;
+     // fetch doctor list data
+    if(mode === '西醫'){
+        data = useGetDoctorListQuery().data;
+        isLoading = useGetDoctorListQuery().isLoading;
+        isError = useGetDoctorListQuery().isError;
+        isSuccess = useGetDoctorListQuery().isSuccess;
+    }
+    
     // For FlatList
     const renderItem = (props: any) => (
-        <Item name={props.item.name} address={props.item.address}
-            gender={props.item.gender} type={props.item.type} navigate={prop} id={props.item.id}
-            pic={props.item.pic}
+        <Item name={props.item.name} email={props.item.email}
+            gender={props.item.gender} specialties={props.item.specialties} navigate={prop} id={props.item.doctor_code} doctor_des={props.item.doctor_des}
+            img={props.item.img} name_en={props.item.name_en} area={props.item.area} clinic_address={props.item.clinic_address} district={props.item.district} spec_name={props.item.spec_name}
         />
     );
 
@@ -134,11 +75,15 @@ export const DrList: React.FC = (prop: any) => {
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <SearchComponent placeholder={"搜索醫生，科目，疾病"} />
             <View style={[backgroundStyle, { flex: 1 }]}>
-                <FlatList
-                    data={FakeDrDATA}
-                    renderItem={renderItem}
-                    keyExtractor={item => item.id}
-                />
+                {isLoading &&  <SpinnerComponent />}
+                {isError && <Text style={styles.title}>Somethings gone wrong...</Text>}
+                {isSuccess &&
+                    <FlatList
+                        data={data}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.doctor_code}
+                    />
+                }
             </View>
         </SafeAreaView>
     )

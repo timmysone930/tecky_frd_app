@@ -4,15 +4,16 @@ import { DrListCard } from '../../components/doctor/DrListCard';
 import { useForm, Controller } from "react-hook-form";
 import { useSelector } from 'react-redux';
 import { store } from '../../redux/store';
-import { setFormData} from '../../redux/slice';
+import { setFormData } from '../../redux/slice';
 
 // Need to be removed; only for testing
 import { FakeDrDATA } from './DrListPage';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
+import { useGetRosterListQuery, useGetSelectedDoctorQuery } from '../../API/DoctorAPI';
 
 export const ReservationPage = (props: any) => {
   // Form element
-  const { control, handleSubmit, formState: { errors }, setValue, getValues} = useForm({
+  const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
     defaultValues: { name: '', reservedDate: '請選擇應診日期', reservedTime: '請選擇應診時間', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '' }
   });
   // Form data submit and navigate
@@ -44,105 +45,110 @@ export const ReservationPage = (props: any) => {
 
   // selected doctor id
   const id = useSelector((state: any) => state.setDoctorID.id);
-  // Need to be removed; only for testing(will be replaced by fetch)
+  const { data, isLoading, isSuccess, isError, error } = useGetSelectedDoctorQuery(id)
   let userData: any = {}
-  FakeDrDATA.map((item) => {
-    if (item['id'] === id) {
-      userData = item
-    }
-  })
+  { isSuccess ? userData = data[0] : userData = {} }
+
+  const rosterData = useGetRosterListQuery(id)
+  let availableDate = [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+  { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+  { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+  ]
+  
+  console.log(rosterData.error)
+  {rosterData.isSuccess && console.log(rosterData)}
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
-          <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
-    >
-      <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white'}}>
-        {/* Doctor Info */}
-        <View style={styles.drListCard}>
-          <DrListCard props={userData} />
-        </View>
-        {/* Booking */}
-        <View style={styles.pageMargin}>
-          <Text style={styles.subTitle}>應診日期</Text>
-          <Controller control={control} rules={{ required: true, }}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
+          {/* Doctor Info */}
+          <View style={styles.drListCard}>
+            <DrListCard props={userData} />
+          </View>
+          {/* Booking */}
+          <View style={styles.pageMargin}>
+            <Text style={styles.subTitle}>應診日期</Text>
+            {/* <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
                 <BaseSelectComponent placeholder={'請選擇應診日期'} data={userData.availableDate} onChange={onValueChange} mode='date'
                   selectedValue={getValues('reservedDate')} dateValue={getValues('reservedDate')}
                 />
             )}
             name="reservedDate"
-          />
-          {/* 必須填寫提示 */}
-          {errors.reservedDate && <Text style={styles.warning}>* 此項必須選擇</Text>}
+          /> */}
+            {/* 必須填寫提示 */}
+            {errors.reservedDate && <Text style={styles.warning}>* 此項必須選擇</Text>}
 
-          <Text style={styles.subTitle}>應診時間</Text>
-          <Controller control={control} rules={{ required: true, }}
+            <Text style={styles.subTitle}>應診時間</Text>
+            {/* <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
                 <BaseSelectComponent placeholder={'請選擇應診時間'} data={userData.availableDate} onChange={onTimeValueChange} mode='time'
                 selectedValue={getValues('reservedTime')} dateValue={getValues('reservedDate')}
               />
             )}
             name="reservedTime"
-          />
-          {/* 必須填寫提示 */}
-          {errors.reservedTime && <Text style={styles.warning}>* 此項必須選擇</Text>}
+          /> */}
+            {/* 必須填寫提示 */}
+            {errors.reservedTime && <Text style={styles.warning}>* 此項必須選擇</Text>}
 
-          <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop: 5, marginBottom: 10, }}>
-            <Text style={styles.subTitle}>問診費用： $100.00</Text>
-            <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
+            <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop: 5, marginBottom: 10, }}>
+              <Text style={styles.subTitle}>問診費用： $100.00</Text>
+              <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
+            </View>
+
+            <Text style={styles.subTitle}>應診者姓名</Text>
+            <Controller control={control} rules={{ required: true, }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
+              )}
+              name="name"
+            />
+            {/* 必須填寫提示 */}
+            {errors.name && <Text style={styles.warning}>* 此項必須填寫</Text>}
+            <Text style={styles.subTitle}>身份證明文件</Text>
+            <Controller control={control}
+              render={({ field: { value } }) => (
+                <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
+                  selectedValue={getValues('idType')} dateValue={''}
+                />
+              )}
+              name="idType"
+            />
+            <Controller control={control} rules={{ required: true, }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="身份證明文件號碼" placeholderTextColor="#737474" />
+              )}
+              name="idNumber"
+            />
+            {/* 必須填寫提示 */}
+            {errors.idNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
+            <Text style={styles.subTitle}>緊急聯絡人</Text>
+            <Controller control={control} rules={{ required: true, }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人姓名" placeholderTextColor="#737474" />
+              )}
+              name="EmergencyContactName"
+            />
+            {/* 必須填寫提示 */}
+            {errors.EmergencyContactName && <Text style={styles.warning}>* 此項必須填寫</Text>}
+            <Controller control={control} rules={{ required: true, }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput keyboardType={'numeric'} style={[styles.input, { marginBottom: 45 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話" placeholderTextColor="#737474" />
+              )}
+              name="EmergencyContactPhone"
+            />
+            {/* 必須填寫提示 */}
+            {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
           </View>
 
-          <Text style={styles.subTitle}>應診者姓名</Text>
-          <Controller control={control} rules={{ required: true, }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
-            )}
-            name="name"
-          />
-          {/* 必須填寫提示 */}
-          {errors.name && <Text style={styles.warning}>* 此項必須填寫</Text>}
-          <Text style={styles.subTitle}>身份證明文件</Text>
-          <Controller control={control}
-            render={({ field: { value } }) => (
-                <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
-                selectedValue={getValues('idType')} dateValue={''}
-              />
-            )}
-            name="idType"
-          />
-          <Controller control={control} rules={{ required: true, }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="身份證明文件號碼" placeholderTextColor="#737474" />
-            )}
-            name="idNumber"
-          />
-          {/* 必須填寫提示 */}
-          {errors.idNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
-          <Text style={styles.subTitle}>緊急聯絡人</Text>
-          <Controller control={control} rules={{ required: true, }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人姓名" placeholderTextColor="#737474" />
-            )}
-            name="EmergencyContactName"
-          />
-          {/* 必須填寫提示 */}
-          {errors.EmergencyContactName && <Text style={styles.warning}>* 此項必須填寫</Text>}
-          <Controller control={control} rules={{ required: true, }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextInput keyboardType={'numeric'}  style={[styles.input,{marginBottom:45}]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話" placeholderTextColor="#737474" />
-            )}
-            name="EmergencyContactPhone"
-          />
-          {/* 必須填寫提示 */}
-          {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
-        </View>
-        
-      </ScrollView>
+        </ScrollView>
       </KeyboardAvoidingView>
       {/* Button to go back and next page */}
-      <View style={{ flexDirection: 'row'}}>
+      <View style={{ flexDirection: 'row' }}>
         <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
           <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
         <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}

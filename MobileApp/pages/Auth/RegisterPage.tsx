@@ -1,7 +1,9 @@
+import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { Checkbox } from 'native-base';
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { usePostRegisterInfoMutation } from '../../API/AuthAPI';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
 import { DatePickerComponent } from '../../components/PickerComponent';
 import { BottomLineComponent } from '../../components/SearchComponent';
@@ -16,7 +18,7 @@ export const RegisterPage = (props: any) => {
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: {
-            regTitle: '', regName: '', regIDType: '', regIDNumber: '', regBDay: '請選擇你的生日日期', regEmail: '', phoneCode: '', regPhone: '', regSMS: '',
+            regTitle: '', regName: '', regIDType: '', regIDNumber: '', regBDay: '', regEmail: '', phoneCode: '', regPhone: '', regSMS: '',
             regPolicyOne: [], regPolicyTwo: []
         }
     });
@@ -45,16 +47,25 @@ export const RegisterPage = (props: any) => {
     // Multi Box     
     const [groupValues, setGroupValues] = React.useState([]);
     const [groupValues2, setGroupValues2] = React.useState([]);
-    const onSubmit = (data: any) => {
-        store.dispatch(checkStatus({ status: true }))
-        props.navigation.navigate({ name: '注冊成功' })
+    // Register
+    const [postRegisterInfo] = usePostRegisterInfoMutation();
+    const onSubmit = async (data: any) => {
+        let registerData = {"id_doc_type": data.regIDType, "hkid":data.regIDNumber,
+        "name": data.regName,  "gender": data.regTitle, "birthday": data.regBDay, "email": data.regEmail, "phone": data.phoneCode + data.regPhone,
+        "member_code":'test',
+    }
+        console.log(registerData)
+        const res:QueryReturnValue = await postRegisterInfo(registerData)
+        console.log(res.error)
+        // store.dispatch(checkStatus({ status: true }))
+        // props.navigation.navigate({ name: '注冊成功' })
     }
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
                 <View style={styles.pageMargin}>
-                    <Text style={styles.subTitle}>稱謂</Text>
+                    <Text style={styles.subTitle}>稱謂<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (
                             <BaseSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
@@ -96,14 +107,15 @@ export const RegisterPage = (props: any) => {
                     {/* 必須填寫提示 */}
                     {errors.regIDNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
-                    <Text style={styles.subTitle}>生日日期</Text>
-                    <Controller control={control}
+                    <Text style={styles.subTitle}>生日日期<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
+                    <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (
                             <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('regBDay')} />
                         )}
                         name="regBDay"
                     />
-
+                    {/* 必須填寫提示 */}
+                    {errors.regBDay && <Text style={styles.warning}>* 此項必須填寫</Text>}
                     <Text style={styles.subTitle}>電郵地址<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { onChange, onBlur, value } }) => (
@@ -119,14 +131,14 @@ export const RegisterPage = (props: any) => {
                         <Controller control={control} rules={{ required: true, }}
                             render={({ field: { value } }) => (
                                 <BaseSelectComponent placeholder={'電話區號 '} data={phoneCodeArr} onChange={onPhoneCodeChange} mode='other'
-                                    selectedValue={getValues('phoneCode')} dateValue={''} 
+                                    selectedValue={getValues('phoneCode')} dateValue={''}
                                 />
                             )}
                             name="phoneCode"
                         />
                         <Controller control={control} rules={{ required: true, }}
                             render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput keyboardType={'numeric'}  style={[styles.input,{marginLeft:10, flex: 1.5}]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫電話號碼" placeholderTextColor="#737474" />
+                                <TextInput textContentType={'telephoneNumber'} keyboardType={'numeric'} style={[styles.input, { marginLeft: 10, flex: 1.5 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫電話號碼" placeholderTextColor="#737474" />
                             )}
                             name="regPhone"
                         />
@@ -210,7 +222,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'red',
         marginLeft: 5,
-        marginBottom:5,
+        marginBottom: 5,
     },
     subTitle: {
         color: '#225D66',

@@ -3,6 +3,18 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import Config from "react-native-config";
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 
+interface registerType{
+    "id_doc_type": string,
+    "hkid":string,
+    "name": string,
+    "gender": string,
+    "birthday": string,
+    "email": string,
+    "phone": string,
+    "member_code":string,
+}
+
+
 
 // Define our single API slice object
 export const authAPI = createApi({
@@ -18,9 +30,26 @@ export const authAPI = createApi({
                 method: "POST",
                 body: data
             })
-        })
+        }),
+        postRegisterInfo: builder.mutation<QueryReturnValue, registerType>({
+            query: (data) => ({
+                url: "/patient/register",
+                method: "POST",
+                body: data
+            })
+        }),
+        getLoginSMS: builder.mutation<QueryReturnValue, {'phone':number}>({
+            query: (phone) => ({
+                url: "/auth/send-sms/",
+                method: 'POST',
+                body: phone
+            })
+        }),
+        getLoginSMSByQuery: builder.query({
+            query: (phone: string) => `/auth/send-sms/${phone}`,
+          }),
     })
 })
 
 // Export the auto-generated hook for the query endpoint
-export const { useLoginByPhoneMutation } = authAPI
+export const { useLoginByPhoneMutation, usePostRegisterInfoMutation, useGetLoginSMSMutation, useGetLoginSMSByQueryQuery } = authAPI

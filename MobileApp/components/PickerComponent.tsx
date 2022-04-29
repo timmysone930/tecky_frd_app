@@ -26,7 +26,7 @@ export const DatePickerComponent = (props:any) => {
     };
     return (
         <View>
-            <TouchableOpacity style={styles.input} onPress={showDatePicker} ><Text>{props.DateTitle}</Text></TouchableOpacity>
+            <TouchableOpacity style={styles.input} onPress={showDatePicker} ><Text>{props.DateTitle ===''?'請選擇你的生日日期':props.DateTitle}</Text></TouchableOpacity>
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode="date"

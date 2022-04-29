@@ -7,6 +7,7 @@ import {
     Image,
     TouchableHighlight,
 } from 'react-native';
+import Config from 'react-native-config';
 
 export const TipsCard = () => {
     // Tips Card isPress Status
@@ -14,7 +15,7 @@ export const TipsCard = () => {
     // Tips Card Name
     const tipsArr = ['癌症檢查', '心臟疾病', '疫苗注射', '體重控制', '健康貼士'];
     // Tips Card Icon
-    const iconArr = [require('../../images/icons/ribbon.png'), require('../../images/icons/clipboard-heart.png'), require('../../images/icons/injection.png'), require('../../images/icons/weight.png'), require('../../images/icons/heart-pulse.png')]
+    const iconArr = ['ribbon.png', 'clipboard-heart.png', 'injection.png', 'weight.png', 'heart-pulse.png']
     return (
         <>
        {/* Tips Card Title */}
@@ -26,7 +27,7 @@ export const TipsCard = () => {
                         <TouchableHighlight key={`tip_${idx}`} style={styles.tipsCard} onPress={() => { }} activeOpacity={1} underlayColor="#3F0075" onHideUnderlay={() => setIsPress(0)}
                             onShowUnderlay={() => { setIsPress(idx + 1) }}>
                             <>
-                                <Image key={`tip_icon_${idx}`} resizeMode='contain' style={isPress === (idx + 1) ? styles.tipsIconAfterPressed : styles.tipsIconBeforePressed} source={iconArr[idx]} />
+                                <Image key={`tip_icon_${idx}`} resizeMode='contain' style={isPress === (idx + 1) ? styles.tipsIconAfterPressed : styles.tipsIconBeforePressed} source={{uri: `${Config.REACT_APP_API_SERVER}/icons/${iconArr[idx]}`,}} />
                                 <Text key={`tip_card_${idx}`} style={isPress === (idx + 1) ? styles.tipsTextAfterPressed : styles.tipsTextBeforePressed}>{item}</Text>
                             </>
                         </TouchableHighlight>

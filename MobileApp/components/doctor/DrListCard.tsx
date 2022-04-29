@@ -9,32 +9,35 @@ import {
 
 // import icon for location pin
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Config from "react-native-config";
 
 export const DrListCard = ({props}:any) => {
+
     return (
         <>
             <View >
-                {props.pic === '' ? <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={require('../../images/profilePic/default.jpg')} /> :
-                    <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={props.pic} />}
+                {props.img === null ? <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{uri: `${Config.REACT_APP_API_SERVER}/profilePic/default.jpg`,}
+                    } /> :
+                    <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{uri: `${Config.REACT_APP_API_SERVER}/profilePic/${props.img}`,}} />}
             </View>
             <View style={styles.drInfo}>
                 {/* Dr Name */}
-                <Text style={styles.title}>{props.name}</Text>
+                <Text style={styles.title}>{props.name}{props.name_en}</Text>
                 {/* Dr Type & Gender */}
                 <View style={{ flexDirection: 'row' }}>
                     {/* Dr Gender */}
-                    <View style={[styles.infoBox, props.gender === '男' ? styles.blue : styles.red]} >
-                        <Text style={styles.gender}>{props.gender === '男' ? '男' : '女'}</Text>
+                    <View style={[styles.infoBox, props.gender === 'Male' ? styles.blue : styles.red]} >
+                        <Text style={styles.gender}>{props.gender === 'Male' ? '男' : '女'}</Text>
                     </View>
                     {/* Dr Type */}
                     <View style={styles.infoBox} >
-                        <Text style={[styles.gender, { color: 'grey' }]}>{props.type}</Text>
+                        <Text style={[styles.gender, { color: 'grey' }]}>{props.spec_name}</Text>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', }}>
                     {/* Dr address */}
                     <Icon name="map-marker" size={20} color="#325C80" />
-                    <Text style={styles.address}>{props.address}</Text>
+                    <Text style={styles.address}>{props.district + props.area +props.clinic_address}</Text>
                 </View>
             </View>
         </>
