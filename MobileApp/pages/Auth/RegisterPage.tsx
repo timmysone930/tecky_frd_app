@@ -18,7 +18,7 @@ export const RegisterPage = (props: any) => {
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: {
-            regTitle: '', regName: '', regIDType: '', regIDNumber: '', regBDay: '', regEmail: '', phoneCode: '', regPhone: '', regSMS: '',
+            regTitle: '', regName: '',regName_en:'', regIDType: '', regIDNumber: '', regBDay: '', regEmail: '', phoneCode: '', regPhone: '', regSMS: '',
             regPolicyOne: [], regPolicyTwo: []
         }
     });
@@ -51,7 +51,7 @@ export const RegisterPage = (props: any) => {
     const [postRegisterInfo] = usePostRegisterInfoMutation();
     const onSubmit = async (data: any) => {
         let registerData = {"id_doc_type": data.regIDType, "hkid":data.regIDNumber,
-        "name": data.regName,  "gender": data.regTitle, "birthday": data.regBDay, "email": data.regEmail, "phone": data.phoneCode + data.regPhone,
+        "name": data.regName, "name_en":data.regName_en,  "gender": data.regTitle, "birthday": data.regBDay, "email": data.regEmail, "phone": data.phoneCode + data.regPhone,
         "member_code":'test',
     }
         console.log(registerData)
@@ -86,6 +86,15 @@ export const RegisterPage = (props: any) => {
                     />
                     {/* 必須填寫提示 */}
                     {errors.regName && <Text style={styles.warning}>* 此項必須填寫</Text>}
+                    <Text style={styles.subTitle}>英文姓名<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
+                    <Controller control={control} rules={{ required: true, }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
+                        )}
+                        name="regName_en"
+                    />
+                    {/* 必須填寫提示 */}
+                    {errors.regName_en && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
                     <Text style={styles.subTitle}>身份證明文件類別<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <Controller control={control} rules={{ required: true, }}

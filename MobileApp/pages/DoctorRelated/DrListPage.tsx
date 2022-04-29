@@ -1,15 +1,11 @@
 import React from 'react'
-
-import {
-    View, Text, SafeAreaView, FlatList, StyleSheet, Image, TouchableOpacity
-} from 'react-native';
+import {View, Text, SafeAreaView, FlatList, StyleSheet, Image, TouchableOpacity} from 'react-native';
 // API route
 import { useGetDoctorListQuery } from '../../API/DoctorAPI';
 // Component
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
 import { SearchComponent } from '../../components/SearchComponent';
-
 
 // Need to be removed; only for testing
 export const FakeDrDATA = [
@@ -30,26 +26,9 @@ export const FakeDrDATA = [
     },
 ];
 
-
-// html and style for FlatList
-const Item = (props: any) => (
-    <TouchableOpacity style={styles.drListCard} onPress={() => {
-        props.navigate.navigation.navigate('相關醫生', {
-            screen: '醫生詳情',
-            params: { id: props.id, docData:{name:props.name, gender:props.gender,specialties:props.specialties, id:props.doctor_code, doctor_des:props.doctor_des,
-            img:props.img, name_en:props.name_en, area:props.area, clinic_address:props.clinic_address,district:props.district, spec_name:props.spec_name} },
-        })
-    }}>
-        <DrListCard props={props} />
-    </TouchableOpacity>
-);
-
-
 export const DrList: React.FC = (prop: any) => {
     // white background
-    const backgroundStyle = {
-        backgroundColor: 'white',
-    };
+    const backgroundStyle = {backgroundColor: 'white',};
     const { mode } = prop.route.params;
     let data;
     let isLoading;
@@ -64,11 +43,17 @@ export const DrList: React.FC = (prop: any) => {
     }
     
     // For FlatList
-    const renderItem = (props: any) => (
-        <Item name={props.item.name} email={props.item.email}
-            gender={props.item.gender} specialties={props.item.specialties} navigate={prop} id={props.item.doctor_code} doctor_des={props.item.doctor_des}
-            img={props.item.img} name_en={props.item.name_en} area={props.item.area} clinic_address={props.item.clinic_address} district={props.item.district} spec_name={props.item.spec_name}
-        />
+    const renderItem = (props: any) =>
+    (
+        <TouchableOpacity style={styles.drListCard} onPress={() => {
+            prop.navigation.navigate('相關醫生', {
+                screen: '醫生詳情',
+                params: { id: props.item.doctor_code, docData:{name:props.item.name, gender:props.item.gender, id:props.item.doctor_code, doctor_des:props.item.doctor_des,
+                img:props.item.img, name_en:props.item.name_en, clinic:props.item.clinic, spec_name:props.item.spec_name} },
+            })
+        }}>
+            <DrListCard props={props.item} />
+        </TouchableOpacity>
     );
 
     return (
@@ -81,7 +66,7 @@ export const DrList: React.FC = (prop: any) => {
                     <FlatList
                         data={data}
                         renderItem={renderItem}
-                        keyExtractor={item => item.doctor_code}
+                        keyExtractor={(item,idx) => `docList_${item.doctor_code}_${idx}`}
                     />
                 }
             </View>

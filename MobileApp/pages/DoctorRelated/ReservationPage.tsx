@@ -5,13 +5,13 @@ import { useForm, Controller } from "react-hook-form";
 import { useSelector } from 'react-redux';
 import { store } from '../../redux/store';
 import { setFormData } from '../../redux/slice';
-
-// Need to be removed; only for testing
-import { FakeDrDATA } from './DrListPage';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
-import { useGetRosterListQuery, useGetSelectedDoctorQuery } from '../../API/DoctorAPI';
+import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
+import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
 
 export const ReservationPage = (props: any) => {
+  // To get the param passing from the previous screen
+  const { id, docData } = props.route.params;
   // Form element
   const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
     defaultValues: { name: '', reservedDate: '請選擇應診日期', reservedTime: '請選擇應診時間', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '' }
@@ -43,20 +43,15 @@ export const ReservationPage = (props: any) => {
     setValue("idType", itemValue)
   };
 
-  // selected doctor id
-  const id = useSelector((state: any) => state.setDoctorID.id);
-  const { data, isLoading, isSuccess, isError, error } = useGetSelectedDoctorQuery(id)
-  let userData: any = {}
-  { isSuccess ? userData = data[0] : userData = {} }
+  const rosterData = useGetRosterListByDocCodeQuery(id)
+  // let availableDate = [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+  // { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+  // { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
+  // ]
 
-  const rosterData = useGetRosterListQuery(id)
-  let availableDate = [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-  { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-  { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-  ]
-  
-  console.log(rosterData.error)
-  {rosterData.isSuccess && console.log(rosterData)}
+
+  console.log(rosterData)
+  // { rosterData.isSuccess && console.log(rosterData) }
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
@@ -67,11 +62,13 @@ export const ReservationPage = (props: any) => {
         <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
           {/* Doctor Info */}
           <View style={styles.drListCard}>
-            <DrListCard props={userData} />
+            <DrListCard props={docData} />
           </View>
-          {/* Booking */}
+          {rosterData.isLoading && <SpinnerComponent />}
+
           <View style={styles.pageMargin}>
             <Text style={styles.subTitle}>應診日期</Text>
+
             {/* <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
                 <BaseSelectComponent placeholder={'請選擇應診日期'} data={userData.availableDate} onChange={onValueChange} mode='date'
@@ -84,6 +81,7 @@ export const ReservationPage = (props: any) => {
             {errors.reservedDate && <Text style={styles.warning}>* 此項必須選擇</Text>}
 
             <Text style={styles.subTitle}>應診時間</Text>
+
             {/* <Controller control={control} rules={{ required: true, }}
             render={({ field: { value } }) => (
                 <BaseSelectComponent placeholder={'請選擇應診時間'} data={userData.availableDate} onChange={onTimeValueChange} mode='time'

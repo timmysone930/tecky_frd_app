@@ -16,17 +16,11 @@ export const doctorAPI = createApi({
       // The URL for the request is '/http://XXXX/doctors/list'
       query: () => '/doctors/allInfo'
     }),
-    getSelectedDoctor: builder.query({
-      query: (code: string) => `/doctors/searchByCode/${code}`,
-    }),
-    getDoctorClinic: builder.query<any, void>({
-      query: () => `/doctors/belong/list`,
-    }),
-    getRosterList:  builder.query({
-      query: (code: string) => `/roster/roster/${code}`,
+    getRosterListByDocCode:  builder.query({
+      query: (code: string) => `/roster/search?column=doc_code&where=${code}`,
     }),
   })
 })
 
 // Export the auto-generated hook for the query endpoint
-export const { useGetDoctorListQuery, useGetSelectedDoctorQuery, useGetDoctorClinicQuery, useGetRosterListQuery } = doctorAPI
+export const { useGetDoctorListQuery, useGetRosterListByDocCodeQuery } = doctorAPI

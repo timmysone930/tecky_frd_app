@@ -14,8 +14,6 @@ interface registerType{
     "member_code":string,
 }
 
-
-
 // Define our single API slice object
 export const authAPI = createApi({
     reducerPath: 'authAPI',
