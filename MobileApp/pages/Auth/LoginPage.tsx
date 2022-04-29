@@ -10,47 +10,22 @@ import { store } from '../../redux/store';
 // Native-base
 import { useToast } from 'native-base';
 
-
-const getSMS = async () => {
-    try {
-        let formObject = {
-            'phone':85255332211
-        }
-        const response = await fetch(
-            `${Config.REACT_APP_API_SERVER}/auth/send-sms`, 
-            {
-                method: "POST",
-                headers: {
-                    "content-type": "application/json",
-                },
-                body: JSON.stringify(formObject),
-            }
-        );
-    } catch (error) {
-        console.error(error);
-    }
-};
-
-
-
 export const LoginPage = (props: any) => {
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
     };
-
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: { phoneNo: '', loginSMS: '' }
     });
-
     // GET previous page 
     const previousPage = useSelector((state: any) => state.setDoctorID.currentPage);
     const [getLoginSMS] = useGetLoginSMSMutation();
-    // Get login SMS
+    // Get login SMS (sample:85255332211)
     const onSMSPress = async (inputData: any) => {
         try {
-            const res: QueryReturnValue = await getLoginSMS({'phone':inputData.phoneNo})
+            const res: QueryReturnValue = await getLoginSMS({ 'phone': inputData.phoneNo })
             console.log(res['error'])
         } catch (e) {
             console.log(e)
@@ -64,18 +39,25 @@ export const LoginPage = (props: any) => {
             "phone": inputData.phoneNo,
             "smsCode": inputData.loginSMS
         }
-        const res: QueryReturnValue = await loginByPhone(data)
-        console.log(res)
-        console.log(res['error'])
-        store.dispatch(checkStatus({ status: true }))
-        if(previousPage === ''){
-            props.navigation.navigate({ name: '預約Tab',})
+        const res: any = await loginByPhone(data)
+        // check the login status
+        if(res['error']){
+            if (res['error']['status'] === 400) {
+                toast.show({
+                    description: "請確認輸入電話號碼及驗證碼正確！"
+                })
+            }
         }else{
-            props.navigation.navigate({ name: '相關醫生', })
+            store.dispatch(checkStatus({ status: true }))
+            if (previousPage === '') {
+                props.navigation.navigate({ name: '預約Tab', })
+            } else {
+                props.navigation.navigate({ name: '相關醫生', })
+            }
+            toast.show({
+                description: "成功登入"
+            })
         }
-        toast.show({
-            description: "成功登入"
-        })
     }
 
     return (

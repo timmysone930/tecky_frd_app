@@ -38,7 +38,7 @@ export const authAPI = createApi({
                 body: data
             })
         }),
-        getLoginSMS: builder.mutation<QueryReturnValue, {'phone':number}>({
+        getLoginSMS: builder.mutation<any, {'phone':number}>({
             query: (phone) => ({
                 url: "/auth/send-sms/",
                 method: 'POST',
