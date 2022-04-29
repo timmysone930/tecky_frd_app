@@ -65,8 +65,8 @@ export const AddressForm = (props: Props) => {
 
     useEffect(()=>{
         if ( props.name.length > 0 &&
-             props.phone.length == 0 &&
-             parseInt(props.phone) == NaN &&
+             props.phone.length == 8 &&
+             parseInt(props.phone) != NaN &&
              props.area.length > 0 &&
              props.district.length > 0 && 
              props.addr.estate.length > 0 && 
