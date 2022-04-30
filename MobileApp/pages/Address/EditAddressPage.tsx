@@ -37,6 +37,9 @@ export function EditAddressPage({navigation}:any) {
     const toast = useToast();
 
     const save = () => {
+        if (!formFilled) {
+            return
+        }
         navigation.navigate("我的地址")
 
         toast.show({

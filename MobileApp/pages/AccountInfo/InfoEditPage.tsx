@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Image, Text } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
@@ -46,21 +46,39 @@ export function InfoEditPage({navigation}:any) {
         noInput: true 
     })
     
-    const verifButtonHandler = () => {
-        setIsDisable({...isDisable, input: false, phoneInput: true})
+
+    const phoneInputHandler = (phone: any) => {
+        setInput({...input, phone: phone})
+
+        if (originalPhone != phone && phone.length == 8) {
+            setIsDisable({...isDisable, button: false})
+        } else {
+            setIsDisable({...isDisable, button: true})
+        }
+    }
+
+    const countTime = 60
+    const [counter, setCounter] = useState(countTime);
+    const [isActive, setIsActive] = useState(false)
+    const verifyButtonHandler = () => {
+        setCounter(countTime)
+        setIsActive(true)
+        setIsDisable({...isDisable, input: false, phoneInput: true, button: true})
         toast.show({
             description: "已送出驗證碼"
         })
     }
-    const phoneInputHandler = (phone: any) => {
-        if (input.phone != phone) {
-            setIsDisable({...isDisable, button: false})
+
+    useEffect(() => {
+        if (isActive) {
+            counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+            counter == 0 && setIsDisable({...isDisable, button: false});
+            counter == 0 && setIsActive(false);
         }
-        setInput({...input, phone: phone})
-    }
+      });
+    
 
-
-    const verrifCodeInputHandler = (value: any) => {
+    const verifyCodeInputHandler = (value: any) => {
         if (value == "" ){
             setIsDisable({...isDisable, noInput: true})
         }
@@ -155,19 +173,21 @@ export function InfoEditPage({navigation}:any) {
                             marginBottom={5}
                             padding={1} 
                             height={10} 
-                            flex={1} 
-                            size={"lg"} 
-                            onPress={verifButtonHandler}
+                            flex={2} 
+                            size={"lg"}
+                            onPress={verifyButtonHandler}
                             >
-                                驗證碼
+                                <Text style={{color: "white"}}>
+                                    驗證碼 {isActive &&`(${counter})`}
+                                </Text>
                         </Button>
-                        <FormControl isInvalid={isDisable.warning} flex={3}>
+                        <FormControl isInvalid={isDisable.warning} flex={4}>
                             <Input
                                 isDisabled={isDisable.input}
                                 height={10}
                                 size="lg"  
                                 placeholder="請輸入短訊驗證碼" 
-                                onChangeText={verrifCodeInputHandler}
+                                onChangeText={verifyCodeInputHandler}
                             />
                             
                             <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>

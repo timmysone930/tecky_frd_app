@@ -11,6 +11,7 @@ import { NewsCard } from '../components/home/NewsCard';
 import { TipsCard } from '../components/home/TipsCard';
 
 import Config from "react-native-config";
+console.log(Config.REACT_APP_API_SERVER)
 
 export const Home =  () => {
     const backgroundStyle = {

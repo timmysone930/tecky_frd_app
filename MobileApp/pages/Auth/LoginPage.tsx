@@ -4,11 +4,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import Config from 'react-native-config';
 import { useSelector } from 'react-redux';
-import { useGetLoginSMSByQueryQuery, useGetLoginSMSMutation, useLoginByPhoneMutation } from '../../API/AuthAPI';
+import { useGetLoginSMSByQueryQuery, useGetLoginSMSMutation, useLoginByPhoneMutation} from '../../API/AuthAPI';
 import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 // Native-base
 import { useToast } from 'native-base';
+
 
 export const LoginPage = (props: any) => {
     // white background
@@ -35,6 +36,7 @@ export const LoginPage = (props: any) => {
     // login
     const toast = useToast()
     const onLoginPress = async (inputData: any) => {
+        
         const data: { 'phone': number, 'smsCode': string } = {
             "phone": inputData.phoneNo,
             "smsCode": inputData.loginSMS
@@ -59,6 +61,7 @@ export const LoginPage = (props: any) => {
             })
         }
     }
+
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>

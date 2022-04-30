@@ -45,7 +45,8 @@ export const authAPI = createApi({
         }),
         getLoginSMSByQuery: builder.query({
             query: (phone: string) => `/auth/send-sms/${phone}`,
-          }),
+        }),
+
     })
 })
 
