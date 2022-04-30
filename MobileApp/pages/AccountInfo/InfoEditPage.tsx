@@ -5,6 +5,9 @@ import { styles } from '../../styles/GeneralStyles';
 // Native-base
 import { View, Button, useToast, Input, FormControl, WarningOutlineIcon} from 'native-base';
 
+// API
+import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
+
 const fakeUserInfo = {
     id: "123",
     hkid: "A1234567",
@@ -26,18 +29,36 @@ export function InfoEditPage({navigation}:any) {
     
     // Toast
     const toast = useToast()
+    
+    // Data fetching
+    let fetchData;
+    let isLoading;
+    let error;
+    let errorDisplay;
+    try {
+        const resp = useGetUserInfoQuery("");
+        fetchData = resp.data;
+        isLoading = resp.isLoading;
+        error = resp.error
 
-    const fetchData = fakeUserInfo
+    } catch (e) {
+        errorDisplay = "系統出現故障，如有需要請致電 ... ..."
+    }
 
+    // Image path
     let pic = require(`../../images/profilePic/test-01.jpg`)
     pic = ""
 
-    const originalPhone = fetchData.phone
+    // Align the original phone number for comparison with the new input phone number
+    const originalPhone = fetchData.phone.slice(3, 12)
+    // New input
     const [input, setInput] = useState({
         email: fetchData.email,
-        phone: fetchData.phone
+        areaCode: fetchData.phone.slice(0, 3),
+        phone: fetchData.phone.slice(3, 12)
     })
 
+    // Determine The inputs are enable or not
     const [isDisable, setIsDisable] = useState({
         button: true,
         input: true,
@@ -46,7 +67,7 @@ export function InfoEditPage({navigation}:any) {
         noInput: true 
     })
     
-
+    // 電話輸入欄
     const phoneInputHandler = (phone: any) => {
         setInput({...input, phone: phone})
 
@@ -57,11 +78,16 @@ export function InfoEditPage({navigation}:any) {
         }
     }
 
+    //60s count down set up
     const countTime = 60
     const [counter, setCounter] = useState(countTime);
     const [isActive, setIsActive] = useState(false)
+
+    // 驗證碼掣
     const verifyButtonHandler = () => {
+        // Reset the counter to 60s
         setCounter(countTime)
+        // Activate 60s count down
         setIsActive(true)
         setIsDisable({...isDisable, input: false, phoneInput: true, button: true})
         toast.show({
@@ -69,15 +95,16 @@ export function InfoEditPage({navigation}:any) {
         })
     }
 
+    // 60s count down
     useEffect(() => {
         if (isActive) {
             counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
             counter == 0 && setIsDisable({...isDisable, button: false});
             counter == 0 && setIsActive(false);
         }
-      });
+    });
     
-
+    // 驗證碼輸入欄
     const verifyCodeInputHandler = (value: any) => {
         if (value == "" ){
             setIsDisable({...isDisable, noInput: true})
@@ -87,9 +114,10 @@ export function InfoEditPage({navigation}:any) {
         }
     }
 
+    // Save all
     const save = () => {
         // If the input of email and phone are empty, not save
-        if (input.email == "" || input.phone == "") {
+        if (input.email.length == 0 || input.phone.length == 0) {
             return
         }
         if (originalPhone != input.phone) {
@@ -108,7 +136,7 @@ export function InfoEditPage({navigation}:any) {
         <SafeAreaView style={{ backgroundColor: 'white'}}>
             <ScrollView>
                 <View style={[styles.viewContainer]}>
-                    <View flexDirection={"row"} marginY={5}>
+                    {/* <View flexDirection={"row"} marginY={5}>
                         {
                             pic === '' ? 
                             <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={require('../../images/profilePic/default.jpg')} /> :
@@ -118,8 +146,24 @@ export function InfoEditPage({navigation}:any) {
                             <Text style={styles.title}>{fetchData.member_code}</Text>
                             <Text style={styles.contentFont}>{fetchData.name}</Text>
                         </View>
-                    </View>
-                    <View justifyContent={"space-between"} height={280} marginY={5}>
+                    </View> */}
+                    <View justifyContent={"space-between"} height={400} marginY={5}>
+                        <View flexDirection={'row'}>
+                            <Text style={[{width: 130}, styles.contentText]}>
+                                會員編號: 
+                            </Text>
+                            <Text style={[styles.subTitle]}>
+                                {fetchData.member_code}
+                            </Text>
+                        </View>
+                        <View flexDirection={'row'}>
+                            <Text style={[{width: 130}, styles.contentText]}>
+                                姓名: 
+                            </Text>
+                            <Text style={[styles.subTitle]}>
+                                {fetchData.name}
+                            </Text>
+                        </View>
                         <View flexDirection={'row'}>
                             <Text style={[{width: 130}, styles.contentText]}>性別: </Text>
                             <Text style={[styles.subTitle]}>{fetchData.gender}</Text>
@@ -147,9 +191,20 @@ export function InfoEditPage({navigation}:any) {
                         {/* 手提電話號碼 */}
                         <FormControl isInvalid={input.phone == ""} >
                             <Text style={[{width: 130}, styles.contentText]}>手提電話號碼: </Text>
+                            <Input 
+                                value={input.areaCode}
+                                isDisabled={true}
+                                size="lg" 
+                                keyboardType="numeric"
+                                placeholder="手提電話號碼" 
+                                onChangeText={phoneInputHandler}
+                            />
+                            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                                此項必須填寫
+                            </FormControl.ErrorMessage>
                             <Input
                                 isDisabled={isDisable.phoneInput}
-                                size="m" 
+                                size="lg" 
                                 keyboardType="numeric"
                                 placeholder="手提電話號碼" 
                                 value={input.phone} 

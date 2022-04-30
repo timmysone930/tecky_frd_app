@@ -52,10 +52,12 @@ export const userStatusSlice = createSlice({
     name: 'userStatus',
     initialState: {
         isLogin: false,
+        phone: null,
     },
     reducers: {
         checkStatus: (state, action) => {
             state.isLogin = action.payload.status
+            state.phone = action.payload.phone
         }
     }
 })
