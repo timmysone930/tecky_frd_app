@@ -1,9 +1,9 @@
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
-import { Checkbox } from 'native-base';
+import { Checkbox, useToast } from 'native-base';
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
-import { usePostRegisterInfoMutation } from '../../API/AuthAPI';
+import { useGetLoginSMSMutation, usePostRegisterInfoMutation } from '../../API/AuthAPI';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
 import { DatePickerComponent } from '../../components/PickerComponent';
 import { BottomLineComponent } from '../../components/SearchComponent';
@@ -11,6 +11,7 @@ import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 
 export const RegisterPage = (props: any) => {
+    const toast = useToast()
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
@@ -18,7 +19,7 @@ export const RegisterPage = (props: any) => {
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: {
-            regTitle: '', regName: '',regName_en:'', regIDType: '', regIDNumber: '', regBDay: '', regEmail: '', phoneCode: '', regPhone: '', regSMS: '',
+            regTitle: '', regName: '', regName_en: '', regIDType: '', regIDNumber: '', regBDay: '', regEmail: '', phoneCode: '', regPhone: '', regSMS: '',
             regPolicyOne: [], regPolicyTwo: []
         }
     });
@@ -29,36 +30,50 @@ export const RegisterPage = (props: any) => {
     // 身份證明文件
     const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
     // id value change function
-    const onIDValueChange = (itemValue: any) => {
-        setValue("regIDType", itemValue)
-    };
+    const onIDValueChange = (itemValue: any) => {setValue("regIDType", itemValue)};
     // Date value change function
-    const onDateChange = (itemValue: any) => {
-        setValue("regBDay", itemValue)
-    };
+    const onDateChange = (itemValue: any) => {setValue("regBDay", itemValue)};
     // Title value change function
-    const onTitleChange = (itemValue: any) => {
-        setValue("regTitle", itemValue)
-    };
+    const onTitleChange = (itemValue: any) => {setValue("regTitle", itemValue)};
     // Title value change function
-    const onPhoneCodeChange = (itemValue: any) => {
-        setValue("phoneCode", itemValue)
-    };
+    const onPhoneCodeChange = (itemValue: any) => {setValue("phoneCode", itemValue)};
     // Multi Box     
     const [groupValues, setGroupValues] = React.useState([]);
     const [groupValues2, setGroupValues2] = React.useState([]);
+    // SMS function
+    const [getLoginSMS] = useGetLoginSMSMutation();
+    const onSMSPress = async()=>{
+        try {
+            let phoneString = getValues('phoneCode') + getValues('regPhone')
+            const res: QueryReturnValue = await getLoginSMS({ 'phone': parseInt(phoneString) })
+        } catch (e) {
+            console.log(e)
+        }
+    }
     // Register
     const [postRegisterInfo] = usePostRegisterInfoMutation();
     const onSubmit = async (data: any) => {
-        let registerData = {"id_doc_type": data.regIDType, "hkid":data.regIDNumber,
-        "name": data.regName, "name_en":data.regName_en,  "gender": data.regTitle, "birthday": data.regBDay, "email": data.regEmail, "phone": data.phoneCode + data.regPhone,
-        "member_code":'test',
-    }
-        console.log(registerData)
-        const res:QueryReturnValue = await postRegisterInfo(registerData)
-        console.log(res.error)
-        // store.dispatch(checkStatus({ status: true }))
-        // props.navigation.navigate({ name: '注冊成功' })
+        let registerData = {
+            "id_type": data.regIDType, "id_number": data.regIDNumber, "name": data.regName, "name_en": data.regName_en, "gender": data.regTitle, "birthday": data.regBDay,
+            "email": data.regEmail, "phone": data.phoneCode + data.regPhone, 'smsCode':data.regSMS
+        }
+        const res: any = await postRegisterInfo(registerData)
+        // check the login status
+        if (res['error']) {
+            if (res['error']['data']['message'] === 'Repeat ID') {
+                toast.show({
+                    description: "輸入的身份證明文件號碼已被使用！"
+                })
+            }else if(res['error']['status'] === 400){
+                toast.show({
+                    description: "請檢查輸入的資料正確！"
+                })
+            }
+        }else{
+        toast.show({ description: "成功注冊" })
+        store.dispatch(checkStatus({ status: true }))
+        props.navigation.navigate({ name: '注冊成功' })
+        }
     }
 
     return (
@@ -165,7 +180,7 @@ export const RegisterPage = (props: any) => {
                             )}
                             name="regSMS"
                         />
-                        <TouchableOpacity style={styles.btnPhone} onPress={() => { }}>
+                        <TouchableOpacity style={styles.btnPhone} onPress={onSMSPress}>
                             <Text style={styles.btnPhoneText}>驗證碼</Text>
                         </TouchableOpacity>
                     </View>

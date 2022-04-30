@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import Config from 'react-native-config';
 import { useSelector } from 'react-redux';
-import { useGetLoginSMSByQueryQuery, useGetLoginSMSMutation, useLoginByPhoneMutation } from '../../API/AuthAPI';
+import { useGetLoginSMSMutation, useLoginByPhoneMutation } from '../../API/AuthAPI';
 import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 // Native-base
