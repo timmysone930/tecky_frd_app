@@ -1,5 +1,5 @@
-import React from 'react'
-import {View, Text, SafeAreaView, FlatList, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, { useState } from 'react'
+import { View, Text, SafeAreaView, FlatList, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
 // API route
 import { useGetDoctorListQuery } from '../../API/DoctorAPI';
 // Component
@@ -27,29 +27,40 @@ export const FakeDrDATA = [
 ];
 
 export const DrList: React.FC = (prop: any) => {
+    const [searchQuery, setSearchQuery] = React.useState('');
     // white background
-    const backgroundStyle = {backgroundColor: 'white',};
+    const backgroundStyle = { backgroundColor: 'white', };
     const { mode } = prop.route.params;
-    let data;
+    let data:any;
     let isLoading;
     let isSuccess;
     let isError;
-     // fetch doctor list data
-    if(mode === '西醫'){
+    // fetch doctor list data
+    if (mode === '西醫') {
         data = useGetDoctorListQuery().data;
         isLoading = useGetDoctorListQuery().isLoading;
         isError = useGetDoctorListQuery().isError;
         isSuccess = useGetDoctorListQuery().isSuccess;
     }
-    
+    // search function
+    if (searchQuery !== '') {
+        let newData = data.filter( (item:any) => (item.name.includes(searchQuery) || item.name_en.toLowerCase().includes(searchQuery.toLowerCase())
+        ||item.spec_name.toString().includes(searchQuery) )
+        );
+        data = newData
+    }
     // For FlatList
     const renderItem = (props: any) =>
     (
         <TouchableOpacity style={styles.drListCard} onPress={() => {
             prop.navigation.navigate('相關醫生', {
                 screen: '醫生詳情',
-                params: { id: props.item.doctor_code, docData:{name:props.item.name, gender:props.item.gender, id:props.item.doctor_code, doctor_des:props.item.doctor_des,
-                img:props.item.img, name_en:props.item.name_en, clinic:props.item.clinic, spec_name:props.item.spec_name} },
+                params: {
+                    id: props.item.doctor_code, docData: {
+                        name: props.item.name, gender: props.item.gender, id: props.item.doctor_code, doctor_des: props.item.doctor_des,
+                        img: props.item.img, name_en: props.item.name_en, clinic: props.item.clinic, spec_name: props.item.spec_name
+                    }
+                },
             })
         }}>
             <DrListCard props={props.item} />
@@ -58,15 +69,15 @@ export const DrList: React.FC = (prop: any) => {
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-            <SearchComponent placeholder={"搜索醫生，科目，疾病"} />
+            <SearchComponent placeholder={"搜索醫生以及科目"} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <View style={[backgroundStyle, { flex: 1 }]}>
-                {isLoading &&  <SpinnerComponent />}
+                {isLoading && <SpinnerComponent />}
                 {isError && <Text style={styles.title}>Somethings gone wrong...</Text>}
                 {isSuccess &&
                     <FlatList
                         data={data}
                         renderItem={renderItem}
-                        keyExtractor={(item,idx) => `docList_${item.doctor_code}_${idx}`}
+                        keyExtractor={(item, idx) => `docList_${item.doctor_code}_${idx}`}
                     />
                 }
             </View>
