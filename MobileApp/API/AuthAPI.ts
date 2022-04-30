@@ -4,14 +4,16 @@ import Config from "react-native-config";
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 
 interface registerType{
-    "id_doc_type": string,
-    "hkid":string,
+    "id_type": string,
+    "id_number":string,
     "name": string,
+    "name_en":string,
     "gender": string,
     "birthday": string,
     "email": string,
     "phone": string,
-    "member_code":string,
+    'smsCode':string,
+    "id_img"?:string,
 }
 
 // Define our single API slice object
@@ -31,7 +33,7 @@ export const authAPI = createApi({
         }),
         postRegisterInfo: builder.mutation<QueryReturnValue, registerType>({
             query: (data) => ({
-                url: "/patient/register",
+                url: "/client/register",
                 method: "POST",
                 body: data
             })
