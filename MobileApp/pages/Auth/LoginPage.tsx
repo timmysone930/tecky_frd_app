@@ -66,6 +66,7 @@ export const LoginPage = (props: any) => {
             });
         }
     });
+    
 
     const [loginByPhone] = useLoginByPhoneMutation();
     // login
@@ -123,7 +124,7 @@ export const LoginPage = (props: any) => {
                             )}
                             name="loginSMS"
                         />
-                        <Button 
+                        {/* <Button 
                             isDisabled={sendCodeBtn.isDisable}
                             colorScheme={"danger"}
                             alignSelf={'center'} 
@@ -137,10 +138,10 @@ export const LoginPage = (props: any) => {
                                 <Text style={{color: "white", fontSize: 15}}>
                                     驗證碼 {sendCodeBtn.isActive &&`(${counter})`}
                                 </Text>
-                        </Button>
-                        {/* <TouchableOpacity style={styles.btnPhone} onPress={handleSubmit(onSMSPress)}>
+                        </Button> */}
+                        <TouchableOpacity style={styles.btnPhone} onPress={handleSubmit(onSMSPress)}>
                             <Text style={styles.btnPhoneText}>驗證碼</Text>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
 
 
                     </View>

@@ -6,7 +6,8 @@ import { styles } from '../../styles/GeneralStyles';
 import { View, Button, useToast, Input, FormControl, WarningOutlineIcon} from 'native-base';
 
 // API
-import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
+import { useGetUserInfoQuery, usePutEditInfoMutation } from '../../API/UserInfoAPI';
+import Config from "react-native-config";
 
 const fakeUserInfo = {
     id: "123",
@@ -26,37 +27,62 @@ const fakeUserInfo = {
 
 
 export function InfoEditPage({navigation}:any) {
-    
+
     // Toast
     const toast = useToast()
     
     // Data fetching
-    let fetchData;
-    let isLoading;
-    let error;
-    let errorDisplay;
-    try {
-        const resp = useGetUserInfoQuery("");
-        fetchData = resp.data;
-        isLoading = resp.isLoading;
-        error = resp.error
-
-    } catch (e) {
-        errorDisplay = "系統出現故障，如有需要請致電 ... ..."
-    }
-
-    // Image path
-    let pic = require(`../../images/profilePic/test-01.jpg`)
-    pic = ""
+    const [fetchData, setFetchData] = useState({
+        birthday: "", 
+        created_at: "", 
+        email: "", 
+        gender: "", 
+        id_img: "", 
+        id_number: "", 
+        id_type: "", 
+        member_code: null, 
+        name: "", 
+        name_en: "", 
+        phone: "",
+    })
 
     // Align the original phone number for comparison with the new input phone number
-    const originalPhone = fetchData.phone.slice(3, 12)
+    const [originalPhone, setOriginalPhone] = useState("")
+
     // New input
     const [input, setInput] = useState({
-        email: fetchData.email,
-        areaCode: fetchData.phone.slice(0, 3),
-        phone: fetchData.phone.slice(3, 12)
+        email: "",
+        areaCode: "",
+        phone: ""
     })
+
+    const infoFetching = async () => {
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`)
+        const result = await resp.json()
+        setFetchData(result)
+        setInput({
+            ...input,
+            email: result.email,
+            areaCode: result.phone.slice(0, 3),
+            phone: result.phone.slice(3, 12)
+        })
+        setOriginalPhone(result.phone.slice(3, 12))
+    }
+    
+    const [fetched, setFetched] = useState(false)
+
+    useEffect(()=>{
+        if (!fetched) {
+            infoFetching() 
+            setFetched(true)
+        }
+    },[])
+
+
+    // Image path
+    // let pic = require(`../../images/profilePic/test-01.jpg`)
+    // pic = ""
+
 
     // Determine The inputs are enable or not
     const [isDisable, setIsDisable] = useState({
@@ -114,8 +140,10 @@ export function InfoEditPage({navigation}:any) {
         }
     }
 
+
     // Save all
-    const save = () => {
+    const [putEditInfo] = usePutEditInfoMutation();
+    const save = async () => {
         // If the input of email and phone are empty, not save
         if (input.email.length == 0 || input.phone.length == 0) {
             return
@@ -126,7 +154,18 @@ export function InfoEditPage({navigation}:any) {
                 return
             }
         }
-        navigation.navigate("我的資料")
+        
+        const newInfo = {
+            ...fetchData,
+            email: input.email,
+            phone: input.areaCode + input.phone,
+        }
+        console.log(newInfo);
+
+        const resp = await putEditInfo(newInfo)
+        
+        
+        navigation.navigate("查看")
         toast.show({
             description: "成功儲存帳戶資料"
         })
@@ -147,78 +186,80 @@ export function InfoEditPage({navigation}:any) {
                             <Text style={styles.contentFont}>{fetchData.name}</Text>
                         </View>
                     </View> */}
-                    <View justifyContent={"space-between"} height={400} marginY={5}>
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>
-                                會員編號: 
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {fetchData.member_code}
-                            </Text>
-                        </View>
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>
-                                姓名: 
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {fetchData.name}
-                            </Text>
-                        </View>
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>性別: </Text>
-                            <Text style={[styles.subTitle]}>{fetchData.gender}</Text>
-                        </View>
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>出生日期: </Text>
-                            <Text style={[styles.subTitle]}>{fetchData.birthday}</Text>
-                        </View>
+                    { fetchData &&
+                        <View justifyContent={"space-between"} height={400} marginY={5}>
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>
+                                    會員編號: 
+                                </Text>
+                                <Text style={[styles.subTitle]}>
+                                    {fetchData.member_code}
+                                </Text>
+                            </View>
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>
+                                    姓名: 
+                                </Text>
+                                <Text style={[styles.subTitle]}>
+                                    {fetchData.name}
+                                </Text>
+                            </View>
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>性別: </Text>
+                                <Text style={[styles.subTitle]}>{fetchData.gender}</Text>
+                            </View>
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>出生日期: </Text>
+                                <Text style={[styles.subTitle]}>{fetchData.birthday}</Text>
+                            </View>
 
-                        {/* Email */}
-                        <FormControl isInvalid={input.email == ""}>
-                            <Text style={[{width: 130}, styles.contentText]}>Email: </Text>
-                            <Input
-                                size="lg"
-                                placeholder="Email" 
-                                keyboardType='email-address'
-                                value={input.email} 
-                                onChangeText={email => setInput({...input, email: email})}
-                            />
-                            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                                此項必須填寫
-                            </FormControl.ErrorMessage>
-                        </FormControl>
+                            {/* Email */}
+                            <FormControl isInvalid={input.email == ""}>
+                                <Text style={[{width: 130}, styles.contentText]}>Email: </Text>
+                                <Input
+                                    size="lg"
+                                    placeholder="Email" 
+                                    keyboardType='email-address'
+                                    value={input.email} 
+                                    onChangeText={email => setInput({...input, email: email})}
+                                />
+                                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                                    此項必須填寫
+                                </FormControl.ErrorMessage>
+                            </FormControl>
 
-                        {/* 手提電話號碼 */}
-                        <FormControl isInvalid={input.phone == ""} >
-                            <Text style={[{width: 130}, styles.contentText]}>手提電話號碼: </Text>
-                            <Input 
-                                value={input.areaCode}
-                                isDisabled={true}
-                                size="lg" 
-                                keyboardType="numeric"
-                                placeholder="手提電話號碼" 
-                                onChangeText={phoneInputHandler}
-                            />
-                            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                                此項必須填寫
-                            </FormControl.ErrorMessage>
-                            <Input
-                                isDisabled={isDisable.phoneInput}
-                                size="lg" 
-                                keyboardType="numeric"
-                                placeholder="手提電話號碼" 
-                                value={input.phone} 
-                                onChangeText={phoneInputHandler}
-                            />
-                            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={input.phone.length != 8}>
-                                此項必須為 8 位數字電話號碼
-                            </FormControl.ErrorMessage>
-                            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                                此項必須填寫
-                            </FormControl.ErrorMessage>
-                        </FormControl>
+                            {/* 手提電話號碼 */}
+                            <FormControl isInvalid={input.phone == ""} >
+                                <Text style={[{width: 130}, styles.contentText]}>手提電話號碼: </Text>
+                                <Input 
+                                    value={input.areaCode}
+                                    isDisabled={true}
+                                    size="lg" 
+                                    keyboardType="numeric"
+                                    placeholder="區號" 
+                                    onChangeText={phoneInputHandler}
+                                />
+                                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                                    此項必須填寫
+                                </FormControl.ErrorMessage>
+                                <Input
+                                    isDisabled={isDisable.phoneInput}
+                                    size="lg" 
+                                    keyboardType="numeric"
+                                    placeholder="手提電話號碼" 
+                                    value={input.phone} 
+                                    onChangeText={phoneInputHandler}
+                                />
+                                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={input.phone.length != 8}>
+                                    此項必須為 8 位數字電話號碼
+                                </FormControl.ErrorMessage>
+                                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                                    此項必須填寫
+                                </FormControl.ErrorMessage>
+                            </FormControl>
 
-                    </View>
+                        </View>
+                    }
                     
                     <View flexDirection={"row"}>
                         <Button 

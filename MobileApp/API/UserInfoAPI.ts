@@ -11,12 +11,19 @@ export const userInfoAPI = createApi({
     endpoints: builder => ({
         // The endpoint is a "query" operation that returns data
         getUserInfo: builder.query({
-            // The URL for the request is '/http://XXXX/doctors/list'
+            // The URL for the request is '/http://XXXX/client/profile'
             query: () => `/client/profile`
+        }),
+        putEditInfo: builder.mutation<QueryReturnValue, any>({
+            query: (data) => ({
+                url: "/client/edit-profile",
+                method: "PUT",
+                body: data
+            })
         }),
     })
 })
 
 // Export the auto-generated hook for the query endpoint
-export const { useGetUserInfoQuery } = userInfoAPI
+export const { useGetUserInfoQuery, usePutEditInfoMutation } = userInfoAPI
 

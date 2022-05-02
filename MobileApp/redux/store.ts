@@ -25,6 +25,6 @@ export const store = configureStore({
   },
 
   // 加入 api middleware 來啟用 caching、invalidation、polling 等其他方法
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(doctorAPI.middleware).concat(authAPI.middleware),
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(doctorAPI.middleware).concat(authAPI.middleware).concat(userInfoAPI.middleware),
   // middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false, }).concat(doctorAPI.middleware).concat(authAPI.middleware),
 })

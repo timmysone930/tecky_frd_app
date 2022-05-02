@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Image, Text } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
@@ -11,7 +11,7 @@ import { View, Button, useToast} from 'native-base';
 
 // API
 import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
-import { convertAbsoluteToRem } from 'native-base/lib/typescript/theme/tools';
+import Config from "react-native-config";
 
 const fakeUserInfo = {
     id: "123",
@@ -32,21 +32,39 @@ const fakeUserInfo = {
 
 export function AccountInfoPage({navigation}:any) {
     // Data fetching
-    let fetchData;
-    let isLoading;
-    let error;
-    let errorDisplay;
-    try {
-        const resp = useGetUserInfoQuery("");
-        fetchData = resp.data;
-        isLoading = resp.isLoading;
-        error = resp.error
 
-    } catch (e) {
-        errorDisplay = "系統出現故障，如有需要請致電 ... ..."
+    // let fetchData:any;
+    const [fetchData, setFetchData] = useState({
+        birthday: "", 
+        created_at: "", 
+        email: "", 
+        gender: "", 
+        id_img: "", 
+        id_number: "", 
+        id_type: "", 
+        member_code: null, 
+        name: "", 
+        name_en: "", 
+        phone: "",
+    })
+
+    async function infoFetching () {
+        // const resp = useGetUserInfoQuery('');
+        // const { isLoading, data, error } = resp;
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`)
+        const result = await resp.json()
+        setFetchData(result)
+        return result
     }
     
-    
+    const [fetched, setFetched] = useState(false)
+    useEffect(()=>{
+        if (!fetched) {
+            infoFetching() 
+            setFetched(true)
+        }
+    },[])
+
     // Toast
     const toast = useToast()
 
@@ -80,7 +98,7 @@ export function AccountInfoPage({navigation}:any) {
                         </View>
                     </View> */}
 
-                    <View justifyContent={"space-between"} height={200} marginY={5} >
+                    {fetchData && <View justifyContent={"space-between"} height={200} marginY={5} >
                         <View flexDirection={'row'}>
                             <Text style={[{width: 130}, styles.contentText]}>
                                 會員編號: 
@@ -129,7 +147,7 @@ export function AccountInfoPage({navigation}:any) {
                                 {fetchData.phone}
                             </Text>
                         </View>
-                    </View>
+                    </View>}
                     <View justifyContent={"space-between"} height={130} marginY={8} >
                         <Button 
                             alignSelf={'center'} 
