@@ -19,8 +19,17 @@ export const doctorAPI = createApi({
     getRosterListByDocCode:  builder.query({
       query: (code: string) => `/roster/search?column=doc_code&where=${code}`,
     }),
+    getRosterSession: builder.query({
+      query:(id:number) => `/roster/session/${id}`
+    }),
+    getRosterById:  builder.query({
+      query: (code: string) => `/roster/search?column=id&where=${code}`,
+    }),
+    getReservedSessionById: builder.query({
+      query: (rosterId: string) => `/roster/oneSession/${rosterId}`,
+    }),
   })
 })
 
 // Export the auto-generated hook for the query endpoint
-export const { useGetDoctorListQuery, useGetRosterListByDocCodeQuery } = doctorAPI
+export const { useGetDoctorListQuery, useGetRosterListByDocCodeQuery,useGetRosterSessionQuery, useGetRosterByIdQuery,useGetReservedSessionByIdQuery } = doctorAPI

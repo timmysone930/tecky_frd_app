@@ -2,38 +2,54 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { useForm, Controller } from "react-hook-form";
-import { useSelector } from 'react-redux';
 import { store } from '../../redux/store';
 import { setFormData } from '../../redux/slice';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
 import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
 import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
+import { ResDateComponent } from '../../components/doctor/ResDateComponent';
+// fetch to check patient status
+const checkPatient = async (id: any) => {
+  try {
+    const response = await fetch(
+      `http://192.168.0.113:3001/patient/search?column=hkid&where=${id}`
+    );
+    const json = await response.json();
+    if (json.message && json.message === 'Not Found') {
+      return { message: 'Not Found' }
+    } else {
+      console.log(json[0].member_code)
+      return { message: 'Found', memberCode:json[0].member_code }
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const ReservationPage = (props: any) => {
   // To get the param passing from the previous screen
   const { id, docData } = props.route.params;
   // Form element
   const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
-    defaultValues: { name: '', reservedDate: '請選擇應診日期', reservedTime: '請選擇應診時間', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '' }
+    defaultValues: { name: '', reservedDate: '', reservedTime: '', reservedSession: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '' }
   });
-  // Form data submit and navigate
-  const onSubmit = (data: any) => {
-    props.navigation.navigate({ name: '上傳身份證明文件' })
-    store.dispatch(setFormData(data))
-  }
-  // Date Selector
-  const [selectedValue, setSelectedValue] = useState('請選擇應診日期');
-
+  // Roster ID Selector
+  const [selectedRoster, setSelectedRoster] = useState('');
   // Date value change function
-  const onValueChange = (itemValue: any, itemIndex: any) => {
-    setSelectedValue(itemValue);
+  const onValueChange = (itemValue: any) => {
+    setSelectedRoster(itemValue);
     setValue("reservedDate", itemValue)
-    setValue("reservedTime", '請選擇應診時間')
+    setValue("reservedTime", '')
+    // setValue("reservedSession", '')
   };
-
   // Time value change function
-  const onTimeValueChange = (itemValue: any, itemIndex: any) => {
+  const onTimeValueChange = (itemValue: any) => {
+    setSelectedRoster(itemValue);
     setValue("reservedTime", itemValue)
+  };
+  // Session value change
+  const onSessionChange = (itemValue: any) => {
+    setValue("reservedSession", itemValue)
   };
 
   // 身份證明文件
@@ -44,14 +60,18 @@ export const ReservationPage = (props: any) => {
   };
 
   const rosterData = useGetRosterListByDocCodeQuery(id)
-  // let availableDate = [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-  // { id: 2, date: '2022-05-05', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-  // { id: 3, date: '2022-05-07', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-  // ]
 
-
-  console.log(rosterData)
-  // { rosterData.isSuccess && console.log(rosterData) }
+  // Form data submit and navigate
+  const onSubmit = async (data: any) => {
+    let patientStatus: any = await checkPatient(data.idNumber)
+    if (patientStatus.message === 'Not Found') {
+      props.navigation.navigate({ name: '上傳身份證明文件'})
+      store.dispatch(setFormData(data))
+    } else if (patientStatus.message === 'Found') {
+      props.navigation.navigate({ name: '健康申報表', param:{memberCode:patientStatus.memberCode}})
+      store.dispatch(setFormData(data))
+    }
+  }
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
@@ -65,84 +85,94 @@ export const ReservationPage = (props: any) => {
             <DrListCard props={docData} />
           </View>
           {rosterData.isLoading && <SpinnerComponent />}
+          {rosterData.isSuccess &&
 
-          <View style={styles.pageMargin}>
-            <Text style={styles.subTitle}>應診日期</Text>
-
-            {/* <Controller control={control} rules={{ required: true, }}
-            render={({ field: { value } }) => (
-                <BaseSelectComponent placeholder={'請選擇應診日期'} data={userData.availableDate} onChange={onValueChange} mode='date'
-                  selectedValue={getValues('reservedDate')} dateValue={getValues('reservedDate')}
-                />
-            )}
-            name="reservedDate"
-          /> */}
-            {/* 必須填寫提示 */}
-            {errors.reservedDate && <Text style={styles.warning}>* 此項必須選擇</Text>}
-
-            <Text style={styles.subTitle}>應診時間</Text>
-
-            {/* <Controller control={control} rules={{ required: true, }}
-            render={({ field: { value } }) => (
-                <BaseSelectComponent placeholder={'請選擇應診時間'} data={userData.availableDate} onChange={onTimeValueChange} mode='time'
-                selectedValue={getValues('reservedTime')} dateValue={getValues('reservedDate')}
+            <View style={styles.pageMargin}>
+              <Text style={styles.subTitle}>應診日期</Text>
+              <Controller control={control} rules={{ required: true, }}
+                render={({ field: { value } }) => (
+                  <ResDateComponent onChange={onValueChange} data={rosterData.currentData} mode='date' placeholder={'請選擇應診日期'}
+                    dateValue={getValues('reservedDate')}
+                  />
+                )}
+                name="reservedDate"
               />
-            )}
-            name="reservedTime"
-          /> */}
-            {/* 必須填寫提示 */}
-            {errors.reservedTime && <Text style={styles.warning}>* 此項必須選擇</Text>}
+              {errors.reservedDate && <Text style={styles.warning}>* 此項必須選擇</Text>}
 
-            <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop: 5, marginBottom: 10, }}>
-              <Text style={styles.subTitle}>問診費用： $100.00</Text>
-              <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
+              <Text style={styles.subTitle}>應診時段</Text>
+              <Controller control={control} rules={{ required: true, }}
+                render={({ field: { value } }) => (
+                  <ResDateComponent onChange={onTimeValueChange} data={rosterData.currentData} mode='time' placeholder={'請選擇應診時段'}
+                    dateValue={getValues('reservedDate')}
+                  />
+                )}
+                name="reservedTime"
+              />
+              {errors.reservedTime && <Text style={styles.warning}>* 此項必須選擇</Text>}
+
+              <Text style={styles.subTitle}>應診時間</Text>
+              <Controller control={control} rules={{ required: true, }}
+                render={({ field: { value } }) => (
+                  // <ResSessionComponent data={rosterData.currentData} placeholder={'請選擇應診時間'} onChange={onSessionChange} />
+                  <ResDateComponent onChange={onSessionChange} data={rosterData.currentData} mode='session' placeholder={'請選擇應診時間'}
+                    dateValue={getValues('reservedDate')} timeValue={getValues('reservedTime')}
+                  />
+
+                )}
+                name="reservedSession"
+              />
+              {errors.reservedSession && <Text style={styles.warning}>* 此項必須選擇</Text>}
+
+              <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop: 5, marginBottom: 10, }}>
+                <Text style={styles.subTitle}>問診費用： ${docData.video_diag_fee}</Text>
+                <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
+              </View>
+
+              <Text style={styles.subTitle}>應診者姓名</Text>
+              <Controller control={control} rules={{ required: true, }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
+                )}
+                name="name"
+              />
+              {/* 必須填寫提示 */}
+              {errors.name && <Text style={styles.warning}>* 此項必須填寫</Text>}
+              <Text style={styles.subTitle}>身份證明文件</Text>
+              <Controller control={control}
+                render={({ field: { value } }) => (
+                  <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
+                    selectedValue={getValues('idType')} dateValue={''}
+                  />
+                )}
+                name="idType"
+              />
+              <Controller control={control} rules={{ required: true, }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="身份證明文件號碼" placeholderTextColor="#737474" />
+                )}
+                name="idNumber"
+              />
+              {/* 必須填寫提示 */}
+              {errors.idNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
+              <Text style={styles.subTitle}>緊急聯絡人</Text>
+              <Controller control={control} rules={{ required: true, }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人姓名" placeholderTextColor="#737474" />
+                )}
+                name="EmergencyContactName"
+              />
+              {/* 必須填寫提示 */}
+              {errors.EmergencyContactName && <Text style={styles.warning}>* 此項必須填寫</Text>}
+              <Controller control={control} rules={{ required: true, }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput keyboardType={'numeric'} style={[styles.input, { marginBottom: 45 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話" placeholderTextColor="#737474" />
+                )}
+                name="EmergencyContactPhone"
+              />
+              {/* 必須填寫提示 */}
+              {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
             </View>
-
-            <Text style={styles.subTitle}>應診者姓名</Text>
-            <Controller control={control} rules={{ required: true, }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
-              )}
-              name="name"
-            />
-            {/* 必須填寫提示 */}
-            {errors.name && <Text style={styles.warning}>* 此項必須填寫</Text>}
-            <Text style={styles.subTitle}>身份證明文件</Text>
-            <Controller control={control}
-              render={({ field: { value } }) => (
-                <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
-                  selectedValue={getValues('idType')} dateValue={''}
-                />
-              )}
-              name="idType"
-            />
-            <Controller control={control} rules={{ required: true, }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="身份證明文件號碼" placeholderTextColor="#737474" />
-              )}
-              name="idNumber"
-            />
-            {/* 必須填寫提示 */}
-            {errors.idNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
-            <Text style={styles.subTitle}>緊急聯絡人</Text>
-            <Controller control={control} rules={{ required: true, }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人姓名" placeholderTextColor="#737474" />
-              )}
-              name="EmergencyContactName"
-            />
-            {/* 必須填寫提示 */}
-            {errors.EmergencyContactName && <Text style={styles.warning}>* 此項必須填寫</Text>}
-            <Controller control={control} rules={{ required: true, }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput keyboardType={'numeric'} style={[styles.input, { marginBottom: 45 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話" placeholderTextColor="#737474" />
-              )}
-              name="EmergencyContactPhone"
-            />
-            {/* 必須填寫提示 */}
-            {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
-          </View>
-
+          }
         </ScrollView>
       </KeyboardAvoidingView>
       {/* Button to go back and next page */}

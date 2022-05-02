@@ -4,28 +4,31 @@ import { createSlice } from '@reduxjs/toolkit'
 export const doctorIDSlice = createSlice({
     name: 'doctorID',
     initialState: {
-        id: '', currentPage:'',
+        id: '', currentPage:'', docData:'',
     },
     reducers: {
         setDoctorID: (state, action) => {
             const { id, currentPage } = action.payload
             state.id = id
             state.currentPage = currentPage
-        }
+        },
+        setDoctorData:(state, action) => {
+            state.docData = action.payload.docData
+        },
     }
 })
-export const { setDoctorID } = doctorIDSlice.actions
+export const { setDoctorID,setDoctorData } = doctorIDSlice.actions
 
 // get reservation form detail
 export const reserveFormSlice = createSlice({
     name: 'reserveForm',
     initialState: {
-        name: '', reservedDate: '', reservedTime: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '',
-        leaveHK: '', Countries: '', backDate: '', symptoms:[],
+        name: '', reservedDate: '', reservedTime: '',  reservedSession: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '',
+        leaveHK: '', Countries: '', backDate: '', symptoms:[], idImg:[],
     },
     reducers: {
         setFormData: (state, action) => {
-            const { name, reservedDate, reservedTime, idType, idNumber, EmergencyContactName, EmergencyContactPhone, } = action.payload
+            const { name, reservedDate, reservedTime, idType, idNumber, EmergencyContactName, EmergencyContactPhone, reservedSession} = action.payload
             state.name = name
             state.reservedDate = reservedDate
             state.reservedTime = reservedTime
@@ -33,6 +36,7 @@ export const reserveFormSlice = createSlice({
             state.idNumber = idNumber
             state.EmergencyContactName = EmergencyContactName
             state.EmergencyContactPhone = EmergencyContactPhone
+            state.reservedSession = reservedSession
         },
         setHealthFormMultiBox: (state, action) => {
             state.symptoms = action.payload.symptoms
@@ -41,11 +45,14 @@ export const reserveFormSlice = createSlice({
             state.leaveHK = action.payload.leaveHK
             state.Countries = action.payload.Countries
             state.backDate = action.payload.backDate
+        },
+        setIDImage:(state, action)=>{
+            state.idImg = action.payload.assets
         }
     }
 })
 
-export const { setFormData, setHealthFormMultiBox, setHealthFormInfo } = reserveFormSlice.actions
+export const { setFormData, setHealthFormMultiBox, setHealthFormInfo,setIDImage } = reserveFormSlice.actions
 
 // to check user auth & status
 export const userStatusSlice = createSlice({
