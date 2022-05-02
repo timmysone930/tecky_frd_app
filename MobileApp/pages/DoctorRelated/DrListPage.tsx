@@ -58,7 +58,7 @@ export const DrList: React.FC = (prop: any) => {
                 params: {
                     id: props.item.doctor_code, docData: {
                         name: props.item.name, gender: props.item.gender, id: props.item.doctor_code, doctor_des: props.item.doctor_des,
-                        img: props.item.img, name_en: props.item.name_en, clinic: props.item.clinic, spec_name: props.item.spec_name
+                        img: props.item.img, name_en: props.item.name_en, clinic: props.item.clinic, spec_name: props.item.spec_name, video_diag_fee:props.item.video_diag_fee
                     }
                 },
             })

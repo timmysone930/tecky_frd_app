@@ -4,7 +4,7 @@ import { Button } from 'react-native-paper';
 import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { InfoCardComponent } from '../../components/doctor/InfoCardComponent';
-import { setDoctorID } from '../../redux/slice';
+import { setDoctorData, setDoctorID } from '../../redux/slice';
 import { store } from '../../redux/store';
 
 export const DrInfo: React.FC = (props: any) => {
@@ -35,8 +35,9 @@ export const DrInfo: React.FC = (props: any) => {
                             name: '預約醫生',
                             params:{docData:docData, id:id}
                         }),
-                            store.dispatch(setDoctorID({ id: id, currentPage: '預約醫生' }),
+                            store.dispatch(setDoctorID({ id: id, currentPage: '預約醫生' })
                             )
+                            store.dispatch(setDoctorData({docData:docData}))
                     }} style={styles.button} disabled={rosterData.isError||rosterData.isLoading ? true : false}>
                         線上視像諮詢
                     </Button>
