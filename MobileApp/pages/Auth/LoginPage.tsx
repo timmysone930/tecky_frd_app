@@ -8,7 +8,9 @@ import { useGetLoginSMSMutation, useLoginByPhoneMutation } from '../../API/AuthA
 import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 // Native-base
-import { useToast } from 'native-base';
+import { useToast, Button } from 'native-base';
+
+
 
 export const LoginPage = (props: any) => {
     // white background
@@ -21,20 +23,55 @@ export const LoginPage = (props: any) => {
     });
     // GET previous page 
     const previousPage = useSelector((state: any) => state.setDoctorID.currentPage);
+
+    const countTime = 60
+    const [counter, setCounter] = useState(countTime);
+    const [sendCodeBtn, setSendCodeBtn] = useState({
+        isDisable: false,
+        isActive: false,
+    })
+
     const [getLoginSMS] = useGetLoginSMSMutation();
     // Get login SMS (sample:85255332211)
     const onSMSPress = async (inputData: any) => {
+        // Reset the counter to 60s
+        setCounter(countTime)
+        // Activate 60s count down
+        setSendCodeBtn({
+            ...sendCodeBtn, 
+            isDisable: true, 
+            isActive: true,
+        });
+        // Fetching
         try {
             const res: QueryReturnValue = await getLoginSMS({ 'phone': inputData.phoneNo })
+
+            toast.show({
+                description: "已送出驗證碼"
+            })
             console.log(res['error'])
         } catch (e) {
             console.log(e)
         }
     }
+
+    // 60s count down
+    useEffect(() => {
+        if (sendCodeBtn.isActive) {
+            counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
+            counter == 0 && setSendCodeBtn({
+                ...sendCodeBtn, 
+                isDisable: false, 
+                isActive: false,
+            });
+        }
+    });
+
     const [loginByPhone] = useLoginByPhoneMutation();
     // login
     const toast = useToast()
     const onLoginPress = async (inputData: any) => {
+        
         const data: { 'phone': number, 'smsCode': string } = {
             "phone": inputData.phoneNo,
             "smsCode": inputData.loginSMS
@@ -48,7 +85,7 @@ export const LoginPage = (props: any) => {
                 })
             }
         }else{
-            store.dispatch(checkStatus({ status: true }))
+            store.dispatch(checkStatus({ status: true, phone: inputData.phoneNo}))
             if (previousPage === '') {
                 props.navigation.navigate({ name: '預約Tab', })
             } else {
@@ -59,6 +96,7 @@ export const LoginPage = (props: any) => {
             })
         }
     }
+
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
@@ -81,13 +119,28 @@ export const LoginPage = (props: any) => {
 
                         <Controller control={control}
                             render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput keyboardType={'numeric'} style={[styles.input, { width: '74%', flex: 1 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請輸入短訊驗證碼" placeholderTextColor="#737474" />
+                                <TextInput keyboardType={'numeric'} style={[styles.input, { width: '74%', flex: 1 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請輸入短訊驗證碼" placeholderTextColor="#737474"/>
                             )}
                             name="loginSMS"
                         />
-                        <TouchableOpacity style={styles.btnPhone} onPress={handleSubmit(onSMSPress)}>
+                        <Button 
+                            isDisabled={sendCodeBtn.isDisable}
+                            colorScheme={"danger"}
+                            alignSelf={'center'} 
+                            padding={1} 
+                            height={12} 
+                            marginLeft={2}
+                            flex={0.4} 
+                            size={"md"}
+                            onPress={handleSubmit(onSMSPress)}
+                        >
+                                <Text style={{color: "white", fontSize: 15}}>
+                                    驗證碼 {sendCodeBtn.isActive &&`(${counter})`}
+                                </Text>
+                        </Button>
+                        {/* <TouchableOpacity style={styles.btnPhone} onPress={handleSubmit(onSMSPress)}>
                             <Text style={styles.btnPhoneText}>驗證碼</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
 
                     </View>

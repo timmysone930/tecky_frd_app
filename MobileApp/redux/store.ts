@@ -7,6 +7,7 @@ import { doctorIDSlice,
        } from './slice'
 import { authAPI } from '../API/AuthAPI'
 import { doctorAPI } from '../API/DoctorAPI'
+import { userInfoAPI } from '../API/UserInfoAPI'
 import { userStatusSlice } from './AuthSlice'
 import { patientAPI } from '../API/PatientAPI'
 
@@ -22,6 +23,7 @@ export const store = configureStore({
     [doctorAPI.reducerPath]: doctorAPI.reducer,
     [authAPI.reducerPath]: authAPI.reducer,
     [patientAPI.reducerPath]: patientAPI.reducer,
+    [userInfoAPI.reducerPath]: userInfoAPI.reducer,
   },
 
   // 加入 api middleware 來啟用 caching、invalidation、polling 等其他方法

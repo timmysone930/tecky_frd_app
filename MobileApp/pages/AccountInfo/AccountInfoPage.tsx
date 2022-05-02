@@ -9,6 +9,10 @@ import { checkStatus } from '../../redux/AuthSlice';
 // Native-base
 import { View, Button, useToast} from 'native-base';
 
+// API
+import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
+import { convertAbsoluteToRem } from 'native-base/lib/typescript/theme/tools';
+
 const fakeUserInfo = {
     id: "123",
     hkid: "A1234567",
@@ -27,12 +31,26 @@ const fakeUserInfo = {
 
 
 export function AccountInfoPage({navigation}:any) {
+    // Data fetching
+    let fetchData;
+    let isLoading;
+    let error;
+    let errorDisplay;
+    try {
+        const resp = useGetUserInfoQuery("");
+        fetchData = resp.data;
+        isLoading = resp.isLoading;
+        error = resp.error
+
+    } catch (e) {
+        errorDisplay = "系統出現故障，如有需要請致電 ... ..."
+    }
+    
     
     // Toast
     const toast = useToast()
 
-    const fetchData = fakeUserInfo
-
+    // Image paths
     let pic = require(`../../images/profilePic/test-01.jpg`)
     pic = ""
 
@@ -50,7 +68,7 @@ export function AccountInfoPage({navigation}:any) {
         <SafeAreaView style={{ backgroundColor: 'white', height: "100%" }}>
             <ScrollView>
                 <View style={[styles.viewContainer]}>
-                    <View flexDirection={"row"} marginY={5}>
+                    {/* <View flexDirection={"row"} marginY={5}>
                         {
                             pic === '' ? 
                             <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={require('../../images/profilePic/default.jpg')} /> :
@@ -60,9 +78,25 @@ export function AccountInfoPage({navigation}:any) {
                             <Text style={styles.title}>{fetchData.member_code}</Text>
                             <Text style={styles.contentFont}>{fetchData.name}</Text>
                         </View>
-                    </View>
+                    </View> */}
 
                     <View justifyContent={"space-between"} height={200} marginY={5} >
+                        <View flexDirection={'row'}>
+                            <Text style={[{width: 130}, styles.contentText]}>
+                                會員編號: 
+                            </Text>
+                            <Text style={[styles.subTitle]}>
+                                {fetchData.member_code}
+                            </Text>
+                        </View>
+                        <View flexDirection={'row'}>
+                            <Text style={[{width: 130}, styles.contentText]}>
+                                姓名: 
+                            </Text>
+                            <Text style={[styles.subTitle]}>
+                                {fetchData.name}
+                            </Text>
+                        </View>
                         <View flexDirection={'row'}>
                             <Text style={[{width: 130}, styles.contentText]}>
                                 性別: 
@@ -96,7 +130,7 @@ export function AccountInfoPage({navigation}:any) {
                             </Text>
                         </View>
                     </View>
-                    <View justifyContent={"space-between"} height={130} marginY={5} >
+                    <View justifyContent={"space-between"} height={130} marginY={8} >
                         <Button 
                             alignSelf={'center'} 
                             marginX={2}
