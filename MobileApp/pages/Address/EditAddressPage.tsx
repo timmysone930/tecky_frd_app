@@ -9,41 +9,62 @@ import { useSelector } from 'react-redux';
 // Native-base
 import { View, Button, useToast } from 'native-base';
 
+// .env
+import Config from 'react-native-config';
+
 
 export function EditAddressPage({navigation}:any) {
 
     const addressContent = useSelector((state:any) => state.getAddressData).addressEditContent
-    const blacnkContent = {
-        hkid:"",
+    const blankContent = {
+        // hkid:"",
         name:"",
         phone:"",
         area:"",
         district:"",
-        addr:{
-            street: "", 
-            estate: "",
-            flat: "",
-            floor: "",
-            block: "",
-        },
+        address:"",
         is_default: false
     }
+    
 
     const [formFilled, setFormFilled] = useState(false)
 
-    const [input, setInput] = (addressContent == null)? useState(blacnkContent) : useState(addressContent)
+    const [input, setInput] = (addressContent == null)? useState(blankContent) : useState(addressContent)
     
     // Toast: Save Successful
     const toast = useToast();
 
-    const save = () => {
+    const save = async () => {
         if (!formFilled) {
             return
         }
+
+        let resp: any;
+        if (addressContent == null) {
+            const hkIdResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`)
+            const hkId = (await hkIdResp.json()).id_number
+            resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/new-addr-book`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({...input, hkid: hkId})
+            })
+
+        } else {
+            resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify(input)
+            })
+        }
+        
         navigation.navigate("我的地址")
 
         toast.show({
-            description: "儲存成功"
+            description: resp.status == 201 ? "儲存成功" : "系統錯誤，儲存失敗"
         })
     }
     return (
@@ -56,7 +77,7 @@ export function EditAddressPage({navigation}:any) {
                         phone={input.phone}
                         area={input.area}
                         district={input.district}
-                        addr={input.addr}
+                        addr={input.address}
                         allFilled={formFilled}
                         setAllFilled={setFormFilled}
                         enabled={true}
