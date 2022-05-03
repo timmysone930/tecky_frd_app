@@ -5,7 +5,7 @@ import { RadioButton } from 'react-native-paper';
 import { BottomLineComponent } from '../../components/SearchComponent';
 import { DatePickerComponent } from '../../components/PickerComponent';
 import { store } from '../../redux/store';
-import { setHealthFormInfo } from '../../redux/slice';
+import { setHealthFormInfo, setHealthFormMultiBox } from '../../redux/slice';
 import { BaseCheckBoxComponent } from '../../components/NativeBase/BaseCheckBoxComponent';
 
 export const HealthDeForm: React.FC = (props: any) => {
@@ -13,6 +13,13 @@ export const HealthDeForm: React.FC = (props: any) => {
     const backgroundStyle = {
         backgroundColor: 'white',
     };
+    // Check Box Value
+    const [groupValues, setGroupValues] = React.useState([]);
+    // checkbox Onchange
+    const onCheckBoxChange = (values:any)=>{
+        setGroupValues(values||[]);
+        store.dispatch(setHealthFormMultiBox({symptoms: values})) 
+    }
     // Date value change function
     const onDateChange = (itemValue: any, itemIndex: any) => {
         setValue("backDate", itemValue)
@@ -33,8 +40,8 @@ export const HealthDeForm: React.FC = (props: any) => {
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (
                             <RadioButton.Group onValueChange={value => {setValue("leaveHKRadio", value) }} value={getValues('leaveHKRadio')}>
-                                <RadioButton.Item label="是" value="yes" mode='android' color='#6d7f99' />
-                                <RadioButton.Item label="否" value="no" mode='android' color='#6d7f99' />
+                                <RadioButton.Item label="是" value="true" mode='android' color='#6d7f99' />
+                                <RadioButton.Item label="否" value="false" mode='android' color='#6d7f99' />
                             </RadioButton.Group>
                         )}
                         name="leaveHKRadio"
@@ -57,7 +64,7 @@ export const HealthDeForm: React.FC = (props: any) => {
 
                     <View style={{ marginTop: 10 }}><BottomLineComponent /></View>
                     <Text style={styles.subTitle}>你是否有以下的病徵？</Text>
-                    <BaseCheckBoxComponent data={['發燒','咳嗽、呼吸困難或咽喉痛','腹瀉或嘔吐','流感症狀']}/>
+                    <BaseCheckBoxComponent data={['發燒','咳嗽、呼吸困難或咽喉痛','腹瀉或嘔吐','流感症狀']} groupValues={groupValues} onChange={onCheckBoxChange}/>
                     <BottomLineComponent />
 
                 </View>

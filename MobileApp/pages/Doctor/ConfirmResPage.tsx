@@ -18,7 +18,7 @@ export const ConfirmResPage: React.FC = (props: any) => {
     // const rosterTime = useGetRosterByIdQuery(formData.reservedTime)
     // let reserveTime;
     // rosterTime.isSuccess?reserveTime = `${rosterTime.currentData[0]['from_time']} - ${rosterTime.currentData[0]['to_time']}`:reserveTime = '載入中'
-    let reserveSession;
+    let reserveSession :any;
     // roster session
     const rosterSession = useGetReservedSessionByIdQuery(formData.reservedSession);
     rosterSession.isSuccess? reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}`:   reserveSession = '載入中'  
@@ -49,7 +49,7 @@ export const ConfirmResPage: React.FC = (props: any) => {
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
                 <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
-                    onPress={() => props.navigation.navigate({ name: '付款' })}>
+                    onPress={() => props.navigation.navigate({ name: '付款', params:{reserveSession:reserveSession}})}>
                     <Text style={styles.buttonText}>前往付款</Text></TouchableOpacity>
             </View>
         </SafeAreaView>

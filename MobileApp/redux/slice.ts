@@ -24,35 +24,51 @@ export const reserveFormSlice = createSlice({
     name: 'reserveForm',
     initialState: {
         name: '', reservedDate: '', reservedTime: '',  reservedSession: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '',
-        leaveHK: '', Countries: '', backDate: '', symptoms:[], idImg:[],
+        leaveHK: false, Countries: '', backDate: '', symptoms:[], idImg:[], memberCode:'', title:'',phone:'',email:'',bDay:'',isFever: false, isCough: false,
+        isVomit: false, isCold: false
     },
     reducers: {
         setFormData: (state, action) => {
-            const { name, reservedDate, reservedTime, idType, idNumber, EmergencyContactName, EmergencyContactPhone, reservedSession} = action.payload
+            const { name, reservedDate, reservedTime, idType, idNumber, EmergencyContactName, EmergencyContactPhone, reservedSession, title} = action.payload
             state.name = name
             state.reservedDate = reservedDate
             state.reservedTime = reservedTime
             state.idType = idType
             state.idNumber = idNumber
-            state.EmergencyContactName = EmergencyContactName
-            state.EmergencyContactPhone = EmergencyContactPhone
             state.reservedSession = reservedSession
+            state.title = title
         },
         setHealthFormMultiBox: (state, action) => {
+            if(action.payload.symptoms !== []){
+                action.payload.symptoms.includes('發燒') ? state.isFever = true: state.isFever = false;
+                action.payload.symptoms.includes('咳嗽、呼吸困難或咽喉痛') ? state.isCough = true: state.isCough = false;
+                action.payload.symptoms.includes('腹瀉或嘔吐') ? state.isVomit = true: state.isVomit = false;
+                action.payload.symptoms.includes('流感症狀') ? state.isCold = true: state.isCold = false;
+            } ;
             state.symptoms = action.payload.symptoms
         },
         setHealthFormInfo: (state, action) => {
-            state.leaveHK = action.payload.leaveHK
+            state.leaveHK = action.payload.leaveHKRadio === 'true'? true:false
             state.Countries = action.payload.Countries
             state.backDate = action.payload.backDate
         },
         setIDImage:(state, action)=>{
             state.idImg = action.payload.assets
+        },
+        setAdditionalInfo:(state, action)=>{
+            state.phone = action.payload.phone
+            state.email = action.payload.email
+            state.bDay = action.payload.bDay
+            state.EmergencyContactName = action.payload.EmergencyContactName
+            state.EmergencyContactPhone = action.payload.EmergencyContactPhone
+        },
+        setMemberCode:(state, action)=>{
+            state.memberCode = action.payload.memberCode
         }
     }
 })
 
-export const { setFormData, setHealthFormMultiBox, setHealthFormInfo,setIDImage } = reserveFormSlice.actions
+export const { setFormData, setHealthFormMultiBox, setHealthFormInfo,setIDImage,setMemberCode,setAdditionalInfo } = reserveFormSlice.actions
 
 // to check user auth & status
 export const userStatusSlice = createSlice({
