@@ -15,21 +15,21 @@ export const ConfirmResPage: React.FC = (props: any) => {
     // get form data
     const formData = useSelector((state: any) => state.getFormData);
     // roster time
-    const rosterTime = useGetRosterByIdQuery(formData.reservedTime)
-    let reserveTime;
-    let reserveSession;
-    rosterTime.isSuccess?reserveTime = `${rosterTime.currentData[0]['from_time']} - ${rosterTime.currentData[0]['to_time']}`:reserveTime = '載入中'
+    // const rosterTime = useGetRosterByIdQuery(formData.reservedTime)
+    // let reserveTime;
+    // rosterTime.isSuccess?reserveTime = `${rosterTime.currentData[0]['from_time']} - ${rosterTime.currentData[0]['to_time']}`:reserveTime = '載入中'
+    let reserveSession :any;
     // roster session
     const rosterSession = useGetReservedSessionByIdQuery(formData.reservedSession);
-    rosterSession.isSuccess?reserveSession = `${rosterSession.currentData[0]['start_at']} - ${rosterSession.currentData[0]['end_at']}`:   reserveSession = '載入中'  
+    rosterSession.isSuccess? reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}`:   reserveSession = '載入中'  
 
-    const rowTitleArr = ['問診費用：', '選擇日期：', '選擇時段：', '選擇時間：', '應診者姓名：', '身份證類型：', '身份證編號：']
-    const rowCellArr = [`$ ${docInfo.docData.video_diag_fee}`, formData.reservedDate, reserveTime, reserveSession, formData.name, formData.idType, formData.idNumber]
+    const rowTitleArr = ['問診費用：', '選擇日期：', '選擇時間：', '應診者姓名：', '身份證類型：', '身份證編號：']
+    const rowCellArr = [`$ ${docInfo.docData.video_diag_fee}`, formData.reservedDate, reserveSession, formData.name, formData.idType, formData.idNumber]
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
-                {rosterTime.isLoading && <SpinnerComponent />}
-                {rosterTime.isSuccess &&
+                {rosterSession.isLoading && <SpinnerComponent />}
+                {rosterSession.isSuccess &&
                     <>
                         <Text style={[styles.rowCellText, { paddingHorizontal: 15, paddingTop: 15, }]}>醫生資料</Text>
                         <View style={styles.drListCard}>
@@ -49,7 +49,7 @@ export const ConfirmResPage: React.FC = (props: any) => {
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
                 <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
-                    onPress={() => props.navigation.navigate({ name: '付款' })}>
+                    onPress={() => props.navigation.navigate({ name: '付款', params:{reserveSession:reserveSession}})}>
                     <Text style={styles.buttonText}>前往付款</Text></TouchableOpacity>
             </View>
         </SafeAreaView>

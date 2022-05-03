@@ -2,15 +2,15 @@ import React from 'react'
 
 import { createStackNavigator } from '@react-navigation/stack';
 import { Doctor } from '../pages/DoctorPage';
-import { ReservationPage } from '../pages/DoctorRelated/ReservationPage';
-import { ReserveIDCardPage } from '../pages/DoctorRelated/ReserveIDCardPage';
-import { PolicyPage } from '../pages/DoctorRelated/PolicyPage';
-import { DrList } from '../pages/DoctorRelated/DrListPage';
-import { DrInfo } from '../pages/DoctorRelated/DrInfoPage';
-import { HealthDeForm } from '../pages/DoctorRelated/HealthDeForm';
-import { ConfirmResPage } from '../pages/DoctorRelated/ConfirmResPage';
-import { PaymentPage } from '../pages/PaymentPage';
-import { ConfirmPaymentPage } from '../pages/ConfirmedPaymentPage';
+import { ReservationPage } from '../pages/Doctor/ReservationPage';
+import { ReserveIDCardPage } from '../pages/Doctor/ResUploadIdCardPage';
+import { PolicyPage } from '../pages/Doctor/PolicyPage';
+import { DrList } from '../pages/Doctor/DrListPage';
+import { DrInfo } from '../pages/Doctor/DrInfoPage';
+import { HealthDeForm } from '../pages/Doctor/HealthDeFormPage';
+import { ConfirmResPage } from '../pages/Doctor/ConfirmResPage';
+import { PaymentPage } from '../pages/Doctor/ResPaymentPage';
+import { ConfirmPaymentPage } from '../pages/Doctor/ResPaymentConfirmPage';
 import { useSelector } from 'react-redux';
 import { LoginStacks } from './LoginStack';
 

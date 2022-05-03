@@ -3,6 +3,8 @@ import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } fr
 import { useSelector } from 'react-redux';
 import { useGetReservedSessionByIdQuery } from '../../API/DoctorAPI';
 import { BottomLineComponent } from '../../components/SearchComponent';
+import { checkRosterStatus } from '../../redux/PaymentSlice';
+import { store } from '../../redux/store';
 
 
 export const PolicyPage: React.FC = (props: any) => {
@@ -19,6 +21,7 @@ export const PolicyPage: React.FC = (props: any) => {
     const onPress = async () => {
         if (rosterSession.isSuccess){
             if(rosterSession.currentData === []){
+                store.dispatch(checkRosterStatus({ paymentRoster: false }))
                 props.navigation.navigate({ name: '預約確認' })
             }else{
                 props.navigation.navigate({ name: '確認預約資料'})

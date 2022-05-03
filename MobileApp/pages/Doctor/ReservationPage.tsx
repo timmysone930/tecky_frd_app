@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableO
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { useForm, Controller } from "react-hook-form";
 import { store } from '../../redux/store';
-import { setFormData } from '../../redux/slice';
+import { setFormData, setMemberCode } from '../../redux/slice';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
 import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
 import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
@@ -19,7 +19,7 @@ const checkPatient = async (id: any) => {
       return { message: 'Not Found' }
     } else {
       console.log(json[0].member_code)
-      return { message: 'Found', memberCode:json[0].member_code }
+      return { message: 'Found', memberCode: json[0].member_code }
     }
   } catch (error) {
     console.error(error);
@@ -31,8 +31,12 @@ export const ReservationPage = (props: any) => {
   const { id, docData } = props.route.params;
   // Form element
   const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
-    defaultValues: { name: '', reservedDate: '', reservedTime: '', reservedSession: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '' }
+    defaultValues: { name: '', reservedDate: '', reservedTime: '', reservedSession: '', idType: '香港身份證', idNumber: '', title: '' }
   });
+  // 稱謂
+  const titleArr = ['先生', '小姐', '女士']
+  // Title value change function
+  const onTitleChange = (itemValue: any) => { setValue("title", itemValue) };
   // Roster ID Selector
   const [selectedRoster, setSelectedRoster] = useState('');
   // Date value change function
@@ -65,11 +69,12 @@ export const ReservationPage = (props: any) => {
   const onSubmit = async (data: any) => {
     let patientStatus: any = await checkPatient(data.idNumber)
     if (patientStatus.message === 'Not Found') {
-      props.navigation.navigate({ name: '上傳身份證明文件'})
+      props.navigation.navigate({ name: '上傳身份證明文件' })
       store.dispatch(setFormData(data))
     } else if (patientStatus.message === 'Found') {
-      props.navigation.navigate({ name: '健康申報表', param:{memberCode:patientStatus.memberCode}})
+      props.navigation.navigate({ name: '健康申報表' })
       store.dispatch(setFormData(data))
+      store.dispatch(setMemberCode({ memberCode: patientStatus.memberCode }))
     }
   }
 
@@ -128,6 +133,18 @@ export const ReservationPage = (props: any) => {
                 <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
               </View>
 
+              <Text style={styles.subTitle}>稱謂</Text>
+              <Controller control={control} rules={{ required: true, }}
+                render={({ field: { value } }) => (
+                  <BaseSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
+                    selectedValue={getValues('title')} dateValue={''}
+                  />
+                )}
+                name="title"
+              />
+              {/* 必須填寫提示 */}
+              {errors.title && <Text style={styles.warning}>* 此項必須選擇</Text>}
+
               <Text style={styles.subTitle}>應診者姓名</Text>
               <Controller control={control} rules={{ required: true, }}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -154,23 +171,6 @@ export const ReservationPage = (props: any) => {
               />
               {/* 必須填寫提示 */}
               {errors.idNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
-              <Text style={styles.subTitle}>緊急聯絡人</Text>
-              <Controller control={control} rules={{ required: true, }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人姓名" placeholderTextColor="#737474" />
-                )}
-                name="EmergencyContactName"
-              />
-              {/* 必須填寫提示 */}
-              {errors.EmergencyContactName && <Text style={styles.warning}>* 此項必須填寫</Text>}
-              <Controller control={control} rules={{ required: true, }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput keyboardType={'numeric'} style={[styles.input, { marginBottom: 45 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話" placeholderTextColor="#737474" />
-                )}
-                name="EmergencyContactPhone"
-              />
-              {/* 必須填寫提示 */}
-              {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
             </View>
           }
         </ScrollView>

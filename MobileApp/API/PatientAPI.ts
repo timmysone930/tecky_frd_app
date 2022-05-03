@@ -14,17 +14,26 @@ export const patientAPI = createApi({
   endpoints: builder => ({
     postPatientRegister: builder.mutation<QueryReturnValue, any>({
       query: (data) => ({
-          url: "/patient/register",
-          method: "POST",
-          headers: {
-            'Content-Type': 'multipart/form-data; ',
-          },
-          body: data
+        url: "/patient/register",
+        method: "POST",
+        headers: {
+          'Content-Type': 'multipart/form-data; ',
+        },
+        body: data
       })
-  }),
-
+    }),
+    postPatientReservation: builder.mutation<QueryReturnValue, any>({
+      query: (data) => ({
+        url: "/reserve/add",
+        method: "POST",
+        headers: {
+          'Content-Type': 'multipart/form-data; ',
+        },
+        body: data
+      })
+    }),
   })
 })
 
 // Export the auto-generated hook for the query endpoint
-export const {usePostPatientRegisterMutation} = patientAPI
+export const { usePostPatientRegisterMutation, usePostPatientReservationMutation } = patientAPI

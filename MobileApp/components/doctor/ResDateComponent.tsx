@@ -78,7 +78,6 @@ export const ResDateComponent = (props: any) => {
                 }else if(sessionData.currentData === undefined){
                     selectFunction = <Select.Item label={`載入中...`} value={`載入中...`} />
                 }else{
-                    console.log('D', sessionID)
                     selectFunction = sessionData.currentData.map((item:any,idx:number)=>(
                         <Select.Item label={`${item['start_at']} - ${item['end_at']}`} value={item['id']} key={`picker_date_${idx}`} />
                     ))
