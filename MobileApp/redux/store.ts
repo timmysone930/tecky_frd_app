@@ -10,6 +10,7 @@ import { doctorAPI } from '../API/DoctorAPI'
 import { userInfoAPI } from '../API/UserInfoAPI'
 import { userStatusSlice } from './AuthSlice'
 import { patientAPI } from '../API/PatientAPI'
+import { paymentStatusSlice } from './PaymentSlice'
 
 
 export const store = configureStore({
@@ -20,6 +21,7 @@ export const store = configureStore({
     getPrescriptionCode: prescriptionCheckingSlice.reducer,
     getPrescriptionPaymentPreset: prescriptionPaymentPresetSlice.reducer,
     getAddressData: addressDataSlice.reducer,
+    getPaymentStatus: paymentStatusSlice.reducer,
     [doctorAPI.reducerPath]: doctorAPI.reducer,
     [authAPI.reducerPath]: authAPI.reducer,
     [patientAPI.reducerPath]: patientAPI.reducer,

@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Dimensions, } from 'react-native';
 // import icon
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useSelector } from 'react-redux';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -11,12 +12,13 @@ export const ConfirmPaymentPage = (props: any) => {
         backgroundColor: 'white',
     };
     // Fake status (for development only )
-    const rosterStatus = true;
+    // const rosterStatus = true;
+    const rosterStatus = useSelector((state: any) => state.getPaymentStatus);
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <View style={{ paddingTop: windowHeight * (1 / 7) }}>
-                {rosterStatus ?
+                {rosterStatus.paymentRoster ?
                     <>
                         <View style={{ marginTop: 20 }}>
                             <Icon name="check-circle" size={100} color="#325C80" style={{ textAlign: 'center', marginBottom: 18 }} />
