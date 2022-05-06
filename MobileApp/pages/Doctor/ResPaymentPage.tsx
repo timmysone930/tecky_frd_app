@@ -10,6 +10,7 @@ import { store } from '../../redux/store';
 import { requestOneTimePayment } from 'react-native-paypal';
 import { useToast } from 'native-base';
 import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
+import { setMemberCode } from '../../redux/slice';
 
 export const PaymentPage = (props: any) => {
     const toast = useToast()
@@ -83,6 +84,7 @@ export const PaymentPage = (props: any) => {
             if (rosterSession.currentData === []) {
                 // selected session not enable
                 store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
+                store.dispatch(setMemberCode({ memberCode: '' }))
                 props.navigation.navigate({ name: '預約確認' })
             } else {
                 // selected session are available
@@ -108,7 +110,6 @@ export const PaymentPage = (props: any) => {
                     })
                     // create member
                     const res: any = await postPatientRegister(submitData)
-                    res.isError && console.log('member', res.error)
                     console.log('member', res)
                 }
                 // member
@@ -121,42 +122,49 @@ export const PaymentPage = (props: any) => {
                     }
                 }
                 // create reservation table
-                const reservationRes: any = await postPatientReservation(resData)
-                console.log('resResult', reservationRes)
-                if (reservationRes?.data) {
-                    // payment
-                    const paypalRes = await redirectPaypal();
-                    if (paypalRes.status === 'success') {
+                try {
+                    const reservationRes: any = await postPatientReservation(resData)
+                    console.log('resResult', reservationRes)
+                    if (reservationRes?.data) {
+                        // payment
+                        const paypalRes = await redirectPaypal();
+                        if (paypalRes.status === 'success') {
+                            toast.show({
+                                description: "付款成功"
+                            })
+                            // create payment table
+                            let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": docInfo.docData.video_diag_fee, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
+                            console.log(paymentData)
+                            const paymentRes: any = await postNewPayment(paymentData)
+                            console.log('paymentRes', paymentRes)
+                            store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
+                            store.dispatch(setMemberCode({ memberCode: '' }))
+                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data } })
+                        } else {
+                            toast.show({
+                                description: "付款失敗"
+                            })
+                            // enable the session 
+                            const enableRes = await putEnableSession(formData.reservedSession)
+                            console.log('enalbeResult', enableRes)
+                            store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
+                            store.dispatch(setMemberCode({ memberCode: '' }))
+                            props.navigation.navigate({ name: '預約確認' })
+                        }
+
+                    } else if (reservationRes.error.data.message === "This patient already have resrvation.") {
                         toast.show({
-                            description: "付款成功"
-                        })
-                        // create payment table
-                        let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": docInfo.docData.video_diag_fee, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
-                        console.log(paymentData)
-                        const paymentRes: any = await postNewPayment(paymentData)
-                        console.log('paymentRes', paymentRes)
-                        store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
-                        props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data } })
-                    } else {
-                        toast.show({
-                            description: "付款失敗"
+                            description: "已有預約記錄人，無法再次預約"
                         })
                         // enable the session 
                         const enableRes = await putEnableSession(formData.reservedSession)
                         console.log('enalbeResult', enableRes)
-                        store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
+                        store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
+                        store.dispatch(setMemberCode({ memberCode: '' }))
                         props.navigation.navigate({ name: '預約確認' })
                     }
-
-                } else if (reservationRes.error.data.message === "This patient already have resrvation.") {
-                    toast.show({
-                        description: "已有預約記錄人，無法再次預約"
-                    })
-                    // enable the session 
-                    const enableRes = await putEnableSession(formData.reservedSession)
-                    console.log('enalbeResult', enableRes)
-                    store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
-                    props.navigation.navigate({ name: '預約確認' })
+                } catch (err) {
+                    console.log(err)
                 }
             }
         }

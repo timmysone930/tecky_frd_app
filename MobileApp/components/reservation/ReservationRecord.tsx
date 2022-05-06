@@ -1,10 +1,13 @@
 import React from 'react'
-import { FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { FlatList, View, Text, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
 import { ResRecordStatus } from './ResRecordStatus';
 
+
 export const ReservationRecord = (props: any) => {
+
   return (
-    <FlatList data={props.data}
+    <FlatList data={props.data} 
+    refreshControl={ <RefreshControl refreshing={props.refreshing} onRefresh={props.onRefresh} /> }
       renderItem={
         ({ item }) => (
           <TouchableOpacity style={[styles.box]} onPress={() => { props.props.navigation.navigate("預約詳情界面", { screen: "預約詳情", params: { 'resCode': item.res_code, 'docCode':item.doc_code, 'data':{item} } }) }} >
