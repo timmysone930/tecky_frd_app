@@ -7,7 +7,7 @@ import { store } from '../../redux/store';
 import { checkStatus } from '../../redux/AuthSlice';
 
 // Native-base
-import { View, Button, useToast} from 'native-base';
+import { View, Button, useToast, HStack, Spinner} from 'native-base';
 
 // API
 import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
@@ -98,83 +98,94 @@ export function AccountInfoPage({navigation}:any) {
                         </View>
                     </View> */}
 
-                    {fetchData && <View justifyContent={"space-between"} height={200} marginY={5} >
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>
-                                會員編號: 
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {fetchData.member_code}
-                            </Text>
+                    {fetched ?
+                    <>
+                        <View justifyContent={"space-between"} height={200} marginY={5} >
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>
+                                    會員編號: 
+                                </Text>
+                                <Text style={[styles.subTitle]}>
+                                    {fetchData.member_code}
+                                </Text>
+                            </View>
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>
+                                    姓名: 
+                                </Text>
+                                <Text style={[styles.subTitle]}>
+                                    {fetchData.name}
+                                </Text>
+                            </View>
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>
+                                    性別: 
+                                </Text>
+                                <Text style={[styles.subTitle]}>
+                                    {fetchData.gender}
+                                </Text>
+                            </View>
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>
+                                    出生日期: 
+                                </Text>
+                                <Text style={[styles.subTitle]}>
+                                    {fetchData.birthday}
+                                </Text>
+                            </View>
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>
+                                    Email: 
+                                </Text>
+                                <Text style={[styles.subTitle]}>
+                                    {fetchData.email}
+                                </Text>
+                            </View>
+                            <View flexDirection={'row'}>
+                                <Text style={[{width: 130}, styles.contentText]}>
+                                    手提電話號碼: 
+                                </Text>
+                                <Text style={[styles.subTitle]}>
+                                    {fetchData.phone}
+                                </Text>
+                            </View>
                         </View>
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>
-                                姓名: 
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {fetchData.name}
-                            </Text>
+                        <View justifyContent={"space-between"} height={130} marginY={8} >
+                            <Button 
+                                alignSelf={'center'} 
+                                marginX={2}
+                                marginBottom={5}
+                                padding={1} 
+                                height={10} 
+                                width={200} 
+                                size={"lg"} 
+                                onPress={editInfo}
+                            >
+                                編輯
+                            </Button>
+                            <Button 
+                                colorScheme={"danger"}
+                                alignSelf={'center'} 
+                                marginX={2}
+                                marginBottom={5}
+                                padding={1} 
+                                height={10} 
+                                width={200} 
+                                size={"lg"} 
+                                onPress={logOut}
+                            >
+                                登出
+                            </Button>
                         </View>
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>
-                                性別: 
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {fetchData.gender}
-                            </Text>
-                        </View>
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>
-                                出生日期: 
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {fetchData.birthday}
-                            </Text>
-                        </View>
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>
-                                Email: 
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {fetchData.email}
-                            </Text>
-                        </View>
-                        <View flexDirection={'row'}>
-                            <Text style={[{width: 130}, styles.contentText]}>
-                                手提電話號碼: 
-                            </Text>
-                            <Text style={[styles.subTitle]}>
-                                {fetchData.phone}
-                            </Text>
-                        </View>
-                    </View>}
-                    <View justifyContent={"space-between"} height={130} marginY={8} >
-                        <Button 
-                            alignSelf={'center'} 
-                            marginX={2}
-                            marginBottom={5}
-                            padding={1} 
-                            height={10} 
-                            width={200} 
-                            size={"lg"} 
-                            onPress={editInfo}
-                        >
-                            編輯
-                        </Button>
-                        <Button 
-                            colorScheme={"danger"}
-                            alignSelf={'center'} 
-                            marginX={2}
-                            marginBottom={5}
-                            padding={1} 
-                            height={10} 
-                            width={200} 
-                            size={"lg"} 
-                            onPress={logOut}
-                        >
-                            登出
-                        </Button>
-                    </View>
+                    </>
+                    :
+                        // Loading Spinner
+                        <HStack space={2} justifyContent="center" alignItems={'center'}>
+                            <Spinner color="#225D66" accessibilityLabel="Loading posts" />
+                        </HStack>
+                    }
+
+                    
                 </View>
             </ScrollView>
         </SafeAreaView>
