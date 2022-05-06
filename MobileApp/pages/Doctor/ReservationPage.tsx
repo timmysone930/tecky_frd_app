@@ -8,17 +8,18 @@ import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectCompo
 import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
 import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
 import { ResDateComponent } from '../../components/doctor/ResDateComponent';
+import Config from "react-native-config";
+
 // fetch to check patient status
 const checkPatient = async (id: any) => {
   try {
     const response = await fetch(
-      `http://192.168.0.113:3001/patient/search?column=hkid&where=${id}`
+      `${Config.REACT_APP_API_SERVER}/patient/search?column=hkid&where=${id}`
     );
     const json = await response.json();
     if (json.message && json.message === 'Not Found') {
       return { message: 'Not Found' }
     } else {
-      console.log(json[0].member_code)
       return { message: 'Found', memberCode: json[0].member_code }
     }
   } catch (error) {

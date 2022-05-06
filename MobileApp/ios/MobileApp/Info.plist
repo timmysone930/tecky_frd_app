@@ -20,6 +20,20 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>org.reactjs.native.example.MobileApp20220423.payments</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>payments</string>
+			</array>
+		</dict>
+		<dict/>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -35,6 +49,34 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>App需要您的同意,才能訪問媒體資料庫</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>App需要您的同意,才能訪問藍芽</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>App需要您的同意,才能訪問日曆</string>
+	<key>NSCameraUsageDescription</key>
+	<string>App需要您的同意,才能訪問相機</string>
+	<key>NSContactsUsageDescription</key>
+	<string>App需要您的同意,才能訪問通訊錄</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>App需要您的同意,才能訪問健康分享</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>App需要您的同意,才能訪問健康更新</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>App需要您的同意,才能始終訪問位置</string>
+	<key>NSLocationUsageDescription</key>
+	<string>App需要您的同意,才能訪問位置</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>App需要您的同意,才能在使用期間訪問位置</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>App需要您的同意,才能訪問麥克風</string>
+	<key>NSMotionUsageDescription</key>
+	<string>App需要您的同意,才能訪問運動與健身</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App需要您的同意,才能訪問相簿</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>App需要您的同意,才能訪問提醒事項</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -68,33 +110,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<string>NSPhotoLibraryUsageDescription</string>
-	<key>NSCameraUsageDescription</key>
-	<string>App需要您的同意,才能訪問相機</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>App需要您的同意,才能訪問相簿</string>
-	<key>NSContactsUsageDescription</key>
-	<string>App需要您的同意,才能訪問通訊錄</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>App需要您的同意,才能始終訪問位置</string>
-	<key>NSLocationUsageDescription</key>
-	<string>App需要您的同意,才能訪問位置</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>App需要您的同意,才能在使用期間訪問位置</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>App需要您的同意,才能訪問麥克風</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>App需要您的同意,才能訪問藍芽</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>App需要您的同意,才能訪問日曆</string>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>App需要您的同意,才能訪問媒體資料庫</string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>App需要您的同意,才能訪問健康分享</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>App需要您的同意,才能訪問健康更新</string>
-	<key>NSMotionUsageDescription</key>
-	<string>App需要您的同意,才能訪問運動與健身</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>App需要您的同意,才能訪問提醒事項</string>
 </dict>
 </plist>

@@ -5,6 +5,8 @@
 #import <React/RCTRootView.h>
 
 #import <React/RCTAppSetupUtils.h>
+// paypal
+#import "RNPaypal.h"
 
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
@@ -27,10 +29,20 @@
 
 @implementation AppDelegate
 
+// if you support only iOS 9+, add the following method
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+  options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [[RNPaypal sharedInstance] application:application openURL:url options:options];
+}
+
+
+// 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   RCTAppSetupPrepareApp(application);
-
+  [[RNPaypal sharedInstance] configure];
+  [BTAppSwitch setReturnURLScheme:@"org.reactjs.native.example.MobileApp20220423.payments"];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
 
 #if RCT_NEW_ARCH_ENABLED

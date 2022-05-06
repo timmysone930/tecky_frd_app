@@ -3,9 +3,9 @@ import { View, Text, StyleSheet } from 'react-native';
 
 export const ResRecordStatus = (props: any) => {
   const statusColor: any = {
-    "已完成":"#ff8000",
-    "已取消": "#ff3333",
-    "待診中":"#00cc00",
+    "finish":"#ff8000",
+    "cancel": "#ff3333",
+    "booked":"#00cc00",
   }
 
   return (

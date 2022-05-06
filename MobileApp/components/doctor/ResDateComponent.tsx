@@ -30,6 +30,7 @@ export const ResDateComponent = (props: any) => {
     }
     // checking the dB data (prevent the same element)
     let provideDate: any = []
+    let chineseArr:any = []
     props.data.map((item: any, idx: number) => {
         let index = tempWeekDay_en.findIndex(x => x === item['weekday']);
         if (provideDate.includes(index)) {
@@ -38,11 +39,23 @@ export const ResDateComponent = (props: any) => {
             provideDate.push(index)
         }
     })
+    // sort the index and convert it to chinese day
     provideDate.sort();
+    provideDate.map((item: any, idx: number) => {
+        chineseArr.push(tempWeekDay[item])
+    })
+    // filter and convert it to full date and day
+    let resultArr:any = []
+    workDateArr.map((item:any)=>{
+        const result = item.substring(item.indexOf("(")+1,item.lastIndexOf(")"))
+        if(chineseArr.includes(result)){
+            resultArr.push(item)
+        }
+    })
     // Check the picker mode
     if (props.mode === 'date') {
-        selectFunction = provideDate.map((item: any, idx: number) => {
-            return <Select.Item label={workDateArr[item - 1]} value={workDateArr[item - 1]} key={`picker_date_${idx}`} />
+        selectFunction = resultArr.map((item: any, idx: number) => {
+            return <Select.Item label={item} value={item} key={`picker_date_${idx}`} />
 
         })
     } else if (props.mode === 'time') { 
@@ -51,16 +64,20 @@ export const ResDateComponent = (props: any) => {
             let selectedIndex = workDateArr.findIndex((x: any) => x === props.dateValue)
             let timeArr: any = [];
             let rosterID:any = [];
+            // to get the chinese date (e.g星期一)
+            const chineseSliceDate = workDateArr[selectedIndex].substring(workDateArr[selectedIndex].indexOf("(")+1,workDateArr[selectedIndex].lastIndexOf(")"))
+            //to get the chinese index for array map
+            let chineseIndex = tempWeekDay.findIndex(x => x === chineseSliceDate);
             props.data.map((item: any, idx: number) => {
-                if (item['weekday'] === tempWeekDay_en[selectedIndex + 1]) {
-                    timeArr.push(`${item['from_time']} - ${item['to_time']}`)
-                    rosterID.push(item['id'])
+                if (item['weekday'] === tempWeekDay_en[chineseIndex]) {
+                    timeArr.push({time:`${item['from_time']} - ${item['to_time']}`, id:item['id']})
+                    timeArr.sort((a:any, b:any)=>(a.time > b.time));
                 }
             })
             // 檢查醫生有沒有時間提供
             if (timeArr !== []) {
                 selectFunction = timeArr.map((item: any, idx: number) => (
-                    <Select.Item label={item} value={rosterID[idx]} key={`picker_time_${idx}`} />
+                    <Select.Item label={item['time']} value={item['id']} key={`picker_time_${idx}`} />
                 ))
             }else{
                 selectFunction = <Select.Item label={`沒有可供應時間`} value={`沒有可供應時間`} />
@@ -77,6 +94,8 @@ export const ResDateComponent = (props: any) => {
                     selectFunction = <Select.Item label={`沒有可供應選擇的時段`} value={`沒有可供應選擇的時段`} />
                 }else if(sessionData.currentData === undefined){
                     selectFunction = <Select.Item label={`載入中...`} value={`載入中...`} />
+                }else if(sessionData.currentData.length === 0){
+                    selectFunction = <Select.Item label={`沒有可供應選擇的時段`} value={`沒有可供應選擇的時段`} />
                 }else{
                     selectFunction = sessionData.currentData.map((item:any,idx:number)=>(
                         <Select.Item label={`${item['start_at']} - ${item['end_at']}`} value={item['id']} key={`picker_date_${idx}`} />

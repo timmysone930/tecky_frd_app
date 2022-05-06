@@ -27,13 +27,35 @@ export const patientAPI = createApi({
         url: "/reserve/add",
         method: "POST",
         headers: {
-          'Content-Type': 'multipart/form-data; ',
+          'Content-Type': 'application/json',
         },
         body: data
       })
+    }),
+    putDisableSession : builder.mutation<QueryReturnValue, any>({
+      query: (sessionID) => ({
+        url: `/roster/session-off/${sessionID}`,
+        method: "PUT",
+      })
+    }),
+    putEnableSession : builder.mutation<QueryReturnValue, any>({
+      query: (sessionID) => ({
+        url: `/roster/session-on/${sessionID}`,
+        method: "PUT",
+      })
+    }),
+    putHoldSession : builder.mutation<QueryReturnValue, any>({
+      query: (sessionID) => ({
+        url: `/roster/session-hold/${sessionID}`,
+        method: "PUT",
+      })
+    }),
+    // get reservation list
+    getReservationList: builder.query<any, void>({
+      query: () => '/client/reservation-list'
     }),
   })
 })
 
 // Export the auto-generated hook for the query endpoint
-export const { usePostPatientRegisterMutation, usePostPatientReservationMutation } = patientAPI
+export const { usePostPatientRegisterMutation, usePostPatientReservationMutation, usePutDisableSessionMutation, usePutEnableSessionMutation,usePutHoldSessionMutation, useGetReservationListQuery } = patientAPI

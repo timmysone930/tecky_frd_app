@@ -14,10 +14,6 @@ export const ConfirmResPage: React.FC = (props: any) => {
     const docInfo = useSelector((state: any) => state.setDoctorID);
     // get form data
     const formData = useSelector((state: any) => state.getFormData);
-    // roster time
-    // const rosterTime = useGetRosterByIdQuery(formData.reservedTime)
-    // let reserveTime;
-    // rosterTime.isSuccess?reserveTime = `${rosterTime.currentData[0]['from_time']} - ${rosterTime.currentData[0]['to_time']}`:reserveTime = '載入中'
     let reserveSession :any;
     // roster session
     const rosterSession = useGetReservedSessionByIdQuery(formData.reservedSession);

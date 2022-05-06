@@ -24,6 +24,11 @@ target 'MobileApp' do
 
   pod 'react-native-config', :path => '../node_modules/react-native-config'
 
+  pod 'RNPaypal', :path => '../node_modules/react-native-paypal'
+  # paypal
+  pod 'Braintree', '~> 4'
+  pod 'Braintree/DataCollector'
+
   target 'MobileAppTests' do
     inherit! :complete
     # Pods for testing

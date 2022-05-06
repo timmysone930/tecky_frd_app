@@ -36,7 +36,6 @@ export const InnerDoctorStacks = () => {
             {isLogin?<InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} options={{headerShown: true }}/>:
             <InnerDoctorStack.Screen name="預約醫生" component={LoginStacks} options={{headerShown: false }}/>
             }
-            {/* <InnerDoctorStack.Screen name="預約醫生" component={isLogin ? ReservationPage : LoginStacks} options={{headerShown: false }}/> */}
             <InnerDoctorStack.Screen name="上傳身份證明文件" component={ReserveIDCardPage} />
             <InnerDoctorStack.Screen name="健康申報表" component={HealthDeForm} />
             <InnerDoctorStack.Screen name="預約須知" component={PolicyPage} />

@@ -7,25 +7,6 @@ import { DrListCard } from '../../components/doctor/DrListCard';
 import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
 import { SearchComponent } from '../../components/SearchComponent';
 
-// Need to be removed; only for testing
-export const FakeDrDATA = [
-    {
-        id: '1',
-        name: '何家瑜 Ho Kar Yu',
-        address: 'Room 11, ABC centre, Kowloon Bay, Kowloon, Hong Kong, ...',
-        gender: '男',
-        type: '中醫',
-        pic: require(`../../images/profilePic/test-01.jpg`),
-        service: ['超聲波掃描', '電腦掃描', 'X 光檢查'],
-        qualifications: ['專業證書課程', '特許公認會計師', '證券及期貨從業員資格', '專業證書課程', '特許公認會計師', '證券及期貨從業員資格'],
-        roster: true,
-        availableDate: [{ id: 1, date: '2022-05-03', time: ['10:00 - 10:30', '10:30 - 11:00', '11:00 - 11:30'] },
-        { id: 2, date: '2022-05-05', time: ['13:00 - 13:30', '14:30 - 15:00', '16:00 - 16:30'] },
-        { id: 3, date: '2022-05-07', time: ['09:00 - 10:30', '12:30 - 14:00', '17:00 - 17:30'] },
-        ],
-    },
-];
-
 export const DrList: React.FC = (prop: any) => {
     const [searchQuery, setSearchQuery] = React.useState('');
     // white background
