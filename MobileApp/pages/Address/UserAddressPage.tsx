@@ -311,7 +311,7 @@ export function UserAddressPage({navigation}:any) {
                         </HStack>
                     }
                     {fetchData == "" &&
-                        <Text style={{textAlign:'center', fontSize:17, margin:20}}>沒有預約記錄</Text>
+                        <Text style={{textAlign:'center', fontSize:17, margin:20}}>沒有地址記錄</Text>
                     }
                 </ScrollView>
 

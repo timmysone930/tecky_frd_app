@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, Text } from 'react-native';
 // Components
 import { PrescriptionList } from '../../components/prescription/PrescriptionList';
 
 // Native-base
-import { HStack, Spinner, Heading } from 'native-base';
+import { HStack, Spinner } from 'native-base';
 
 import Config from 'react-native-config';
-import { Text } from 'react-native-svg';
 
 // Fake Data for development
 const FakeData = [
@@ -54,9 +53,9 @@ export const PrescriptionListPage = ({navigation}:any) => {
   const dataFetching = async () => {
     const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`)
     const data = await resp.json()
-    setFetchData(data)
-    console.log(data);
-    console.log(data[0].spec);
+    if (data.length > 0) {
+      setFetchData(data)
+    }
   }
 
   const [fetched, setFetched] = useState(false)
@@ -71,18 +70,20 @@ export const PrescriptionListPage = ({navigation}:any) => {
   return (
       <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
         {fetched ?
+        (
+          fetchData != null ?
           <PrescriptionList 
             data={fetchData} 
             changePage={"藥單詳情"}
             navigation={navigation}
           />
           :
+          <Text style={{textAlign:'center', fontSize:17, margin:20}}>沒有藥單記錄</Text>
+        )
+          :
           // Loading Spinner
           <HStack space={2} justifyContent="center" alignItems={'center'}>
               <Spinner color="#225D66" accessibilityLabel="Loading posts" />
-              <Heading color="#225D66" fontSize="md">
-                  Loading
-              </Heading>
           </HStack>
         }
       </SafeAreaView>
