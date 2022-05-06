@@ -98,6 +98,7 @@ export function UserAddressPage({navigation}:any) {
     const infoFetching = async () => {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/addr-book`)
         const data = await resp.json()
+        data.length > 0 ? setFetchData(data) : setFetchData("")
         let findDefaultAddressID:any;
         try {
             findDefaultAddressID = data.filter((obj:any) => obj.is_default == true)[0].id
@@ -105,7 +106,7 @@ export function UserAddressPage({navigation}:any) {
             findDefaultAddressID = ""
         }
         setDefaultAddressID(findDefaultAddressID)
-        setFetchData(data)
+        
     }
 
     const [fetched, setFetched] = useState(false)
@@ -307,10 +308,10 @@ export function UserAddressPage({navigation}:any) {
                         // Loading Spinner
                         <HStack space={2} justifyContent="center" alignItems={'center'}>
                             <Spinner color="#225D66" accessibilityLabel="Loading posts" />
-                            <Heading color="#225D66" fontSize="md">
-                                Loading
-                            </Heading>
                         </HStack>
+                    }
+                    {fetchData == "" &&
+                        <Text style={{textAlign:'center', fontSize:17, margin:20}}>沒有預約記錄</Text>
                     }
                 </ScrollView>
 
