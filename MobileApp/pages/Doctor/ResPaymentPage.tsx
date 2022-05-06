@@ -24,6 +24,7 @@ export const PaymentPage = (props: any) => {
     const [radioValue, setRadioValue] = React.useState('PayPal');
     // get form data
     const formData = useSelector((state: any) => state.getFormData);
+    console.log(formData,'formData')
     // selected doctor id
     const docInfo = useSelector((state: any) => state.setDoctorID);
     // roster session
@@ -40,6 +41,18 @@ export const PaymentPage = (props: any) => {
     // Register
     const [postPatientRegister] = usePostPatientRegisterMutation();
     const submitData = new FormData();
+    submitData.append('hkid', formData.idNumber)
+    submitData.append('id_doc_type', formData.idType)
+    submitData.append('name', formData.name)
+    submitData.append('alt_contact', formData.EmergencyContactName)
+    submitData.append('alt_phone', formData.EmergencyContactPhone)
+    submitData.append('gender', formData.title)
+    submitData.append('email', formData.email)
+    submitData.append('phone', formData.phone)
+    submitData.append('birthday', formData.bDay)
+    submitData.append('hkid_img', {
+        name: formData['idImg'][0].fileName, type: formData['idImg'][0].type, uri: Platform.OS === 'android' ? formData['idImg'][0].uri : formData['idImg'][0].uri.replace('file://', ''),
+    })
     // Reservation 
     const [postPatientReservation] = usePostPatientReservationMutation();
     // to disable the selected session 
@@ -96,21 +109,16 @@ export const PaymentPage = (props: any) => {
                 console.log('hold', holdRes)
                 // non member
                 if (formData.memberCode === '') {
-                    submitData.append('hkid', formData.idNumber)
-                    submitData.append('id_doc_type', formData.idType)
-                    submitData.append('name', formData.name)
-                    submitData.append('alt_contact', formData.EmergencyContactName)
-                    submitData.append('alt_phone', formData.EmergencyContactPhone)
-                    submitData.append('gender', formData.title)
-                    submitData.append('email', formData.email)
-                    submitData.append('phone', formData.phone)
-                    submitData.append('birthday', formData.bDay)
-                    submitData.append('hkid_img', {
-                        name: formData['idImg'][0].fileName, type: formData['idImg'][0].type, uri: Platform.OS === 'android' ? formData['idImg'][0].uri : formData['idImg'][0].uri.replace('file://', ''),
-                    })
                     // create member
                     const res: any = await postPatientRegister(submitData)
                     console.log('member', res)
+                    if(res.error){
+                        console.log('member', res.error)
+                        store.dispatch(checkRosterStatus({ paymentRoster: 'error' }))
+                        store.dispatch(setMemberCode({ memberCode: '' }))
+                        props.navigation.navigate({ name: '預約確認' })
+                        return
+                    }
                 }
                 // member
                 // reservation data

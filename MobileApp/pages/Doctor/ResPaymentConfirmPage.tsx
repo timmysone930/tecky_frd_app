@@ -60,7 +60,20 @@ export const ConfirmPaymentPage = (props: any) => {
                         </View>
                     </>
                 }
-
+                {rosterStatus.paymentRoster === 'error' &&
+                    <>
+                        <View style={{ marginTop: 20 }}>
+                            <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
+                            <Text style={[styles.subTitle]}>預約失敗</Text>
+                        </View>
+                        <View style={{ marginTop: 20, }}>
+                            <Text style={[styles.contentText]}>系統出現錯誤</Text>
+                            <Text style={[styles.contentText]}>請與相關職員聯絡</Text>
+                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
+                                <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
+                        </View>
+                    </>
+                }
 
 
 
