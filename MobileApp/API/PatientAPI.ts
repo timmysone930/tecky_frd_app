@@ -58,4 +58,4 @@ export const patientAPI = createApi({
 })
 
 // Export the auto-generated hook for the query endpoint
-export const { usePostPatientRegisterMutation, usePostPatientReservationMutation, usePutDisableSessionMutation, usePutEnableSessionMutation,usePutHoldSessionMutation, useGetReservationListQuery } = patientAPI
+export const { usePostPatientRegisterMutation, usePostPatientReservationMutation, usePutDisableSessionMutation, usePutEnableSessionMutation,usePutHoldSessionMutation, useGetReservationListQuery, } = patientAPI

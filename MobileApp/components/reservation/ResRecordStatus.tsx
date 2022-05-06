@@ -8,12 +8,18 @@ export const ResRecordStatus = (props: any) => {
     "booked":"#00cc00",
   }
 
+  const statusText:any = {
+    "finish":"已完成",
+    "cancel": "已取消",
+    "booked":"待診中",
+  }
+
   return (
     <>    
       {Object.keys(statusColor).map((key, idx)=> (
         props.resStatus == key && 
         <View style={[styles.resStatus, {backgroundColor: statusColor[key]}]} key={`resRecordStatus_${idx}`}>
-          <Text style={[styles.resStatusFont]}>{key}</Text>
+          <Text style={[styles.resStatusFont]}>{statusText[key]}</Text>
         </View>
       ))}
     </>

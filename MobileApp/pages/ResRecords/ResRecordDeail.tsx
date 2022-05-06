@@ -1,27 +1,23 @@
 import React from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { useGetOneDoctorQuery } from '../../API/DoctorAPI';
+import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
 import { BottomLineComponent } from '../../components/SearchComponent';
-// Need to be removed; only for development (will be replaced by fetch)
-import { FakeRecordData } from '../ResRecordPage';
-
 
 export const ResRecordDeail = (props: any) => {
     // To get the param passing from the previous screen
-    const { id } = props.route.params;
+    const { resCode, docCode, data } = props.route.params;
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
     };
-    // Need to be removed; only for testing(will be replaced by fetch)
-    let userData: any = {}
-    FakeRecordData.map((item) => {
-        if (item['id'] === id) {
-            userData = item
-        }
-    })
-
+    // get doctor name
+    const docData = useGetOneDoctorQuery(docCode);
     const rowTitleArr = ['預約編號：', '預約醫生：', '預約日期：', '預約時間：']
-    const rowCellArr = [userData.record_code, userData.doctor, userData.res_date, userData.res_time]
+    let rowCellArr :any=[];
+    if (docData.isSuccess) {
+        rowCellArr = [resCode, docData.data[0].name, data.item.res_date, data.item.res_time.substring(0,5)]
+    }
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
@@ -33,18 +29,22 @@ export const ResRecordDeail = (props: any) => {
                     purus auctor malesuada.
                 </Text>
                 <BottomLineComponent />
-                {rowTitleArr.map((item, idx) => (
-                        <View style={[backgroundStyle,{flexDirection:'row', marginBottom: 1, marginHorizontal:15,}]} key={`confirm_row_${idx}`}>
-                            <View style={{flex:1.3}}><Text style={styles.rowTitle}>{item}</Text></View>
-                            <View style={{flex:3}}><Text style={styles.rowCellText}>{rowCellArr[idx]}</Text></View>
+                {docData.isLoading && <SpinnerComponent />}
+                {docData.isSuccess &&
+                    rowTitleArr.map((item, idx) => (
+                        <View style={[backgroundStyle, { flexDirection: 'row', marginBottom: 1, marginHorizontal: 15, }]} key={`confirm_row_${idx}`}>
+                            <View style={{ flex: 1.3 }}><Text style={styles.rowTitle}>{item}</Text></View>
+                            <View style={{ flex: 3 }}><Text style={styles.rowCellText}>{rowCellArr[idx]}</Text></View>
                         </View>
-                        ))}
-                {/* </View> */}
-                {userData.res_status !== '已完成' ?
-                    <TouchableOpacity disabled={userData.res_status === '待診中' ? false : true} style={userData.res_status === '待診中' ? styles.button : styles.disableButton} onPress={() => props.navigation.navigate({ name: '主頁' })}>
+                    ))
+
+                }
+
+                {data.item.status !== 'finish' ?
+                    <TouchableOpacity disabled={data.item.status === 'booked' ? false : true} style={data.item.status === 'booked' ? styles.button : styles.disableButton} onPress={() => props.navigation.navigate({ name: '主頁' })}>
                         <Text style={styles.buttonText}>開始診症</Text></TouchableOpacity> :
                     null}
-                {userData.res_status === '已取消'? <Text style={styles.warning}>* 請聯絡客服了解預約詳情</Text>:null}
+                {data.item.status === 'cancel' ? <Text style={styles.warning}>* 請聯絡客服了解預約詳情</Text> : null}
             </ScrollView>
         </SafeAreaView>
     )
@@ -84,10 +84,10 @@ const styles = StyleSheet.create({
     warning: {
         fontSize: 14,
         color: 'red',
-        textAlign:'center',
+        textAlign: 'center',
         marginVertical: 20,
-      },
-      rowTitle: {
+    },
+    rowTitle: {
         color: '#3B3B3B',
         fontSize: 17,
         fontWeight: '500',
