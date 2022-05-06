@@ -11,7 +11,7 @@ interface Props {
 
 export const PayButton = (props:Props) => {
     return (
-        <Button mode="contained" color='#325C80' onPress={props.onPressFunction} disabled={false}> 
+        <Button mode="contained" color='#325C80' onPress={props.onPressFunction} disabled={props.disabled}> 
             <Text style={[styles.payButton]}>
                 {props.title}
             </Text>

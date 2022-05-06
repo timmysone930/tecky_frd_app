@@ -90,11 +90,14 @@ export const { checkStatus } = userStatusSlice.actions
 export const prescriptionCheckingSlice = createSlice({
     name: "prescriptionChecking",
     initialState: {
-        prescriptionCode: ""
+        prescriptionCode: "",
+        prescriptionDetail: null
+
     },
     reducers: {
         setPrescriptionCode: (state, action) => {
             state.prescriptionCode = action.payload.prescriptionCode
+            state.prescriptionDetail = action.payload.prescriptionDetail
         }
     }
 })
