@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
 interface Props {
-    prescription_details: string[]
+    prescription_details: string
 }
 
 export const PrescriptionDetail = (props: Props) => {
@@ -13,10 +13,13 @@ export const PrescriptionDetail = (props: Props) => {
                 藥物明細：
             </Text>
             {
-                props.prescription_details.map((item: string)=>(
-                    <View key={item} style={[styles.mv_10]}>
+                props.prescription_details.split("/nl/").map((item: string)=>(
+                    <View 
+                        key={props.prescription_details.split("/nl/").indexOf(item)} 
+                        style={[styles.mv_10]}
+                    >
                         <Text style={[styles.contentText]}>
-                            {props.prescription_details.indexOf(item) + 1}. {item}
+                            {props.prescription_details.split("/nl/").indexOf(item) + 1}. {item}
                         </Text>
                     </View>
                 ))

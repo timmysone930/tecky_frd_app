@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { View, ScrollView, Text, SafeAreaView, Linking } from 'react-native';
 import { useSelector } from 'react-redux';
 import { styles } from "../../styles/GeneralStyles"
@@ -8,6 +8,13 @@ import { PrescriptionBasicInfo } from '../../components/prescription/Prescriptio
 import { PrescriptionDetail } from '../../components/prescription/PrescriptionDetail';
 import { CostDisplay } from '../../components/prescription/CostDisplay'
 import { PayButton } from '../../components/prescription/PayButton'
+
+// Redux
+import { store } from '../../redux/store';
+import { setPrescriptionCode } from '../../redux/slice';
+import Config from 'react-native-config';
+
+import { statueDisplay } from '../../components/prescription/PrescriptionList';
 
 export const FakeData = {
     pres_code: "RM220319001",
@@ -52,47 +59,79 @@ export const FakeData = {
 
 export function PrescriptionDetailPage({navigation}:any) {
 
-    const prescriptionCode = useSelector((state: any) => state.getPrescriptionCode).prescriptionCode ;
+    const reduxData = useSelector((state: any) => state.getPrescriptionCode)
+    const prescriptionCode = reduxData.prescriptionCode ;
+
+    const [fetchData, setFetchData] = useState(null as any)
+    const dataFetching = async () => {
+      const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`)
+      const data = (await resp.json()).filter((item: any)=> item.prescription.pres_code == prescriptionCode)[0]
+
+      const costResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${data.prescription.payment.toString()}`)
+      const cost = (await costResp.json())[0].amount
+
+      const clinicPhoneResp = await fetch(`${Config.REACT_APP_API_SERVER}/clinics/search?column=code&where=${data.clinic_code}`)
+      const clinicPhone = (await clinicPhoneResp.json())[0].clinic_phone
+
+      setFetchData({...data, payment_amount: cost, clinic_phone: clinicPhone})
+    }
+  
+    const goToPay = () => {
+        store.dispatch(setPrescriptionCode({prescriptionDetail: fetchData}))
+        navigation.navigate("地址確認")
+    }
+
+    const [fetched, setFetched] = useState(false)
+  
+    useEffect(()=>{
+        if (!fetched) {
+            dataFetching()
+            setFetched(true)
+        }
+    },[])
     
-    const fetchData = FakeData
+    // const fetchData = FakeData
 
     return (
         <SafeAreaView>
             <ScrollView>
-                <View style={[styles.viewContainer]}>
+                
+                {fetchData != null &&
+                    <View style={[styles.viewContainer]}>
 
-                    {/* Component */}
-                    <PrescriptionBasicInfo 
-                        pres_code={prescriptionCode}
-                        doctor={fetchData.doctor}
-                        profession={fetchData.profession}
-                        created_at={fetchData.created_at}
-                        course_of_treatment={fetchData.course_of_treatment}
-                        patient_name={fetchData.patient_name}
-                        patient_id={fetchData.patient_id}
-                        orderStatusShow={true}
-                        order_status={fetchData.order_status}
-                    />
+                        {/* Component */}
+                        <PrescriptionBasicInfo 
+                            pres_code={prescriptionCode}
+                            doctor={fetchData.doctor_name}
+                            profession={fetchData.spec[0].spec_name}
+                            created_at={fetchData.prescription.created_at.split("T")[0]}
+                            course_of_treatment="{fetchData.course_of_treatment}"
+                            patient_name={fetchData.name}
+                            patient_id={fetchData.hkid}
+                            orderStatusShow={true}
+                            order_status={statueDisplay[fetchData.prescription.order_status]}
+                        />
 
-                    {/* Component */}
-                    <CostDisplay cost={fetchData.cost}/>
+                        {/* Component */}
+                        <CostDisplay cost={fetchData.payment_amount}/>
 
-                    <PayButton title={"前往付款"} disabled={false} onPressFunction={()=>{navigation.navigate("地址確認")}}/>
+                        <PayButton title={"前往付款"} disabled={fetchData.prescription.order_status != "waiting"} onPressFunction={goToPay}/>
 
-                    {/* Component */}
-                    <PrescriptionDetail prescription_details={fetchData.prescription_details}/>
+                        {/* Component */}
+                        <PrescriptionDetail prescription_details={fetchData.prescription.pres_details}/>
 
-                    <Text style={[styles.subTitle, styles.textCenter, styles.mt_10]}>
-                        請依照指示及療程服藥。
-                    </Text>
-                    <Text 
-                        onPress={()=>{Linking.openURL(`tel:${fetchData.contact_number}`);} }
-                        style={[styles.subTitle, styles.textCenter, styles.mb_10]}
-                    >
-                        如布疑問請致電 {fetchData.contact_number} 查詢。 
-                    </Text>
-                    
-                </View>
+                        <Text style={[styles.subTitle, styles.textCenter, styles.mt_10]}>
+                            請依照指示及療程服藥。
+                        </Text>
+                        <Text 
+                            onPress={()=>{Linking.openURL(`tel:${fetchData.contact_number}`);} }
+                            style={[styles.subTitle, styles.textCenter, styles.mb_10]}
+                        >
+                            如布疑問請致電 {fetchData.clinic_phone} 查詢。 
+                        </Text>
+                        
+                    </View>
+                }
             </ScrollView>
         </SafeAreaView>
     );
