@@ -21,7 +21,7 @@ export const PolicyPage: React.FC = (props: any) => {
     const onPress = async () => {
         if (rosterSession.isSuccess){
             if(rosterSession.currentData === []){
-                store.dispatch(checkRosterStatus({ paymentRoster: false }))
+                store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
                 props.navigation.navigate({ name: '預約確認' })
             }else{
                 props.navigation.navigate({ name: '確認預約資料'})
