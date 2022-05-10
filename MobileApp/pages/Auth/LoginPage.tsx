@@ -1,5 +1,5 @@
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import Config from 'react-native-config';
@@ -33,8 +33,9 @@ export const LoginPage = (props: any) => {
 
     const [getLoginSMS] = useGetLoginSMSMutation();
     // Get login SMS (sample:85255332211)
+
+    const prog = useRef(0 as any)
     const onSMSPress = async (inputData: any) => {
-        // Reset the counter to 60s
         setCounter(countTime)
         // Activate 60s count down
         setSendCodeBtn({
@@ -42,6 +43,19 @@ export const LoginPage = (props: any) => {
             isDisable: true, 
             isActive: true,
         });
+
+        let t = countTime
+        prog.current = setInterval(()=>{
+            t = t - 1
+            setCounter(t)
+            if (t < 0) {
+                clearInterval(prog.current)
+                setSendCodeBtn({
+                    isDisable: false, 
+                    isActive: false,
+                });
+            }
+        },1000)
         // Fetching
         try {
             const res: QueryReturnValue = await getLoginSMS({ 'phone': inputData.phoneNo })
@@ -49,23 +63,10 @@ export const LoginPage = (props: any) => {
             toast.show({
                 description: "已送出驗證碼"
             })
-            console.log(res['error'])
         } catch (e) {
             console.log(e)
         }
     }
-
-    // 60s count down
-    useEffect(() => {
-        if (sendCodeBtn.isActive) {
-            counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
-            counter == 0 && setSendCodeBtn({
-                ...sendCodeBtn, 
-                isDisable: false, 
-                isActive: false,
-            });
-        }
-    });
     
 
     const [loginByPhone] = useLoginByPhoneMutation();
@@ -87,6 +88,7 @@ export const LoginPage = (props: any) => {
             }
         }else{
             store.dispatch(checkStatus({ status: true, phone: inputData.phoneNo}))
+            clearInterval(prog.current)
             if (previousPage === '') {
                 props.navigation.navigate({ name: '預約Tab', })
             } else {
@@ -124,7 +126,7 @@ export const LoginPage = (props: any) => {
                             )}
                             name="loginSMS"
                         />
-                        {/* <Button 
+                        <Button 
                             isDisabled={sendCodeBtn.isDisable}
                             colorScheme={"danger"}
                             alignSelf={'center'} 
@@ -138,10 +140,10 @@ export const LoginPage = (props: any) => {
                                 <Text style={{color: "white", fontSize: 15}}>
                                     驗證碼 {sendCodeBtn.isActive &&`(${counter})`}
                                 </Text>
-                        </Button> */}
-                        <TouchableOpacity style={styles.btnPhone} onPress={handleSubmit(onSMSPress)}>
+                        </Button>
+                        {/* <TouchableOpacity style={styles.btnPhone} onPress={handleSubmit(onSMSPress)}>
                             <Text style={styles.btnPhoneText}>驗證碼</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
 
                     </View>

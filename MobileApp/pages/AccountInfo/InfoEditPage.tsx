@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, Image, Text } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
 // Native-base
-import { View, Button, useToast, Input, FormControl, WarningOutlineIcon} from 'native-base';
+import { View, Button, useToast, Input, FormControl, WarningOutlineIcon, HStack, Spinner} from 'native-base';
 
 // API
 import { useGetUserInfoQuery, usePutEditInfoMutation } from '../../API/UserInfoAPI';
@@ -32,19 +32,7 @@ export function InfoEditPage({navigation}:any) {
     const toast = useToast()
     
     // Data fetching
-    const [fetchData, setFetchData] = useState({
-        birthday: "", 
-        created_at: "", 
-        email: "", 
-        gender: "", 
-        id_img: "", 
-        id_number: "", 
-        id_type: "", 
-        member_code: null, 
-        name: "", 
-        name_en: "", 
-        phone: "",
-    })
+    const [fetchData, setFetchData] = useState(null as any)
 
     // Align the original phone number for comparison with the new input phone number
     const [originalPhone, setOriginalPhone] = useState("")
@@ -77,12 +65,6 @@ export function InfoEditPage({navigation}:any) {
             setFetched(true)
         }
     },[])
-
-
-    // Image path
-    // let pic = require(`../../images/profilePic/test-01.jpg`)
-    // pic = ""
-
 
     // Determine The inputs are enable or not
     const [isDisable, setIsDisable] = useState({
@@ -175,137 +157,133 @@ export function InfoEditPage({navigation}:any) {
         <SafeAreaView style={{ backgroundColor: 'white'}}>
             <ScrollView>
                 <View style={[styles.viewContainer]}>
-                    {/* <View flexDirection={"row"} marginY={5}>
-                        {
-                            pic === '' ? 
-                            <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={require('../../images/profilePic/default.jpg')} /> :
-                            <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={require(`../../images/profilePic/test-01.jpg`)} />
-                        }
-                        <View justifyContent={"center"} marginLeft={10}>
-                            <Text style={styles.title}>{fetchData.member_code}</Text>
-                            <Text style={styles.contentFont}>{fetchData.name}</Text>
-                        </View>
-                    </View> */}
-                    { fetchData &&
-                        <View justifyContent={"space-between"} height={400} marginY={5}>
-                            <View flexDirection={'row'}>
-                                <Text style={[{width: 130}, styles.contentText]}>
-                                    會員編號: 
-                                </Text>
-                                <Text style={[styles.subTitle]}>
-                                    {fetchData.member_code}
-                                </Text>
+                    { fetched && fetchData != null ?
+                        <>
+                            <View justifyContent={"space-between"} height={400} marginY={5}>
+                                <View flexDirection={'row'}>
+                                    <Text style={[{width: 130}, styles.contentText]}>
+                                        會員編號: 
+                                    </Text>
+                                    <Text style={[styles.subTitle]}>
+                                        {fetchData.member_code}
+                                    </Text>
+                                </View>
+                                <View flexDirection={'row'}>
+                                    <Text style={[{width: 130}, styles.contentText]}>
+                                        姓名: 
+                                    </Text>
+                                    <Text style={[styles.subTitle]}>
+                                        {fetchData.name}
+                                    </Text>
+                                </View>
+                                <View flexDirection={'row'}>
+                                    <Text style={[{width: 130}, styles.contentText]}>性別: </Text>
+                                    <Text style={[styles.subTitle]}>{fetchData.gender}</Text>
+                                </View>
+                                <View flexDirection={'row'}>
+                                    <Text style={[{width: 130}, styles.contentText]}>出生日期: </Text>
+                                    <Text style={[styles.subTitle]}>{fetchData.birthday}</Text>
+                                </View>
+
+                                {/* Email */}
+                                <FormControl isInvalid={input.email == ""}>
+                                    <Text style={[{width: 130}, styles.contentText]}>Email: </Text>
+                                    <Input
+                                        size="lg"
+                                        placeholder="Email" 
+                                        keyboardType='email-address'
+                                        value={input.email} 
+                                        onChangeText={email => setInput({...input, email: email})}
+                                    />
+                                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                                        此項必須填寫
+                                    </FormControl.ErrorMessage>
+                                </FormControl>
+
+                                {/* 手提電話號碼 */}
+                                <FormControl isInvalid={input.phone == ""} >
+                                    <Text style={[{width: 130}, styles.contentText]}>手提電話號碼: </Text>
+                                    <Input 
+                                        value={input.areaCode}
+                                        isDisabled={true}
+                                        size="lg" 
+                                        keyboardType="numeric"
+                                        placeholder="區號" 
+                                        onChangeText={phoneInputHandler}
+                                    />
+                                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                                        此項必須填寫
+                                    </FormControl.ErrorMessage>
+                                    <Input
+                                        isDisabled={isDisable.phoneInput}
+                                        size="lg" 
+                                        keyboardType="numeric"
+                                        placeholder="手提電話號碼" 
+                                        value={input.phone} 
+                                        onChangeText={phoneInputHandler}
+                                    />
+                                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={input.phone.length != 8}>
+                                        此項必須為 8 位數字電話號碼
+                                    </FormControl.ErrorMessage>
+                                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                                        此項必須填寫
+                                    </FormControl.ErrorMessage>
+                                </FormControl>
+
                             </View>
-                            <View flexDirection={'row'}>
-                                <Text style={[{width: 130}, styles.contentText]}>
-                                    姓名: 
-                                </Text>
-                                <Text style={[styles.subTitle]}>
-                                    {fetchData.name}
-                                </Text>
-                            </View>
-                            <View flexDirection={'row'}>
-                                <Text style={[{width: 130}, styles.contentText]}>性別: </Text>
-                                <Text style={[styles.subTitle]}>{fetchData.gender}</Text>
-                            </View>
-                            <View flexDirection={'row'}>
-                                <Text style={[{width: 130}, styles.contentText]}>出生日期: </Text>
-                                <Text style={[styles.subTitle]}>{fetchData.birthday}</Text>
+                            <View flexDirection={"row"}>
+                                <Button 
+                                    isDisabled={isDisable.button}
+                                    colorScheme={"danger"}
+                                    alignSelf={'flex-start'} 
+                                    marginBottom={5}
+                                    padding={1} 
+                                    height={10} 
+                                    flex={2} 
+                                    size={"lg"}
+                                    onPress={verifyButtonHandler}
+                                    >
+                                        <Text style={{color: "white"}}>
+                                            驗證碼 {isActive &&`(${counter})`}
+                                        </Text>
+                                </Button>
+                                <FormControl isInvalid={isDisable.warning} flex={4}>
+                                    <Input
+                                        isDisabled={isDisable.input}
+                                        height={10}
+                                        size="lg"  
+                                        placeholder="請輸入短訊驗證碼" 
+                                        onChangeText={verifyCodeInputHandler}
+                                    />
+                                    
+                                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+                                        此項必須填寫
+                                    </FormControl.ErrorMessage>
+                                </FormControl>
                             </View>
 
-                            {/* Email */}
-                            <FormControl isInvalid={input.email == ""}>
-                                <Text style={[{width: 130}, styles.contentText]}>Email: </Text>
-                                <Input
-                                    size="lg"
-                                    placeholder="Email" 
-                                    keyboardType='email-address'
-                                    value={input.email} 
-                                    onChangeText={email => setInput({...input, email: email})}
-                                />
-                                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                                    此項必須填寫
-                                </FormControl.ErrorMessage>
-                            </FormControl>
-
-                            {/* 手提電話號碼 */}
-                            <FormControl isInvalid={input.phone == ""} >
-                                <Text style={[{width: 130}, styles.contentText]}>手提電話號碼: </Text>
-                                <Input 
-                                    value={input.areaCode}
-                                    isDisabled={true}
-                                    size="lg" 
-                                    keyboardType="numeric"
-                                    placeholder="區號" 
-                                    onChangeText={phoneInputHandler}
-                                />
-                                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                                    此項必須填寫
-                                </FormControl.ErrorMessage>
-                                <Input
-                                    isDisabled={isDisable.phoneInput}
-                                    size="lg" 
-                                    keyboardType="numeric"
-                                    placeholder="手提電話號碼" 
-                                    value={input.phone} 
-                                    onChangeText={phoneInputHandler}
-                                />
-                                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={input.phone.length != 8}>
-                                    此項必須為 8 位數字電話號碼
-                                </FormControl.ErrorMessage>
-                                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                                    此項必須填寫
-                                </FormControl.ErrorMessage>
-                            </FormControl>
-
-                        </View>
+                            <View justifyContent={"center"} height={50} marginY={5} >
+                                <Button 
+                                    alignSelf={'center'} 
+                                    marginX={2}
+                                    marginBottom={5}
+                                    padding={1} 
+                                    height={10} 
+                                    width={200} 
+                                    size={"lg"} 
+                                    onPress={save}
+                                >
+                                    儲存變更
+                                </Button>
+                            </View>
+                        </>
+                        :
+                            // Loading Spinner
+                        <HStack space={2} justifyContent="center" alignItems={'center'}>
+                            <Spinner color="#225D66" accessibilityLabel="Loading posts" />
+                        </HStack>
                     }
                     
-                    <View flexDirection={"row"}>
-                        <Button 
-                            isDisabled={isDisable.button}
-                            colorScheme={"danger"}
-                            alignSelf={'flex-start'} 
-                            marginBottom={5}
-                            padding={1} 
-                            height={10} 
-                            flex={2} 
-                            size={"lg"}
-                            onPress={verifyButtonHandler}
-                            >
-                                <Text style={{color: "white"}}>
-                                    驗證碼 {isActive &&`(${counter})`}
-                                </Text>
-                        </Button>
-                        <FormControl isInvalid={isDisable.warning} flex={4}>
-                            <Input
-                                isDisabled={isDisable.input}
-                                height={10}
-                                size="lg"  
-                                placeholder="請輸入短訊驗證碼" 
-                                onChangeText={verifyCodeInputHandler}
-                            />
-                            
-                            <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                                此項必須填寫
-                            </FormControl.ErrorMessage>
-                        </FormControl>
-                    </View>
-
-                    <View justifyContent={"center"} height={50} marginY={5} >
-                        <Button 
-                            alignSelf={'center'} 
-                            marginX={2}
-                            marginBottom={5}
-                            padding={1} 
-                            height={10} 
-                            width={200} 
-                            size={"lg"} 
-                            onPress={save}
-                        >
-                            儲存變更
-                        </Button>
-                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
