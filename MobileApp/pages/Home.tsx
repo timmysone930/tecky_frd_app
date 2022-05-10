@@ -13,26 +13,11 @@ import { TipsCard } from '../components/home/TipsCard';
 import Config from "react-native-config";
 console.log(Config.REACT_APP_API_SERVER)
 
-async function getMoviesFromApi() {
-    try {
-      // 注意这里的await语句，其所在的函数必须有async关键字声明
-      let response = await fetch(
-        'http://telemedicine.onesolution.hk/doctors/list'
-      );
-      let responseJson = await response.json();
-      console.log(responseJson)
-      return responseJson;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
 export const Home =  () => {
     const backgroundStyle = {
         backgroundColor:'white',
     };
 
-    getMoviesFromApi()
     return (
         <SafeAreaView style={backgroundStyle}>
             <ScrollView
