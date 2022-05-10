@@ -20,7 +20,7 @@ export const doctorAPI = createApi({
       query: (code: string) => `/roster/search?column=doc_code&where=${code}`,
     }),
     getRosterSession: builder.query({
-      query:(id:number) => `/roster/session/${id}`
+      query:(id:string) => `/roster/session/${id}`
     }),
     getRosterById:  builder.query({
       query: (code: string) => `/roster/search?column=id&where=${code}`,

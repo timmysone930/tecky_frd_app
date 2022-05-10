@@ -123,7 +123,7 @@ export const PaymentPage = (props: any) => {
                 // member
                 // reservation data
                 let resData = {
-                    'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': convertedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[0]['clinic_code'],
+                    'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': convertedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['clinic_code'],
                     'status': 'booked', 'video_url': null, 'is_follow_up': true, 'channel': 'null', 'declare': {
                         "isLeave": formData.leaveHK, "location": formData.Countries, "date_back": formData.backDate,
                         "isFever": formData.isFever, "isCought": formData.isCough, "isVomit": formData.isVomit, "isCold": formData.isCold
@@ -162,7 +162,7 @@ export const PaymentPage = (props: any) => {
 
                     } else if (reservationRes.error.data.message === "This patient already have resrvation.") {
                         toast.show({
-                            description: "已有預約記錄人，無法再次預約"
+                            description: "已有預約記錄，無法再次預約"
                         })
                         // enable the session 
                         const enableRes = await putEnableSession(formData.reservedSession)
