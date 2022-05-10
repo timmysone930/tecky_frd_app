@@ -9,6 +9,7 @@ import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
 import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
 import { ResDateComponent } from '../../components/doctor/ResDateComponent';
 import Config from "react-native-config";
+import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
 
 // fetch to check patient status
 const checkPatient = async (id: any) => {
@@ -28,6 +29,8 @@ const checkPatient = async (id: any) => {
 };
 
 export const ReservationPage = (props: any) => {
+  // get current users profile
+  const userData = useGetUserInfoQuery()
   // To get the param passing from the previous screen
   const { id, docData } = props.route.params;
   // Form element
@@ -78,6 +81,13 @@ export const ReservationPage = (props: any) => {
       store.dispatch(setMemberCode({ memberCode: patientStatus.memberCode }))
     }
   }
+  // auto input login users info once
+  useEffect(() => {
+    if(userData.isSuccess){
+      setValue('name', userData.data.name)
+      setValue('idNumber', userData.data.id_number)
+    }
+  }, []);
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
