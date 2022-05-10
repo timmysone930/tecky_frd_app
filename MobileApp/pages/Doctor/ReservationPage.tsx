@@ -10,6 +10,7 @@ import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
 import { ResDateComponent } from '../../components/doctor/ResDateComponent';
 import Config from "react-native-config";
 import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
+import { ResSessionComponent } from '../../components/doctor/ResSessionComponent';
 
 // fetch to check patient status
 const checkPatient = async (id: any) => {
@@ -68,7 +69,6 @@ export const ReservationPage = (props: any) => {
   };
 
   const rosterData = useGetRosterListByDocCodeQuery(id)
-
   // Form data submit and navigate
   const onSubmit = async (data: any) => {
     let patientStatus: any = await checkPatient(data.idNumber)
@@ -83,7 +83,7 @@ export const ReservationPage = (props: any) => {
   }
   // auto input login users info once
   useEffect(() => {
-    if(userData.isSuccess){
+    if (userData.isSuccess) {
       setValue('name', userData.data.name)
       setValue('idNumber', userData.data.id_number)
     }
@@ -101,7 +101,7 @@ export const ReservationPage = (props: any) => {
             <DrListCard props={docData} />
           </View>
           {rosterData.isLoading && userData.isLoading && <SpinnerComponent />}
-          {rosterData.isSuccess && userData.isSuccess  &&
+          {rosterData.isSuccess && userData.isSuccess &&
 
             <View style={styles.pageMargin}>
               <Text style={styles.subTitle}>應診日期</Text>
@@ -127,13 +127,20 @@ export const ReservationPage = (props: any) => {
               {errors.reservedTime && <Text style={styles.warning}>* 此項必須選擇</Text>}
 
               <Text style={styles.subTitle}>應診時間</Text>
-              <Controller control={control} rules={{ required: true, }}
+              {/* <Controller control={control} rules={{ required: true, }}
                 render={({ field: { value } }) => (
                   // <ResSessionComponent data={rosterData.currentData} placeholder={'請選擇應診時間'} onChange={onSessionChange} />
                   <ResDateComponent onChange={onSessionChange} data={rosterData.currentData} mode='session' placeholder={'請選擇應診時間'}
                     dateValue={getValues('reservedDate')} timeValue={getValues('reservedTime')}
                   />
 
+                )}
+                name="reservedSession"
+              /> */}
+              <Controller control={control} rules={{ required: true, }}
+                render={({ field: { value } }) => (
+                  <ResSessionComponent onChange={onSessionChange} placeholder={'請選擇應診時間'} timeValue={getValues('reservedTime')}
+                  />
                 )}
                 name="reservedSession"
               />

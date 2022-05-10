@@ -40,6 +40,12 @@ export const styles = StyleSheet.create({
       marginTop: 5,
       marginBottom: 15,
     },
+    greyInfoText:{
+        color: '#848A8A',
+        fontSize: 14,
+        marginBottom: 10,
+        paddingHorizontal: 15,
+    },
     button: {
       width: '50%',
       backgroundColor: '#6d7f99',
@@ -54,6 +60,32 @@ export const styles = StyleSheet.create({
         color: '#3B3B3B',
         fontSize: 17,
         fontWeight: '500',
+    },
+    rowTitle:{
+        color: '#3B3B3B',
+        fontSize: 17,
+        fontWeight: '500',
+        marginTop: 12,
+        marginBottom: 15,
+    },
+    rowCellText:{
+        color: '#225D66',
+        fontSize: 17,
+        fontWeight: '600',
+        marginTop: 10,
+        marginBottom: 15,
+    },
+    fullButton:{
+        backgroundColor: '#6d7f99',
+        paddingVertical: 16,
+        marginHorizontal: 40,
+        marginTop: 20,
+    },
+    disableButton: {
+        backgroundColor: 'grey',
+        paddingVertical: 16,
+        marginHorizontal: 40,
+        marginTop: 20,
     },
 
     //additional
@@ -165,6 +197,12 @@ export const styles = StyleSheet.create({
 
     mv_10: {
         marginVertical: 10
+    },
+    pv_10:{
+      paddingVertical:10
+    },
+    ph_10:{
+      paddingHorizontal:10
     },
 
     bottomLine: {

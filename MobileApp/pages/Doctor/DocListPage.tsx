@@ -1,18 +1,34 @@
-import React, { useState } from 'react'
-import { View, Text, SafeAreaView, FlatList, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native';
-// API route
+import React from 'react'
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { useGetDoctorListQuery } from '../../API/DoctorAPI';
-// Component
 import { DrListCard } from '../../components/doctor/DrListCard';
 import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
 import { SearchComponent } from '../../components/SearchComponent';
+import {styles} from '../../styles/DoctorStyle';
 
-export const DrList: React.FC = (prop: any) => {
+interface dataType{
+    "clinic": [[Object]], 
+    "doctor_code": string, 
+    "doctor_des": string, 
+    "email": string, 
+    "gender": string, 
+    "img": null | string, 
+    "name": string, 
+    "name_en": string, 
+    "qual_doc": null|string, 
+    "signature": string|null, 
+    "spec_name": [string], 
+    "status": string, 
+    "video_diag_duration": number, 
+    "video_diag_fee": number
+}
+ // white background
+const backgroundStyle = { backgroundColor: 'white', };
+
+export const DocListPage: React.FC = (prop: any) => {
     const [searchQuery, setSearchQuery] = React.useState('');
-    // white background
-    const backgroundStyle = { backgroundColor: 'white', };
     const { mode } = prop.route.params;
-    let data:any;
+    let data;
     let isLoading;
     let isSuccess;
     let isError;
@@ -25,7 +41,7 @@ export const DrList: React.FC = (prop: any) => {
     }
     // search function
     if (searchQuery !== '') {
-        let newData = data.filter( (item:any) => (item.name.includes(searchQuery) || item.name_en.toLowerCase().includes(searchQuery.toLowerCase())
+        let newData = data.filter( (item:dataType) => (item.name.includes(searchQuery) || item.name_en.toLowerCase().includes(searchQuery.toLowerCase())
         ||item.spec_name.toString().includes(searchQuery) )
         );
         data = newData
@@ -33,7 +49,7 @@ export const DrList: React.FC = (prop: any) => {
     // For FlatList
     const renderItem = (props: any) =>
     (
-        <TouchableOpacity style={styles.drListCard} onPress={() => {
+        <TouchableOpacity style={styles.docListCard} onPress={() => {
             prop.navigation.navigate('相關醫生', {
                 screen: '醫生詳情',
                 params: {
@@ -65,50 +81,3 @@ export const DrList: React.FC = (prop: any) => {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    drListCard: {
-        padding: 15,
-        marginVertical: 8,
-        marginHorizontal: 8,
-        borderBottomColor: '#B5B5B5',
-        borderBottomWidth: 0.8,
-        flexDirection: 'row',
-    },
-    drInfo: {
-        marginLeft: 20,
-    },
-    title: {
-        fontSize: 16,
-        color: '#545454',
-        marginBottom: 8,
-    },
-    infoBox: {
-        justifyContent: 'center',
-        backgroundColor: '#F3F3F3',
-        height: 'auto',
-        borderRadius: 4,
-        marginBottom: 20,
-        marginRight: 10,
-    },
-    blue: {
-        backgroundColor: '#5990BE',
-    },
-    red: {
-        backgroundColor: '#CC7373'
-    },
-    gender: {
-        color: 'white',
-        textAlign: 'center',
-        fontWeight: '700',
-        fontSize: 11,
-        paddingVertical: 4,
-        paddingHorizontal: 10,
-    },
-    address: {
-        color: '#545454',
-        fontSize: 12,
-        marginRight: 80,
-        marginLeft: 6,
-    }
-});

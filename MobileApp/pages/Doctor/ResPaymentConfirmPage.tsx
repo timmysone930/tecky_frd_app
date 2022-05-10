@@ -55,7 +55,7 @@ export const ConfirmPaymentPage = (props: any) => {
                         <View style={{ marginTop: 20, }}>
                             <Text style={[styles.contentText]}>你已有預約記錄</Text>
                             <Text style={[styles.contentText]}>如有疑問，請與相關職員聯絡</Text>
-                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
+                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                                 <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
                         </View>
                     </>

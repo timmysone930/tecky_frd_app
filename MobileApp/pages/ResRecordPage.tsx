@@ -1,11 +1,8 @@
 import React from 'react'
-import { RefreshControl, SafeAreaView, Text } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import {SafeAreaView, Text } from 'react-native';
 import { useGetReservationListQuery } from '../API/PatientAPI';
 import { SpinnerComponent } from '../components/NativeBase/SpinnerComponent';
-import Config from "react-native-config";
-// Components
-import { ReservationRecord } from '../components/reservation/ReservationRecord';
+import { ResRecordComponent } from '../components/reservationRecord/ResRecordComponent';
 
 const wait = (timeout: number) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -26,17 +23,12 @@ export const ResRecordPage = (props: any) => {
         }
     }, []);
     // white background
-    const backgroundStyle = {
-        backgroundColor: 'white',
-    };
-
-    console.log('resRecord', recordData.data)
-
+    const backgroundStyle = {backgroundColor: 'white',};
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             {recordData.isLoading && <SpinnerComponent />}
             {recordData.isSuccess &&
-                recordData.data.length !==0 ?<ReservationRecord data={recordData.data} props={props} refreshing={refreshing} onRefresh={onRefresh} /> :
+                recordData.data.length !==0 ?<ResRecordComponent data={recordData.data} props={props} refreshing={refreshing} onRefresh={onRefresh} /> :
                 <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>
             }
             {recordData.isError && <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>}
