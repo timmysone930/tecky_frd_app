@@ -41,7 +41,7 @@ export const ResRecordDeail = (props: any) => {
                 }
 
                 {data.item.status !== 'finish' ?
-                    <TouchableOpacity disabled={data.item.status === 'booked' ? false : true} style={data.item.status === 'booked' ? styles.button : styles.disableButton} onPress={() => props.navigation.navigate({ name: '主頁' })}>
+                    <TouchableOpacity disabled={data.item.status === 'booked' ? false : true} style={data.item.status === 'booked' ? styles.button : styles.disableButton} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                         <Text style={styles.buttonText}>開始診症</Text></TouchableOpacity> :
                     null}
                 {data.item.status === 'cancel' ? <Text style={styles.warning}>* 請聯絡客服了解預約詳情</Text> : null}

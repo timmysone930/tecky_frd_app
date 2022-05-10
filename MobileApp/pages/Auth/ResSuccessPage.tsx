@@ -36,7 +36,7 @@ export const ResSuccessPage = (props: any) => {
                         onPress={onPressNavigate}
                     >
                         <Text style={styles.buttonText}>前往預約</Text></TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
+                    <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                         <Text style={styles.buttonText}>會員資料</Text></TouchableOpacity>
                 </View>
             </View>

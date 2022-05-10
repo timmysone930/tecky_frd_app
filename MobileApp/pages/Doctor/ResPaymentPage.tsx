@@ -41,18 +41,6 @@ export const PaymentPage = (props: any) => {
     // Register
     const [postPatientRegister] = usePostPatientRegisterMutation();
     const submitData = new FormData();
-    submitData.append('hkid', formData.idNumber)
-    submitData.append('id_doc_type', formData.idType)
-    submitData.append('name', formData.name)
-    submitData.append('alt_contact', formData.EmergencyContactName)
-    submitData.append('alt_phone', formData.EmergencyContactPhone)
-    submitData.append('gender', formData.title)
-    submitData.append('email', formData.email)
-    submitData.append('phone', formData.phone)
-    submitData.append('birthday', formData.bDay)
-    submitData.append('hkid_img', {
-        name: formData['idImg'][0].fileName, type: formData['idImg'][0].type, uri: Platform.OS === 'android' ? formData['idImg'][0].uri : formData['idImg'][0].uri.replace('file://', ''),
-    })
     // Reservation 
     const [postPatientReservation] = usePostPatientReservationMutation();
     // to disable the selected session 
@@ -110,6 +98,18 @@ export const PaymentPage = (props: any) => {
                 // non member
                 if (formData.memberCode === '') {
                     // create member
+                    submitData.append('hkid', formData.idNumber)
+                    submitData.append('id_doc_type', formData.idType)
+                    submitData.append('name', formData.name)
+                    submitData.append('alt_contact', formData.EmergencyContactName)
+                    submitData.append('alt_phone', formData.EmergencyContactPhone)
+                    submitData.append('gender', formData.title)
+                    submitData.append('email', formData.email)
+                    submitData.append('phone', formData.phone)
+                    submitData.append('birthday', formData.bDay)
+                    submitData.append('hkid_img', {
+                        name: formData['idImg'][0].fileName, type: formData['idImg'][0].type, uri: Platform.OS === 'android' ? formData['idImg'][0].uri : formData['idImg'][0].uri.replace('file://', ''),
+                    })
                     const res: any = await postPatientRegister(submitData)
                     console.log('member', res)
                     if(res.error){
@@ -194,7 +194,7 @@ export const PaymentPage = (props: any) => {
             </ScrollView>
             {/* Button to go back and next page */}
             <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
+                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
                 <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={onPress}>
                     <Text style={styles.buttonText}>下一步</Text></TouchableOpacity>

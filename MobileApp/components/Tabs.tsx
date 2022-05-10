@@ -26,14 +26,14 @@ export const Tabs = () => {
   // get user status
   const isLogin = useSelector((state: any) => state.getUserStatus.isLogin);
   return (
-    <Tab.Navigator initialRouteName="主頁" screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center', tabBarStyle:{paddingBottom:10} }}>
-      <Tab.Screen name="主頁" component={Home} options={{
+    <Tab.Navigator initialRouteName="醫生" screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center', tabBarStyle:{paddingBottom:10} }}>
+      {/* <Tab.Screen name="主頁" component={Home} options={{
         headerStyle: { backgroundColor: 'white' },
         headerTitle: () => (<Image style={{ width: 80, height: 40 }} source={{uri: `${Config.REACT_APP_API_SERVER}/logo.png`,}
         } />),
         tabBarIcon: ({ color }) => (<Icon name="home" size={21} color={color} />
         )
-      }} />
+      }} /> */}
       <Tab.Screen name="醫生" component={DoctorStacks}
         options={{
           headerShown: false, tabBarLabel: '醫生',

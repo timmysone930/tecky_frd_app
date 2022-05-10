@@ -42,7 +42,7 @@ export const ConfirmResPage: React.FC = (props: any) => {
             </ScrollView>
             {/* Button to go back and next page */}
             <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
+                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
                 <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
                     onPress={() => props.navigation.navigate({ name: '付款', params:{reserveSession:reserveSession}})}>

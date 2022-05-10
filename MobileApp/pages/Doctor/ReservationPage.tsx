@@ -100,8 +100,8 @@ export const ReservationPage = (props: any) => {
           <View style={styles.drListCard}>
             <DrListCard props={docData} />
           </View>
-          {rosterData.isLoading && <SpinnerComponent />}
-          {rosterData.isSuccess &&
+          {rosterData.isLoading && userData.isLoading && <SpinnerComponent />}
+          {rosterData.isSuccess && userData.isSuccess  &&
 
             <View style={styles.pageMargin}>
               <Text style={styles.subTitle}>應診日期</Text>
@@ -188,7 +188,7 @@ export const ReservationPage = (props: any) => {
       </KeyboardAvoidingView>
       {/* Button to go back and next page */}
       <View style={{ flexDirection: 'row' }}>
-        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '主頁' })}>
+        <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
           <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
         <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
           onPress={handleSubmit(onSubmit)}
