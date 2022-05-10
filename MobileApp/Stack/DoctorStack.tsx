@@ -5,8 +5,8 @@ import { DocSpecPage } from '../pages/DocSpecPage';
 import { ReservationPage } from '../pages/Doctor/ReservationPage';
 import { ReserveIDCardPage } from '../pages/Doctor/ResUploadIdCardPage';
 import { PolicyPage } from '../pages/Doctor/PolicyPage';
-import { DrList } from '../pages/Doctor/DrListPage';
-import { DrInfo } from '../pages/Doctor/DrInfoPage';
+import { DocListPage } from '../pages/Doctor/DocListPage';
+import { DocDetailPage } from '../pages/Doctor/DocDetailPage';
 import { HealthDeForm } from '../pages/Doctor/HealthDeFormPage';
 import { ConfirmResPage } from '../pages/Doctor/ConfirmResPage';
 import { PaymentPage } from '../pages/Doctor/ResPaymentPage';
@@ -20,7 +20,7 @@ export const DoctorStacks = () => {
     return (
         <DoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} >
             <DoctorStack.Screen name="搜尋醫生" component={DocSpecPage} options={{ headerShown: true }} />
-            <DoctorStack.Screen name="醫生列表" component={DrList} />
+            <DoctorStack.Screen name="醫生列表" component={DocListPage} />
             {/* <DoctorStack.Screen name="預約確認" component={ConfirmPaymentPage} options={{ headerShown: false, animationEnabled: false }} /> */}
         </DoctorStack.Navigator>
     )
@@ -32,7 +32,7 @@ export const InnerDoctorStacks = () => {
     const isLogin = useSelector((state: any) => state.getUserStatus.isLogin);
     return (
         <InnerDoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} initialRouteName="醫生詳情">
-            <InnerDoctorStack.Screen name="醫生詳情" component={DrInfo} />
+            <InnerDoctorStack.Screen name="醫生詳情" component={DocDetailPage} />
             {isLogin?<InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} options={{headerShown: true }}/>:
             <InnerDoctorStack.Screen name="預約醫生" component={LoginStacks} options={{headerShown: false }}/>
             }
