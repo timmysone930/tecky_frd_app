@@ -24,35 +24,32 @@ export const LoginPage = (props: any) => {
     // GET previous page 
     const previousPage = useSelector((state: any) => state.setDoctorID.currentPage);
 
+    
+    const [getLoginSMS] = useGetLoginSMSMutation();
+    // Get login SMS (sample:85255332211)
+    
     const countTime = 60
     const [counter, setCounter] = useState(countTime);
     const [sendCodeBtn, setSendCodeBtn] = useState({
         isDisable: false,
-        isActive: false,
     })
-
-    const [getLoginSMS] = useGetLoginSMSMutation();
-    // Get login SMS (sample:85255332211)
-
-    const prog = useRef(0 as any)
+    const intervalId = useRef(0 as any)
     const onSMSPress = async (inputData: any) => {
+        // Reset counter to 60s
         setCounter(countTime)
-        // Activate 60s count down
+        // Activate 60s count down and Disable the button
         setSendCodeBtn({
-            ...sendCodeBtn, 
             isDisable: true, 
-            isActive: true,
         });
 
         let t = countTime
-        prog.current = setInterval(()=>{
+        intervalId.current = setInterval(()=>{
             t = t - 1
             setCounter(t)
             if (t < 0) {
-                clearInterval(prog.current)
+                clearInterval(intervalId.current)
                 setSendCodeBtn({
                     isDisable: false, 
-                    isActive: false,
                 });
             }
         },1000)
@@ -88,7 +85,7 @@ export const LoginPage = (props: any) => {
             }
         }else{
             store.dispatch(checkStatus({ status: true, phone: inputData.phoneNo}))
-            clearInterval(prog.current)
+            clearInterval(intervalId.current)
             if (previousPage === '') {
                 props.navigation.navigate({ name: '預約Tab', })
             } else {
@@ -138,7 +135,7 @@ export const LoginPage = (props: any) => {
                             onPress={handleSubmit(onSMSPress)}
                         >
                                 <Text style={{color: "white", fontSize: 15}}>
-                                    驗證碼 {sendCodeBtn.isActive &&`(${counter})`}
+                                    驗證碼 {sendCodeBtn.isDisable &&`(${counter})`}
                                 </Text>
                         </Button>
                         {/* <TouchableOpacity style={styles.btnPhone} onPress={handleSubmit(onSMSPress)}>

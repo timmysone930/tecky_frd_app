@@ -16,7 +16,7 @@ export const MyInfoStacks = () => {
         <MyInfoStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} initialRouteName="查看">
             <MyInfoStack.Screen name="查看" component={MyInfoPage} options={{ headerShown: true }} />
             <MyInfoStack.Screen name="帳戶資料" component={UserInfoStacks} options={{ headerShown: false}}/>
-            <MyInfoStack.Screen name="預約" component={ResRecordStacks} options={{ headerShown: false }}/>
+            <MyInfoStack.Screen name="預約記錄 " component={ResRecordStacks} options={{ headerShown: false }}/>
             <MyInfoStack.Screen name="藥單記錄" component={PrescriptionStacks} options={{ headerShown: false }}/>
             <MyInfoStack.Screen name="送藥地址" component={UserAddressStacks} options={{ headerShown: false }}/>
         </MyInfoStack.Navigator>
