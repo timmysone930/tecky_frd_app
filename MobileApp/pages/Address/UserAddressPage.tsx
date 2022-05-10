@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SafeAreaView, RefreshControl } from 'react-native';
+import { Text as RNtext } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
 // Native-base
@@ -157,12 +158,12 @@ export function UserAddressPage({navigation}:any) {
         // store.dispatch(setAddressWannaDeleteID({addressWannaDeleteID: addressToDeleteID}))
         onClose()
         // Fetch to delete address
-        const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
+        const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/addr-book/delete/${addressToDeleteID}`, {
             headers: {
                 'Content-Type': 'application/json'
             },
             method: "DELETE",
-            body: JSON.stringify({addr_id: addressToDeleteID})
+
         })
 
         resp.status == 200 && infoFetching() 
@@ -244,75 +245,83 @@ export function UserAddressPage({navigation}:any) {
                         />
                     }
                 >
-                    {fetchData != null && defaultAddressID != null ?
-                        <Radio.Group 
-                                name="myRadioGroup" 
-                                accessibilityLabel="favorite number" 
-                                value={defaultAddressID} 
-                                onChange={nextValue => {
-                                    setResetDefaultDialog(true)
-                                    setIsOpen(!isOpen)
-                                    setAddrToSetDefault(nextValue)
-                                }}
-                        >
-                            {
-                                fetchData.map((address:any) => 
-                                    <View 
-                                        key={address.id} 
-                                        width={"100%"}
-                                        marginBottom={10} 
-                                        borderBottomColor={'gray.600'} 
-                                        borderBottomWidth={'0.5'} 
-                                        paddingBottom={'5'}
-                                    >
-                                        <Radio value={address.id} my={1} >
-                                            <View width={"100%"} alignItems={'flex-start'} >
-                                                {/* <Text style={[styles.subTitle]} marginLeft={2}>
-                                                    聯絡人: {address.name}
-                                                </Text> */}
-                                                <Text style={[styles.subTitle]} marginY={1} marginX={5} textAlign={"left"}>
-                                                    聯絡人: {address.name}
-                                                </Text>
-                                                <Text style={[styles.subTitle]} marginY={1} marginX={5} textAlign={"left"}>
-                                                    聯絡電話: {address.phone}
-                                                </Text>
-                                                <Text style={[styles.contentText]} marginY={1} marginX={5} textAlign={"left"}>
-                                                    {address.area}&nbsp;{address.district}
-                                                </Text>
-                                                <Text style={[styles.contentText]} marginY={1} marginX={5} textAlign={"left"}>
-                                                    {address.address.split("/nl/")[0]}
-                                                </Text>
-                                                <Text style={[styles.contentText]} marginY={1} marginX={5} textAlign={"left"}>
-                                                    {address.address.split("/nl/")[1]}
-                                                </Text>
+
+                    {
+                        fetchData != null ?
+                        (
+                            defaultAddressID != null && fetchData != "" ?
+                            <Radio.Group 
+                                    name="myRadioGroup" 
+                                    accessibilityLabel="favorite number" 
+                                    value={defaultAddressID} 
+                                    onChange={nextValue => {
+                                        setResetDefaultDialog(true)
+                                        setIsOpen(!isOpen)
+                                        setAddrToSetDefault(nextValue)
+                                    }}
+                            >
+                                {
+                                    fetchData.map((address:any) => 
+                                        <View 
+                                            key={address.id} 
+                                            width={"100%"}
+                                            marginBottom={10} 
+                                            borderBottomColor={'gray.600'} 
+                                            borderBottomWidth={'0.5'} 
+                                            paddingBottom={'5'}
+                                        >
+                                            <Radio value={address.id} my={1} >
+                                                <View width={"100%"} alignItems={'flex-start'} >
+                                                    {/* <Text style={[styles.subTitle]} marginLeft={2}>
+                                                        聯絡人: {address.name}
+                                                    </Text> */}
+                                                    <Text style={[styles.subTitle]} marginY={1} marginX={5} textAlign={"left"}>
+                                                        聯絡人: {address.name}
+                                                    </Text>
+                                                    <Text style={[styles.subTitle]} marginY={1} marginX={5} textAlign={"left"}>
+                                                        聯絡電話: {address.phone}
+                                                    </Text>
+                                                    <Text style={[styles.contentText]} marginY={1} marginX={5} textAlign={"left"}>
+                                                        {address.area}&nbsp;{address.district}
+                                                    </Text>
+                                                    <Text style={[styles.contentText]} marginY={1} marginX={5} textAlign={"left"}>
+                                                        {address.address.split("/nl/")[0]}
+                                                    </Text>
+                                                    <Text style={[styles.contentText]} marginY={1} marginX={5} textAlign={"left"}>
+                                                        {address.address.split("/nl/")[1]}
+                                                    </Text>
+                                                </View>
+                                            </Radio>
+
+                                            {/* [ 編輯, 刪除 ] button */}
+                                            <View flexDirection={'row'} justifyContent={'flex-end'} alignItems={'center'} marginTop={3}>
+                                                <Button padding={1} height={10} width={100} marginX={5} size={"lg"} onPress={editButtonHandler(address)}>
+                                                    編輯
+                                                </Button>
+
+                                                <Button colorScheme="danger" padding={1} height={10} width={100} marginX={10} size={"lg"} onPress={deleteButtonHandler(address.id)}>
+                                                    刪除
+                                                </Button>
                                             </View>
-                                        </Radio>
 
-                                        {/* [ 編輯, 刪除 ] button */}
-                                        <View flexDirection={'row'} justifyContent={'flex-end'} alignItems={'center'} marginTop={3}>
-                                            <Button padding={1} height={10} width={100} marginX={5} size={"lg"} onPress={editButtonHandler(address)}>
-                                                編輯
-                                            </Button>
 
-                                            <Button colorScheme="danger" padding={1} height={10} width={100} marginX={10} size={"lg"} onPress={deleteButtonHandler(address.id)}>
-                                                刪除
-                                            </Button>
                                         </View>
-
-
-                                    </View>
-                                )
-                            }
-                        </Radio.Group>
+                                    )
+                                }
+                            </Radio.Group>
+                            :
+                            <RNtext style={{textAlign:'center', fontSize:17, margin:20}}>沒有地址記錄</RNtext>
+                        )
                         :
                         // Loading Spinner
                         <HStack space={2} justifyContent="center" alignItems={'center'}>
                             <Spinner color="#225D66" accessibilityLabel="Loading posts" />
                         </HStack>
                     }
-                    {fetchData == "" &&
+
+                    {/* {fetchData == "" &&
                         <Text style={{textAlign:'center', fontSize:17, margin:20}}>沒有地址記錄</Text>
-                    }
+                    } */}
                 </ScrollView>
 
 

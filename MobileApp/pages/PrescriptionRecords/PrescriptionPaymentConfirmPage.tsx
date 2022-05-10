@@ -3,6 +3,8 @@ import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 //Redux
 import { useSelector } from 'react-redux';
+import { store } from '../../redux/store';
+import { setPrescriptionCode } from '../../redux/slice';
 
 // Component
 import { PrescriptionBasicInfo } from '../../components/prescription/PrescriptionBasicInfo';
@@ -10,19 +12,53 @@ import { PrescriptionDetail } from '../../components/prescription/PrescriptionDe
 import { CostDisplay } from '../../components/prescription/CostDisplay';
 import { PayButton } from '../../components/prescription/PayButton';
 
+// Config
+import Config from 'react-native-config';
+
 
 export const PrescriptionPaymentConfirm = ({navigation}:any) => {
-    let fetchData = null
+    let fetchData:any = null
     fetchData = useSelector((state:any)=>state.getPrescriptionCode).prescriptionDetail;
 
-    let deliveryMethod = null
+    let deliveryMethod:any = null
     deliveryMethod = useSelector((state:any)=>state.getPrescriptionPaymentPreset).deliveryMethod
 
-    let pickUpStore = null
+    let pickUpStore: any = null
     pickUpStore = useSelector((state:any)=>state.getPrescriptionPaymentPreset).pickUpStore
 
-    let deliverAddress = null
+    let deliverAddress: any = null
     deliverAddress = useSelector((state:any)=>state.getPrescriptionPaymentPreset).deliverAddress
+
+    console.log(deliveryMethod,fetchData.prescription,"deliveryMethod*************",pickUpStore, deliverAddress);
+
+    // Confirm and pay button
+    const confirmAndPay = async () => {
+        let presEditData;
+        if (deliveryMethod == "pick-up") {
+            presEditData = {
+                ...fetchData.prescription,
+                address: pickUpStore.addr,
+                area: pickUpStore.area,
+                district: pickUpStore.district,
+                is_delivery: false,
+                pick_up_store: pickUpStore.clinic_code,
+            }
+        }
+        else if (deliveryMethod == "deliver") {
+            presEditData = {
+                ...fetchData.prescription,
+                address: deliverAddress.address,
+                area: deliverAddress.area,
+                district: deliverAddress.district,
+                is_delivery: true,
+                delivery_contact: deliverAddress.name,
+                delivery_phone: deliverAddress.phone
+            }
+        }
+        store.dispatch(setPrescriptionCode({prescriptionDetail: {...fetchData, prescription: presEditData}}))
+
+        navigation.navigate("藥單付款")
+    }
     
     return (
         <SafeAreaView>
@@ -34,7 +70,7 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
                             doctor={fetchData.doctor_name}
                             profession={fetchData.spec[0].spec_name}
                             created_at={fetchData.prescription.created_at}
-                            course_of_treatment="{fetchData.course_of_treatment}"
+                            course_of_treatment={fetchData.prescription.treatment}
                             patient_name={fetchData.name}
                             patient_id={fetchData.hkid}
                             orderStatusShow={false}
@@ -92,7 +128,7 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
                                 }
                             </View>
                         </View>
-                        <PayButton title={"確定並付款"} disabled={false} onPressFunction={()=> navigation.navigate("藥單付款")}/>
+                        <PayButton title={"確定並付款"} disabled={false} onPressFunction={confirmAndPay}/>
                     </View>
                 }
             </ScrollView>

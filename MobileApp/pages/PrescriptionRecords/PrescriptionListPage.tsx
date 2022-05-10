@@ -53,6 +53,7 @@ export const PrescriptionListPage = ({navigation}:any) => {
   const dataFetching = async () => {
     const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`)
     const data = await resp.json()
+    console.log(data);
     if (data.length > 0) {
       setFetchData(data)
     }

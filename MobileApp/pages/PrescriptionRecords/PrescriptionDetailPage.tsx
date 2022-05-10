@@ -67,7 +67,7 @@ export function PrescriptionDetailPage({navigation}:any) {
       const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`)
       const data = (await resp.json()).filter((item: any)=> item.prescription.pres_code == prescriptionCode)[0]
 
-      const costResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${data.prescription.payment.toString()}`)
+      const costResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${data.prescription.payment}`)
       const cost = (await costResp.json())[0].amount
 
       const clinicPhoneResp = await fetch(`${Config.REACT_APP_API_SERVER}/clinics/search?column=code&where=${data.clinic_code}`)
@@ -105,7 +105,7 @@ export function PrescriptionDetailPage({navigation}:any) {
                             doctor={fetchData.doctor_name}
                             profession={fetchData.spec[0].spec_name}
                             created_at={fetchData.prescription.created_at.split("T")[0]}
-                            course_of_treatment="{fetchData.course_of_treatment}"
+                            course_of_treatment={fetchData.prescription.treatment}
                             patient_name={fetchData.name}
                             patient_id={fetchData.hkid}
                             orderStatusShow={true}
