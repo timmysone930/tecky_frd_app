@@ -334,6 +334,9 @@ apply from: file("../../node_modules/@react-native-community/cli-platform-androi
 // config
 apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+
+
 def isNewArchitectureEnabled() {
     // To opt-in for the New Architecture, you can either:
     // - Set `newArchEnabled` to true inside the `gradle.properties` file
