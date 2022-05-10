@@ -10,7 +10,7 @@ export const userInfoAPI = createApi({
     // The "endpoints" represent operations and requests for this server
     endpoints: builder => ({
         // The endpoint is a "query" operation that returns data
-        getUserInfo: builder.query({
+        getUserInfo: builder.query<any, void>({
             // The URL for the request is '/http://XXXX/client/profile'
             query: () => `/client/profile`
         }),

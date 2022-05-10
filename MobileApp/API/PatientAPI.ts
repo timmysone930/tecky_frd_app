@@ -16,10 +16,6 @@ export const patientAPI = createApi({
       query: (data) => ({
         url: "/patient/register",
         method: "POST",
-        // headers: {
-        //   'Content-Type': 'multipart/form-data; ',
-        //   // 'Content-Type': 'application/json',
-        // },
         body: data
       })
     }),

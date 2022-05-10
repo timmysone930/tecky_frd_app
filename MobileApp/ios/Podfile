@@ -29,6 +29,8 @@ target 'MobileApp' do
   pod 'Braintree', '~> 4'
   pod 'Braintree/DataCollector'
 
+  pod 'react-native-onesignal', :path => '../node_modules/react-native-onesignal'
+
   target 'MobileAppTests' do
     inherit! :complete
     # Pods for testing
@@ -44,4 +46,8 @@ target 'MobileApp' do
     react_native_post_install(installer)
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
   end
+end
+
+target 'OneSignalNotificationServiceExtension' do
+  pod 'OneSignalXCFramework', '>= 3.0', '< 4.0'
 end
