@@ -45,21 +45,6 @@ interface Props {
 
 // Component
 export const AddressForm = (props: Props) => {
-    // const [input, setInput] = useState({
-    //     hkid: "",
-    //     name: "",
-    //     phone: "",
-    //     area: "",
-    //     district: "",
-    //     addr: {
-    //         street: "", 
-    //         estate: "",
-    //         flat: "",
-    //         floor: "",
-    //         block: "",
-    //     },
-    //     enabled: true,
-    // })
     const areaSelection = areas
     const areaForMap = [["香港", districtsOfHK], ["新界", districtsOfNT], ["九龍", districtsOfKLN]]
 

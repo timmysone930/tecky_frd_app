@@ -7,7 +7,7 @@ import {
 
 export const MyInfoPage = ({navigation}:any) => {
 
-    const listItems = ["帳戶資料", "預約記錄", "藥單記錄", "送藥地址"] ;
+    const listItems = ["帳戶資料", "預約記錄 ", "藥單記錄", "送藥地址"] ;
     // Set background to white
     const backgroundStyle = {
         backgroundColor:'white',

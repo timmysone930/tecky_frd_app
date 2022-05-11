@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { SafeAreaView, ScrollView, Image, Text } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
@@ -9,22 +9,6 @@ import { View, Button, useToast, Input, FormControl, WarningOutlineIcon, HStack,
 import { useGetUserInfoQuery, usePutEditInfoMutation } from '../../API/UserInfoAPI';
 import Config from "react-native-config";
 
-const fakeUserInfo = {
-    id: "123",
-    hkid: "A1234567",
-    id_doc_type: "HKID",
-    name: "張中和",
-    gender: "男",
-    phone: "12345678",
-    member_code: "M150006",
-    binding_member: true,
-    email: "abc123@gmail.com",
-    birthday: "1998/6/5",
-    hkid_img: "img-123456",
-    created_at: "2022/4/28",
-    channel: "what is this"
-}
-
 
 export function InfoEditPage({navigation}:any) {
 
@@ -34,14 +18,15 @@ export function InfoEditPage({navigation}:any) {
     // Data fetching
     const [fetchData, setFetchData] = useState(null as any)
 
-    // Align the original phone number for comparison with the new input phone number
+    // Assign the original phone number (8 digits) for comparison with the new input phone number
     const [originalPhone, setOriginalPhone] = useState("")
 
     // New input
     const [input, setInput] = useState({
         email: "",
         areaCode: "",
-        phone: ""
+        phone: "",
+        validCode: "",
     })
 
     const infoFetching = async () => {
@@ -64,6 +49,7 @@ export function InfoEditPage({navigation}:any) {
             infoFetching() 
             setFetched(true)
         }
+        return ()=> clearInterval(intervalId.current)
     },[])
 
     // Determine The inputs are enable or not
@@ -72,7 +58,6 @@ export function InfoEditPage({navigation}:any) {
         input: true,
         warning: false,
         phoneInput: false,
-        noInput: true 
     })
     
     // 電話輸入欄
@@ -86,54 +71,92 @@ export function InfoEditPage({navigation}:any) {
         }
     }
 
-    //60s count down set up
     const countTime = 60
     const [counter, setCounter] = useState(countTime);
     const [isActive, setIsActive] = useState(false)
-
+    const intervalId = useRef(0 as any)
     // 驗證碼掣
-    const verifyButtonHandler = () => {
-        // Reset the counter to 60s
-        setCounter(countTime)
-        // Activate 60s count down
-        setIsActive(true)
-        setIsDisable({...isDisable, input: false, phoneInput: true, button: true})
-        toast.show({
-            description: "已送出驗證碼"
+    const verifyButtonHandler = async () => {
+        // Fetching
+        const phoneNum = input.areaCode + input.phone
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/send-sms-for-change/`, {
+            method: "POST",
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({phone: phoneNum})
         })
-    }
 
-    // 60s count down
-    useEffect(() => {
-        if (isActive) {
-            counter > 0 && setTimeout(() => setCounter(counter - 1), 1000);
-            counter == 0 && setIsDisable({...isDisable, button: false});
-            counter == 0 && setIsActive(false);
+        if (resp.status == 201) {
+            toast.show({
+                description: "已送出驗證碼"
+            })
+        } else {
+            toast.show({
+                description: "驗證碼發送故障，請再嘗試。"
+            })
+            return
         }
-    });
+        // Reset counter to 60s
+        setCounter(countTime)
+        // Activate 60s count down and Disable the button
+        setIsActive(true)
+
+        let t = countTime
+        intervalId.current = setInterval(()=>{
+            t = t - 1
+            setCounter(t)
+            if (t < 0) {
+                clearInterval(intervalId.current)
+                setIsActive(false)
+                setIsDisable({...isDisable, input: false, phoneInput: true, button: false})
+            }
+        },1000)
+        setIsDisable({...isDisable, input: false, phoneInput: true, button: true})
+
+    }
     
     // 驗證碼輸入欄
     const verifyCodeInputHandler = (value: any) => {
-        if (value == "" ){
-            setIsDisable({...isDisable, noInput: true})
-        }
-        else {
-            setIsDisable({...isDisable, noInput: false})
-        }
+        setInput({...input, validCode: value})
     }
 
 
     // Save all
     const [putEditInfo] = usePutEditInfoMutation();
     const save = async () => {
+        if (input.email == fetchData.email && input.phone == fetchData.phone) {
+            toast.show({
+                description: "帳戶資料未有變更，請輸入新的帳戶資料並儲存。"
+            })
+            return
+        }
         // If the input of email and phone are empty, not save
         if (input.email.length == 0 || input.phone.length == 0) {
+            toast.show({
+                description: "請輸入新的帳戶資料並儲存。"
+            })
             return
         }
         if (originalPhone != input.phone) {
-            if (isDisable.noInput) {
+            if (input.validCode.length == 0) {
                 setIsDisable({...isDisable, warning: true})
                 return
+            } else {
+                const phoneNum = input.areaCode + input.phone
+                const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/client/confirm-change-info/`, {
+                    method: "POST",
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({phone: phoneNum, smsCode: input.validCode})
+                })
+                if (resp.status == 400) {
+                    toast.show({
+                        description: "請確認輸入正確電話號碼及驗證碼"
+                    })
+                    return
+                }
             }
         }
         
@@ -142,10 +165,8 @@ export function InfoEditPage({navigation}:any) {
             email: input.email,
             phone: input.areaCode + input.phone,
         }
-        console.log(newInfo);
 
         const resp = await putEditInfo(newInfo)
-        
         
         navigation.navigate("查看")
         toast.show({

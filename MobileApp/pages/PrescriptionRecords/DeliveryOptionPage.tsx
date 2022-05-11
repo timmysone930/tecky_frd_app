@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { styles } from '../../styles/GeneralStyles';
 
 // Native-base
-import { Select, Radio, FormControl, CheckIcon, WarningOutlineIcon, Button, HStack, Spinner, Heading } from "native-base";
+import { Select, Radio, FormControl, CheckIcon, WarningOutlineIcon, Button, HStack, Spinner, useToast } from "native-base";
 
 // Redux
 import { store } from '../../redux/store';
@@ -43,12 +43,26 @@ export const FakeAddr = [
     },
 ]
 
+const wait = (timeout:any) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 // Page
 export const DeliveryOptionPage = ({navigation}:any)=> {
 
-    const fetchData = FakeData ;
+    const [refreshing, setRefreshing] = React.useState(false);
 
-    const prescriptionDetail = useSelector((state:any)=>state.getPrescriptionCode).prescriptionDetail
+    const onRefresh = React.useCallback(() => {
+      setRefreshing(true);
+      wait(2000).then(() => setRefreshing(false));
+    }, []);
+
+    // Toast
+    const toast = useToast()
+
+    const prescriptionDetail= (useSelector((state:any)=>state.getPrescriptionCode)).prescriptionDetail
+    console.log(prescriptionDetail);
+
 
     // deliveryOption: 'pick-up' || 'deliver'
     const [deliveryOption, setDeliveryOption] = useState('pick-up');
@@ -72,21 +86,31 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
     const dataFetching = async () => {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`)
         const defaultAddress = await resp.json()
-        if (defaultAddress != null) {
+        if (defaultAddress.address != null) {
             setInput(defaultAddress)
+        } else {
+            setInput("")
         }
         const pickUpStoreResp = await fetch (`${Config.REACT_APP_API_SERVER}/clinics/getList`)
         const pickUpStore = (await pickUpStoreResp.json()).filter((item: any) => item.allow_store_pickup)
         if (pickUpStore.length > 0) {
             setAllowPickUp(pickUpStore)
+        } else {
+            setAllowPickUp("")
         }
     }
 
     const submitHandler = () => {
         if (pickUpClinic.clinic_code == "" && deliveryOption == "pick-up") {
+            
             return
         }
         if (!formFilled && deliveryOption == "deliver") {
+            if (input == "") {
+                toast.show({
+                    description: "暫無任何地址記錄，請點選新增地址新增記錄，或選擇分店自取。"
+                })
+            }
             return
         }
 
@@ -98,26 +122,44 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
         navigation.navigate("付款確認")
     }
 
+
     const [fetched, setFetched] = useState(false)
   
     useEffect(()=>{
-        if (!fetched) {
+        // if (!fetched) {
+            // dataFetching()
+            // setFetched(true)
+        // }
+        const unsubscribe = navigation.addListener('focus', () => {
             dataFetching()
             setFetched(true)
-        }
-    },[])
+        });
+
+        return () => {unsubscribe}
+    },[navigation])
 
     return (
         <SafeAreaView>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={onRefresh}
+                    />
+                }
+            >
+                {
+                    allowPickUp == null &&
+                    // Loading Spinner
+                    <HStack space={2} justifyContent="center" alignItems={'center'} marginTop={50}>
+                        <Spinner color="#225D66" accessibilityLabel="Loading posts" />
+                    </HStack>
+                }
                 { fetched && allowPickUp != null && 
                     <View style={[styles.viewContainer]}>
                         <Text style={[styles.title, styles.mb_30]}>
-                            藥單編號: {fetchData.pres_code}
+                            藥單編號: {prescriptionDetail.prescription.pres_code}
                         </Text>
-
-                        {/*  */}
-                        
 
                         <Radio.Group 
                             name="myRadioGroup" 
@@ -193,22 +235,14 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
                         </Radio.Group>
 
-                        {
-                            !fetched &&
-                            // Loading Spinner
-                            <HStack space={2} justifyContent="center" alignItems={'center'}>
-                                <Spinner color="#225D66" accessibilityLabel="Loading posts" />
-                            </HStack>
-                        }
 
                         {
-                            
-                        input == null ?
-                        <>
+                            input == "" && input != null ?
+                            <>
                                 <Text style={[styles.subTitle, styles.mv_10, styles.textCenter]}>
                                     沒有地址記錄
                                 </Text>
-                                <Button size={"lg"} onPress={() => navigation.navigate("送藥地址", {screen: "編輯地址"})}>
+                                <Button size={"lg"} onPress={() => navigation.navigate("新增地址")}>
                                     新增地址
                                 </Button>
                             </>
@@ -226,9 +260,10 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                     setAllFilled={setFormFilled}
                                     input={input}
                                     setInput={setInput}
-                                />
+                                    />
                             </View>
                         }
+
 
                         <Text style={[styles.mt_30, styles.mb_10]}>
                             付款前，請詳細核對送貨地址。
