@@ -96,6 +96,36 @@ export const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 4,
     },
+    // Res Payment confirm page
+    subTitle: {
+        color: '#225D66',
+        fontSize: 26,
+        fontWeight: '900',
+        marginTop: 10,
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    contentText: {
+        color: '#3B3B3B',
+        marginVertical: 10,
+        fontSize: 20,
+        fontWeight: '500',
+        marginTop: 8,
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    button: {
+        backgroundColor: '#6d7f99',
+        paddingVertical: 16,
+        marginHorizontal: 40,
+        marginTop: 20,
+        borderRadius: 4,
+    },
+    buttonText: {
+        color: 'white',
+        textAlign: 'center',
+        fontSize: 16,
+    },
     // margin/ position/ padding
     ml_20: {
         marginLeft: 20,

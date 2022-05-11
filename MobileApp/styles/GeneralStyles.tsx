@@ -46,6 +46,10 @@ export const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 15,
   },
+  greyPolicyText: {
+    color: '#848A8A',
+    marginVertical: 10,
+  },
   button: {
     width: '50%',
     backgroundColor: '#6d7f99',
@@ -201,6 +205,9 @@ export const styles = StyleSheet.create({
 
   mv_10: {
     marginVertical: 10
+  },
+  mv_15: {
+    marginVertical: 15
   },
   pv_10: {
     paddingVertical: 10

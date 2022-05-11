@@ -1,16 +1,15 @@
 import React from 'react'
-
 import { createStackNavigator } from '@react-navigation/stack';
 import { DocSpecPage } from '../pages/DocSpecPage';
 import { ReservationPage } from '../pages/Reservation/ReservationPage';
 import { ResAddInfoPage } from '../pages/Reservation/ResAddInfoPage';
-import { PolicyPage } from '../pages/Doctor/PolicyPage';
+import { ResPolicyPage } from '../pages/Reservation/ResPolicyPage';
 import { DocListPage } from '../pages/Doctor/DocListPage';
 import { DocDetailPage } from '../pages/Doctor/DocDetailPage';
 import { ResHealthFormPage } from '../pages/Reservation/ResHealthFormPage';
-import { ConfirmResPage } from '../pages/Doctor/ConfirmResPage';
-import { PaymentPage } from '../pages/Doctor/ResPaymentPage';
-import { ConfirmPaymentPage } from '../pages/Doctor/ResPaymentConfirmPage';
+import { ResDetailConfirmPage } from '../pages/Reservation/ResDetailConfirmPage';
+import { PaymentPage } from '../pages/Reservation/ResPaymentPage';
+import { ResPaymentConfirmPage } from '../pages/Reservation/ResPaymentConfirmPage';
 import { useSelector } from 'react-redux';
 import { LoginStacks } from './LoginStack';
 
@@ -21,7 +20,6 @@ export const DoctorStacks = () => {
         <DoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} >
             <DoctorStack.Screen name="搜尋醫生" component={DocSpecPage} options={{ headerShown: true }} />
             <DoctorStack.Screen name="醫生列表" component={DocListPage} />
-            {/* <DoctorStack.Screen name="預約確認" component={ConfirmPaymentPage} options={{ headerShown: false, animationEnabled: false }} /> */}
         </DoctorStack.Navigator>
     )
 }
@@ -38,10 +36,10 @@ export const InnerDoctorStacks = () => {
             }
             <InnerDoctorStack.Screen name="上傳身份證明文件" component={ResAddInfoPage} />
             <InnerDoctorStack.Screen name="健康申報表" component={ResHealthFormPage} />
-            <InnerDoctorStack.Screen name="預約須知" component={PolicyPage} />
-            <InnerDoctorStack.Screen name="確認預約資料" component={ConfirmResPage} />
+            <InnerDoctorStack.Screen name="預約須知" component={ResPolicyPage} />
+            <InnerDoctorStack.Screen name="確認預約資料" component={ResDetailConfirmPage} />
             <InnerDoctorStack.Screen name="付款" component={PaymentPage} />
-            <InnerDoctorStack.Screen name="預約確認" component={ConfirmPaymentPage} options={{ headerShown: false, animationEnabled: false }} />
+            <InnerDoctorStack.Screen name="預約確認" component={ResPaymentConfirmPage} options={{ headerShown: false, animationEnabled: false }} />
         </InnerDoctorStack.Navigator>
     )
 }
