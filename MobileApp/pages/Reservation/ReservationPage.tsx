@@ -4,7 +4,7 @@ import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { useForm, Controller } from "react-hook-form";
 import { store } from '../../redux/store';
 import { setFormData, setMemberCode } from '../../redux/slice';
-import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
+import { DropdownSelectComponent } from '../../components/utils/DropdownSelectComponent';
 import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
 import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
 import { ResDateComponent } from '../../components/reservation/ResDateComponent';
@@ -138,8 +138,8 @@ export const ReservationPage = (props: any) => {
               <Text style={styles.subTitle}>稱謂</Text>
               <Controller control={control} rules={{ required: true, }}
                 render={({ field: { value } }) => (
-                  <BaseSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
-                    selectedValue={getValues('title')} dateValue={''}
+                  <DropdownSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
+                    selectedValue={getValues('title')} 
                   />
                 )}
                 name="title"
@@ -158,8 +158,8 @@ export const ReservationPage = (props: any) => {
               <Text style={styles.subTitle}>身份證明文件</Text>
               <Controller control={control}
                 render={({ field: { value } }) => (
-                  <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
-                    selectedValue={getValues('idType')} dateValue={''}
+                  <DropdownSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
+                    selectedValue={getValues('idType')}
                   />
                 )}
                 name="idType"

@@ -1,21 +1,28 @@
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { Checkbox, useToast } from 'native-base';
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { useGetLoginSMSMutation, usePostRegisterInfoMutation } from '../../API/AuthAPI';
-import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
+import { DropdownSelectComponent } from '../../components/utils/DropdownSelectComponent';
 import { BottomLineComponent } from '../../components/utils/BottomLineComponent';
 import { DatePickerComponent } from '../../components/utils/DatePickerComponent';
 import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
+import { RegisterSubmitProp } from './AuthType';
+import {styles} from '../../styles/AuthStyle'
+// white background
+const backgroundStyle = { backgroundColor: 'white', };
+// 稱謂
+const titleArr = ['先生', '小姐', '女士']
+// 電話Code
+const phoneCodeArr = ['852', '853', '86']
+// 身份證明文件
+const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
+const countTime = 60
 
 export const RegisterPage = (props: any) => {
     const toast = useToast()
-    // white background
-    const backgroundStyle = {
-        backgroundColor: 'white',
-    };
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: {
@@ -23,39 +30,67 @@ export const RegisterPage = (props: any) => {
             regPolicyOne: [], regPolicyTwo: []
         }
     });
-    // 稱謂
-    const titleArr = ['先生', '小姐', '女士']
-    // 稱謂
-    const phoneCodeArr = ['852', '853', '86']
-    // 身份證明文件
-    const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
     // id value change function
-    const onIDValueChange = (itemValue: any) => {setValue("regIDType", itemValue)};
+    const onIDValueChange = (itemValue: string) => { setValue("regIDType", itemValue) };
     // Date value change function
-    const onDateChange = (itemValue: any) => {setValue("regBDay", itemValue)};
+    const onDateChange = (itemValue: string) => { setValue("regBDay", itemValue) };
     // Title value change function
-    const onTitleChange = (itemValue: any) => {setValue("regTitle", itemValue)};
-    // Title value change function
-    const onPhoneCodeChange = (itemValue: any) => {setValue("phoneCode", itemValue)};
+    const onTitleChange = (itemValue: string) => { setValue("regTitle", itemValue) };
+    // Phone value change function
+    const onPhoneCodeChange = (itemValue: string) => { setValue("phoneCode", itemValue) };
     // Multi Box     
     const [groupValues, setGroupValues] = React.useState([]);
     const [groupValues2, setGroupValues2] = React.useState([]);
     // SMS function
     const [getLoginSMS] = useGetLoginSMSMutation();
-    const onSMSPress = async()=>{
+    const [counter, setCounter] = useState(countTime);
+    const [sendCodeBtn, setSendCodeBtn] = useState({
+        isDisable: false,
+    })
+    const intervalId = useRef(0 as any)
+    const onSMSPress = async (inputData: any) => {
+        // Reset counter to 60s
+        setCounter(countTime)
+        // Activate 60s count down and Disable the button
+        setSendCodeBtn({
+            isDisable: true, 
+        });
+        let t = countTime
+        intervalId.current = setInterval(()=>{
+            t = t - 1
+            setCounter(t)
+            if (t < 0) {
+                clearInterval(intervalId.current)
+                setSendCodeBtn({
+                    isDisable: false, 
+                });
+            }
+        },1000)
+        // Fetching
         try {
             let phoneString = getValues('phoneCode') + getValues('regPhone')
-            const res: QueryReturnValue = await getLoginSMS({ 'phone': parseInt(phoneString) })
+            const res: QueryReturnValue = await getLoginSMS({ 'phone':  parseInt(phoneString) })
+            toast.show({
+                description: "已送出驗證碼"
+            })
         } catch (e) {
             console.log(e)
         }
     }
+    // const onSMSPress = async () => {
+    //     try {
+    //         let phoneString = getValues('phoneCode') + getValues('regPhone')
+    //         const res: QueryReturnValue = await getLoginSMS({ 'phone': parseInt(phoneString) })
+    //     } catch (e) {
+    //         console.log(e)
+    //     }
+    // }
     // Register
     const [postRegisterInfo] = usePostRegisterInfoMutation();
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: RegisterSubmitProp) => {
         let registerData = {
             "id_type": data.regIDType, "id_number": data.regIDNumber, "name": data.regName, "name_en": data.regName_en, "gender": data.regTitle, "birthday": data.regBDay,
-            "email": data.regEmail, "phone": data.phoneCode + data.regPhone, 'smsCode':data.regSMS
+            "email": data.regEmail, "phone": data.phoneCode + data.regPhone, 'smsCode': data.regSMS
         }
         const res: any = await postRegisterInfo(registerData)
         // check the login status
@@ -64,15 +99,15 @@ export const RegisterPage = (props: any) => {
                 toast.show({
                     description: "輸入的身份證明文件號碼已被使用！"
                 })
-            }else if(res['error']['status'] === 400){
+            } else if (res['error']['status'] === 400) {
                 toast.show({
                     description: "請檢查輸入的資料正確！"
                 })
             }
-        }else{
-        toast.show({ description: "成功注冊" })
-        store.dispatch(checkStatus({ status: true }))
-        props.navigation.navigate({ name: '注冊成功' })
+        } else {
+            toast.show({ description: "成功注冊" })
+            store.dispatch(checkStatus({ status: true }))
+            props.navigation.navigate({ name: '注冊成功' })
         }
     }
 
@@ -83,8 +118,8 @@ export const RegisterPage = (props: any) => {
                     <Text style={styles.subTitle}>稱謂<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (
-                            <BaseSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
-                                selectedValue={getValues('regTitle')} dateValue={''}
+                            <DropdownSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
+                                selectedValue={getValues('regTitle')}
                             />
                         )}
                         name="regTitle"
@@ -99,7 +134,6 @@ export const RegisterPage = (props: any) => {
                         )}
                         name="regName"
                     />
-                    {/* 必須填寫提示 */}
                     {errors.regName && <Text style={styles.warning}>* 此項必須填寫</Text>}
                     <Text style={styles.subTitle}>英文姓名<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <Controller control={control} rules={{ required: true, }}
@@ -108,14 +142,13 @@ export const RegisterPage = (props: any) => {
                         )}
                         name="regName_en"
                     />
-                    {/* 必須填寫提示 */}
                     {errors.regName_en && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
                     <Text style={styles.subTitle}>身份證明文件類別<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (
-                            <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
-                                selectedValue={getValues('regIDType')} dateValue={''}
+                            <DropdownSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
+                                selectedValue={getValues('regIDType')}
                             />
                         )}
                         name="regIDType"
@@ -128,7 +161,6 @@ export const RegisterPage = (props: any) => {
                         )}
                         name="regIDNumber"
                     />
-                    {/* 必須填寫提示 */}
                     {errors.regIDNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
                     <Text style={styles.subTitle}>生日日期<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
@@ -138,7 +170,6 @@ export const RegisterPage = (props: any) => {
                         )}
                         name="regBDay"
                     />
-                    {/* 必須填寫提示 */}
                     {errors.regBDay && <Text style={styles.warning}>* 此項必須填寫</Text>}
                     <Text style={styles.subTitle}>電郵地址<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <Controller control={control} rules={{ required: true, }}
@@ -147,15 +178,14 @@ export const RegisterPage = (props: any) => {
                         )}
                         name="regEmail"
                     />
-                    {/* 必須填寫提示 */}
                     {errors.regEmail && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
                     <Text style={styles.subTitle}>流動電話號碼<Text style={{ color: 'red', fontSize: 12, }}> *</Text></Text>
                     <View style={{ flexDirection: 'row', }}>
                         <Controller control={control} rules={{ required: true, }}
                             render={({ field: { value } }) => (
-                                <BaseSelectComponent placeholder={'電話區號 '} data={phoneCodeArr} onChange={onPhoneCodeChange} mode='other'
-                                    selectedValue={getValues('phoneCode')} dateValue={''}
+                                <DropdownSelectComponent placeholder={'電話區號 '} data={phoneCodeArr} onChange={onPhoneCodeChange} mode='other'
+                                    selectedValue={getValues('phoneCode')}
                                 />
                             )}
                             name="phoneCode"
@@ -168,20 +198,18 @@ export const RegisterPage = (props: any) => {
                         />
 
                     </View>
-                    {/* 必須填寫提示 */}
                     {errors.regPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
                     <Text style={styles.subTitle}>輸入驗證碼<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-
                         <Controller control={control} rules={{ required: true, }}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <TextInput keyboardType={'numeric'} style={[styles.input, { width: '74%', flex: 1 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請輸入短訊驗證碼" placeholderTextColor="#737474" />
                             )}
                             name="regSMS"
                         />
-                        <TouchableOpacity style={styles.btnPhone} onPress={onSMSPress}>
-                            <Text style={styles.btnPhoneText}>驗證碼</Text>
+                        <TouchableOpacity style={sendCodeBtn.isDisable?[styles.btnPhone,{backgroundColor:'grey'}]:styles.btnPhone} onPress={onSMSPress} disabled={sendCodeBtn.isDisable}>
+                            <Text style={styles.btnPhoneText}>驗證碼{sendCodeBtn.isDisable &&`(${counter})`}</Text>
                         </TouchableOpacity>
                     </View>
                     {errors.regSMS && <Text style={styles.warning}>* 此項必須填寫</Text>}
@@ -216,12 +244,9 @@ export const RegisterPage = (props: any) => {
                         name="regPolicyTwo"
                     />
                     {errors.regPolicyTwo && <Text style={styles.warning}>* 此項必須選擇</Text>}
-
-
                 </View>
                 <BottomLineComponent />
                 {/* Button to go back and next page */}
-
                 <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
                     onPress={handleSubmit(onSubmit)}
                 >
@@ -230,66 +255,3 @@ export const RegisterPage = (props: any) => {
         </SafeAreaView >
     )
 }
-
-
-const styles = StyleSheet.create({
-    pageMargin: {
-        padding: 15,
-    },
-    input: {
-        borderColor: '#737474',
-        padding: 10,
-        borderWidth: 0.7,
-        marginVertical: 8,
-    },
-    warning: {
-        fontSize: 12,
-        color: 'red',
-        marginLeft: 5,
-        marginBottom: 5,
-    },
-    subTitle: {
-        color: '#225D66',
-        fontSize: 17,
-        fontWeight: '600',
-        marginTop: 8,
-    },
-    infoText: {
-        color: '#C32D3A',
-        fontSize: 12,
-        fontWeight: '400',
-        marginTop: 5,
-        marginBottom: 15,
-    },
-    button: {
-        // width: '50%',
-        backgroundColor: '#6d7f99',
-        paddingVertical: 16,
-        marginHorizontal: 20,
-        marginBottom: 100,
-        borderRadius: 4,
-    },
-    buttonText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 16,
-    },
-    btnPhone: {
-        backgroundColor: 'red',
-        padding: 10,
-        marginVertical: 8,
-        marginLeft: 10,
-        borderRadius: 4,
-    },
-    btnPhoneText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 13,
-    },
-    policyText: {
-        fontSize: 12,
-        marginRight: 12,
-        color: '#2E2E2E',
-    },
-
-});
