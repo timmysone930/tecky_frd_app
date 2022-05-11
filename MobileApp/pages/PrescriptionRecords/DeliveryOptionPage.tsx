@@ -126,10 +126,6 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
     const [fetched, setFetched] = useState(false)
   
     useEffect(()=>{
-        // if (!fetched) {
-            // dataFetching()
-            // setFetched(true)
-        // }
         const unsubscribe = navigation.addListener('focus', () => {
             dataFetching()
             setFetched(true)
@@ -260,7 +256,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                     setAllFilled={setFormFilled}
                                     input={input}
                                     setInput={setInput}
-                                    />
+                                />
                             </View>
                         }
 

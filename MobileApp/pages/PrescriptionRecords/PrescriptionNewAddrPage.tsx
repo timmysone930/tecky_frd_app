@@ -18,7 +18,7 @@ export function PrescriptionNewAddrPage({navigation}:any) {
     const blankContent = {
         hkid:"",
         name:"",
-        phone:"",
+        phone:"852",
         area:"",
         district:"",
         address:"",

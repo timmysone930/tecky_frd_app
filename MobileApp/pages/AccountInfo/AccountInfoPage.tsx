@@ -13,11 +13,11 @@ import { View, Button, useToast, HStack, Spinner} from 'native-base';
 import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
 import Config from "react-native-config";
 
+import { districtSelection } from '../Address/HongKongDistrictSelect';
+
 
 export function AccountInfoPage({navigation}:any) {
     // Data fetching
-
-    // let fetchData:any;
     const [fetchData, setFetchData] = useState(null as any)
 
     async function infoFetching () {
@@ -30,12 +30,15 @@ export function AccountInfoPage({navigation}:any) {
     }
     
     const [fetched, setFetched] = useState(false)
+
     useEffect(()=>{
-        if (!fetched) {
-            infoFetching() 
+        const unsubscribe = navigation.addListener('focus', () => {
+            infoFetching()
             setFetched(true)
-        }
-    },[])
+        });
+
+        return () => {unsubscribe}
+    },[navigation])
 
     // Toast
     const toast = useToast()
@@ -107,7 +110,7 @@ export function AccountInfoPage({navigation}:any) {
                                     手提電話號碼: 
                                 </Text>
                                 <Text style={[styles.subTitle]}>
-                                    {fetchData.phone}
+                                    {fetchData.phone.slice(0,3)}&nbsp;{fetchData.phone.slice(3)}
                                 </Text>
                             </View>
                         </View>

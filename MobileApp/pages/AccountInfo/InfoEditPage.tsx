@@ -168,7 +168,7 @@ export function InfoEditPage({navigation}:any) {
 
         const resp = await putEditInfo(newInfo)
         
-        navigation.navigate("查看")
+        navigation.navigate("我的資料")
         toast.show({
             description: "成功儲存帳戶資料"
         })
@@ -224,25 +224,27 @@ export function InfoEditPage({navigation}:any) {
                                 {/* 手提電話號碼 */}
                                 <FormControl isInvalid={input.phone == ""} >
                                     <Text style={[{width: 130}, styles.contentText]}>手提電話號碼: </Text>
-                                    <Input 
-                                        value={input.areaCode}
-                                        isDisabled={true}
-                                        size="lg" 
-                                        keyboardType="numeric"
-                                        placeholder="區號" 
-                                        onChangeText={phoneInputHandler}
-                                    />
-                                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
-                                        此項必須填寫
-                                    </FormControl.ErrorMessage>
-                                    <Input
-                                        isDisabled={isDisable.phoneInput}
-                                        size="lg" 
-                                        keyboardType="numeric"
-                                        placeholder="手提電話號碼" 
-                                        value={input.phone} 
-                                        onChangeText={phoneInputHandler}
-                                    />
+                                    <View flexDirection={"row"}>
+                                        <Input 
+                                            flex={1}
+                                            value={input.areaCode}
+                                            isDisabled={true}
+                                            size="lg" 
+                                            keyboardType="numeric"
+                                            placeholder="區號" 
+                                            onChangeText={phoneInputHandler}
+                                        />
+                                        <Input
+                                            flex={4}
+                                            isDisabled={isDisable.phoneInput}
+                                            size="lg" 
+                                            keyboardType="numeric"
+                                            placeholder="手提電話號碼" 
+                                            value={input.phone} 
+                                            onChangeText={phoneInputHandler}
+                                        />
+                                    </View>
+
                                     <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={input.phone.length != 8}>
                                         此項必須為 8 位數字電話號碼
                                     </FormControl.ErrorMessage>

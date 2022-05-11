@@ -14,83 +14,12 @@ import { setAddressEditContent } from '../../redux/slice';
 // .env
 import Config from 'react-native-config';
 
-const FakeAddr = [
-    {
-        id: "123",
-        hkid: "A123456(7)",
-        name: "張中和",
-        phone: "12345678",
-        area: "新界",
-        district: "沙田區大圍",
-        addr: {
-            street: "XXX街", 
-            estate: "XXX屋苑", 
-            flat: "3", 
-            floor: "20", 
-            block: "A"
-        },
-        is_default: true,
-    },
-    {
-        id: "345",
-        hkid: "A123456(7)",
-        name: "張中和",
-        phone: "12345678",
-        area: "九龍",
-        district: "油尖旺區大南",
-        addr: {
-            street: "XXX街", 
-            estate: "XXX屋苑", 
-            flat: "5", 
-            floor: "10", 
-            block: "B"
-        },
-        is_default: false,
-    },
-    {
-        id: "752",
-        hkid: "A123456(7)",
-        name: "張中和",
-        phone: "12345678",
-        area: "九龍",
-        district: "油尖旺區大南",
-        addr: {
-            street: "XXX街", 
-            estate: "XXX屋苑", 
-            flat: "5", 
-            floor: "10", 
-            block: "B"
-        },
-        is_default: false,
-    },
-    {
-        id: "422",
-        hkid: "A123456(7)",
-        name: "張中和",
-        phone: "12345678",
-        area: "九龍",
-        district: "油尖旺區大南",
-        addr: {
-            street: "XXX街", 
-            estate: "XXX屋苑", 
-            flat: "5", 
-            floor: "10", 
-            block: "B"
-        },
-        is_default: false,
-    },
-]
-//INSERT INTO addr_books(hkid_hkid, name, phone, area, district, address, is_default) VALUES ('A12345DA','呂仁月','85255332211','新界','沙田區大圍','XXX街 XXX屋苑/nl/3座, 20樓, A室',0);
-
 const wait = (timeout:any) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-
 export function UserAddressPage({navigation}:any) {
 
-    
-    // const fetchData = FakeAddr
     const [fetchData, setFetchData] = useState(null as any)
     const [defaultAddressID, setDefaultAddressID] = useState(null as any);
     
@@ -113,11 +42,15 @@ export function UserAddressPage({navigation}:any) {
     const [fetched, setFetched] = useState(false)
 
     useEffect(()=>{
-        if (!fetched) {
-            infoFetching() 
-            setFetched(true)
-        }
-    },[])
+        const unsubscribe = navigation.addListener('focus', () => {
+            if (!fetched) {
+                infoFetching() 
+                setFetched(true)
+            }
+        });
+
+        return () => {unsubscribe}
+    },[navigation])
 
     // Each Button Handler
 
@@ -127,10 +60,6 @@ export function UserAddressPage({navigation}:any) {
         setFetched(false)
         navigation.navigate("編輯地址")
     }
-
-
-
-    
 
     // Confirm Delete AlertDialog
     const [isOpen, setIsOpen] = useState(false);
@@ -319,9 +248,6 @@ export function UserAddressPage({navigation}:any) {
                         </HStack>
                     }
 
-                    {/* {fetchData == "" &&
-                        <Text style={{textAlign:'center', fontSize:17, margin:20}}>沒有地址記錄</Text>
-                    } */}
                 </ScrollView>
 
 

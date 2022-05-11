@@ -1,24 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
-import { areas, districtsOfHK, districtsOfKLN, districtsOfNT} from '../../pages/Address/HongKongDistrictData';
-import { TextInput } from 'react-native-paper';
 import { styles } from '../../styles/GeneralStyles';
 
 //Native-Base
 import { Input, Select, FormControl, CheckIcon, Box, WarningOutlineIcon, View } from 'native-base';
 
 // Data of Hong Kong District
-const HKdata = require("../../pages/Address/HKGS_Dataset_2019-District.json")
-
-export const HKDistricts = HKdata.features.map((item:any)=>{
-    return {
-        DISTRICT_T: item.properties.DISTRICT_T,
-        DISTRICT_E: item.properties.DISTRICT_E,
-        CNAME: item.properties.CNAME,
-        ENAME: item.properties.ENAME
-    }
-})
+import { districtSelection } from '../../pages/Address/HongKongDistrictSelect';
 
 // Type of props
 export interface Addr {
@@ -42,11 +30,10 @@ interface Props {
     input: any,
     setInput: any
 }
+const areaForMap: any = {"香港":"HK", "新界":"NT", "九龍":"KLN"}
 
 // Component
 export const AddressForm = (props: Props) => {
-    const areaSelection = areas
-    const areaForMap = [["香港", districtsOfHK], ["新界", districtsOfNT], ["九龍", districtsOfKLN]]
 
     // Handle Address
     const [addr, setAddr] = useState({
@@ -92,10 +79,11 @@ export const AddressForm = (props: Props) => {
                     <Input
                         flex={1}
                         size="m"
-                        placeholder="區號" 
+                        placeholder="區號 (例如: 852)" 
                         value={props.phone.slice(0, 3)}
                         keyboardType="numeric"
                         isInvalid={!(parseInt(props.phone) != NaN && props.phone.slice(0, 3).length > 0)}
+                        isDisabled={true}
                         onChangeText={text => props.setInput({...props.input, phone: text + props.phone.slice(3)})}
                     />
                     <Input 
@@ -114,12 +102,6 @@ export const AddressForm = (props: Props) => {
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.phone.slice(3).length == 0}>
                     此項必須填寫
                 </FormControl.ErrorMessage>
-                
-
-                {/* <TextInput editable={props.enabled} label={"聯絡人"} value={props.name} onChangeText={text => props.setInput({...props.input, name: text})}/>
-                <TextInput editable={props.enabled} label={"聯絡電話"} value={props.phone} onChangeText={text => props.setInput({...props.input, phone: text})}/> */}
-
-            
             
                 <Text style={[styles.subTitle, styles.mb_10, styles.mt_10]}>
                     收貨地址
@@ -148,8 +130,8 @@ export const AddressForm = (props: Props) => {
                         }}
                     >
 
-                        {areaSelection.map((item: any) => (
-                            <Select.Item label={item.chi} value={item.chi} key={item.eng}/>
+                        {Object.keys(areaForMap).map((item: any) => (
+                            <Select.Item label={item} value={item} key={areaForMap[item]}/>
                             ))}
 
                     </Select>
@@ -160,39 +142,7 @@ export const AddressForm = (props: Props) => {
 
                 <FormControl.Label>地區</FormControl.Label>
 
-                {/* {areaForMap.map((a: any) => 
-                    {props.input.area === a[0] && 
-                        <Select 
-                            accessibilityLabel="請選擇地區" 
-                            placeholder="請選擇地區" 
-                            borderColor="#737474"
-                            minWidth="200" 
-                            fontSize="sm"
-                            mb='1'
-                            _selectedItem={{
-                                bg: "teal.600",
-                                endIcon: <CheckIcon size={5} />
-                            }}
-                            selectedValue={props.input.district}
-                            onValueChange={(itemValue) => {
-                                props.setInput({
-                                    ...props.input,
-                                    district: itemValue
-                                })
-                            }}
-                        >
-
-                                {a[1].map((item: any) => (
-                                    HKDistricts.filter((i:any)=> i.DISTRICT_T == item.chi).map((x:any)=>
-                                        <Select.Item label={x.DISTRICT_T+" - "+x.CNAME} value={x.DISTRICT_T+x.CNAME} key={x.CNAME}/>
-                                    )
-                                ))}
-
-                        </Select>
-                    }
-                )} */}
                 <FormControl isInvalid={props.district == ""}>
-                {props.area === "香港" && 
                     <Select 
                         accessibilityLabel="請選擇地區" 
                         placeholder="請選擇地區" 
@@ -212,72 +162,13 @@ export const AddressForm = (props: Props) => {
                             })
                         }}
                     >
-
-                            {districtsOfHK.map((item: any) => (
-                                HKDistricts.filter((i:any)=> i.DISTRICT_T == item.chi).map((x:any)=>
-                                    <Select.Item label={x.DISTRICT_T+" - "+x.CNAME} value={x.DISTRICT_T+x.CNAME} key={x.CNAME}/>
-                                )
-                            ))}
-
+                        {districtSelection[areaForMap[props.area]] &&
+                            districtSelection[areaForMap[props.area]].map((item:any) => 
+                                <Select.Item label={item.chi} value={item.chi} key={item.eng}/>
+                            )
+                        }
                     </Select>
-                }
-                {props.area === "新界" && 
-                <Select 
-                    accessibilityLabel="請選擇地區" 
-                    placeholder="請選擇地區" 
-                    borderColor="#737474"
-                    minWidth="200" 
-                    fontSize="sm"
-                    mb='1'
-                    _selectedItem={{
-                        bg: "teal.600",
-                        endIcon: <CheckIcon size={5} />
-                    }}
-                    selectedValue={props.district}
-                    onValueChange={(itemValue) => {
-                        props.setInput({
-                            ...props.input,
-                            district: itemValue
-                        })
-                    }}
-                >
-
-                        {districtsOfNT.map((item: any) => (
-                            HKDistricts.filter((i:any)=> i.DISTRICT_T == item.chi).map((x:any)=>
-                                <Select.Item label={x.DISTRICT_T+" - "+x.CNAME} value={x.DISTRICT_T+x.CNAME} key={x.CNAME}/>
-                            )
-                        ))}
-                        
-                </Select>}
-
-                {props.area == "九龍" && 
-                <Select 
-                    accessibilityLabel="請選擇地區" 
-                    placeholder="請選擇地區" 
-                    borderColor="#737474"
-                    minWidth="200" 
-                    fontSize="sm"
-                    mb='1'
-                    _selectedItem={{
-                        bg: "teal.600",
-                        endIcon: <CheckIcon size={5} />
-                    }}
-                    selectedValue={props.district}
-                    onValueChange={(itemValue) => {
-                        props.setInput({
-                            ...props.input,
-                            district: itemValue
-                        })
-                    }}
-                >
-
-                        {districtsOfKLN.map((item: any) => (
-                            HKDistricts.filter((i:any)=> i.DISTRICT_T == item.chi).map((x:any)=>
-                                <Select.Item label={x.DISTRICT_T+" - "+x.CNAME} value={x.DISTRICT_T+x.CNAME} key={x.CNAME}/>
-                            )
-                        ))}
-                        
-                </Select>}
+                
                 </FormControl>
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.district == ""}>
                     此項必須選擇

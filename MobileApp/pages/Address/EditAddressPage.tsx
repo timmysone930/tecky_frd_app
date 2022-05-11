@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { SafeAreaView, ScrollView } from 'react-native';
+import React, { useRef, useState} from 'react';
+import { SafeAreaView, ScrollView, Text } from 'react-native';
 import { AddressForm } from '../../components/address/AddressForm';
 import { styles } from '../../styles/GeneralStyles';
 
@@ -7,7 +7,7 @@ import { styles } from '../../styles/GeneralStyles';
 import { useSelector } from 'react-redux';
 
 // Native-base
-import { View, Button, useToast } from 'native-base';
+import { View, Button, useToast, Checkbox, Radio, HStack, Switch } from 'native-base';
 
 // .env
 import Config from 'react-native-config';
@@ -17,9 +17,9 @@ export function EditAddressPage({navigation}:any) {
 
     const addressContent = useSelector((state:any) => state.getAddressData).addressEditContent
     const blankContent = {
-        // hkid:"",
+        hkid:"",
         name:"",
-        phone:"",
+        phone:"852",
         area:"",
         district:"",
         address:"",
@@ -30,6 +30,12 @@ export function EditAddressPage({navigation}:any) {
     const [formFilled, setFormFilled] = useState(false)
 
     const [input, setInput] = (addressContent == null)? useState(blankContent) : useState(addressContent)
+
+    const defaultAddress = useRef(null as any)
+
+    
+
+    const toggleSwitch = (value:boolean) => {setInput({...input, is_default: value})}; 
     
     // Toast: Save Successful
     const toast = useToast();
@@ -39,11 +45,36 @@ export function EditAddressPage({navigation}:any) {
             return
         }
 
-        let resp: any;
+        // Fetch the existing default address
+        const defaultAddrResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`)
+        const defaultAddrResult = await defaultAddrResp.json()
+        if (defaultAddrResult.address != null) {
+            // If there is a default address, then the defaultAddress.current will be assigned an object of the address info
+            // Otherwise, it would be null
+            defaultAddress.current = defaultAddrResult
+        }
+
+        let toDefaultResp: any;
+        let offSetOriginResp: any;
+
+        // Set the original default address's "is_default" to false (if the input's "is_default" want to set default)
+        if (input.is_default == true && defaultAddress.current != null) {
+            offSetOriginResp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: "POST",
+                body: JSON.stringify({id: defaultAddress.current.id, is_default: 0})
+            })
+        }
+        // Deal with (Add new address / Edit existing address)
         if (addressContent == null) {
+            // if (blankContent.is_default != input.is_default) {
+                
+            // }
             const hkIdResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`)
             const hkId = (await hkIdResp.json()).id_number
-            resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/new-addr-book`, {
+            toDefaultResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/new-addr-book`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -52,7 +83,7 @@ export function EditAddressPage({navigation}:any) {
             })
 
         } else {
-            resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
+            toDefaultResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -64,7 +95,7 @@ export function EditAddressPage({navigation}:any) {
         navigation.navigate("我的地址")
 
         toast.show({
-            description: resp.status == 201 ? "儲存成功" : "系統錯誤，儲存失敗"
+            description: toDefaultResp.status == 201 ? "儲存成功" : "系統錯誤，儲存失敗"
         })
     }
     return (
@@ -85,6 +116,13 @@ export function EditAddressPage({navigation}:any) {
                         setInput={setInput}
                     />
                 </View>
+
+                <HStack justifyContent={"center"} alignItems="center" space={4} marginBottom={8}>
+                    <Switch size="md" onValueChange={toggleSwitch} isChecked={input.is_default}/>
+                    <Text style={[styles.subTitle]}>
+                        設為預設送藥地址
+                    </Text>
+                </HStack>
 
                 <Button 
                     alignSelf={'center'} 
