@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { DrListCard } from '../../components/doctor/DrListCard';
+import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { useSelector } from 'react-redux';
 import { useGetReservedSessionByIdQuery, useGetRosterByIdQuery } from '../../API/DoctorAPI';
-import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
+import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
 
 export const ConfirmResPage: React.FC = (props: any) => {
     // white background
@@ -29,7 +29,7 @@ export const ConfirmResPage: React.FC = (props: any) => {
                     <>
                         <Text style={[styles.rowCellText, { paddingHorizontal: 15, paddingTop: 15, }]}>醫生資料</Text>
                         <View style={styles.drListCard}>
-                            <DrListCard props={docInfo.docData} />
+                            <DocListComponent props={docInfo.docData} />
                         </View>
                         {rowTitleArr.map((item, idx) => (
                             <View style={[backgroundStyle, { flexDirection: 'row', marginBottom: 1, marginHorizontal: 15, }]} key={`confirm_row_${idx}`}>

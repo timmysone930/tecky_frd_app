@@ -2,11 +2,11 @@ import React from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { RadioButton } from 'react-native-paper';
-import { BottomLineComponent } from '../../components/SearchComponent';
 import { DatePickerComponent } from '../../components/PickerComponent';
 import { store } from '../../redux/store';
 import { setHealthFormInfo, setHealthFormMultiBox } from '../../redux/slice';
 import { BaseCheckBoxComponent } from '../../components/NativeBase/BaseCheckBoxComponent';
+import { BottomLineComponent } from '../../components/utils/BottomLineComponent';
 
 export const HealthDeForm: React.FC = (props: any) => {
     // white background

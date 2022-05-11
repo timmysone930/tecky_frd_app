@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useGetReservedSessionByIdQuery } from '../../API/DoctorAPI';
-import { BottomLineComponent } from '../../components/SearchComponent';
+import { BottomLineComponent } from '../../components/utils/BottomLineComponent';
 import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { store } from '../../redux/store';
 

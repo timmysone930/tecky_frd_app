@@ -1,4 +1,4 @@
-import { Heading, Spinner } from 'native-base'
+import {Spinner } from 'native-base'
 import React from 'react'
 
 export const SpinnerComponent = () => {

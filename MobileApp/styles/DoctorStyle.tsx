@@ -38,6 +38,14 @@ export const styles = StyleSheet.create({
     red: {
         backgroundColor: '#CC7373'
     },
+    infoBox: {
+        justifyContent: 'center',
+        backgroundColor: '#F3F3F3',
+        height: 'auto',
+        borderRadius: 4,
+        marginBottom: 20,
+        marginRight: 10,
+    },
     gender: {
         color: 'white',
         textAlign: 'center',
@@ -51,5 +59,48 @@ export const styles = StyleSheet.create({
         fontSize: 12,
         marginRight: 80,
         marginLeft: 6,
+    },
+    // infoCardComponent
+    docInfoCard:{
+        backgroundColor:'white', 
+        marginTop:6,
+        marginBottom:6,
+        padding:15,
+        shadowColor: '#E4E4E4',
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.5,
+        shadowRadius: 10,
+    },
+    docInfoTitle: {
+        fontSize: 16,
+        fontWeight: '600',
+        marginHorizontal: 8,
+        marginVertical: 8,
+        paddingHorizontal: 15,
+        marginTop: 20,
+        color: '#292929',
+    },
+    docInfoText: {
+        color: '#3B5C7D',
+        fontWeight: '500',
+        fontSize: 15,
+    },
+    listView: {
+        flexDirection: 'row',
+        marginHorizontal: 8,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+    },
+    listCircle: {
+        marginRight: 10,
+        justifyContent: 'center',
+        marginTop: 4,
+    },
+    // margin/ position/ padding
+    ml_20: {
+        marginLeft: 20,
+    },
+    t_center:{
+        textAlign:'center'
     }
 });

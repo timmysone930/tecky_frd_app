@@ -6,7 +6,7 @@ import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInpu
 import { useGetLoginSMSMutation, usePostRegisterInfoMutation } from '../../API/AuthAPI';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
 import { DatePickerComponent } from '../../components/PickerComponent';
-import { BottomLineComponent } from '../../components/SearchComponent';
+import { BottomLineComponent } from '../../components/utils/BottomLineComponent';
 import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 

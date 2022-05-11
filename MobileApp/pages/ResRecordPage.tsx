@@ -1,7 +1,7 @@
 import React from 'react'
 import {SafeAreaView, Text } from 'react-native';
 import { useGetReservationListQuery } from '../API/PatientAPI';
-import { SpinnerComponent } from '../components/NativeBase/SpinnerComponent';
+import { SpinnerComponent } from '../components/utils/SpinnerComponent';
 import { ResRecordComponent } from '../components/reservationRecord/ResRecordComponent';
 
 const wait = (timeout: number) => {

@@ -2,7 +2,7 @@ import React from 'react'
 import { View, SafeAreaView, ScrollView, } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
-import { DrListCard } from '../../components/doctor/DrListCard';
+import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { InfoCardComponent } from '../../components/doctor/InfoCardComponent';
 import { setDoctorData, setDoctorID } from '../../redux/slice';
 import { store } from '../../redux/store';
@@ -21,7 +21,7 @@ export const DocDetailPage: React.FC = (props: any) => {
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
                 <>
                     <View style={styles.docDetailCard}>
-                        <DrListCard props={docData} />
+                        <DocListComponent props={docData} />
                     </View>
                     <InfoCardComponent title={'醫療服務包括'} array={docData.spec_name ? docData.spec_name : []} />
                     <InfoCardComponent title={'專業資格'} array={doctorDes} />

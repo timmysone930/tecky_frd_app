@@ -1,8 +1,8 @@
 import React from 'react'
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import { useGetOneDoctorQuery } from '../../API/DoctorAPI';
-import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
-import { BottomLineComponent } from '../../components/SearchComponent';
+import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
+import { BottomLineComponent } from '../../components/utils/BottomLineComponent';
 import { styles } from '../../styles/GeneralStyles';
 
 const rowTitleArr = ['預約編號：', '預約醫生：', '預約日期：', '預約時間：']

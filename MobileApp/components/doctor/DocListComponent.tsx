@@ -1,10 +1,9 @@
 import React from 'react'
-import { StyleSheet,Text,View,Image,} from 'react-native';
-// import icon for location pin
+import { StyleSheet, Text, View, Image, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Config from "react-native-config";
-
-export const DrListCard = ({ props }: any) => {
+import { styles } from '../../styles/DoctorStyle';
+export const DocListComponent = ({ props }: any) => {
     return (
         <>
             <View >
@@ -12,7 +11,7 @@ export const DrListCard = ({ props }: any) => {
                 } /> :
                     <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{ uri: `${Config.REACT_APP_API_SERVER}/profilePic/${props.img}`, }} />}
             </View>
-            <View style={styles.drInfo}>
+            <View style={styles.ml_20}>
                 <Text style={styles.title}>{props.name}{props.name_en}</Text>
 
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
@@ -20,14 +19,14 @@ export const DrListCard = ({ props }: any) => {
                         <Text style={styles.gender}>{props.gender === 'Male' ? '男' : '女'}</Text>
                     </View>
 
-                    {props.spec_name.map((item: string,idx:number) => (
+                    {props.spec_name.map((item: string, idx: number) => (
                         <View style={styles.infoBox} key={`docSpec_${idx}`}>
                             <Text style={[styles.gender, { color: 'grey' }]}>{item}</Text>
                         </View>
                     ))}
                 </View>
                 {
-                    props.clinic.map((item:{address:string, clinic_name:string}, idx:number) => (
+                    props.clinic.map((item: { address: string, clinic_name: string }, idx: number) => (
                         <View style={{ flexDirection: 'row', }} key={`docClinic_${idx}`}>
                             <Icon name="map-marker" size={20} color="#325C80" />
                             <Text style={styles.address}>{item.address}</Text>
@@ -39,43 +38,3 @@ export const DrListCard = ({ props }: any) => {
         </>
     )
 }
-
-
-const styles = StyleSheet.create({
-    drInfo: {
-        marginLeft: 20,
-    },
-    title: {
-        fontSize: 16,
-        color: '#545454',
-        marginBottom: 8,
-    },
-    infoBox: {
-        justifyContent: 'center',
-        backgroundColor: '#F3F3F3',
-        height: 'auto',
-        borderRadius: 4,
-        marginBottom: 20,
-        marginRight: 10,
-    },
-    blue: {
-        backgroundColor: '#5990BE',
-    },
-    red: {
-        backgroundColor: '#CC7373'
-    },
-    gender: {
-        color: 'white',
-        textAlign: 'center',
-        fontWeight: '700',
-        fontSize: 11,
-        paddingVertical: 4,
-        paddingHorizontal: 10,
-    },
-    address: {
-        color: '#545454',
-        fontSize: 12,
-        marginRight: 80,
-        marginLeft: 6,
-    }
-});

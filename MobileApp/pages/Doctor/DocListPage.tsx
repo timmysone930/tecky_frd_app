@@ -1,9 +1,9 @@
 import React from 'react'
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
 import { useGetDoctorListQuery } from '../../API/DoctorAPI';
-import { DrListCard } from '../../components/doctor/DrListCard';
-import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
-import { SearchComponent } from '../../components/SearchComponent';
+import { DocListComponent } from '../../components/doctor/DocListComponent';
+import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
+import { SearchComponent } from '../../components/utils/SearchComponent';
 import {styles} from '../../styles/DoctorStyle';
 
 interface dataType{
@@ -60,7 +60,7 @@ export const DocListPage: React.FC = (prop: any) => {
                 },
             })
         }}>
-            <DrListCard props={props.item} />
+            <DocListComponent props={props.item} />
         </TouchableOpacity>
     );
 
@@ -69,7 +69,7 @@ export const DocListPage: React.FC = (prop: any) => {
             <SearchComponent placeholder={"搜索醫生以及科目"} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <View style={[backgroundStyle, { flex: 1 }]}>
                 {isLoading && <SpinnerComponent />}
-                {isError && <Text style={styles.title}>Somethings gone wrong...</Text>}
+                {isError && <Text style={[styles.title,,styles.t_center]}>載入出現錯誤...</Text>}
                 {isSuccess &&
                     <FlatList
                         data={data}

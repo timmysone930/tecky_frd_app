@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
-import { DrListCard } from '../../components/doctor/DrListCard';
+import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { useForm, Controller } from "react-hook-form";
 import { store } from '../../redux/store';
 import { setFormData, setMemberCode } from '../../redux/slice';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
 import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
-import { SpinnerComponent } from '../../components/NativeBase/SpinnerComponent';
+import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
 import { ResDateComponent } from '../../components/doctor/ResDateComponent';
 import Config from "react-native-config";
 import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
@@ -98,7 +98,7 @@ export const ReservationPage = (props: any) => {
         <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
           {/* Doctor Info */}
           <View style={styles.drListCard}>
-            <DrListCard props={docData} />
+            <DocListComponent props={docData} />
           </View>
           {rosterData.isLoading && userData.isLoading && <SpinnerComponent />}
           {rosterData.isSuccess && userData.isSuccess &&
