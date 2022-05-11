@@ -3,7 +3,7 @@ import { CheckIcon, Select } from 'native-base'
 import { useGetRosterSessionQuery } from '../../API/DoctorAPI';
 
 interface Props {
-    onChange: (value:String) => void,
+    onChange: (value:string) => void,
     placeholder: string,
     timeValue: string,
 }
@@ -15,7 +15,6 @@ interface dataMapType {
     "start_at": string,
     "status": string
 }
-
 export const ResSessionComponent = (props: Props) => {
     let selectFunction;
     let sessionID = props.timeValue

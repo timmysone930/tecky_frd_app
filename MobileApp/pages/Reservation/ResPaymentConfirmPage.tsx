@@ -1,19 +1,14 @@
 import React from 'react'
-import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Dimensions, } from 'react-native';
-// import icon
+import { View, Text, SafeAreaView, TouchableOpacity, Dimensions, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useSelector } from 'react-redux';
-
+import {styles} from '../../styles/DoctorStyle'
 const windowHeight = Dimensions.get('window').height;
+// white background
+const backgroundStyle = { backgroundColor: 'white',};
 
-export const ConfirmPaymentPage = (props: any) => {
-    // white background
-    const backgroundStyle = {
-        backgroundColor: 'white',
-    };
-
+export const ResPaymentConfirmPage = (props: any) => {
     const rosterStatus = useSelector((state: any) => state.getPaymentStatus);
-
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
@@ -74,44 +69,7 @@ export const ConfirmPaymentPage = (props: any) => {
                         </View>
                     </>
                 }
-
-
-
             </View>
         </SafeAreaView>
     )
 }
-
-
-const styles = StyleSheet.create({
-    subTitle: {
-        color: '#225D66',
-        fontSize: 26,
-        fontWeight: '900',
-        marginTop: 10,
-        marginBottom: 15,
-        textAlign: 'center',
-    },
-    contentText: {
-        color: '#3B3B3B',
-        marginVertical: 10,
-        fontSize: 20,
-        fontWeight: '500',
-        marginTop: 8,
-        marginBottom: 15,
-        textAlign: 'center',
-    },
-    button: {
-        backgroundColor: '#6d7f99',
-        paddingVertical: 16,
-        marginHorizontal: 40,
-        marginTop: 20,
-        borderRadius: 4,
-    },
-    buttonText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 16,
-    },
-
-});

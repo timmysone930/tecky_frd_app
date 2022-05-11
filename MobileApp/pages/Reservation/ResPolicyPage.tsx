@@ -5,26 +5,23 @@ import { useGetReservedSessionByIdQuery } from '../../API/DoctorAPI';
 import { BottomLineComponent } from '../../components/utils/BottomLineComponent';
 import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { store } from '../../redux/store';
+import {styles} from '../../styles/GeneralStyles'
+// white background
+const backgroundStyle = { backgroundColor: 'white',};
 
-
-export const PolicyPage: React.FC = (props: any) => {
-    // white background
-    const backgroundStyle = {
-        backgroundColor: 'white',
-    };
+export const ResPolicyPage: React.FC = (props: any) => {
     // get form data
-    const formData = useSelector((state: any) => state.getFormData);
+    const formData = useSelector((state:any) => state.getFormData);
     // roster session
     const rosterSession = useGetReservedSessionByIdQuery(formData.reservedSession);
-    console.log(rosterSession)
     // check Roster Status
     const onPress = async () => {
-        if (rosterSession.isSuccess){
-            if(rosterSession.currentData === []){
+        if (rosterSession.isSuccess) {
+            if (rosterSession.currentData === []) {
                 store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
                 props.navigation.navigate({ name: '預約確認' })
-            }else{
-                props.navigation.navigate({ name: '確認預約資料'})
+            } else {
+                props.navigation.navigate({ name: '確認預約資料' })
             }
         }
     }
@@ -33,8 +30,8 @@ export const PolicyPage: React.FC = (props: any) => {
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', padding: 15, paddingTop: 25, marginBottom: 2, }}>
                 <View style={[backgroundStyle, { flex: 1, marginBottom: 15 }]}>
-                    <Text style={styles.subTitle}>服務條款</Text>
-                    <Text style={styles.contentText}>
+                    <Text style={[styles.subTitle,styles.mt_10]}>服務條款</Text>
+                    <Text style={styles.greyPolicyText}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet est ipsum. Nullam sagittis eu elit nec porta. Nulla sollicitudin magna non purus auctor
                         malesuada.
                         Duis scelerisque, turpis non tincidunt hendrerit, orci velit eleifend purus, ut laoreet massa augue vitae sapien. Proin tellus metus, varius et velit sed, ornare
@@ -47,8 +44,8 @@ export const PolicyPage: React.FC = (props: any) => {
                         eleifend bibendum.
                     </Text>
                     <BottomLineComponent />
-                    <Text style={styles.subTitle}>免責聲明</Text>
-                    <Text style={styles.contentText}>
+                    <Text style={[styles.subTitle,styles.mt_10]}>免責聲明</Text>
+                    <Text style={styles.greyPolicyText}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet est ipsum. Nullam sagittis eu elit nec porta. Nulla sollicitudin magna non purus auctor
                         malesuada.
                         Duis scelerisque, turpis non tincidunt hendrerit, orci velit eleifend purus, ut laoreet massa augue vitae sapien. Proin tellus metus, varius et velit sed, ornare
@@ -60,9 +57,7 @@ export const PolicyPage: React.FC = (props: any) => {
                         Nam rhoncus velit vel justo varius luctus. Morbi sit amet volutpat diam, et mattis elit. Pellentesque rutrum leo quis placerat cursus. Sed lacinia
                         eleifend bibendum.
                     </Text>
-
                     <BottomLineComponent />
-
                 </View>
             </ScrollView>
             {/* Button to go back and next page */}
@@ -76,26 +71,3 @@ export const PolicyPage: React.FC = (props: any) => {
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({
-    subTitle: {
-        color: '#225D66',
-        fontSize: 17,
-        fontWeight: '600',
-        marginTop: 8,
-    },
-    button: {
-        width: '50%',
-        backgroundColor: '#6d7f99',
-        paddingVertical: 16,
-    },
-    buttonText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 16,
-    },
-    contentText: {
-        color: '#848A8A',
-        marginVertical: 10,
-    }
-});

@@ -4,20 +4,19 @@ import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { useForm, Controller } from "react-hook-form";
 import { store } from '../../redux/store';
 import { setFormData, setMemberCode } from '../../redux/slice';
-import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
+import { DropdownSelectComponent } from '../../components/utils/DropdownSelectComponent';
 import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
 import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
-import { ResDateComponent } from '../../components/doctor/ResDateComponent';
-import Config from "react-native-config";
+import { ResDateComponent } from '../../components/reservation/ResDateComponent';
+import { ResSessionComponent } from '../../components/reservation/ResSessionComponent';
 import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
-import { ResSessionComponent } from '../../components/doctor/ResSessionComponent';
-
+import Config from "react-native-config";
+import { ReservationSubmitType1, ReservationSubmitType2, ReservationType } from './ResType';
+import { styles } from '../../styles/GeneralStyles'
 // fetch to check patient status
-const checkPatient = async (id: any) => {
+const checkPatient = async (id: string) => {
   try {
-    const response = await fetch(
-      `${Config.REACT_APP_API_SERVER}/patient/search?column=hkid&where=${id}`
-    );
+    const response = await fetch(`${Config.REACT_APP_API_SERVER}/patient/search?column=hkid&where=${id}`);
     const json = await response.json();
     if (json.message && json.message === 'Not Found') {
       return { message: 'Not Found' }
@@ -28,6 +27,10 @@ const checkPatient = async (id: any) => {
     console.error(error);
   }
 };
+// 稱謂
+const titleArr = ['先生', '小姐', '女士']
+// 身份證明文件
+const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
 
 export const ReservationPage = (props: any) => {
   // get current users profile
@@ -38,65 +41,56 @@ export const ReservationPage = (props: any) => {
   const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
     defaultValues: { name: '', reservedDate: '', reservedTime: '', reservedSession: '', idType: '香港身份證', idNumber: '', title: '' }
   });
-  // 稱謂
-  const titleArr = ['先生', '小姐', '女士']
   // Title value change function
-  const onTitleChange = (itemValue: any) => { setValue("title", itemValue) };
+  const onTitleChange = (itemValue: string) => { setValue("title", itemValue) };
   // Roster ID Selector
   const [selectedRoster, setSelectedRoster] = useState('');
   // Date value change function
-  const onValueChange = (itemValue: any) => {
+  const onValueChange = (itemValue: string) => {
     setSelectedRoster(itemValue);
     setValue("reservedDate", itemValue)
     setValue("reservedTime", '')
-    // setValue("reservedSession", '')
   };
   // Time value change function
-  const onTimeValueChange = (itemValue: any) => {
+  const onTimeValueChange = (itemValue: string) => {
     setSelectedRoster(itemValue);
     setValue("reservedTime", itemValue)
   };
   // Session value change
-  const onSessionChange = (itemValue: any) => {
-    setValue("reservedSession", itemValue)
-  };
-
-  // 身份證明文件
-  const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
+  const onSessionChange = (itemValue: string) => { setValue("reservedSession", itemValue) };
   // id value change function
-  const onIDValueChange = (itemValue: any, itemIndex: any) => {
-    setValue("idType", itemValue)
-  };
-
+  const onIDValueChange = (itemValue: string) => { setValue("idType", itemValue) };
   const rosterData = useGetRosterListByDocCodeQuery(id)
   // Form data submit and navigate
-  const onSubmit = async (data: any) => {
-    let patientStatus: any = await checkPatient(data.idNumber)
-    if (patientStatus.message === 'Not Found') {
+  const onSubmit = async (data: ReservationType) => {
+    let patientStatus: ReservationSubmitType1 | ReservationSubmitType2 | undefined = await checkPatient(data.idNumber)
+    if (patientStatus?.message === 'Not Found') {
       props.navigation.navigate({ name: '上傳身份證明文件' })
       store.dispatch(setFormData(data))
-    } else if (patientStatus.message === 'Found') {
+    } else if (patientStatus?.message === 'Found') {
       props.navigation.navigate({ name: '健康申報表' })
       store.dispatch(setFormData(data))
-      store.dispatch(setMemberCode({ memberCode: patientStatus.memberCode }))
+      store.dispatch(setMemberCode({ memberCode: patientStatus?.memberCode }))
     }
   }
   // auto input login users info once
   useEffect(() => {
-    if (userData.isSuccess) {
-      setValue('name', userData.data.name)
-      setValue('idNumber', userData.data.id_number)
+    const updateUserInfo = async()=>{
+      if (userData.isSuccess) {
+        await setValue('name', userData.data.name)
+        await setValue('idNumber', userData.data.id_number)
+        setSelectedRoster('Updated');
+      }
     }
-  }, []);
+    updateUserInfo();
+  }, [userData.isSuccess]);
 
   return (
     <SafeAreaView style={{ backgroundColor: 'white', flex: 1 }}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}
       >
         <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
-          {/* Doctor Info */}
           <View style={styles.drListCard}>
             <DocListComponent props={docData} />
           </View>
@@ -127,16 +121,6 @@ export const ReservationPage = (props: any) => {
               {errors.reservedTime && <Text style={styles.warning}>* 此項必須選擇</Text>}
 
               <Text style={styles.subTitle}>應診時間</Text>
-              {/* <Controller control={control} rules={{ required: true, }}
-                render={({ field: { value } }) => (
-                  // <ResSessionComponent data={rosterData.currentData} placeholder={'請選擇應診時間'} onChange={onSessionChange} />
-                  <ResDateComponent onChange={onSessionChange} data={rosterData.currentData} mode='session' placeholder={'請選擇應診時間'}
-                    dateValue={getValues('reservedDate')} timeValue={getValues('reservedTime')}
-                  />
-
-                )}
-                name="reservedSession"
-              /> */}
               <Controller control={control} rules={{ required: true, }}
                 render={({ field: { value } }) => (
                   <ResSessionComponent onChange={onSessionChange} placeholder={'請選擇應診時間'} timeValue={getValues('reservedTime')}
@@ -154,8 +138,8 @@ export const ReservationPage = (props: any) => {
               <Text style={styles.subTitle}>稱謂</Text>
               <Controller control={control} rules={{ required: true, }}
                 render={({ field: { value } }) => (
-                  <BaseSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
-                    selectedValue={getValues('title')} dateValue={''}
+                  <DropdownSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
+                    selectedValue={getValues('title')} 
                   />
                 )}
                 name="title"
@@ -170,13 +154,12 @@ export const ReservationPage = (props: any) => {
                 )}
                 name="name"
               />
-              {/* 必須填寫提示 */}
               {errors.name && <Text style={styles.warning}>* 此項必須填寫</Text>}
               <Text style={styles.subTitle}>身份證明文件</Text>
               <Controller control={control}
                 render={({ field: { value } }) => (
-                  <BaseSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
-                    selectedValue={getValues('idType')} dateValue={''}
+                  <DropdownSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
+                    selectedValue={getValues('idType')}
                   />
                 )}
                 name="idType"
@@ -187,7 +170,6 @@ export const ReservationPage = (props: any) => {
                 )}
                 name="idNumber"
               />
-              {/* 必須填寫提示 */}
               {errors.idNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
             </View>
           }
@@ -205,60 +187,3 @@ export const ReservationPage = (props: any) => {
     </SafeAreaView >
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  drListCard: {
-    padding: 15,
-    paddingTop: 25,
-    marginBottom: 2,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    shadowColor: '#E4E4E4',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    borderBottomColor: '#B5B5B5',
-    borderBottomWidth: 0.8,
-  },
-  pageMargin: {
-    padding: 15,
-  },
-  input: {
-    borderColor: '#737474',
-    padding: 10,
-    borderWidth: 0.7,
-    marginVertical: 8,
-  },
-  warning: {
-    fontSize: 12,
-    color: 'red',
-    marginLeft: 5,
-  },
-  subTitle: {
-    color: '#225D66',
-    fontSize: 17,
-    fontWeight: '600',
-    marginTop: 8,
-  },
-  infoText: {
-    color: '#C32D3A',
-    fontSize: 12,
-    fontWeight: '400',
-    marginTop: 5,
-    marginBottom: 15,
-  },
-  button: {
-    width: '50%',
-    backgroundColor: '#6d7f99',
-    paddingVertical: 16,
-  },
-  buttonText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 16,
-  }
-
-});

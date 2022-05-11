@@ -2,7 +2,7 @@ import { CheckIcon, Select } from 'native-base'
 import React from 'react'
 
 interface Props {
-    onChange: (value:String) => void,
+    onChange: (value:string) => void,
     data:[string,[[Object]]],
     mode:string,
     placeholder: string,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, SafeAreaView, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { useGetDoctorListQuery } from '../../API/DoctorAPI';
 import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
@@ -25,27 +25,43 @@ interface dataType{
  // white background
 const backgroundStyle = { backgroundColor: 'white', };
 
+const wait = (timeout: number) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
+
 export const DocListPage: React.FC = (prop: any) => {
     const [searchQuery, setSearchQuery] = React.useState('');
+    const [refreshing, setRefreshing] = React.useState(false);
     const { mode } = prop.route.params;
-    let data;
+    let data:any;
     let isLoading;
     let isSuccess;
     let isError;
     // fetch doctor list data
     if (mode === '西醫') {
-        data = useGetDoctorListQuery().data;
+        data = useGetDoctorListQuery();
         isLoading = useGetDoctorListQuery().isLoading;
         isError = useGetDoctorListQuery().isError;
         isSuccess = useGetDoctorListQuery().isSuccess;
     }
     // search function
     if (searchQuery !== '') {
-        let newData = data.filter( (item:dataType) => (item.name.includes(searchQuery) || item.name_en.toLowerCase().includes(searchQuery.toLowerCase())
+        let newData = data.data.filter( (item:dataType) => (item.name.includes(searchQuery) || item.name_en.toLowerCase().includes(searchQuery.toLowerCase())
         ||item.spec_name.toString().includes(searchQuery) )
         );
-        data = newData
+        data.data = newData
     }
+    // refresh
+    const onRefresh = React.useCallback(async () => {
+        try {
+            setRefreshing(true);
+            data.refetch();
+            wait(2000).then(() => setRefreshing(false));
+        } catch (e) {
+            console.log(e)
+        }
+    }, []);
+
     // For FlatList
     const renderItem = (props: any) =>
     (
@@ -72,7 +88,8 @@ export const DocListPage: React.FC = (prop: any) => {
                 {isError && <Text style={[styles.title,,styles.t_center]}>載入出現錯誤...</Text>}
                 {isSuccess &&
                     <FlatList
-                        data={data}
+                        data={data.data}
+                        refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> }
                         renderItem={renderItem}
                         keyExtractor={(item, idx) => `docList_${item.doctor_code}_${idx}`}
                     />
