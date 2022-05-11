@@ -1,14 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, Text } from 'react-native';
 import { useGetReservationListQuery } from '../API/PatientAPI';
 import { SpinnerComponent } from '../components/utils/SpinnerComponent';
 import { ResRecordComponent } from '../components/reservationRecord/ResRecordComponent';
+// white background
+const backgroundStyle = { backgroundColor: 'white', };
 
 const wait = (timeout: number) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
-// white background
-const backgroundStyle = { backgroundColor: 'white', };
 
 export const ResRecordPage = (props: any) => {
     // fetch the resRecord
