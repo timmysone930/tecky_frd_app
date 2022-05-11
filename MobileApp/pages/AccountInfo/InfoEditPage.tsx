@@ -79,7 +79,7 @@ export function InfoEditPage({navigation}:any) {
     const verifyButtonHandler = async () => {
         // Fetching
         const phoneNum = input.areaCode + input.phone
-        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/send-sms-for-change/`, {
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/send-sm/change/`, {
             method: "POST",
             headers: {
                 'content-type': 'application/json'
@@ -144,7 +144,7 @@ export function InfoEditPage({navigation}:any) {
                 return
             } else {
                 const phoneNum = input.areaCode + input.phone
-                const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/client/confirm-change-info/`, {
+                const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/confirm`, {
                     method: "POST",
                     headers: {
                         'content-type': 'application/json'

@@ -9,12 +9,8 @@ import { checkStatus } from '../../redux/AuthSlice';
 // Native-base
 import { View, Button, useToast, HStack, Spinner} from 'native-base';
 
-// API
-import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
+// .env
 import Config from "react-native-config";
-
-import { districtSelection } from '../Address/HongKongDistrictSelect';
-
 
 export function AccountInfoPage({navigation}:any) {
     // Data fetching
