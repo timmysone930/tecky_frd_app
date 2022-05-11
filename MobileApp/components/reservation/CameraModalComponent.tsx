@@ -2,8 +2,13 @@ import React from 'react'
 import { Modal, PermissionsAndroid, Platform, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
+interface modalProps{
+    modalVisible:boolean,
+    setModalVisible:(status: boolean) => void, 
+    setResponse: (item:any) =>void ,
+}
 
-export const CameraModalComponent = (props: any) => {
+export const CameraModalComponent = (props: modalProps) => {
     // Permission for open camera (Android version)
     const requestCameraPermission = async () => {
             const granted = await PermissionsAndroid.request(

@@ -102,5 +102,5 @@ export const styles = StyleSheet.create({
     },
     t_center:{
         textAlign:'center'
-    }
+    },
 });

@@ -5,8 +5,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { useGetLoginSMSMutation, usePostRegisterInfoMutation } from '../../API/AuthAPI';
 import { BaseSelectComponent } from '../../components/NativeBase/BaseSelectComponent';
-import { DatePickerComponent } from '../../components/PickerComponent';
 import { BottomLineComponent } from '../../components/utils/BottomLineComponent';
+import { DatePickerComponent } from '../../components/utils/DatePickerComponent';
 import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 
