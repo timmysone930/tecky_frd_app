@@ -9,8 +9,7 @@ import { checkStatus } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 // Native-base
 import { useToast, Button } from 'native-base';
-
-
+import OneSignal from 'react-native-onesignal';
 
 export const LoginPage = (props: any) => {
     // white background
@@ -24,10 +23,10 @@ export const LoginPage = (props: any) => {
     // GET previous page 
     const previousPage = useSelector((state: any) => state.setDoctorID.currentPage);
 
-    
+
     const [getLoginSMS] = useGetLoginSMSMutation();
     // Get login SMS (sample:85255332211)
-    
+
     const countTime = 60
     const [counter, setCounter] = useState(countTime);
     const [sendCodeBtn, setSendCodeBtn] = useState({
@@ -39,20 +38,20 @@ export const LoginPage = (props: any) => {
         setCounter(countTime)
         // Activate 60s count down and Disable the button
         setSendCodeBtn({
-            isDisable: true, 
+            isDisable: true,
         });
 
         let t = countTime
-        intervalId.current = setInterval(()=>{
+        intervalId.current = setInterval(() => {
             t = t - 1
             setCounter(t)
             if (t < 0) {
                 clearInterval(intervalId.current)
                 setSendCodeBtn({
-                    isDisable: false, 
+                    isDisable: false,
                 });
             }
-        },1000)
+        }, 1000)
         // Fetching
         try {
             const res: QueryReturnValue = await getLoginSMS({ 'phone': inputData.phoneNo })
@@ -64,28 +63,35 @@ export const LoginPage = (props: any) => {
             console.log(e)
         }
     }
-    
+
 
     const [loginByPhone] = useLoginByPhoneMutation();
     // login
     const toast = useToast()
     const onLoginPress = async (inputData: any) => {
-        
+
         const data: { 'phone': number, 'smsCode': string } = {
             "phone": inputData.phoneNo,
             "smsCode": inputData.loginSMS
         }
         const res: any = await loginByPhone(data)
+        console.log(res)
         // check the login status
-        if(res['error']){
+        if (res['error']) {
             if (res['error']['status'] === 400) {
                 toast.show({
                     description: "請確認輸入電話號碼及驗證碼正確！"
                 })
             }
-        }else{
-            store.dispatch(checkStatus({ status: true, phone: inputData.phoneNo}))
+        } else {
+            store.dispatch(checkStatus({ status: true, phone: inputData.phoneNo }))
             clearInterval(intervalId.current)
+            let externalUserId = res.data.member_code.toString()
+            // setExternalUserId
+            OneSignal.setExternalUserId(externalUserId, (results) => {
+                // The results will contain push and email success statuses
+                console.log('Results of setting external user id', results);
+            });
             if (previousPage === '') {
                 props.navigation.navigate({ name: '預約Tab', })
             } else {
@@ -119,24 +125,24 @@ export const LoginPage = (props: any) => {
 
                         <Controller control={control}
                             render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput keyboardType={'numeric'} style={[styles.input, { width: '74%', flex: 1 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請輸入短訊驗證碼" placeholderTextColor="#737474"/>
+                                <TextInput keyboardType={'numeric'} style={[styles.input, { width: '74%', flex: 1 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請輸入短訊驗證碼" placeholderTextColor="#737474" />
                             )}
                             name="loginSMS"
                         />
-                        <Button 
+                        <Button
                             isDisabled={sendCodeBtn.isDisable}
                             colorScheme={"danger"}
-                            alignSelf={'center'} 
-                            padding={1} 
-                            height={12} 
+                            alignSelf={'center'}
+                            padding={1}
+                            height={12}
                             marginLeft={2}
-                            flex={0.4} 
+                            flex={0.4}
                             size={"md"}
                             onPress={handleSubmit(onSMSPress)}
                         >
-                                <Text style={{color: "white", fontSize: 15}}>
-                                    驗證碼 {sendCodeBtn.isDisable &&`(${counter})`}
-                                </Text>
+                            <Text style={{ color: "white", fontSize: 15 }}>
+                                驗證碼 {sendCodeBtn.isDisable && `(${counter})`}
+                            </Text>
                         </Button>
                         {/* <TouchableOpacity style={styles.btnPhone} onPress={handleSubmit(onSMSPress)}>
                             <Text style={styles.btnPhoneText}>驗證碼</Text>
