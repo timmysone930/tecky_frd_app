@@ -1,14 +1,14 @@
 import { useToast } from 'native-base';
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image,TextInput } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native'
 import { CameraModalComponent } from '../../components/reservation/CameraModalComponent'; // react-native-image-picker
 import { DatePickerComponent } from '../../components/utils/DatePickerComponent';
 import { setAdditionalInfo, setIDImage } from '../../redux/slice';
 import { store } from '../../redux/store';
 import { AddInfoSubmitType } from './ResType';
 import Config from 'react-native-config';
-import {styles } from '../../styles/GeneralStyles'
+import { styles } from '../../styles/GeneralStyles'
 // white background
 const backgroundStyle = { backgroundColor: 'white', };
 
@@ -16,7 +16,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
     const toast = useToast()
     // upload image
     const [response, setResponse] = useState<any>(null);
-    const onSetResponse = (item: any) => { setResponse(item);};
+    const onSetResponse = (item: any) => { setResponse(item); };
     // set the modal
     const [modalVisible, setModalVisible] = useState(false);
     const onSetModalVisible = (status: boolean) => { setModalVisible(status); };
@@ -43,7 +43,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', padding: 15, paddingTop: 25, marginBottom: 2, }}>
                 <View style={[backgroundStyle, { flex: 1 }]}>
-                    <Text style={[styles.subTitle,styles.mt_10]}>生日日期</Text>
+                    <Text style={[styles.subTitle, styles.mt_10]}>生日日期</Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (
                             <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('bDay')} />
@@ -52,7 +52,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     />
                     {/* 必須填寫提示 */}
                     {errors.bDay && <Text style={styles.warning}>* 此項必須填寫</Text>}
-                    <Text style={[styles.subTitle,styles.mt_10]}>電郵地址</Text>
+                    <Text style={[styles.subTitle, styles.mt_10]}>電郵地址</Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫收發通知用的電郵地址" placeholderTextColor="#737474" />
@@ -61,7 +61,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     />
                     {errors.email && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
-                    <Text style={[styles.subTitle,styles.mt_10]}>流動電話號碼</Text>
+                    <Text style={[styles.subTitle, styles.mt_10]}>流動電話號碼</Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput textContentType={'telephoneNumber'} keyboardType={'numeric'} style={[styles.input]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="e.g 85212345678" placeholderTextColor="#737474" />
@@ -69,7 +69,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                         name="phone"
                     />
                     {errors.phone && <Text style={styles.warning}>* 此項必須填寫</Text>}
-                    <Text style={[styles.subTitle,styles.mt_10]}>緊急聯絡人</Text>
+                    <Text style={[styles.subTitle, styles.mt_10]}>緊急聯絡人</Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人姓名" placeholderTextColor="#737474" />
@@ -84,7 +84,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                         name="EmergencyContactPhone"
                     />
                     {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
-                    <Text style={[styles.subTitle,styles.mt_10]}>請上傳你的身份證照片正面</Text>
+                    <Text style={[styles.subTitle, styles.mt_10]}>請上傳你的身份證照片正面</Text>
                     {/* Modal for camera */}
                     <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.uploadBtn}>
                         <Image source={{ uri: `${Config.REACT_APP_API_SERVER}/btn_IDCard.jpg`, }} style={{ width: 380, height: 200 }} resizeMode="contain" resizeMethod="scale" />
@@ -94,11 +94,12 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     {response?.assets &&
                         response?.assets.map(({ uri }: any) => (
                             <View key={uri}>
-                                <Text style={[styles.subTitle,styles.mt_10]}>上傳的身份證照片:</Text>
+                                <Text style={[styles.subTitle, styles.mt_10]}>上傳的身份證照片:</Text>
                                 <Image resizeMode="contain" resizeMethod="scale" style={{ width: 380, height: 240, marginBottom: 50, }} source={{ uri: uri }} />
                             </View>
-                        ))}
-                    {response?.assets && response?.assets.map(({ uri }: any) => (console.log(uri)))}
+                        ))
+                    }
+                    {/* {response?.assets && response?.assets.map(({ uri }: any) => (console.log(uri)))} */}
                 </View>
             </ScrollView>
             {/* Button to go back and next page */}

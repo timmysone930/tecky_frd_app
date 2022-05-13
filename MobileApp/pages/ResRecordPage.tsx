@@ -4,6 +4,7 @@ import { useGetReservationListQuery } from '../API/PatientAPI';
 import { SpinnerComponent } from '../components/utils/SpinnerComponent';
 import { ResRecordComponent } from '../components/reservationRecord/ResRecordComponent';
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 // white background
 const backgroundStyle = { backgroundColor: 'white', };
 
@@ -12,17 +13,16 @@ const wait = (timeout: number) => {
 }
 
 export const ResRecordPage = (props: any) => {
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
     // fetch the resRecord
-    let recordData = useGetReservationListQuery();
-
+    let recordData = useGetReservationListQuery(userToken);
     const navigation = useNavigation(); 
-    
     const [refreshing, setRefreshing] = React.useState(false);
     const onRefresh = React.useCallback(() => {
         try {
             setRefreshing(true);
             recordData.refetch();
-            console.log(recordData.data);
+            // console.log('recordData.data',recordData.data);
             wait(2000).then(() => setRefreshing(false));
 
         } catch (e) {
@@ -49,7 +49,16 @@ export const ResRecordPage = (props: any) => {
                         onRefresh={onRefresh} 
                     /> 
                     :
-                    <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>
+                    <ScrollView
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                      />
+                    }
+                  >
+                      <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>
+                  </ScrollView>
                 }
         </SafeAreaView>
     )

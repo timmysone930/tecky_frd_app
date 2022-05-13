@@ -126,7 +126,7 @@ export const PaymentPage = (props: any) => {
                             console.log('paymentRes', paymentRes)
                             store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
                             store.dispatch(setMemberCode({ memberCode: '' }))
-                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data } })
+                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data, 'res_date':convertedDate,'res_time':`${rosterSession.data.start_at}`  } })
                         } else {
                             toast.show({
                                 description: "付款失敗"

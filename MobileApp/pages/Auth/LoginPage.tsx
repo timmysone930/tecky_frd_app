@@ -5,7 +5,7 @@ import { View, Text, SafeAreaView, StyleSheet, TouchableOpacity, Image, TextInpu
 import Config from 'react-native-config';
 import { useSelector } from 'react-redux';
 import { useGetLoginSMSMutation, useLoginByPhoneMutation } from '../../API/AuthAPI';
-import { checkStatus } from '../../redux/AuthSlice';
+import { checkStatus, setUserInfo } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 // Native-base
 import { useToast, Button } from 'native-base';
@@ -75,7 +75,6 @@ export const LoginPage = (props: any) => {
             "smsCode": inputData.loginSMS
         }
         const res: any = await loginByPhone(data)
-        console.log(res)
         // check the login status
         if (res['error']) {
             if (res['error']['status'] === 400) {
@@ -87,6 +86,7 @@ export const LoginPage = (props: any) => {
             store.dispatch(checkStatus({ status: true, phone: inputData.phoneNo }))
             clearInterval(intervalId.current)
             let externalUserId = res.data.member_code.toString()
+            store.dispatch(setUserInfo({ member_code: externalUserId, token: res.data.access_token }))
             // setExternalUserId
             OneSignal.setExternalUserId(externalUserId, (results) => {
                 // The results will contain push and email success statuses
