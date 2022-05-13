@@ -59,7 +59,7 @@ export const ResRecordDetail = (props: any, {navigation}: any) => {
         // reservation time
         const resFullDate = data.item.res_date
         const resHours = parseInt(data.item.res_time.split(":")[0])
-        const resMins = parseInt(data.item.res_time.split(":")[1])
+        const resMins = parseInt(data.item.res_time.split(":")[1]) - 5
 
         // reservation end time
         let resEndHours:number = resHours

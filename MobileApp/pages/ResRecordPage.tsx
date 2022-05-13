@@ -36,16 +36,6 @@ export const ResRecordPage = (props: any) => {
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-            {/* <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                          refreshing={refreshing}
-                          onRefresh={
-                              onRefresh
-                            }
-                        />
-                    }
-            > */}
                 {recordData.isLoading && <SpinnerComponent />}
                 {/* {recordData.isError && <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>} */}
                 {/* {recordData.isSuccess && recordData.data.length !== 0 ? <ResRecordComponent data={recordData.data} props={props} refreshing={refreshing} onRefresh={onRefresh} /> :
@@ -61,7 +51,6 @@ export const ResRecordPage = (props: any) => {
                     :
                     <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>
                 }
-            {/* </ScrollView> */}
         </SafeAreaView>
     )
 }
