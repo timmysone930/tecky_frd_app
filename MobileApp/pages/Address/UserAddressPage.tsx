@@ -14,6 +14,7 @@ import { setAddressEditContent } from '../../redux/slice';
 // .env
 import Config from 'react-native-config';
 
+
 const wait = (timeout:any) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
@@ -65,9 +66,6 @@ export function UserAddressPage({navigation}:any) {
     const [isOpen, setIsOpen] = useState(false);
     const onClose = () => {
         setIsOpen(false)
-        
-        // To decide which Dialog to show
-        setResetDefaultDialog(false)
     };
 
     const cancelRef = React.useRef(null);
@@ -79,6 +77,8 @@ export function UserAddressPage({navigation}:any) {
     const deleteButtonHandler = (addressID:any) => () => {
         
         setAddressToDeleteID(addressID)
+        // To decide which Dialog to show
+        setResetDefaultDialog(false)
         setIsOpen(!isOpen)
     }
 
@@ -184,6 +184,7 @@ export function UserAddressPage({navigation}:any) {
                                     accessibilityLabel="favorite number" 
                                     value={defaultAddressID} 
                                     onChange={nextValue => {
+                                        // To decide which Dialog to show
                                         setResetDefaultDialog(true)
                                         setIsOpen(!isOpen)
                                         setAddrToSetDefault(nextValue)
