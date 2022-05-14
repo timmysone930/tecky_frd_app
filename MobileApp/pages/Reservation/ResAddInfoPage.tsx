@@ -22,7 +22,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
     const onSetModalVisible = (status: boolean) => { setModalVisible(status); };
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
-        defaultValues: { phone: '', bDay: '', email: '', EmergencyContactName: '', EmergencyContactPhone: '' }
+        defaultValues: { phone: '', bDay: '', email: '', EmergencyContactName: '', EmergencyContactPhone: '', name_en: '' }
     });
     // Date value change function
     const onDateChange = (itemValue: string) => { setValue("bDay", itemValue) };
@@ -43,6 +43,15 @@ export const ResAddInfoPage: React.FC = (props: any) => {
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', padding: 15, paddingTop: 25, marginBottom: 2, }}>
                 <View style={[backgroundStyle, { flex: 1 }]}>
+                    <Text style={styles.subTitle}>英文姓名</Text>
+                    <Controller control={control} rules={{ required: true, }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="英文姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
+                        )}
+                        name="name_en"
+                    />
+                    {errors.name_en && <Text style={styles.warning}>* 此項必須填寫</Text>}
+
                     <Text style={[styles.subTitle, styles.mt_10]}>生日日期</Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (

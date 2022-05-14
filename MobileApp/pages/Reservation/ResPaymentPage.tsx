@@ -83,6 +83,7 @@ export const PaymentPage = (props: any) => {
                     submitData.append('hkid', formData.idNumber)
                     submitData.append('id_doc_type', formData.idType)
                     submitData.append('name', formData.name)
+                    submitData.append('name_en', formData.name_en)
                     submitData.append('alt_contact', formData.EmergencyContactName)
                     submitData.append('alt_phone', formData.EmergencyContactPhone)
                     submitData.append('gender', formData.title)

@@ -23,13 +23,13 @@ export const { setDoctorID,setDoctorData } = doctorIDSlice.actions
 export const reserveFormSlice = createSlice({
     name: 'reserveForm',
     initialState: {
-        name: '', reservedDate: '', reservedTime: '',  reservedSession: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '',
+        name: '', name_en:'' ,reservedDate: '', reservedTime: '',  reservedSession: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '',
         leaveHK: false, Countries: '', backDate: '', symptoms:[], idImg:[], memberCode:'', title:'',phone:'',email:'',bDay:'',isFever: false, isCough: false,
         isVomit: false, isCold: false
     },
     reducers: {
         setFormData: (state, action) => {
-            const { name, reservedDate, reservedTime, idType, idNumber, EmergencyContactName, EmergencyContactPhone, reservedSession, title} = action.payload
+            const { name, reservedDate, reservedTime, idType, idNumber, reservedSession, title} = action.payload
             state.name = name
             state.reservedDate = reservedDate
             state.reservedTime = reservedTime
@@ -56,6 +56,7 @@ export const reserveFormSlice = createSlice({
             state.idImg = action.payload.assets
         },
         setAdditionalInfo:(state, action)=>{
+            state.name_en = action.payload.name_en
             state.phone = action.payload.phone
             state.email = action.payload.email
             state.bDay = action.payload.bDay
