@@ -46,7 +46,7 @@ export const PaymentPage = (props: any) => {
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
                 `${Config.PAYPAL}`
                 , {
-                    amount: `${docInfo.docData.video_diag_fee}`, // required
+                    amount: `100`, // required
                     currency: 'HKD',
                     localeCode: 'zh_HK',
                     shippingAddressRequired: false,
