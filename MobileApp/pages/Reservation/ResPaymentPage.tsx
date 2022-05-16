@@ -122,7 +122,7 @@ export const PaymentPage = (props: any) => {
                                 description: "付款成功"
                             })
                             // create payment table
-                            let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": docInfo.docData.video_diag_fee, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
+                            let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": 100, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
                             const paymentRes: any = await postNewPayment(paymentData)
                             console.log('paymentRes', paymentRes)
                             store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
