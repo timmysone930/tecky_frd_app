@@ -46,7 +46,7 @@ export const PaymentPage = (props: any) => {
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
                 `${Config.PAYPAL}`
                 , {
-                    amount: `${docInfo.docData.video_diag_fee}`, // required
+                    amount: `100`, // required
                     currency: 'HKD',
                     localeCode: 'zh_HK',
                     shippingAddressRequired: false,
@@ -83,6 +83,7 @@ export const PaymentPage = (props: any) => {
                     submitData.append('hkid', formData.idNumber)
                     submitData.append('id_doc_type', formData.idType)
                     submitData.append('name', formData.name)
+                    submitData.append('name_en', formData.name_en)
                     submitData.append('alt_contact', formData.EmergencyContactName)
                     submitData.append('alt_phone', formData.EmergencyContactPhone)
                     submitData.append('gender', formData.title)
@@ -126,7 +127,7 @@ export const PaymentPage = (props: any) => {
                             console.log('paymentRes', paymentRes)
                             store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
                             store.dispatch(setMemberCode({ memberCode: '' }))
-                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data } })
+                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data, 'res_date':convertedDate,'res_time':`${rosterSession.data.start_at}`  } })
                         } else {
                             toast.show({
                                 description: "付款失敗"

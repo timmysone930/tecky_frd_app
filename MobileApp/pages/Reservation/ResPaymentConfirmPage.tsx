@@ -2,13 +2,48 @@ import React from 'react'
 import { View, Text, SafeAreaView, TouchableOpacity, Dimensions, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useSelector } from 'react-redux';
-import {styles} from '../../styles/DoctorStyle'
+import { styles } from '../../styles/DoctorStyle'
+import Config from "react-native-config";
 const windowHeight = Dimensions.get('window').height;
 // white background
-const backgroundStyle = { backgroundColor: 'white',};
+const backgroundStyle = { backgroundColor: 'white', };
+
+// set One Signal notification
+const setNotification = async (res_date:string, userCode:string, pushTime:string) => {
+    let data = {
+        "app_id": `${Config.ONESIGNAL}`,
+        "include_external_user_ids": [`${userCode}`],
+        "channel_for_external_user_ids": "push",
+        "headings": { "en": "預約提醒" },
+        "contents": { "en": "你的視診預約將於1小時後開始" },
+        "delayed_option": "timezone",
+        "send_after": `${res_date} 00:00:00 GMT+0800`,
+        "delivery_time_of_day": `${pushTime}`
+    }
+
+    const res = await fetch('https://onesignal.com/api/v1/notifications', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Basic ${Config.OneSignal_REST_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    const json = await res.json();
+    console.log(json)
+}
 
 export const ResPaymentConfirmPage = (props: any) => {
     const rosterStatus = useSelector((state: any) => state.getPaymentStatus);
+    const userCode = useSelector((state: any) => state.getUserStatus.member_code);
+
+    if (rosterStatus.paymentRoster === 'true') {
+        // To get the param passing from the previous screen
+        const { resCode, res_date, res_time } = props.route.params;
+        let time = parseInt(res_time.substring(0,2));
+        let pushTime = `${time-1<10?`0${time-1}`:time-1}:${res_time.substring(3,5)}`
+        setNotification(res_date, userCode, pushTime);
+    }
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>

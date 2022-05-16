@@ -4,12 +4,16 @@ import { createSlice } from '@reduxjs/toolkit'
 export const userStatusSlice = createSlice({
     name: 'userStatus',
     initialState: {
-        isLogin: false, currentPage:''
+        isLogin: false, currentPage:'', member_code:'',token:''
     },
     reducers: {
         checkStatus: (state, action) => {
             state.isLogin = action.payload.status
         },
+        setUserInfo:(state, action)=>{
+            state.member_code = action.payload.member_code
+            state.token = action.payload.token
+        }
     },
 })
-export const { checkStatus } = userStatusSlice.actions
+export const { checkStatus,setUserInfo } = userStatusSlice.actions

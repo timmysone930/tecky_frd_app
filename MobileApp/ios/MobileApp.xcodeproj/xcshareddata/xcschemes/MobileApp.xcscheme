@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "MobileApp.app"
-               BlueprintName = "MobileApp"
+               BuildableName = "Swindon.app"
+               BlueprintName = "Swindon"
                ReferencedContainer = "container:MobileApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -55,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "MobileApp.app"
+            BuildableName = "Swindon.app"
             BlueprintName = "MobileApp"
             ReferencedContainer = "container:MobileApp.xcodeproj">
          </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "MobileApp.app"
+            BuildableName = "Swindon.app"
             BlueprintName = "MobileApp"
             ReferencedContainer = "container:MobileApp.xcodeproj">
          </BuildableReference>

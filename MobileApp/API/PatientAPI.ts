@@ -4,7 +4,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import Config from "react-native-config";
 
-
 // Define our single API slice object
 export const patientAPI = createApi({
   reducerPath: 'patientAPI',
@@ -49,7 +48,12 @@ export const patientAPI = createApi({
     }),
     // get reservation list
     getReservationList: builder.query<any, void>({
-      query: () => '/client/reservation-list'
+      query: (token) => ({
+        url: "/client/reservation-list",
+        headers:{
+          "Authorization":`Bearer ${token}`,
+        }
+    })
     }),
   })
 })
