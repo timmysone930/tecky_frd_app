@@ -90,9 +90,7 @@ export const PaymentPage = (props: any) => {
                     submitData.append('email', formData.email)
                     submitData.append('phone', formData.phone)
                     submitData.append('birthday', formData.bDay)
-                    submitData.append('hkid_img', {
-                        name: formData['idImg'][0].fileName, type: formData['idImg'][0].type, uri: Platform.OS === 'android' ? formData['idImg'][0].uri : formData['idImg'][0].uri.replace('file://', ''),
-                    })
+                    submitData.append('hkid_img', formData['idImg'])
                     const res: any = await postPatientRegister(submitData)
                     if (res.error) {
                         console.log('member', res.error)
@@ -162,7 +160,7 @@ export const PaymentPage = (props: any) => {
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
                 <View>
-                    <Text style={[styles.subTitle, styles.mv_15,styles.ph_10,styles.pv_10,{marginLeft:5}]}>問診費用：$ {docInfo.docData.video_diag_fee}</Text>
+                    <Text style={[styles.subTitle, styles.mv_15,styles.ph_10,styles.pv_10,{marginLeft:5}]}>問診費用：$ 100</Text>
                     <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>如在三十分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約</Text>
                 </View>
                 <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>
