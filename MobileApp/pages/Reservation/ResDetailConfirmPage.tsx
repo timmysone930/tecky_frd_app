@@ -18,7 +18,7 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
     // roster session
     const rosterSession = useGetReservedSessionByIdQuery(formData.reservedSession);
     rosterSession.isSuccess ? reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}` : reserveSession = '載入中'
-    const rowCellArr = [`$ ${docInfo.docData.video_diag_fee}`, formData.reservedDate, reserveSession, formData.name, formData.idType, formData.idNumber]
+    const rowCellArr = [`$ 100`, formData.reservedDate, reserveSession, formData.name, formData.idType, formData.idNumber]
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>

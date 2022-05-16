@@ -53,7 +53,7 @@ export const reserveFormSlice = createSlice({
             state.backDate = action.payload.backDate
         },
         setIDImage:(state, action)=>{
-            state.idImg = action.payload.assets
+            state.idImg = action.payload
         },
         setAdditionalInfo:(state, action)=>{
             state.name_en = action.payload.name_en

@@ -1,7 +1,7 @@
 import { useToast } from 'native-base';
 import React, { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput, Platform } from 'react-native'
 import { CameraModalComponent } from '../../components/reservation/CameraModalComponent'; // react-native-image-picker
 import { DatePickerComponent } from '../../components/utils/DatePickerComponent';
 import { setAdditionalInfo, setIDImage } from '../../redux/slice';
@@ -33,7 +33,10 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                 description: "請上傳身份證明文件！"
             })
         } else {
-            store.dispatch(setIDImage(response))
+            let image = {
+                name: response.assets[0].fileName, type: response.assets[0].type, uri: Platform.OS === 'android' ? response.assets[0].uri : response.assets[0].uri.replace('file://', ''),
+            }
+            store.dispatch(setIDImage(image))
             store.dispatch(setAdditionalInfo(data))
             props.navigation.navigate({ name: '健康申報表' })
         }
