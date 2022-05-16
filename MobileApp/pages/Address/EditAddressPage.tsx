@@ -15,6 +15,8 @@ import Config from 'react-native-config';
 
 export function EditAddressPage({navigation}:any) {
 
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
+
     const addressContent = useSelector((state:any) => state.getAddressData).addressEditContent
     const blankContent = {
         hkid:"",
@@ -46,7 +48,11 @@ export function EditAddressPage({navigation}:any) {
         }
 
         // Fetch the existing default address
-        const defaultAddrResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`)
+        const defaultAddrResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, {
+            headers:{
+                "Authorization":`Bearer ${userToken}`,
+            }
+        })
         const defaultAddrResult = await defaultAddrResp.json()
         if (defaultAddrResult.address != null) {
             // If there is a default address, then the defaultAddress.current will be assigned an object of the address info
@@ -61,6 +67,7 @@ export function EditAddressPage({navigation}:any) {
         if (input.is_default == true && defaultAddress.current != null) {
             offSetOriginResp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
                 headers: {
+                    "Authorization":`Bearer ${userToken}`,
                     'Content-Type': 'application/json'
                 },
                 method: "POST",
@@ -72,10 +79,15 @@ export function EditAddressPage({navigation}:any) {
             // if (blankContent.is_default != input.is_default) {
                 
             // }
-            const hkIdResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`)
+            const hkIdResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`, {
+                headers:{
+                    "Authorization":`Bearer ${userToken}`,
+                }
+            })
             const hkId = (await hkIdResp.json()).id_number
             toDefaultResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/new-addr-book`, {
                 headers: {
+                    "Authorization":`Bearer ${userToken}`,
                     'Content-Type': 'application/json'
                 },
                 method: "POST",
@@ -85,6 +97,7 @@ export function EditAddressPage({navigation}:any) {
         } else {
             toDefaultResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
                 headers: {
+                    "Authorization":`Bearer ${userToken}`,
                     'Content-Type': 'application/json'
                 },
                 method: "POST",

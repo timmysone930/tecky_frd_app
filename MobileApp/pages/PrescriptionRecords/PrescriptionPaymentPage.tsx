@@ -59,12 +59,12 @@ export const PrescriptionPaymentPage = (props: any) => {
         // update payment table
         let paymentData = { 
             "id": fetchData.prescription.payment, 
-            "gateway": "paypal", 
+            "gateway": "Paypal", 
             "payment_id": paypalRes.data.nonce, 
             "amount": fetchData.payment_amount, 
             "payment_status": true, 
             "type": "prescription", 
-            "payment_type": "paypal"
+            "payment_type": "visa"
         }
 
         if (paypalRes.status == 'success') {

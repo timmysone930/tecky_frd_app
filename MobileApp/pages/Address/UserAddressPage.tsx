@@ -3,6 +3,9 @@ import { SafeAreaView, RefreshControl } from 'react-native';
 import { Text as RNtext } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
+// Redux
+import { useSelector } from 'react-redux';
+
 // Native-base
 import { Radio, Text, View, Button, ScrollView, AlertDialog, useToast, Spinner, HStack, Heading } from 'native-base';
 
@@ -21,13 +24,19 @@ const wait = (timeout:any) => {
 
 export function UserAddressPage({navigation}:any) {
 
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
+
     const [fetchData, setFetchData] = useState(null as any)
     const [defaultAddressID, setDefaultAddressID] = useState(null as any);
     
     const toast = useToast()
     
     const infoFetching = async () => {
-        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/addr-book`)
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/addr-book`, {
+            headers:{
+                "Authorization":`Bearer ${userToken}`,
+            }
+        })
         const data = await resp.json()
         data.length > 0 ? setFetchData(data) : setFetchData("")
         let findDefaultAddressID:any;

@@ -5,6 +5,7 @@ import { styles } from '../../styles/GeneralStyles';
 // Redux
 import { store } from '../../redux/store';
 import { checkStatus } from '../../redux/AuthSlice';
+import { useSelector } from 'react-redux';
 
 // Native-base
 import { View, Button, useToast, HStack, Spinner} from 'native-base';
@@ -13,13 +14,19 @@ import { View, Button, useToast, HStack, Spinner} from 'native-base';
 import Config from "react-native-config";
 
 export function AccountInfoPage({navigation}:any) {
+
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
     // Data fetching
     const [fetchData, setFetchData] = useState(null as any)
 
     async function infoFetching () {
         // const resp = useGetUserInfoQuery('');
         // const { isLoading, data, error } = resp;
-        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`)
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`, {
+            headers:{
+                "Authorization":`Bearer ${userToken}`,
+            }
+        })
         const result = await resp.json()
         setFetchData(result)
         return result

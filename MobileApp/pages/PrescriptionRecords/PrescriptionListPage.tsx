@@ -6,10 +6,15 @@ import { PrescriptionList } from '../../components/prescription/PrescriptionList
 // Native-base
 import { HStack, Spinner } from 'native-base';
 
+// Redux
+import { useSelector } from 'react-redux';
+
 import Config from 'react-native-config';
 
 
 export const PrescriptionListPage = ({navigation}:any) => {
+
+  const userToken = useSelector((state: any) => state.getUserStatus.token);
   // white background
   const backgroundStyle = {
     backgroundColor: 'white',
@@ -17,11 +22,16 @@ export const PrescriptionListPage = ({navigation}:any) => {
 
   const [fetchData, setFetchData] = useState(null as any)
   const dataFetching = async () => {
-    const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`)
+    const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`, {
+      headers:{
+        "Authorization":`Bearer ${userToken}`,
+      }
+    })
     const data = await resp.json()
-    console.log(data);
-    if (data.length > 0) {
-      setFetchData(data)
+    const dataToDisplay = data.filter((item:any) => typeof item.prescription.payment == "string")
+    console.log(dataToDisplay);
+    if (dataToDisplay.length > 0) {
+      setFetchData(dataToDisplay)
     } else {
       setFetchData("")
     }

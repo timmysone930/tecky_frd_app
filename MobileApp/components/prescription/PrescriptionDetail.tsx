@@ -3,23 +3,27 @@ import { View, Text } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
 interface Props {
-    prescription_details: string
+    prescription_details: any
 }
 
 export const PrescriptionDetail = (props: Props) => {
+
+    const treatments = JSON.parse(props.prescription_details)
+    console.log(treatments);
+
     return (
         <>
             <Text style={[styles.mb_10, styles.mt_30 , styles.title]}>
                 藥物明細：
             </Text>
             {
-                props.prescription_details.split("/nl/").map((item: string)=>(
+                treatments.map((item: any)=>(
                     <View 
-                        key={props.prescription_details.split("/nl/").indexOf(item)} 
+                        key={`treatment${treatments.indexOf(item)}`} 
                         style={[styles.mv_10]}
                     >
                         <Text style={[styles.contentText]}>
-                            {props.prescription_details.split("/nl/").indexOf(item) + 1}. {item}
+                            {treatments.indexOf(item) + 1}. {item.name_en}: {item.quantity} {item.dosage}
                         </Text>
                     </View>
                 ))
