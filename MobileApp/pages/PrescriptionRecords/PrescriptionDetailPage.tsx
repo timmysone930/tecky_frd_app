@@ -66,9 +66,11 @@ export function PrescriptionDetailPage({navigation}:any) {
     const dataFetching = async () => {
       const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`)
       const data = (await resp.json()).filter((item: any)=> item.prescription.pres_code == prescriptionCode)[0]
-
+      console.log(data.prescription);
       const costResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${data.prescription.payment}`)
-      const cost = (await costResp.json())[0].amount
+    //   const cost = (await costResp.json())[0].amount
+        const cost = await costResp.json()
+        console.log(cost); 
 
       const clinicPhoneResp = await fetch(`${Config.REACT_APP_API_SERVER}/clinics/search?column=code&where=${data.clinic_code}`)
       const clinicPhone = (await clinicPhoneResp.json())[0].clinic_phone
@@ -88,6 +90,7 @@ export function PrescriptionDetailPage({navigation}:any) {
             dataFetching()
             setFetched(true)
         }
+        console.log(fetchData);
     },[])
     
     // const fetchData = FakeData

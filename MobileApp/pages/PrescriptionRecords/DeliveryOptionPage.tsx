@@ -85,7 +85,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
     const dataFetching = async () => {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`)
-        const defaultAddress = await resp.json()
+        const defaultAddress = (await resp.json())[0]
         if (defaultAddress.address != null) {
             setInput(defaultAddress)
         } else {

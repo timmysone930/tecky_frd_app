@@ -31,7 +31,11 @@ export const ResRecordPage = (props: any) => {
     }, []);
     
     useEffect(() => {
-            recordData.refetch();
+        const unsubscribe = navigation.addListener('focus', () => {
+                recordData.refetch();
+        });
+
+        return () => {unsubscribe}
     }, [navigation])
 
     return (
@@ -49,7 +53,18 @@ export const ResRecordPage = (props: any) => {
                         onRefresh={onRefresh} 
                     /> 
                     :
-                    <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>
+                    <ScrollView
+                        refreshControl={
+                            <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={
+                                onRefresh
+                                }
+                            />
+                        }
+                    >
+                        <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>
+                    </ScrollView>
                 }
         </SafeAreaView>
     )
