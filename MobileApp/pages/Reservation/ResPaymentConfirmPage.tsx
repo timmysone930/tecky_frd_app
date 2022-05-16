@@ -15,7 +15,7 @@ const setNotification = async (res_date:string, userCode:string, pushTime:string
         "include_external_user_ids": [`${userCode}`],
         "channel_for_external_user_ids": "push",
         "headings": { "en": "預約提醒" },
-        "contents": { "en": "你的視診預約將於1小時後後開始" },
+        "contents": { "en": "你的視診預約將於1小時後開始" },
         "delayed_option": "timezone",
         "send_after": `${res_date} 00:00:00 GMT+0800`,
         "delivery_time_of_day": `${pushTime}`
