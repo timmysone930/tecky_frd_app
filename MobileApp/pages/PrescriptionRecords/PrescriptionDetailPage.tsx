@@ -59,19 +59,24 @@ export const FakeData = {
 
 export function PrescriptionDetailPage({navigation}:any) {
 
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
+
     const reduxData = useSelector((state: any) => state.getPrescriptionCode)
     const prescriptionCode = reduxData.prescriptionCode ;
 
     const [fetchData, setFetchData] = useState(null as any)
     const dataFetching = async () => {
-      const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`)
+      const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`, {
+        headers:{
+            "Authorization":`Bearer ${userToken}`,
+        }
+      })
       const data = (await resp.json()).filter((item: any)=> item.prescription.pres_code == prescriptionCode)[0]
-      console.log(data.prescription);
+      console.log(data);
       const costResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${data.prescription.payment}`)
     //   const cost = (await costResp.json())[0].amount
-        const cost = await costResp.json()
-        console.log(cost); 
-
+        const cost = (await costResp.json())[0].amount
+        
       const clinicPhoneResp = await fetch(`${Config.REACT_APP_API_SERVER}/clinics/search?column=code&where=${data.clinic_code}`)
       const clinicPhone = (await clinicPhoneResp.json())[0].clinic_phone
 
@@ -108,7 +113,7 @@ export function PrescriptionDetailPage({navigation}:any) {
                             doctor={fetchData.doctor_name}
                             profession={fetchData.spec[0].spec_name}
                             created_at={fetchData.prescription.created_at.split("T")[0]}
-                            course_of_treatment={fetchData.prescription.treatment}
+                            course_of_treatment={JSON.parse(fetchData.prescription.pres_details)[0].total_day}
                             patient_name={fetchData.name}
                             patient_id={fetchData.hkid}
                             orderStatusShow={true}

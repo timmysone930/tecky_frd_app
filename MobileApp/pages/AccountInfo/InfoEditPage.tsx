@@ -9,9 +9,13 @@ import { View, Button, useToast, Input, FormControl, WarningOutlineIcon, HStack,
 import { useGetUserInfoQuery, usePutEditInfoMutation } from '../../API/UserInfoAPI';
 import Config from "react-native-config";
 
+// Redux
+import { useSelector } from 'react-redux';
 
 export function InfoEditPage({navigation}:any) {
 
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
+    
     // Toast
     const toast = useToast()
     
@@ -30,7 +34,11 @@ export function InfoEditPage({navigation}:any) {
     })
 
     const infoFetching = async () => {
-        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`)
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`, {
+            headers:{
+                "Authorization":`Bearer ${userToken}`,
+            }
+        })
         const result = await resp.json()
         setFetchData(result)
         setInput({
@@ -82,6 +90,7 @@ export function InfoEditPage({navigation}:any) {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/send-sm/change/`, {
             method: "POST",
             headers: {
+                "Authorization":`Bearer ${userToken}`,
                 'content-type': 'application/json'
             },
             body: JSON.stringify({phone: phoneNum})
@@ -147,6 +156,7 @@ export function InfoEditPage({navigation}:any) {
                 const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/confirm`, {
                     method: "POST",
                     headers: {
+                        "Authorization":`Bearer ${userToken}`,
                         'content-type': 'application/json'
                     },
                     body: JSON.stringify({phone: phoneNum, smsCode: input.validCode})

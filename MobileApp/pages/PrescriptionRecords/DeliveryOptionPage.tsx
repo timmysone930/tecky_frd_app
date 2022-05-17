@@ -50,6 +50,8 @@ const wait = (timeout:any) => {
 // Page
 export const DeliveryOptionPage = ({navigation}:any)=> {
 
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
+
     const [refreshing, setRefreshing] = React.useState(false);
 
     const onRefresh = React.useCallback(() => {
@@ -61,7 +63,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
     const toast = useToast()
 
     const prescriptionDetail= (useSelector((state:any)=>state.getPrescriptionCode)).prescriptionDetail
-    console.log(prescriptionDetail);
+    // console.log(prescriptionDetail);
 
 
     // deliveryOption: 'pick-up' || 'deliver'
@@ -84,8 +86,13 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
     const [formFilled, setFormFilled] = useState(false)
 
     const dataFetching = async () => {
-        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`)
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, {
+            headers:{
+                "Authorization":`Bearer ${userToken}`,
+            }
+        })
         const defaultAddress = (await resp.json())[0]
+        console.log(defaultAddress);
         if (defaultAddress.address != null) {
             setInput(defaultAddress)
         } else {
