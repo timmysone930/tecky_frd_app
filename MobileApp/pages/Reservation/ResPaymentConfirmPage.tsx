@@ -9,7 +9,7 @@ const windowHeight = Dimensions.get('window').height;
 const backgroundStyle = { backgroundColor: 'white', };
 
 // set One Signal notification
-const setNotification = async (res_date: string, userCode: string, pushTime: string) => {
+export const setNotification = async (res_date: string, userCode: string, pushTime: string, resCode:string) => {
     let data = {
         "app_id": `${Config.ONESIGNAL}`,
         "include_external_user_ids": [`${userCode}`],
@@ -30,8 +30,19 @@ const setNotification = async (res_date: string, userCode: string, pushTime: str
         body: JSON.stringify(data)
     })
     const json = await res.json();
-    console.log(json)
+    console.log('json', json.id)
+    let submitData:any = { "res_code":resCode, "one_signal":json.id }
+    console.log('submitData', submitData)
+    await fetch(`${Config.REACT_APP_API_SERVER}/reserve/oneSignal`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+          },
+        body: JSON.stringify(submitData)
+    })
 }
+
+
 
 export const ResPaymentConfirmPage = (props: any) => {
     const rosterStatus = useSelector((state: any) => state.getPaymentStatus);
@@ -40,9 +51,10 @@ export const ResPaymentConfirmPage = (props: any) => {
     if (rosterStatus.paymentRoster === 'true') {
         // To get the param passing from the previous screen
         const { resCode, res_date, res_time } = props.route.params;
+        console.log('resCode', resCode)
         let time = parseInt(res_time.substring(0, 2));
         let pushTime = `${time - 1 < 10 ? `0${time - 1}` : time - 1}:${res_time.substring(3, 5)}`
-        setNotification(res_date, userCode, pushTime);
+        setNotification(res_date, userCode, pushTime, resCode);
     }
 
     return (
@@ -112,7 +124,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                         </View>
                         <View style={{ marginTop: 20, }}>
                             <Text style={[styles.contentText]}>未能完成付款程序</Text>
-                            <Text style={[styles.contentText,{fontSize:14}]}>請於創建預約後三十分鐘內付款，否則預約會被取消</Text>
+                            <Text style={[styles.contentText, { fontSize: 14 }]}>請於創建預約後三十分鐘內付款，否則預約會被取消</Text>
                             <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                                 <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
                         </View>

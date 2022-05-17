@@ -13,6 +13,8 @@ import { store } from '../../redux/store';
 import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
 import { useToast } from 'native-base';
+import { setNotification } from '../Reservation/ResPaymentConfirmPage';
+import { useSelector } from 'react-redux';
 
 const rowTitleArr = ['預約編號：', '預約醫生：', '預約日期：', '預約時間：']
 enum ButtonText {
@@ -28,6 +30,8 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
     const toast = useToast()
     // To get the param passing from the previous screen
     const { resCode, docCode, data } = props.route.params;
+    // to Get user code
+    const userCode = useSelector((state: any) => state.getUserStatus.member_code);
 
     const [reservationData, setReservationData] = useState(data.item)
 
@@ -152,6 +156,9 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationData.res_code, "session_id": reservationData.session_id }
             const paymentRes: any = await postNewPayment(paymentData)
             console.log('paymentRes', paymentRes)
+            let time = parseInt(data.item.res_time.substring(0, 2));
+            let pushTime = `${time - 1 < 10 ? `0${time - 1}` : time - 1}:${data.item.res_time.substring(3, 5)}`
+            setNotification(reservationData.res_date, userCode, pushTime, reservationData.res_code)
             props.navigation.navigate({ name: '預約記錄' })
         } else {
             toast.show({
