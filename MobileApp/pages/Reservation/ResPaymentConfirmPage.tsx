@@ -9,7 +9,7 @@ const windowHeight = Dimensions.get('window').height;
 const backgroundStyle = { backgroundColor: 'white', };
 
 // set One Signal notification
-const setNotification = async (res_date:string, userCode:string, pushTime:string) => {
+const setNotification = async (res_date: string, userCode: string, pushTime: string) => {
     let data = {
         "app_id": `${Config.ONESIGNAL}`,
         "include_external_user_ids": [`${userCode}`],
@@ -40,8 +40,8 @@ export const ResPaymentConfirmPage = (props: any) => {
     if (rosterStatus.paymentRoster === 'true') {
         // To get the param passing from the previous screen
         const { resCode, res_date, res_time } = props.route.params;
-        let time = parseInt(res_time.substring(0,2));
-        let pushTime = `${time-1<10?`0${time-1}`:time-1}:${res_time.substring(3,5)}`
+        let time = parseInt(res_time.substring(0, 2));
+        let pushTime = `${time - 1 < 10 ? `0${time - 1}` : time - 1}:${res_time.substring(3, 5)}`
         setNotification(res_date, userCode, pushTime);
     }
 
@@ -62,7 +62,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                         </View>
                     </>
                 }
-                {rosterStatus.paymentRoster === 'false' &&
+                {rosterStatus.paymentRoster === 'full' &&
                     <>
                         <View style={{ marginTop: 20 }}>
                             <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
@@ -99,6 +99,20 @@ export const ResPaymentConfirmPage = (props: any) => {
                         <View style={{ marginTop: 20, }}>
                             <Text style={[styles.contentText]}>系統出現錯誤</Text>
                             <Text style={[styles.contentText]}>請與相關職員聯絡</Text>
+                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
+                                <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
+                        </View>
+                    </>
+                }
+                {rosterStatus.paymentRoster === 'false' &&
+                    <>
+                        <View style={{ marginTop: 20 }}>
+                            <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
+                            <Text style={[styles.subTitle]}>付款失敗</Text>
+                        </View>
+                        <View style={{ marginTop: 20, }}>
+                            <Text style={[styles.contentText]}>未能完成付款程序</Text>
+                            <Text style={[styles.contentText,{fontSize:14}]}>請於創建預約後三十分鐘內付款，否則預約會被取消</Text>
                             <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                                 <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
                         </View>

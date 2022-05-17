@@ -13,6 +13,7 @@ import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
 import Config from "react-native-config";
 import { ReservationSubmitType1, ReservationSubmitType2, ReservationType } from './ResType';
 import { styles } from '../../styles/GeneralStyles'
+import { useNavigation } from '@react-navigation/native';
 // fetch to check patient status
 const checkPatient = async (id: string) => {
   try {
@@ -73,6 +74,7 @@ export const ReservationPage = (props: any) => {
       store.dispatch(setMemberCode({ memberCode: patientStatus?.memberCode }))
     }
   }
+  
   // auto input login users info once
   useEffect(() => {
     const updateUserInfo = async()=>{

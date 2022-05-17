@@ -11,6 +11,7 @@ interface Props {
 }
 
 export const ResRecordComponent = (props: Props) => {
+  console.log(props.data)
   return (
     <FlatList data={props.data} 
     refreshControl={ <RefreshControl refreshing={props.refreshing} onRefresh={props.onRefresh} /> }
@@ -21,6 +22,7 @@ export const ResRecordComponent = (props: Props) => {
               <Text style={[styles.resCode]}>{item.res_code}</Text>
               <Text style={[styles.contentFont]}>預約日期: {item.res_date}</Text>
               <Text style={[styles.contentFont]}>預約時間: {item.res_time.substring(0,5)}</Text>
+              {item.payment === null && <Text style={[styles.contentFont, {color:'red'}]}>(待付款中)</Text>}
             </View>
             <View>
               <ResRecordStatus resStatus={item.status} />

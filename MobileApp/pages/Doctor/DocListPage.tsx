@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { useGetDoctorListQuery } from '../../API/DoctorAPI';
 import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
 import { SearchComponent } from '../../components/utils/SearchComponent';
 import {styles} from '../../styles/DoctorStyle';
+import { useNavigation } from '@react-navigation/native';
 
 interface dataType{
     "clinic": [[Object]], 
@@ -61,6 +62,16 @@ export const DocListPage: React.FC = (prop: any) => {
             console.log(e)
         }
     }, []);
+
+    const navigation = useNavigation(); 
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            data.refetch();
+        });
+
+        return () => {unsubscribe}
+    }, [navigation])
+
 
     // For FlatList
     const renderItem = (props: any) =>

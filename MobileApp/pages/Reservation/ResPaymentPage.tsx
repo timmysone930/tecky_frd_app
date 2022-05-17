@@ -46,7 +46,7 @@ export const PaymentPage = (props: any) => {
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
                 `${Config.PAYPAL}`
                 , {
-                    amount: `100`, // required
+                    amount: `${Config.Res_code}`, // required
                     currency: 'HKD',
                     localeCode: 'zh_HK',
                     shippingAddressRequired: false,
@@ -67,7 +67,7 @@ export const PaymentPage = (props: any) => {
         if (rosterSession.isSuccess) {
             if (rosterSession.currentData === []) {
                 // selected session not enable
-                store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
+                store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
                 store.dispatch(setMemberCode({ memberCode: '' }))
                 props.navigation.navigate({ name: '預約確認' })
             } else {
@@ -103,7 +103,7 @@ export const PaymentPage = (props: any) => {
                 // member
                 // reservation data
                 let resData = {
-                    'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': convertedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['clinic_code'],
+                    'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': convertedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['clinic_code'],'session_id': formData.reservedSession,
                     'status': 'booked', 'video_url': null, 'is_follow_up': true, 'channel': 'null', 'declare': {
                         "isLeave": formData.leaveHK, "location": formData.Countries, "date_back": formData.backDate,
                         "isFever": formData.isFever, "isCought": formData.isCough, "isVomit": formData.isVomit, "isCold": formData.isCold
@@ -120,7 +120,7 @@ export const PaymentPage = (props: any) => {
                                 description: "付款成功"
                             })
                             // create payment table
-                            let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": 100, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
+                            let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
                             const paymentRes: any = await postNewPayment(paymentData)
                             console.log('paymentRes', paymentRes)
                             store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
@@ -131,8 +131,8 @@ export const PaymentPage = (props: any) => {
                                 description: "付款失敗"
                             })
                             // enable the session 
-                            const enableRes = await putEnableSession(formData.reservedSession)
-                            console.log('enalbeResult', enableRes)
+                            // const enableRes = await putEnableSession(formData.reservedSession)
+                            // console.log('enalbeResult', enableRes)
                             store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
                             store.dispatch(setMemberCode({ memberCode: '' }))
                             props.navigation.navigate({ name: '預約確認' })
@@ -160,7 +160,7 @@ export const PaymentPage = (props: any) => {
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
                 <View>
-                    <Text style={[styles.subTitle, styles.mv_15,styles.ph_10,styles.pv_10,{marginLeft:5}]}>問診費用：$ 100</Text>
+                    <Text style={[styles.subTitle, styles.mv_15,styles.ph_10,styles.pv_10,{marginLeft:5}]}>問診費用：$ {Config.Res_code}</Text>
                     <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>如在三十分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約</Text>
                 </View>
                 <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>

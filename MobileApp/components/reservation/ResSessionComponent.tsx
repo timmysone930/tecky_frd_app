@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CheckIcon, Select } from 'native-base'
 import { useGetRosterSessionQuery } from '../../API/DoctorAPI';
 
@@ -19,6 +19,11 @@ export const ResSessionComponent = (props: Props) => {
     let selectFunction;
     let sessionID = props.timeValue
     const sessionData = useGetRosterSessionQuery(sessionID)
+
+    useEffect(() => {
+        sessionData.refetch();
+    }, [sessionID])
+    
     // 已選擇時段
     if (sessionID !== '') {
         if (sessionData.isSuccess) {

@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import { useGetReservedSessionByIdQuery } from '../../API/DoctorAPI';
 import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
 import { styles } from '../../styles/GeneralStyles'
+import Config from 'react-native-config';
 // white background
 const backgroundStyle = {backgroundColor: 'white',};
 const rowTitleArr = ['問診費用：', '選擇日期：', '選擇時間：', '應診者姓名：', '身份證類型：', '身份證編號：']
@@ -18,7 +19,7 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
     // roster session
     const rosterSession = useGetReservedSessionByIdQuery(formData.reservedSession);
     rosterSession.isSuccess ? reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}` : reserveSession = '載入中'
-    const rowCellArr = [`$ 100`, formData.reservedDate, reserveSession, formData.name, formData.idType, formData.idNumber]
+    const rowCellArr = [`$ ${Config.Res_code}`, formData.reservedDate, reserveSession, formData.name, formData.idType, formData.idNumber]
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
