@@ -98,6 +98,7 @@ export function UserAddressPage({navigation}:any) {
         // Fetch to delete address
         const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/addr-book/delete/${addressToDeleteID}`, {
             headers: {
+                "Authorization":`Bearer ${userToken}`,
                 'Content-Type': 'application/json'
             },
             method: "DELETE",
@@ -133,6 +134,7 @@ export function UserAddressPage({navigation}:any) {
 
             firstResp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
                 headers: {
+                    "Authorization":`Bearer ${userToken}`,
                     'Content-Type': 'application/json'
                 },
                 method: "POST",
@@ -142,6 +144,7 @@ export function UserAddressPage({navigation}:any) {
 
         const secondResp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
             headers: {
+                "Authorization":`Bearer ${userToken}`,
                 'Content-Type': 'application/json'
             },
             method: "POST",

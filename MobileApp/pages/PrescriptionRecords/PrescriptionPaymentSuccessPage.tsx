@@ -15,6 +15,13 @@ import Config from 'react-native-config';
 const windowHeight = Dimensions.get('window').height;
 
 export const PrescriptionPaymentSuccessPage = (props: any) => {
+
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
+    const init = {
+        headers:{
+            "Authorization":`Bearer ${userToken}`,
+        }
+    };
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
@@ -30,15 +37,16 @@ export const PrescriptionPaymentSuccessPage = (props: any) => {
 
     const dataFetching = async () => {
 
-        const paymentResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${storeData.prescription.payment}`)
+        const paymentResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${storeData.prescription.payment}`, init)
         const paymentResult = (await paymentResp.json())[0]
 
         setFetchData(paymentResult)
-        console.log(storeData);
+        console.log(paymentResult);
         if (paymentResult.payment_status ) {
             const editPrescription = await fetch(`${Config.REACT_APP_API_SERVER}/prescription/edit`, {
                 method: "PUT",
                 headers: {
+                    "Authorization":`Bearer ${userToken}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

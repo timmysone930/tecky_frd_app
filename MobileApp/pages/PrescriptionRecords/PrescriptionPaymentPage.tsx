@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { useToast } from 'native-base';
 
 export const PrescriptionPaymentPage = (props: any) => {
+
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
@@ -15,13 +17,20 @@ export const PrescriptionPaymentPage = (props: any) => {
     //Toast
     const toast = useToast()
 
-
-    let fetchData:any = null
-    fetchData = useSelector((state:any)=>state.getPrescriptionCode).prescriptionDetail;
-    console.log(fetchData);
+    const [fetchData, setFetchData] = useState(null as any)
+    const redux = useSelector((state:any)=>state.getPrescriptionCode);
+    const prescriptionDetail = redux.prescriptionDetail
+    useEffect(()=>{
+        console.log(prescriptionDetail);
+        if (fetchData == null) {
+            setFetchData(prescriptionDetail)
+        }
+        console.log(fetchData);
+    },[])
 
     // redirect to paypal
     const redirectPaypal = async () => {
+        // const fetchData = prescriptionDetail
         try {
             // For one time payments
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
@@ -50,34 +59,33 @@ export const PrescriptionPaymentPage = (props: any) => {
 
 
     const nextStep = async () => {
+        // const fetchData = prescriptionDetail
         toast.show({
             description: "載入中"
         })
                 
         const paypalRes = await redirectPaypal();
         
-        // update payment table
-        let paymentData = { 
-            "id": fetchData.prescription.payment, 
-            "gateway": "Paypal", 
-            "payment_id": paypalRes.data.nonce, 
-            "amount": fetchData.payment_amount, 
-            "payment_status": true, 
-            "type": "prescription", 
-            "payment_type": "visa"
-        }
 
         if (paypalRes.status == 'success') {
-            
-            props.navigation.navigate({ name: '付款完成' })
 
-            const editPaymentResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/edit`, {
+            const editPaymentResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/pay-pres`, {
                 method: "PUT",
                 headers: {
+                    "Authorization":`Bearer ${userToken}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(paymentData)
+                body: JSON.stringify({ 
+                    "id": fetchData.prescription.payment, 
+                    "gateway": "Paypal", 
+                    "payment_id": paypalRes.data.nonce, 
+                    "amount": fetchData.payment_amount, 
+                    "payment_status": true, 
+                    "type": "prescription", 
+                    "payment_type": "visa"
+                })
             })
+            props.navigation.navigate({ name: '付款完成' })
 
         } else {
             props.navigation.navigate({ name: '付款完成' })
@@ -93,10 +101,11 @@ export const PrescriptionPaymentPage = (props: any) => {
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
-
-                <View>
-                    <Text style={[styles.subTitle, { paddingHorizontal: 15, paddingTop: 15, }]}>藥單費用：${fetchData.payment_amount}</Text>
-                </View>
+                {fetchData &&
+                    <View>
+                        <Text style={[styles.subTitle, { paddingHorizontal: 15, paddingTop: 15, }]}>藥單費用：${fetchData.payment_amount}</Text>
+                    </View>
+                }
 
                 <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>
                     <TouchableOpacity style={{ flexDirection: 'row' ,justifyContent:'flex-start'}} onPress={()=>setRadioValue("PayPal")}>
@@ -110,9 +119,12 @@ export const PrescriptionPaymentPage = (props: any) => {
             <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
-                <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
-                    onPress={nextStep}>
-                    <Text style={styles.buttonText}>下一步</Text></TouchableOpacity>
+                <TouchableOpacity 
+                    style={[styles.button, { backgroundColor: '#325C80' }]}
+                    onPress={nextStep}
+                >
+                    <Text style={styles.buttonText}>下一步</Text>
+                </TouchableOpacity>
             </View>
 
         </SafeAreaView>

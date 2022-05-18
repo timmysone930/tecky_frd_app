@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 //Redux
@@ -17,9 +17,10 @@ import Config from 'react-native-config';
 
 
 export const PrescriptionPaymentConfirm = ({navigation}:any) => {
-    let fetchData:any = null
-    fetchData = useSelector((state:any)=>state.getPrescriptionCode).prescriptionDetail;
-
+    let fetching:any = null
+    fetching = useSelector((state:any)=>state.getPrescriptionCode).prescriptionSelecting;
+    const [fetchData, setFetchData] = useState(fetching)
+    
     let deliveryMethod:any = null
     deliveryMethod = useSelector((state:any)=>state.getPrescriptionPaymentPreset).deliveryMethod
 
@@ -28,12 +29,16 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
 
     let deliverAddress: any = null
     deliverAddress = useSelector((state:any)=>state.getPrescriptionPaymentPreset).deliverAddress
+    // console.log(fetchData.prescription);
+    // console.log(deliveryMethod,"deliveryMethod*************",pickUpStore, deliverAddress);
 
-    console.log(deliveryMethod,fetchData.prescription,"deliveryMethod*************",pickUpStore, deliverAddress);
+    useEffect(()=>{
+
+    })
 
     // Confirm and pay button
     const confirmAndPay = async () => {
-        let presEditData;
+        let presEditData: any;
         if (deliveryMethod == "pick-up") {
             presEditData = {
                 ...fetchData.prescription,
@@ -55,9 +60,12 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
                 delivery_phone: deliverAddress.phone
             }
         }
-        store.dispatch(setPrescriptionCode({prescriptionDetail: {...fetchData, prescription: presEditData}}))
+        const prescriptionDetail = {...fetchData}
+        prescriptionDetail.prescription = presEditData
+        console.log(prescriptionDetail);
+        store.dispatch(setPrescriptionCode({prescriptionDetail: prescriptionDetail}))
 
-        navigation.navigate("藥單付款")
+        navigation.navigate("藥單付款", {name: "付款"})
     }
     
     return (
@@ -78,7 +86,7 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
                             order_status={fetchData.prescription.order_status}
                         />
                         {/* Component */}
-                        <PrescriptionDetail prescription_details={fetchData.prescription.pres_details}/>
+                        <PrescriptionDetail treatmentItems={fetchData.treatmentItems}/>
                         <View style={[styles.flexEnd, styles.mb_30, styles.bottomLine]}>
                             {/* Component */}
                             <CostDisplay cost={fetchData.payment_amount}/>

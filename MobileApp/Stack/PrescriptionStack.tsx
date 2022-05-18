@@ -29,7 +29,7 @@ const InnerPrescriptionStack = createStackNavigator();
 export const InnerPrescriptionStacks = () => {
 
     return (
-        <InnerPrescriptionStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} initialRouteName="醫生詳情">
+        <InnerPrescriptionStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} initialRouteName="付款">
             <PrescriptionStack.Screen name="付款" component={PrescriptionPaymentPage} options={{ headerShown: true }}/>
             <PrescriptionStack.Screen name="付款完成" component={PrescriptionPaymentSuccessPage}  options={{ headerShown: false, animationEnabled: false }}/>
         </InnerPrescriptionStack.Navigator>

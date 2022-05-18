@@ -60,31 +60,44 @@ export const FakeData = {
 export function PrescriptionDetailPage({navigation}:any) {
 
     const userToken = useSelector((state: any) => state.getUserStatus.token);
-
-    const reduxData = useSelector((state: any) => state.getPrescriptionCode)
-    const prescriptionCode = reduxData.prescriptionCode ;
-
-    const [fetchData, setFetchData] = useState(null as any)
-    const dataFetching = async () => {
-      const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`, {
+    const init = {
         headers:{
             "Authorization":`Bearer ${userToken}`,
         }
-      })
-      const data = (await resp.json()).filter((item: any)=> item.prescription.pres_code == prescriptionCode)[0]
-      console.log(data);
-      const costResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${data.prescription.payment}`)
-    //   const cost = (await costResp.json())[0].amount
+    }
+
+    const reduxData = useSelector((state: any) => state.getPrescriptionCode)
+    const prescriptionSelecting = reduxData.prescriptionSelecting ;
+    const prescriptionCode = reduxData.prescriptionCode ;
+
+    const [fetchData, setFetchData] = useState(null as any)
+
+    const dataFetching = async () => {
+        
+    //   const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/prescription-list`, {
+    //     headers:{
+    //         "Authorization":`Bearer ${userToken}`,
+    //     }
+    //   })
+    //   const data = (await resp.json()).filter((item: any)=> item.prescription.pres_code == prescriptionCode)[0]
+        const data = prescriptionSelecting
+        console.log(data);
+        const costResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${data.prescription.payment}`, init)
         const cost = (await costResp.json())[0].amount
         
-      const clinicPhoneResp = await fetch(`${Config.REACT_APP_API_SERVER}/clinics/search?column=code&where=${data.clinic_code}`)
-      const clinicPhone = (await clinicPhoneResp.json())[0].clinic_phone
-
-      setFetchData({...data, payment_amount: cost, clinic_phone: clinicPhone})
+        const clinicPhoneResp = await fetch(`${Config.REACT_APP_API_SERVER}/clinics/search?column=code&where=${data.clinic_code}`, init)
+        const clinicPhone = (await clinicPhoneResp.json())[0].clinic_phone
+        console.log(data.prescription.pres_code);
+        
+        const getTreatmentResp = await fetch(`${Config.REACT_APP_API_SERVER}/prescription/treatment/${data.prescription.pres_code}`, init)
+        const treatmentItems = (await getTreatmentResp.json())
+        console.log(treatmentItems);
+        // console.log({...data, payment_amount: cost, clinic_phone: clinicPhone, treatmentItems});
+        setFetchData({...data, payment_amount: cost, clinic_phone: clinicPhone, treatmentItems})
     }
   
     const goToPay = () => {
-        store.dispatch(setPrescriptionCode({prescriptionDetail: fetchData}))
+        store.dispatch(setPrescriptionCode({prescriptionSelecting: fetchData}))
         navigation.navigate("地址確認")
     }
 
@@ -95,7 +108,7 @@ export function PrescriptionDetailPage({navigation}:any) {
             dataFetching()
             setFetched(true)
         }
-        console.log(fetchData);
+        // console.log(fetchData);
     },[])
     
     // const fetchData = FakeData
@@ -109,11 +122,11 @@ export function PrescriptionDetailPage({navigation}:any) {
 
                         {/* Component */}
                         <PrescriptionBasicInfo 
-                            pres_code={prescriptionCode}
+                            pres_code={fetchData.prescription.pres_code}
                             doctor={fetchData.doctor_name}
                             profession={fetchData.spec[0].spec_name}
                             created_at={fetchData.prescription.created_at.split("T")[0]}
-                            course_of_treatment={JSON.parse(fetchData.prescription.pres_details)[0].total_day}
+                            course_of_treatment={fetchData.treatmentItems[0].total_day}
                             patient_name={fetchData.name}
                             patient_id={fetchData.hkid}
                             orderStatusShow={true}
@@ -126,7 +139,7 @@ export function PrescriptionDetailPage({navigation}:any) {
                         <PayButton title={"前往付款"} disabled={fetchData.prescription.order_status != "waiting"} onPressFunction={goToPay}/>
 
                         {/* Component */}
-                        <PrescriptionDetail prescription_details={fetchData.prescription.pres_details}/>
+                        <PrescriptionDetail treatmentItems={fetchData.treatmentItems}/>
 
                         <Text style={[styles.subTitle, styles.textCenter, styles.mt_10]}>
                             請依照指示及療程服藥。

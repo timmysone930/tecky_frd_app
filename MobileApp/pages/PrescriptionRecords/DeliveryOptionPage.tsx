@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, ScrollView, Text, View, RefreshControl } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { styles } from '../../styles/GeneralStyles';
@@ -19,29 +19,6 @@ import { PayButton } from '../../components/prescription/PayButton';
 // Config
 import Config from 'react-native-config';
 
-// Fake Data
-import { FakeData } from './PrescriptionDetailPage';
-
-export const FakeAddr = [
-    {
-        hkid: "A123456(7)",
-        name: "張中和",
-        phone: "12345678",
-        area: "新界",
-        district: "沙田區大圍",
-        addr: "dsgssggfsgsgsddg",
-        is_default: true,
-    },
-    {
-        hkid: "A123456(7)",
-        name: "張中和",
-        phone: "12345678",
-        area: "九龍",
-        district: "油尖旺區大南",
-        addr: "fsdfafdsfsdasf",
-        is_default: false,
-    },
-]
 
 const wait = (timeout:any) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
@@ -51,8 +28,13 @@ const wait = (timeout:any) => {
 export const DeliveryOptionPage = ({navigation}:any)=> {
 
     const userToken = useSelector((state: any) => state.getUserStatus.token);
+    const init = {
+        headers:{
+            "Authorization":`Bearer ${userToken}`,
+        }
+    };
 
-    const [refreshing, setRefreshing] = React.useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = React.useCallback(() => {
       setRefreshing(true);
@@ -62,7 +44,10 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
     // Toast
     const toast = useToast()
 
-    const prescriptionDetail= (useSelector((state:any)=>state.getPrescriptionCode)).prescriptionDetail
+    const reduxData = useSelector((state: any) => state.getPrescriptionCode)
+    const [prescriptionSelecting, setPrescriptionSelecting] = useState(null as any) ;
+    
+    // const prescriptionDetail= (useSelector((state:any)=>state.getPrescriptionCode)).prescriptionDetail
     // console.log(prescriptionDetail);
 
 
@@ -86,25 +71,15 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
     const [formFilled, setFormFilled] = useState(false)
 
     const dataFetching = async () => {
-        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, {
-            headers:{
-                "Authorization":`Bearer ${userToken}`,
-            }
-        })
-        const defaultAddress = (await resp.json())[0]
-        console.log(defaultAddress);
-        if (defaultAddress.address != null) {
-            setInput(defaultAddress)
-        } else {
-            setInput("")
-        }
-        const pickUpStoreResp = await fetch (`${Config.REACT_APP_API_SERVER}/clinics/getList`)
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, init)
+        const defaultAddress = resp.status === 200 ? (await resp.json())[0] : null
+
+        setInput(defaultAddress.address != null ? defaultAddress : "")
+
+        const pickUpStoreResp = await fetch (`${Config.REACT_APP_API_SERVER}/clinics/getList`, init)
         const pickUpStore = (await pickUpStoreResp.json()).filter((item: any) => item.allow_store_pickup)
-        if (pickUpStore.length > 0) {
-            setAllowPickUp(pickUpStore)
-        } else {
-            setAllowPickUp("")
-        }
+
+        setAllowPickUp(pickUpStore.length > 0 ? pickUpStore : "")
     }
 
     const submitHandler = () => {
@@ -131,6 +106,10 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
 
     const [fetched, setFetched] = useState(false)
+    useEffect(()=>{
+        console.log(reduxData.prescriptionSelecting)
+        setPrescriptionSelecting(reduxData.prescriptionSelecting)
+    }, [reduxData])
   
     useEffect(()=>{
         const unsubscribe = navigation.addListener('focus', () => {
@@ -158,10 +137,10 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                         <Spinner color="#225D66" accessibilityLabel="Loading posts" />
                     </HStack>
                 }
-                { fetched && allowPickUp != null && 
+                { fetched && allowPickUp != null && prescriptionSelecting != null &&
                     <View style={[styles.viewContainer]}>
                         <Text style={[styles.title, styles.mb_30]}>
-                            藥單編號: {prescriptionDetail.prescription.pres_code}
+                            藥單編號: {prescriptionSelecting.prescription.pres_code}
                         </Text>
 
                         <Radio.Group 

@@ -92,12 +92,14 @@ export const prescriptionCheckingSlice = createSlice({
     name: "prescriptionChecking",
     initialState: {
         prescriptionCode: "",
+        prescriptionSelecting: null,
         prescriptionDetail: null
 
     },
     reducers: {
         setPrescriptionCode: (state, action) => {
             state.prescriptionCode = action.payload.prescriptionCode
+            state.prescriptionSelecting = action.payload.prescriptionSelecting
             state.prescriptionDetail = action.payload.prescriptionDetail
         }
     }
