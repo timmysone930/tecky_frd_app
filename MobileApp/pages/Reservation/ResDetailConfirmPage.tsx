@@ -15,9 +15,10 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
     const docInfo = useSelector((state: any) => state.setDoctorID);
     // get form data
     const formData = useSelector((state: any) => state.getFormData);
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
     let reserveSession: string;
     // roster session
-    const rosterSession = useGetReservedSessionByIdQuery(formData.reservedSession);
+    const rosterSession = useGetReservedSessionByIdQuery({rosterId:formData.reservedSession, token:userToken});
     rosterSession.isSuccess ? reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}` : reserveSession = '載入中'
     const rowCellArr = [`$ ${Config.Res_code}`, formData.reservedDate, reserveSession, formData.name, formData.idType, formData.idNumber]
     return (

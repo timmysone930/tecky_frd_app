@@ -158,9 +158,14 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationData.res_code, "session_id": reservationData.session_id }
             const paymentRes: any = await postNewPayment({data:paymentData, token:userToken})
             console.log('paymentRes', paymentRes)
-            let time = parseInt(data.item.res_time.substring(0, 2));
-            let pushTime = `${time - 1 < 10 ? `0${time - 1}` : time - 1}:${data.item.res_time.substring(3, 5)}`
-            setNotification(reservationData.res_date, userCode, pushTime, reservationData.res_code)
+            let time = parseInt(data.item.res_time.replace(':', ''), 10)
+            if(time % 100 - 10 < 0){
+                time = time - 50 
+            }else {
+                time = time -10
+            }
+            let pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
+            setNotification(reservationData.res_date, userCode, pushTime, reservationData.res_code, userToken)
             props.navigation.navigate({ name: '預約記錄' })
         } else {
             toast.show({

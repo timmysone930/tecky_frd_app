@@ -12,8 +12,9 @@ const backgroundStyle = { backgroundColor: 'white',};
 export const ResPolicyPage: React.FC = (props: any) => {
     // get form data
     const formData = useSelector((state:any) => state.getFormData);
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
     // roster session
-    const rosterSession = useGetReservedSessionByIdQuery(formData.reservedSession);
+    const rosterSession = useGetReservedSessionByIdQuery({rosterId:formData.reservedSession, token:userToken});
     // check Roster Status
     const onPress = async () => {
         if (rosterSession.isSuccess) {

@@ -134,8 +134,8 @@ export const ReservationPage = (props: any) => {
               <Text style={styles.subTitle}>應診時間</Text>
               <Controller control={control} rules={{ required: true, }}
                 render={({ field: { value } }) => (
-                  <ResSessionComponent onChange={onSessionChange} placeholder={'請選擇應診時間'} timeValue={getValues('reservedTime')}
-                  />
+                  <ResSessionComponent onChange={onSessionChange} placeholder={'請選擇應診時間'} timeValue={getValues('reservedTime')} userToken={userToken}
+                   />
                 )}
                 name="reservedSession"
               />

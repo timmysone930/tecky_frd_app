@@ -6,6 +6,7 @@ interface Props {
     onChange: (value:string) => void,
     placeholder: string,
     timeValue: string,
+    userToken:string,
 }
 interface dataMapType {
     "end_at": string,
@@ -18,7 +19,8 @@ interface dataMapType {
 export const ResSessionComponent = (props: Props) => {
     let selectFunction;
     let sessionID = props.timeValue
-    const sessionData = useGetRosterSessionQuery(sessionID)
+    console.log('object', {id:sessionID, token:props.userToken})
+    const sessionData = useGetRosterSessionQuery({id:sessionID, token:props.userToken})
 
     useEffect(() => {
         sessionData.refetch();

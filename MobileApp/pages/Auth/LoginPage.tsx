@@ -55,12 +55,12 @@ export const LoginPage = (props: any) => {
         // Fetching
         try {
             const res: QueryReturnValue = await getLoginSMS({ 'phone': inputData.phoneNo })
-            console.log(res)
+            console.log('res',res)
             toast.show({
                 description: "已送出驗證碼"
             })
             toast.show({
-                description: `SMS Code: ${JSON.stringify(res.data)}`
+                description: `SMS Code: ${res.data}`
             })
         } catch (e) {
             console.log(e)

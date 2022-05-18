@@ -19,19 +19,26 @@ export const doctorAPI = createApi({
     getRosterListByDocCode: builder.query({
       query: (code) => ({
         url: `/roster/search?column=doc_code&where=${code}`,
-        // headers: {
-        //   "Authorization": `Bearer ${token}`,
-        // }
       })
     }),
     getRosterSession: builder.query({
-      query: (id: string) => `/roster/session/${id}`
+      query: ({id, token}) => ({
+        url: `/roster/session/${id}`,
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        }
+      })
     }),
     getRosterById: builder.query({
       query: (code: string) => `/roster/search?column=id&where=${code}`,
     }),
     getReservedSessionById: builder.query({
-      query: (rosterId: string) => `/roster/oneSession/${rosterId}`,
+      query: ({rosterId, token}) => ({
+        url:`/roster/oneSession/${rosterId}`,
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        }
+      }),
     }),
     getOneDoctor: builder.query({
       query: ({ docCode, token }) => ({

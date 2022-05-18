@@ -25,7 +25,7 @@ export const PaymentPage = (props: any) => {
     // selected doctor id
     const docInfo = useSelector((state: any) => state.setDoctorID);
     // roster session
-    const rosterSession = useGetReservedSessionByIdQuery(formData.reservedSession);
+    const rosterSession = useGetReservedSessionByIdQuery({rosterId:formData.reservedSession, token:userToken});
     // to get clinic code from roster table 
     const rosterClinicCode = useGetRosterByIdQuery(formData.reservedTime);
     // convert date to server date
@@ -112,7 +112,7 @@ export const PaymentPage = (props: any) => {
                 }
                 // create reservation table
                 try {
-                    const reservationRes: any = await postPatientReservation(resData)
+                    const reservationRes: any = await postPatientReservation({data:resData, token:userToken})
                     if (reservationRes?.data) {
                         // payment
                         const paypalRes = await redirectPaypal();

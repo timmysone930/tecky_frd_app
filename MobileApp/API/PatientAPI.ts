@@ -19,11 +19,12 @@ export const patientAPI = createApi({
       })
     }),
     postPatientReservation: builder.mutation<QueryReturnValue, any>({
-      query: (data) => ({
+      query: ({data, token}) => ({
         url: "/reserve/add",
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": `Bearer ${token}`,
         },
         body: data
       })

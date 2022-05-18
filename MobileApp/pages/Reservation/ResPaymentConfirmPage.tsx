@@ -9,15 +9,15 @@ const windowHeight = Dimensions.get('window').height;
 const backgroundStyle = { backgroundColor: 'white', };
 
 // set One Signal notification
-export const setNotification = async (res_date: string, userCode: string, pushTime: string, resCode:string) => {
+export const setNotification = async (res_date: string, userCode: string, pushTime: string, resCode:string, token:string) => {
     let data = {
         "app_id": `${Config.ONESIGNAL}`,
         "include_external_user_ids": [`${userCode}`],
         "channel_for_external_user_ids": "push",
         "headings": { "en": "預約提醒" },
-        "contents": { "en": "你的視診預約將於1小時後開始" },
+        "contents": { "en": "你的視診預約將於十分鐘後開始" },
         "delayed_option": "timezone",
-        "send_after": `${res_date} 00:00:00 GMT+0800`,
+        "send_after": `${res_date} ${pushTime}:00 GMT+0800`,
         "delivery_time_of_day": `${pushTime}`
     }
 
@@ -37,6 +37,7 @@ export const setNotification = async (res_date: string, userCode: string, pushTi
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`,
           },
         body: JSON.stringify(submitData)
     })
@@ -47,14 +48,21 @@ export const setNotification = async (res_date: string, userCode: string, pushTi
 export const ResPaymentConfirmPage = (props: any) => {
     const rosterStatus = useSelector((state: any) => state.getPaymentStatus);
     const userCode = useSelector((state: any) => state.getUserStatus.member_code);
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
 
     if (rosterStatus.paymentRoster === 'true') {
         // To get the param passing from the previous screen
         const { resCode, res_date, res_time } = props.route.params;
         console.log('resCode', resCode)
-        let time = parseInt(res_time.substring(0, 2));
-        let pushTime = `${time - 1 < 10 ? `0${time - 1}` : time - 1}:${res_time.substring(3, 5)}`
-        setNotification(res_date, userCode, pushTime, resCode);
+        let time = parseInt(res_time.replace(':', ''), 10)
+        if(time % 100 - 10 < 0){
+            time = time - 50 
+        }else {
+            time = time -10
+        }
+        let pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
+        console.log(pushTime)
+        setNotification(res_date, userCode, pushTime, resCode, userToken);
     }
 
     return (
