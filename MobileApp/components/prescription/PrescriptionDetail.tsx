@@ -3,13 +3,13 @@ import { View, Text } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
 interface Props {
-    prescription_details: any
+    treatmentItems: any
 }
 
 export const PrescriptionDetail = (props: Props) => {
 
-    const treatments = JSON.parse(props.prescription_details)
-    console.log(treatments);
+    const treatments = props.treatmentItems
+
 
     return (
         <>

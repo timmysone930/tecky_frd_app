@@ -153,14 +153,15 @@ export function InfoEditPage({navigation}:any) {
                 return
             } else {
                 const phoneNum = input.areaCode + input.phone
-                const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/confirm`, {
+                const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/phone`, {
                     method: "POST",
                     headers: {
                         "Authorization":`Bearer ${userToken}`,
                         'content-type': 'application/json'
                     },
-                    body: JSON.stringify({phone: phoneNum, smsCode: input.validCode})
+                    body: JSON.stringify({phone: fetchData.phone, smsCode: input.validCode})
                 })
+                console.log(resp.status);
                 if (resp.status == 400) {
                     toast.show({
                         description: "請確認輸入正確電話號碼及驗證碼"
@@ -176,7 +177,17 @@ export function InfoEditPage({navigation}:any) {
             phone: input.areaCode + input.phone,
         }
 
-        const resp = await putEditInfo(newInfo)
+        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-profile`, {
+            method: "PUT",
+            headers: {
+                "Authorization":`Bearer ${userToken}`,
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(newInfo)
+        })
+        console.log(resp.status);
+
+        // const resp = await putEditInfo(newInfo)
         
         navigation.navigate("我的資料")
         toast.show({
@@ -222,7 +233,6 @@ export function InfoEditPage({navigation}:any) {
                                     <Input
                                         size="lg"
                                         placeholder="Email" 
-                                        keyboardType='email-address'
                                         value={input.email} 
                                         onChangeText={email => setInput({...input, email: email})}
                                     />

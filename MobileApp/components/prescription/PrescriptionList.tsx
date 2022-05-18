@@ -35,7 +35,7 @@ export const PrescriptionList = (props: Props) => {
               <TouchableOpacity 
                 style={[styles.box]}
                 onPress={()=>{
-                  store.dispatch(setPrescriptionCode({prescriptionCode: item.prescription.pres_code}))
+                  store.dispatch(setPrescriptionCode({prescriptionSelecting: item}))
                   props.navigation.navigate(props.changePage)
                 }}
               >

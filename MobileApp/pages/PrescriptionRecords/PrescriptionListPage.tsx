@@ -40,11 +40,13 @@ export const PrescriptionListPage = ({navigation}:any) => {
   const [fetched, setFetched] = useState(false)
 
   useEffect(()=>{
-      if (!fetched) {
-          dataFetching()
-          setFetched(true)
-      }
-  },[])
+      const unsubscribe = navigation.addListener('focus', () => {
+        dataFetching()
+        setFetched(true)
+      });
+
+      return () => {unsubscribe}
+  },[navigation])
 
   return (
       <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
