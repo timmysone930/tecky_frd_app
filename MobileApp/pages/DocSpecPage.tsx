@@ -1,5 +1,6 @@
 import React from 'react'
 import {SafeAreaView,ScrollView,} from 'react-native';
+import Config from 'react-native-config';
 import { DocSpecCardComponent } from '../components/doctor/DocSpecCardComponent';
 
 export const DocSpecPage = (props:any) => {

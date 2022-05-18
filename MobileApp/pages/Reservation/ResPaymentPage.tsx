@@ -16,6 +16,7 @@ import { styles } from '../../styles/GeneralStyles'
 const backgroundStyle = {backgroundColor: 'white',};
 
 export const PaymentPage = (props: any) => {
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
     const toast = useToast()
     // Radio Button
     const [radioValue, setRadioValue] = React.useState('PayPal');
@@ -121,7 +122,7 @@ export const PaymentPage = (props: any) => {
                             })
                             // create payment table
                             let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
-                            const paymentRes: any = await postNewPayment(paymentData)
+                            const paymentRes: any = await postNewPayment({data:paymentData, token:userToken})
                             console.log('paymentRes', paymentRes)
                             store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
                             store.dispatch(setMemberCode({ memberCode: '' }))
@@ -161,7 +162,7 @@ export const PaymentPage = (props: any) => {
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
                 <View>
                     <Text style={[styles.subTitle, styles.mv_15,styles.ph_10,styles.pv_10,{marginLeft:5}]}>問診費用：$ {Config.Res_code}</Text>
-                    <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>如在三十分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約</Text>
+                    <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>如在十五分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約</Text>
                 </View>
                 <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>
                     <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start' }} onPress={() => setRadioValue("PayPal")}>

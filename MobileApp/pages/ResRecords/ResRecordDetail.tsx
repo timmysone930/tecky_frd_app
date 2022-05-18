@@ -28,6 +28,7 @@ const backgroundStyle = { backgroundColor: 'white', };
 
 export const ResRecordDetail = (props: any, { navigation }: any) => {
     const toast = useToast()
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
     // To get the param passing from the previous screen
     const { resCode, docCode, data } = props.route.params;
     // to Get user code
@@ -37,7 +38,8 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
     let recordData = useGetReservationListQuery();
     // get doctor name
-    const docData = useGetOneDoctorQuery(docCode);
+    const docData = useGetOneDoctorQuery({docCode:docCode, token:userToken});
+    console.log('docData',docData)
     let rowCellArr: [string, string, string, string];
     if (docData.isSuccess) {
         rowCellArr = [resCode, docData.data[0].name, data.item.res_date, data.item.res_time.substring(0, 5)]
@@ -154,7 +156,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             })
             // create payment table
             let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationData.res_code, "session_id": reservationData.session_id }
-            const paymentRes: any = await postNewPayment(paymentData)
+            const paymentRes: any = await postNewPayment({data:paymentData, token:userToken})
             console.log('paymentRes', paymentRes)
             let time = parseInt(data.item.res_time.substring(0, 2));
             let pushTime = `${time - 1 < 10 ? `0${time - 1}` : time - 1}:${data.item.res_time.substring(3, 5)}`
@@ -204,7 +206,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                     <>
                         <TouchableOpacity style={styles.fullButton} onPress={onClickPaypal}>
                             <Text style={styles.buttonText}>進行付款</Text></TouchableOpacity>
-                        <Text style={[styles.warning, styles.textCenter, { marginVertical: 10, }]}>*請於創建預約後三十分鐘內付款，否則預約會被取消</Text>
+                        <Text style={[styles.warning, styles.textCenter, { marginVertical: 10, }]}>*請於創建預約後十五分鐘內付款，否則預約會被取消</Text>
                     </>
                 }
             </ScrollView>

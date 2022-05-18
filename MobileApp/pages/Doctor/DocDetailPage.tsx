@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, SafeAreaView, ScrollView, } from 'react-native';
 import { Button } from 'react-native-paper';
+import { useSelector } from 'react-redux';
 import { useGetRosterListByDocCodeQuery } from '../../API/DoctorAPI';
 import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { InfoCardComponent } from '../../components/doctor/InfoCardComponent';
@@ -11,6 +12,7 @@ import {styles} from '../../styles/DoctorStyle';
 const backgroundStyle = { backgroundColor: 'white', };
 
 export const DocDetailPage: React.FC = (props: any) => {
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
     // To get the param passing from the previous screen
     const { id, docData } = props.route.params;
     let doctorDes = docData.doctor_des.split(',')

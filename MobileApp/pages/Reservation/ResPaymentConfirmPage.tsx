@@ -124,7 +124,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                         </View>
                         <View style={{ marginTop: 20, }}>
                             <Text style={[styles.contentText]}>未能完成付款程序</Text>
-                            <Text style={[styles.contentText, { fontSize: 14 }]}>請於創建預約後三十分鐘內付款，否則預約會被取消</Text>
+                            <Text style={[styles.contentText, { fontSize: 14 }]}>請於創建預約後十五分鐘內付款，否則預約會被取消</Text>
                             <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                                 <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
                         </View>

@@ -13,11 +13,12 @@ export const paymentAPI = createApi({
   // The "endpoints" represent operations and requests for this server
   endpoints: builder => ({
     postNewPayment: builder.mutation<QueryReturnValue, any>({
-      query: (data) => ({
+      query: ({data,token}) => ({
         url: "/payment/reserve",
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
+          "Authorization":`Bearer ${token}`,
         },
         body: data
       })

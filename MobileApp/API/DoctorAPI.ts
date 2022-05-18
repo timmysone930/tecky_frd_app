@@ -16,23 +16,33 @@ export const doctorAPI = createApi({
       // The URL for the request is '/http://XXXX/doctors/list'
       query: () => '/doctors/allInfo'
     }),
-    getRosterListByDocCode:  builder.query({
-      query: (code: string) => `/roster/search?column=doc_code&where=${code}`,
+    getRosterListByDocCode: builder.query({
+      query: (code) => ({
+        url: `/roster/search?column=doc_code&where=${code}`,
+        // headers: {
+        //   "Authorization": `Bearer ${token}`,
+        // }
+      })
     }),
     getRosterSession: builder.query({
-      query:(id:string) => `/roster/session/${id}`
+      query: (id: string) => `/roster/session/${id}`
     }),
-    getRosterById:  builder.query({
+    getRosterById: builder.query({
       query: (code: string) => `/roster/search?column=id&where=${code}`,
     }),
     getReservedSessionById: builder.query({
       query: (rosterId: string) => `/roster/oneSession/${rosterId}`,
     }),
     getOneDoctor: builder.query({
-      query: (docCode: string) => `/doctors/search?column=code&where=${docCode}`,
+      query: ({ docCode, token }) => ({
+        url: `/doctors/search?column=code&where=${docCode}`,
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        }
+      }),
     }),
   })
 })
 
 // Export the auto-generated hook for the query endpoint
-export const { useGetDoctorListQuery, useGetRosterListByDocCodeQuery,useGetRosterSessionQuery, useGetRosterByIdQuery,useGetReservedSessionByIdQuery, useGetOneDoctorQuery } = doctorAPI
+export const { useGetDoctorListQuery, useGetRosterListByDocCodeQuery, useGetRosterSessionQuery, useGetRosterByIdQuery, useGetReservedSessionByIdQuery, useGetOneDoctorQuery } = doctorAPI

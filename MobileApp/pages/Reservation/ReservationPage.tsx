@@ -14,11 +14,19 @@ import Config from "react-native-config";
 import { ReservationSubmitType1, ReservationSubmitType2, ReservationType } from './ResType';
 import { styles } from '../../styles/GeneralStyles'
 import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 // fetch to check patient status
-const checkPatient = async (id: string) => {
+const checkPatient = async (id: string, token: string) => {
   try {
-    const response = await fetch(`${Config.REACT_APP_API_SERVER}/patient/search?column=hkid&where=${id}`);
+    const response = await fetch(`${Config.REACT_APP_API_SERVER}/patient/search?column=hkid&where=${id}`,
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      }
+    );
     const json = await response.json();
+    console.log('json',json)
     if (json.message && json.message === 'Not Found') {
       return { message: 'Not Found' }
     } else {
@@ -34,8 +42,9 @@ const titleArr = ['先生', '小姐', '女士']
 const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
 
 export const ReservationPage = (props: any) => {
+  const userToken = useSelector((state: any) => state.getUserStatus.token);
   // get current users profile
-  const userData = useGetUserInfoQuery()
+  const userData = useGetUserInfoQuery(userToken)
   // To get the param passing from the previous screen
   const { id, docData } = props.route.params;
   // Form element
@@ -64,7 +73,7 @@ export const ReservationPage = (props: any) => {
   const rosterData = useGetRosterListByDocCodeQuery(id)
   // Form data submit and navigate
   const onSubmit = async (data: ReservationType) => {
-    let patientStatus: ReservationSubmitType1 | ReservationSubmitType2 | undefined = await checkPatient(data.idNumber)
+    let patientStatus: ReservationSubmitType1 | ReservationSubmitType2 | undefined = await checkPatient(data.idNumber, userToken)
     if (patientStatus?.message === 'Not Found') {
       props.navigation.navigate({ name: '上傳身份證明文件' })
       store.dispatch(setFormData(data))
@@ -74,10 +83,10 @@ export const ReservationPage = (props: any) => {
       store.dispatch(setMemberCode({ memberCode: patientStatus?.memberCode }))
     }
   }
-  
+
   // auto input login users info once
   useEffect(() => {
-    const updateUserInfo = async()=>{
+    const updateUserInfo = async () => {
       if (userData.isSuccess) {
         await setValue('name', userData.data.name)
         await setValue('idNumber', userData.data.id_number)
@@ -133,7 +142,7 @@ export const ReservationPage = (props: any) => {
               {errors.reservedSession && <Text style={styles.warning}>* 此項必須選擇</Text>}
 
               <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop: 5, marginBottom: 10, }}>
-                <Text style={styles.subTitle}>問診費用： ${docData.video_diag_fee}</Text>
+                <Text style={styles.subTitle}>問診費用： ${Config.Res_code}</Text>
                 <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
               </View>
 
@@ -141,7 +150,7 @@ export const ReservationPage = (props: any) => {
               <Controller control={control} rules={{ required: true, }}
                 render={({ field: { value } }) => (
                   <DropdownSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
-                    selectedValue={getValues('title')} 
+                    selectedValue={getValues('title')}
                   />
                 )}
                 name="title"

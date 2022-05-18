@@ -12,7 +12,12 @@ export const userInfoAPI = createApi({
         // The endpoint is a "query" operation that returns data
         getUserInfo: builder.query<any, void>({
             // The URL for the request is '/http://XXXX/client/profile'
-            query: () => `/client/profile`
+            query: (token) => ({
+                url:`/client/profile`,
+                headers:{
+                    "Authorization":`Bearer ${token}`,
+                  }
+            })
         }),
         putEditInfo: builder.mutation<QueryReturnValue, any>({
             query: (data) => ({
