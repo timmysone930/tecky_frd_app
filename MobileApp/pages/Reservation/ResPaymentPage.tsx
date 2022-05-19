@@ -13,7 +13,7 @@ import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
 import { setMemberCode } from '../../redux/slice';
 import { styles } from '../../styles/GeneralStyles'
 // white background
-const backgroundStyle = {backgroundColor: 'white',};
+const backgroundStyle = { backgroundColor: 'white', };
 
 export const PaymentPage = (props: any) => {
     const userToken = useSelector((state: any) => state.getUserStatus.token);
@@ -24,8 +24,8 @@ export const PaymentPage = (props: any) => {
     const formData = useSelector((state: any) => state.getFormData);
     // selected doctor id
     const docInfo = useSelector((state: any) => state.setDoctorID);
-    // roster session
-    const rosterSession = useGetReservedSessionByIdQuery({rosterId:formData.reservedSession, token:userToken});
+    // // roster session
+    // const rosterSession = useGetReservedSessionByIdQuery({ rosterId: formData.reservedSession, token: userToken });
     // to get clinic code from roster table 
     const rosterClinicCode = useGetRosterByIdQuery(formData.reservedTime);
     // convert date to server date
@@ -33,6 +33,8 @@ export const PaymentPage = (props: any) => {
     // Register
     const [postPatientRegister] = usePostPatientRegisterMutation();
     const submitData = new FormData();
+    // roster session
+    const rosterSession = useGetReservedSessionByIdQuery({ rosterId: formData.reservedSession, token: userToken });
     // Reservation 
     const [postPatientReservation] = usePostPatientReservationMutation();
     // to enable the select session
@@ -62,10 +64,35 @@ export const PaymentPage = (props: any) => {
             return { status: 'error', data: { error } }
         }
     }
-
+    // console.log('123rosterSession',rosterSession)
     // submit
     const onPress = async () => {
-        if (rosterSession.isSuccess) {
+        // non member
+        if (formData.memberCode === '') {
+            // create member
+            submitData.append('hkid', formData.idNumber)
+            submitData.append('id_doc_type', formData.idType)
+            submitData.append('name', formData.name)
+            submitData.append('name_en', formData.name_en)
+            submitData.append('alt_contact', formData.EmergencyContactName)
+            submitData.append('alt_phone', formData.EmergencyContactPhone)
+            submitData.append('gender', formData.title)
+            submitData.append('email', formData.email)
+            submitData.append('phone', formData.phone)
+            submitData.append('birthday', formData.bDay)
+            submitData.append('hkid_img', formData['idImg'])
+            const res: any = await postPatientRegister(submitData)
+            if (res.error) {
+                console.log('member', res.error)
+                store.dispatch(checkRosterStatus({ paymentRoster: 'error' }))
+                store.dispatch(setMemberCode({ memberCode: '' }))
+                props.navigation.navigate({ name: '預約確認' })
+                return
+            }
+        }
+        rosterSession.refetch();
+        rosterClinicCode.refetch();
+        if (rosterClinicCode.isSuccess) {
             if (rosterSession.currentData === []) {
                 // selected session not enable
                 store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
@@ -78,33 +105,10 @@ export const PaymentPage = (props: any) => {
                 })
                 // hold session
                 const holdRes = await putHoldSession(formData.reservedSession)
-                // non member
-                if (formData.memberCode === '') {
-                    // create member
-                    submitData.append('hkid', formData.idNumber)
-                    submitData.append('id_doc_type', formData.idType)
-                    submitData.append('name', formData.name)
-                    submitData.append('name_en', formData.name_en)
-                    submitData.append('alt_contact', formData.EmergencyContactName)
-                    submitData.append('alt_phone', formData.EmergencyContactPhone)
-                    submitData.append('gender', formData.title)
-                    submitData.append('email', formData.email)
-                    submitData.append('phone', formData.phone)
-                    submitData.append('birthday', formData.bDay)
-                    submitData.append('hkid_img', formData['idImg'])
-                    const res: any = await postPatientRegister(submitData)
-                    if (res.error) {
-                        console.log('member', res.error)
-                        store.dispatch(checkRosterStatus({ paymentRoster: 'error' }))
-                        store.dispatch(setMemberCode({ memberCode: '' }))
-                        props.navigation.navigate({ name: '預約確認' })
-                        return
-                    }
-                }
                 // member
                 // reservation data
                 let resData = {
-                    'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': convertedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['clinic_code'],'session_id': formData.reservedSession,
+                    'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': convertedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['clinic_code'], 'session_id': formData.reservedSession,
                     'status': 'booked', 'video_url': null, 'is_follow_up': true, 'channel': 'null', 'declare': {
                         "isLeave": formData.leaveHK, "location": formData.Countries, "date_back": formData.backDate,
                         "isFever": formData.isFever, "isCought": formData.isCough, "isVomit": formData.isVomit, "isCold": formData.isCold
@@ -112,7 +116,7 @@ export const PaymentPage = (props: any) => {
                 }
                 // create reservation table
                 try {
-                    const reservationRes: any = await postPatientReservation({data:resData, token:userToken})
+                    const reservationRes: any = await postPatientReservation({ data: resData, token: userToken })
                     if (reservationRes?.data) {
                         // payment
                         const paypalRes = await redirectPaypal();
@@ -122,11 +126,11 @@ export const PaymentPage = (props: any) => {
                             })
                             // create payment table
                             let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
-                            const paymentRes: any = await postNewPayment({data:paymentData, token:userToken})
+                            const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
                             console.log('paymentRes', paymentRes)
                             store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
                             store.dispatch(setMemberCode({ memberCode: '' }))
-                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data, 'res_date':convertedDate,'res_time':`${rosterSession.data.start_at}`  } })
+                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data, 'res_date': convertedDate, 'res_time': `${rosterSession.data.start_at}` } })
                         } else {
                             toast.show({
                                 description: "付款失敗"
@@ -154,6 +158,10 @@ export const PaymentPage = (props: any) => {
                     console.log(err)
                 }
             }
+        } else if (rosterClinicCode.isError) {
+            store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
+            store.dispatch(setMemberCode({ memberCode: '' }))
+            props.navigation.navigate({ name: '預約確認' })
         }
     }
 
@@ -161,7 +169,7 @@ export const PaymentPage = (props: any) => {
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
                 <View>
-                    <Text style={[styles.subTitle, styles.mv_15,styles.ph_10,styles.pv_10,{marginLeft:5}]}>問診費用：$ {Config.Res_code}</Text>
+                    <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>問診費用：$ {Config.Res_code}</Text>
                     <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>如在十五分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約</Text>
                 </View>
                 <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>

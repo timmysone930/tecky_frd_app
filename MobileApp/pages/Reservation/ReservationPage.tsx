@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, RefreshControl } from 'react-native'
 import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { useForm, Controller } from "react-hook-form";
 import { store } from '../../redux/store';
@@ -15,6 +15,7 @@ import { ReservationSubmitType1, ReservationSubmitType2, ReservationType } from 
 import { styles } from '../../styles/GeneralStyles'
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { wait } from '../ResRecordPage';
 // fetch to check patient status
 const checkPatient = async (id: string, token: string) => {
   try {
@@ -26,7 +27,7 @@ const checkPatient = async (id: string, token: string) => {
       }
     );
     const json = await response.json();
-    console.log('json',json)
+    console.log('json', json)
     if (json.message && json.message === 'Not Found') {
       return { message: 'Not Found' }
     } else {
@@ -84,6 +85,30 @@ export const ReservationPage = (props: any) => {
     }
   }
 
+  // refetch
+
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+      try {
+          setRefreshing(true);
+          rosterData.refetch();
+          wait(2000).then(() => setRefreshing(false));
+
+      } catch (e) {
+          console.log(e)
+      }
+  }, []);
+
+  const navigation = useNavigation();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      rosterData.refetch();
+    });
+
+    return () => { unsubscribe }
+  }, [navigation])
+
+
   // auto input login users info once
   useEffect(() => {
     const updateUserInfo = async () => {
@@ -101,7 +126,14 @@ export const ReservationPage = (props: any) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}
       >
-        <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }}>
+        <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }} 
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
+        >
           <View style={styles.drListCard}>
             <DocListComponent props={docData} />
           </View>
@@ -135,7 +167,7 @@ export const ReservationPage = (props: any) => {
               <Controller control={control} rules={{ required: true, }}
                 render={({ field: { value } }) => (
                   <ResSessionComponent onChange={onSessionChange} placeholder={'請選擇應診時間'} timeValue={getValues('reservedTime')} userToken={userToken}
-                   />
+                  />
                 )}
                 name="reservedSession"
               />

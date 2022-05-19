@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 // white background
 const backgroundStyle = { backgroundColor: 'white', };
 
-const wait = (timeout: number) => {
+export const wait = (timeout: number) => {
     return new Promise(resolve => setTimeout(resolve, timeout));
 }
 
