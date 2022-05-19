@@ -53,12 +53,13 @@ export const ResHealthFormPage: React.FC = (props: any) => {
                     )}
                         name="Countries" />
                     <Text style={[styles.subTitle,styles.mt_10]}>你回到香港的日期？</Text>
-                    <Controller control={control}
+                    <Controller control={control} rules={{validate: value => {let today = new Date(); let inputDay = new Date(value);return inputDay < today}}}
                         render={({ field: { value } }) => (
                             <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('backDate')} />
                         )}
                         name="backDate"
                     />
+                     {errors.backDate && <Text style={styles.warning}>* 請檢查回港日期是否填寫正確</Text>}
                     <View style={{ marginTop: 10 }}><BottomLineComponent /></View>
                     <Text style={[styles.subTitle,styles.mt_10]}>你是否有以下的病徵？</Text>
                     <ResCheckBoxComponent groupValues={groupValues} onChange={onCheckBoxChange} />

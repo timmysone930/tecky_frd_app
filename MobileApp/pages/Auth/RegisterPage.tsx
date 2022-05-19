@@ -167,21 +167,21 @@ export const RegisterPage = (props: any) => {
                     {errors.regIDNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
                     <Text style={styles.subTitle}>生日日期<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
-                    <Controller control={control} rules={{ required: true, }}
+                    <Controller control={control} rules={{ required: true, validate: value => {let today = new Date(); let inputDay = new Date(value);return inputDay < today} }}
                         render={({ field: { value } }) => (
                             <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('regBDay')} />
                         )}
                         name="regBDay"
                     />
-                    {errors.regBDay && <Text style={styles.warning}>* 此項必須填寫</Text>}
+                    {errors.regBDay && <Text style={styles.warning}>* 請檢查生日日期是否填寫或正確</Text>}
                     <Text style={styles.subTitle}>電郵地址<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
-                    <Controller control={control} rules={{ required: true, }}
+                    <Controller control={control} rules={{ required: true, pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫收發通知用的電郵地址" placeholderTextColor="#737474" />
                         )}
                         name="regEmail"
                     />
-                    {errors.regEmail && <Text style={styles.warning}>* 此項必須填寫</Text>}
+                    {errors.regEmail && <Text style={styles.warning}>* 請檢查電郵地址是否填寫或正確</Text>}
 
                     <Text style={styles.subTitle}>流動電話號碼<Text style={{ color: 'red', fontSize: 12, }}> *</Text></Text>
                     <View style={{ flexDirection: 'row', }}>
@@ -193,7 +193,7 @@ export const RegisterPage = (props: any) => {
                             )}
                             name="phoneCode"
                         />
-                        <Controller control={control} rules={{ required: true, }}
+                        <Controller control={control} rules={{ required: true,  pattern: /^(0|[1-9]\d*)(\.\d+)?$/ }}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <TextInput textContentType={'telephoneNumber'} keyboardType={'numeric'} style={[styles.input, { marginLeft: 10, flex: 1.5 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫電話號碼" placeholderTextColor="#737474" />
                             )}
@@ -201,7 +201,7 @@ export const RegisterPage = (props: any) => {
                         />
 
                     </View>
-                    {errors.regPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
+                    {errors.regPhone && <Text style={styles.warning}>* 請檢查電話號碼是否填寫或正確</Text>}
 
                     <Text style={styles.subTitle}>輸入驗證碼<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
