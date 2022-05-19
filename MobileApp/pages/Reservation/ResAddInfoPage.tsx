@@ -56,31 +56,31 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     {errors.name_en && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
                     <Text style={[styles.subTitle, styles.mt_10]}>生日日期</Text>
-                    <Controller control={control} rules={{ required: true, }}
+                    <Controller control={control} rules={{ required: true, validate: value => {let today = new Date(); let inputDay = new Date(value);return inputDay < today} }}
                         render={({ field: { value } }) => (
                             <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('bDay')} />
                         )}
                         name="bDay"
                     />
                     {/* 必須填寫提示 */}
-                    {errors.bDay && <Text style={styles.warning}>* 此項必須填寫</Text>}
+                    {errors.bDay && <Text style={styles.warning}>* 請檢查生日日期是否填寫或正確</Text>}
                     <Text style={[styles.subTitle, styles.mt_10]}>電郵地址</Text>
-                    <Controller control={control} rules={{ required: true, }}
+                    <Controller control={control} rules={{ required: true,  pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫收發通知用的電郵地址" placeholderTextColor="#737474" />
                         )}
                         name="email"
                     />
-                    {errors.email && <Text style={styles.warning}>* 此項必須填寫</Text>}
+                    {errors.email && <Text style={styles.warning}>* 請檢查電郵地址是否填寫或正確</Text>}
 
                     <Text style={[styles.subTitle, styles.mt_10]}>流動電話號碼</Text>
-                    <Controller control={control} rules={{ required: true, }}
+                    <Controller control={control} rules={{ required: true,  pattern: /^(0|[1-9]\d*)(\.\d+)?$/ }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput textContentType={'telephoneNumber'} keyboardType={'numeric'} style={[styles.input]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="e.g 85212345678" placeholderTextColor="#737474" />
                         )}
                         name="phone"
                     />
-                    {errors.phone && <Text style={styles.warning}>* 此項必須填寫</Text>}
+                    {errors.phone && <Text style={styles.warning}>* 請檢查電話號碼是否填寫或正確</Text>}
                     <Text style={[styles.subTitle, styles.mt_10]}>緊急聯絡人</Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { onChange, onBlur, value } }) => (
@@ -89,13 +89,13 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                         name="EmergencyContactName"
                     />
                     {errors.EmergencyContactName && <Text style={styles.warning}>* 此項必須填寫</Text>}
-                    <Controller control={control} rules={{ required: true, }}
+                    <Controller control={control} rules={{ required: true, pattern: /^(0|[1-9]\d*)(\.\d+)?$/}}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput keyboardType={'numeric'} style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話 (e.g 85212345678)" placeholderTextColor="#737474" />
                         )}
                         name="EmergencyContactPhone"
                     />
-                    {errors.EmergencyContactPhone && <Text style={styles.warning}>* 此項必須填寫</Text>}
+                    {errors.EmergencyContactPhone && <Text style={styles.warning}>* 請檢查電話號碼是否填寫或正確</Text>}
                     <Text style={[styles.subTitle, styles.mt_10]}>請上傳你的身份證照片正面</Text>
                     {/* Modal for camera */}
                     <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.uploadBtn}>

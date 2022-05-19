@@ -91,7 +91,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                         <View style={{ marginTop: 20, }}>
                             <Text style={[styles.contentText]}>該時段已滿</Text>
                             <Text style={[styles.contentText]}>請重新選擇時段</Text>
-                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '預約醫生' })}>
+                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                                 <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
                         </View>
                     </>

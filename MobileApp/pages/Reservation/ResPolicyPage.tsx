@@ -15,16 +15,22 @@ export const ResPolicyPage: React.FC = (props: any) => {
     const userToken = useSelector((state: any) => state.getUserStatus.token);
     // roster session
     const rosterSession = useGetReservedSessionByIdQuery({rosterId:formData.reservedSession, token:userToken});
+  
     // check Roster Status
     const onPress = async () => {
-        if (rosterSession.isSuccess) {
-            if (rosterSession.currentData === []) {
-                store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
-                props.navigation.navigate({ name: '預約確認' })
-            } else {
-                props.navigation.navigate({ name: '確認預約資料' })
-            }
-        }
+        props.navigation.navigate({ name: '確認預約資料' })
+        // rosterSession.refetch();
+        // if (rosterSession.isSuccess) {
+        //     if (rosterSession.currentData === []) {
+        //         store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
+        //         props.navigation.navigate({ name: '預約確認' })
+        //     } else {
+        //         props.navigation.navigate({ name: '確認預約資料' })
+        //     }
+        // }else if(rosterSession.isError){
+        //     store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
+        //     props.navigation.navigate({ name: '預約確認' })
+        // }
     }
 
     return (

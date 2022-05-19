@@ -13,7 +13,7 @@ export const DatePickerComponent = (props: datePickerProps) => {
   const showDatePicker = () => { setDatePickerVisibility(true); };
   const hideDatePicker = () => { setDatePickerVisibility(false); };
   const handleConfirm = (date: Date) => {
-    const selectedDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+    const selectedDate = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}`:date.getMonth() + 1}-${date.getDate()}`
     props.setDateTitle(selectedDate)
     hideDatePicker();
   };

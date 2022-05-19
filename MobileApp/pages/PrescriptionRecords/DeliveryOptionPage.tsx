@@ -72,14 +72,12 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
     const dataFetching = async () => {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, init)
-        const defaultAddress = resp.status === 200 ? (await resp.json())[0] : null
+        const result = resp.status === 200 ? (await resp.json()) : null
+        console.log(result);
 
-        setInput(defaultAddress.address != null ? defaultAddress : "")
+        setInput(result.defaultAddress != null ? result.defaultAddress[0] : "")
 
-        const pickUpStoreResp = await fetch (`${Config.REACT_APP_API_SERVER}/clinics/getList`, init)
-        const pickUpStore = (await pickUpStoreResp.json()).filter((item: any) => item.allow_store_pickup)
-
-        setAllowPickUp(pickUpStore.length > 0 ? pickUpStore : "")
+        setAllowPickUp(result.pickUpStores != null ? result.pickUpStores : "")
     }
 
     const submitHandler = () => {
