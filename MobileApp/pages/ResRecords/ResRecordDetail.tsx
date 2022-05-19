@@ -93,7 +93,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
         // Check if current time in the time range
         const range = [resStart, resEnd];
-        console.log(rowCellArr[0]);
+        // console.log(rowCellArr[0]);
         console.log(currentFullTime, range);
         console.log(reservationData);
         if (reservationData.status == 'booked' &&
