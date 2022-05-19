@@ -7,10 +7,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { HStack, Spinner, useToast } from 'native-base';
 
 // Redux
+import { store } from '../../redux/store';
+import { setPrescriptionCode } from '../../redux/slice';
 import { useSelector } from 'react-redux';
-
-//env
-import Config from 'react-native-config';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -30,75 +29,43 @@ export const PrescriptionPaymentSuccessPage = (props: any) => {
     //Toast
     const toast = useToast()
 
-    const [fetchData, setFetchData] = useState(null as any)
+    const [result, setResult] = useState(null as any)
+    const [pres_code, setPres_code] = useState(null as any)
 
-    let storeData:any = null
-    storeData = useSelector((state:any)=>state.getPrescriptionCode).prescriptionDetail;
-
-    const dataFetching = async () => {
-
-        const paymentResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${storeData.prescription.payment}`, init)
-        const paymentResult = (await paymentResp.json())[0]
-
-        setFetchData(paymentResult)
-        console.log(paymentResult);
-        if (paymentResult.payment_status ) {
-            const editPrescription = await fetch(`${Config.REACT_APP_API_SERVER}/prescription/edit`, {
-                method: "PUT",
-                headers: {
-                    "Authorization":`Bearer ${userToken}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    pres_code: storeData.prescription.pres_code, 
-                    address: storeData.prescription.address, 
-                    area: storeData.prescription.area, 
-                    courier_code: storeData.prescription.courier_code, 
-                    delivery_contact: storeData.prescription.delivery_contact, 
-                    delivery_phone: storeData.prescription.delivery_phone, 
-                    district: storeData.prescription.district, 
-                    is_delivery: storeData.prescription.is_delivery, 
-                    payment: storeData.prescription.payment, 
-                    pick_up_store: storeData.prescription.pick_up_store, 
-                    pres_details: storeData.prescription.pres_details,
-                    order_status: "paied",
-                })
-                // {...storeData.prescription, order_status: "paied"}
-            })
-            const editResult = await editPrescription.json()
-            if (editPrescription.status == 200) {
-                toast.show({
-                    description: "付款成功"
-                })
-            }
-        }
-    }
-
+    const redux = useSelector((state:any)=> state.getPrescriptionCode);
+    const prescriptionDetail = redux.prescriptionDetail
+    console.log(redux);
+    
+    
     const [fetched, setFetched] = useState(false)
-  
+    
     useEffect(()=>{
-          if (!fetched) {
-              dataFetching()
-              setFetched(true)
-          }
+        if (redux != null) {
+            const pres_code = redux.prescriptionDetail.prescription.pres_code
+            const payment_status = redux.payment_status
+            setResult(payment_status)
+            setPres_code(pres_code)
+            setFetched(true)
+        }
+        return ()=>{store.dispatch(setPrescriptionCode({payment_status: null}))}
       },[])
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <View style={{ paddingTop: windowHeight * (1 / 7) }}>
-                {fetchData == null ?
+                {result == null || pres_code == null ?
                     // Loading Spinner
                     <HStack space={2} justifyContent="center" alignItems={'center'}>
                         <Spinner color="#225D66" accessibilityLabel="Loading posts" />
                     </HStack>
                     :
-                    ( fetchData.payment_status ?
+                    (result ?
                         <>
                             <View style={{ marginTop: 20 }}>
                                 <Icon name="check-circle" size={100} color="#325C80" style={{ textAlign: 'center', marginBottom: 18 }} />
                                 <Text style={[styles.subTitle]}>付款完成</Text>
                             </View>
                             <View style={{ marginTop: 20, }}>
-                                <Text style={[styles.contentText]}>藥單編號：{fetchData.pres_code}</Text>
+                                <Text style={[styles.contentText]}>藥單編號：{pres_code}</Text>
                                 <Text style={[styles.contentText]}>收據已發送到你的電郵</Text>
                                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '藥單記錄表' })}>
                                     <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
@@ -118,7 +85,6 @@ export const PrescriptionPaymentSuccessPage = (props: any) => {
                         </>
                     )
                 }
-
             </View>
         </SafeAreaView>
     )

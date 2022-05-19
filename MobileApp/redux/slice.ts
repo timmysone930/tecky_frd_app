@@ -93,7 +93,8 @@ export const prescriptionCheckingSlice = createSlice({
     initialState: {
         prescriptionCode: "",
         prescriptionSelecting: null,
-        prescriptionDetail: null
+        prescriptionDetail: null,
+        payment_status : null
 
     },
     reducers: {
@@ -101,6 +102,7 @@ export const prescriptionCheckingSlice = createSlice({
             state.prescriptionCode = action.payload.prescriptionCode
             state.prescriptionSelecting = action.payload.prescriptionSelecting
             state.prescriptionDetail = action.payload.prescriptionDetail
+            state.payment_status = action.payload.payment_status
         }
     }
 })
