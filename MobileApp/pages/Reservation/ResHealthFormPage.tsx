@@ -53,7 +53,7 @@ export const ResHealthFormPage: React.FC = (props: any) => {
                     )}
                         name="Countries" />
                     <Text style={[styles.subTitle,styles.mt_10]}>你回到香港的日期？</Text>
-                    <Controller control={control} rules={{validate: value => {let today = new Date(); let inputDay = new Date(value);return inputDay < today}}}
+                    <Controller control={control} 
                         render={({ field: { value } }) => (
                             <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('backDate')} />
                         )}

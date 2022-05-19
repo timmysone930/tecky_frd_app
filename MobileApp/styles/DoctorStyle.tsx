@@ -43,7 +43,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#F3F3F3',
         height: 'auto',
         borderRadius: 4,
-        marginBottom: 20,
+        marginBottom: 12,
         marginRight: 10,
     },
     gender: {
