@@ -233,6 +233,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                 <AddressForm
                                     hkid={input.hkid}
                                     name={input.name}
+                                    name_en={input.name_en}
                                     phone={input.phone}
                                     area={input.area}
                                     district={input.district}

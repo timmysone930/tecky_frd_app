@@ -20,6 +20,7 @@ export interface Addr {
 interface Props {
     hkid: string,
     name: string,
+    name_en: string,
     phone: string,
     area: string,
     district: string,
@@ -69,6 +70,16 @@ export const AddressForm = (props: Props) => {
                     onChangeText={text => props.setInput({...props.input, name: text})}
                 />
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.name == ""}>
+                    此項必須填寫
+                </FormControl.ErrorMessage>
+                <Input 
+                    size="m"  
+                    placeholder="聯絡人 (英文姓名)" 
+                    value={props.name_en}
+                    isInvalid={props.name_en == ""}
+                    onChangeText={text => props.setInput({...props.input, name_en: text})}
+                />
+                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.name_en == ""}>
                     此項必須填寫
                 </FormControl.ErrorMessage>
 
