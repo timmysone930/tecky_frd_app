@@ -27,8 +27,14 @@ enum ButtonText {
 const backgroundStyle = { backgroundColor: 'white', };
 
 export const ResRecordDetail = (props: any, { navigation }: any) => {
+
     const toast = useToast()
     const userToken = useSelector((state: any) => state.getUserStatus.token);
+    const init = {
+        headers:{
+            "Authorization":`Bearer ${userToken}`,
+        }
+    };
     // To get the param passing from the previous screen
     const { resCode, docCode, data } = props.route.params;
     // to Get user code
@@ -39,7 +45,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
     let recordData = useGetReservationListQuery();
     // get doctor name
     const docData = useGetOneDoctorQuery({docCode:docCode, token:userToken});
-    console.log('docData',docData)
+    // console.log('docData',docData)
     let rowCellArr: [string, string, string, string];
     if (docData.isSuccess) {
         rowCellArr = [resCode, docData.data[0].name, data.item.res_date, data.item.res_time.substring(0, 5)]
@@ -51,22 +57,23 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
     const intervalId = useRef(null as any)
 
+    const time = useRef(null as any)
     const [buttonText, setButtonText] = useState(ButtonText.outOfTime)
 
     useEffect(() => {
-        let currentTime: any = new Date()
-        currentTime.setUTCHours(currentTime.getUTCHours() + 8)
+        time.current = new Date()
+        // time.current.setUTCHours(time.current.getUTCHours() + 8)
         // current date
-        const year = currentTime.getFullYear()
-        const month = currentTime.getMonth() + 1
-        const date = currentTime.getDate()
+        const year = time.current.getFullYear()
+        const month = time.current.getMonth() + 1
+        const date = time.current.getDate()
         // current time 
-        const fullDate = `${year}-${month}-${date}`
+        const fullDate = `${year}-${month < 10 ? (`0` + month) : month}-${date < 10 ? (`0` + date) : date}`
 
-        let hours = currentTime.getHours()
-        let mins = currentTime.getMinutes()
+        let hours = time.current.getHours()
+        let mins = time.current.getMinutes()
         // current fulltime 
-        let currentFullTime = `${hours < 10 ? "0" + hours : hours}:${mins < 10 ? "0" + mins : mins}`
+        let currentFullTime = `${hours}:${mins < 10 ? (`0` + mins) : mins}`
 
         // reservation time
         const resFullDate = data.item.res_date
@@ -81,34 +88,45 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             resEndMins -= 60
         }
         // reservation time range
-        const resStart = `${resHours}:${resMins}`
-        const resEnd = `${resEndHours}:${resEndMins}`
+        const resStart = `${resHours}:${resMins < 10 ? (`0` + resMins) : resMins}`
+        const resEnd = `${resEndHours}:${resEndMins < 10 ? (`0` + resEndMins) : resEndMins}`
 
         // Check if current time in the time range
         const range = [resStart, resEnd];
-
+        console.log(rowCellArr[0]);
+        console.log(currentFullTime, range);
+        console.log(reservationData);
         if (reservationData.status == 'booked' &&
-            reservationData.video_url !== null &&
+            reservationData.video_url == null &&
             fullDate == resFullDate &&
             isInRange(currentFullTime, range)) {
             // enable the button
             setButtonText(ButtonText.start)
             // Start Fetching every mins
-            intervalId.current = setInterval(() => {
+            intervalId.current = setInterval(async () => {
                 // refetching
-                recordData.refetch()
-                setReservationData(recordData.data[0])
+                const getURL = await fetch (`${Config.REACT_APP_API_SERVER}/reserve/video/${rowCellArr[0]}`, init)
+                const url = getURL.status == 200 ? (await getURL.json()).video_url : null
+
+                setReservationData({...reservationData, video_url: url})
+
                 // Get current time
-                currentTime = new Date()
-                currentTime.setUTCHours(currentTime.getUTCHours() + 8)
-                hours = currentTime.getHours()
-                mins = currentTime.getMinutes()
+                time.current = new Date()
+                time.current.setUTCHours(time.current.getUTCHours() + 8)
+                hours = time.current.getHours()
+                mins = time.current.getMinutes()
                 // current fulltime 
-                currentFullTime = `${hours < 10 ? "0" + hours : hours}:${mins < 10 ? "0" + mins : mins}`
+                currentFullTime = `${hours}:${mins < 10 ? (`0` + mins) : mins}`
+
                 if (!isInRange(currentFullTime, range)) {
                     clearInterval(intervalId.current)
                 }
             }, 60000)
+        } else if (reservationData.status == 'booked' &&
+                    reservationData.video_url != null &&
+                    fullDate == resFullDate &&
+                    isInRange(currentFullTime, range)) {
+            setButtonText(ButtonText.start)
         } else if (reservationData.status == 'cancel') {
             setButtonText(ButtonText.cancel)
         } else if (reservationData.status == 'finish') {
