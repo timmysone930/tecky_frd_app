@@ -21,6 +21,7 @@ export function EditAddressPage({navigation}:any) {
     const blankContent = {
         hkid:"",
         name:"",
+        name_en:"",
         phone:"852",
         area:"",
         district:"",
@@ -93,6 +94,7 @@ export function EditAddressPage({navigation}:any) {
                 method: "POST",
                 body: JSON.stringify({...input, hkid: hkId})
             })
+            console.log({...input, hkid: hkId});
 
         } else {
             toDefaultResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
@@ -118,6 +120,7 @@ export function EditAddressPage({navigation}:any) {
                     <AddressForm 
                         hkid={input.hkid}
                         name={input.name}
+                        name_en={input.name_en}
                         phone={input.phone}
                         area={input.area}
                         district={input.district}

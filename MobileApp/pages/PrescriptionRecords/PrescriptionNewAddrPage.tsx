@@ -18,6 +18,7 @@ export function PrescriptionNewAddrPage({navigation}:any) {
     const blankContent = {
         hkid:"",
         name:"",
+        name_en:"",
         phone:"852",
         area:"",
         district:"",
@@ -65,6 +66,7 @@ export function PrescriptionNewAddrPage({navigation}:any) {
                     <AddressForm 
                         hkid={input.hkid}
                         name={input.name}
+                        name_en={input.name_en}
                         phone={input.phone}
                         area={input.area}
                         district={input.district}
