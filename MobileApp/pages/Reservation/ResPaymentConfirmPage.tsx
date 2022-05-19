@@ -60,7 +60,12 @@ export const ResPaymentConfirmPage = (props: any) => {
         }else {
             time = time -10
         }
-        let pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
+        let pushTime;
+        if(time.toString().length === 3){
+            pushTime = `0${time.toString().substring(0,1)}:${time.toString().substring(1, 3)}`
+        }else{
+            pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
+        }
         console.log(pushTime)
         setNotification(res_date, userCode, pushTime, resCode, userToken);
     }
