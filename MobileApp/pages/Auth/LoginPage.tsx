@@ -156,8 +156,8 @@ export const LoginPage = (props: any) => {
                     <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={handleSubmit(onLoginPress)}>
                         <Text style={styles.buttonText}>登入</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate({ name: '注冊界面' }) }}>
-                        <Text style={styles.buttonText}>立即注冊</Text>
+                    <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate({ name: '註冊界面' }) }}>
+                        <Text style={styles.buttonText}>立即註冊</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

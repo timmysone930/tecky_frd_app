@@ -45,6 +45,13 @@ export const authAPI = createApi({
                 body: phone
             })
         }),
+        getNotUserSMS: builder.mutation<any, {'phone':number}>({
+            query: (phone) => ({
+                url: "/auth/send-sms/not-user/",
+                method: 'POST',
+                body: phone
+            })
+        }),
         getLoginSMSByQuery: builder.query({
             query: (phone: string) => `/auth/send-sms/${phone}`,
         }),
@@ -53,4 +60,4 @@ export const authAPI = createApi({
 })
 
 // Export the auto-generated hook for the query endpoint
-export const { useLoginByPhoneMutation, usePostRegisterInfoMutation, useGetLoginSMSMutation, useGetLoginSMSByQueryQuery } = authAPI
+export const { useLoginByPhoneMutation, usePostRegisterInfoMutation, useGetLoginSMSMutation, useGetNotUserSMSMutation, useGetLoginSMSByQueryQuery } = authAPI

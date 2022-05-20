@@ -27,7 +27,7 @@ export function AccountInfoPage({navigation}:any) {
                 "Authorization":`Bearer ${userToken}`,
             }
         })
-        const result = await resp.json()
+        const result = resp.status === 200 ? (await resp.json()) : "";
         setFetchData(result)
         return result
     }
@@ -65,7 +65,7 @@ export function AccountInfoPage({navigation}:any) {
             <ScrollView>
                 <View style={[styles.viewContainer]}>
 
-                    {fetched && fetchData != null ?
+                    {fetched && fetchData != null && fetchData != "" ?
                     <>
                         <View justifyContent={"space-between"} height={200} marginY={5} >
                             <View flexDirection={'row'}>
@@ -146,10 +146,44 @@ export function AccountInfoPage({navigation}:any) {
                         </View>
                     </>
                     :
+                        (fetchData == "" ?
+                        <>
+                            <Text style={[{textAlign: "center"}, styles.contentText]}>
+                                會員資料存取失敗
+                            </Text>
+                            <Button 
+                                alignSelf={'center'} 
+                                marginX={2}
+                                marginBottom={5}
+                                padding={1} 
+                                height={10} 
+                                width={200} 
+                                size={"lg"} 
+                                onPress={editInfo}
+                            >
+                                編輯
+                            </Button>
+                            <Button 
+                                colorScheme={"danger"}
+                                alignSelf={'center'} 
+                                marginX={2}
+                                marginBottom={5}
+                                padding={1} 
+                                height={10} 
+                                width={200} 
+                                size={"lg"} 
+                                onPress={logOut}
+                            >
+                                登出
+                            </Button>
+                        </>
+                        
+                        :
                         // Loading Spinner
                         <HStack space={2} justifyContent="center" alignItems={'center'}>
                             <Spinner color="#225D66" accessibilityLabel="Loading posts" />
                         </HStack>
+                        )
                     }
 
                     
