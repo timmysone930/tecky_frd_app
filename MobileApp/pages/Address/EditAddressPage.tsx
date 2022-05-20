@@ -92,8 +92,9 @@ export function EditAddressPage({navigation}:any) {
                     'Content-Type': 'application/json'
                 },
                 method: "POST",
-                body: JSON.stringify({...input, hkid: hkId})
+                body: JSON.stringify({...input, hkid: hkId}),
             })
+            console.log(toDefaultResp.status);
             console.log({...input, hkid: hkId});
 
         } else {

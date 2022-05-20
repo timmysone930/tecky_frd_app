@@ -18,9 +18,9 @@ export const LoginStacks = () => {
 const InnerLoginStack = createStackNavigator();
 export const InnerLoginStacks = () => {
     return (
-        <InnerLoginStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' , headerTitleAlign: 'center' }} initialRouteName="注冊">
-            <InnerLoginStack.Screen name="注冊" component={RegisterPage} />
-            <InnerLoginStack.Screen name="注冊成功" component={RegSuccessPage} options={{ headerShown: false, animationEnabled:false}} />
+        <InnerLoginStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' , headerTitleAlign: 'center' }} initialRouteName="註冊">
+            <InnerLoginStack.Screen name="註冊" component={RegisterPage} />
+            <InnerLoginStack.Screen name="註冊成功" component={RegSuccessPage} options={{ headerShown: false, animationEnabled:false}} />
         </InnerLoginStack.Navigator>
     )
 }

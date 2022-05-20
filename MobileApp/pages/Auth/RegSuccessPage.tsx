@@ -21,7 +21,7 @@ export const RegSuccessPage = (props: any) => {
             <View style={{ paddingTop: windowHeight * (1 / 7) }}>
                 <View style={{ marginTop: 20 }}>
                     <Icon name="check-circle" size={100} color="#325C80" style={{ textAlign: 'center', marginBottom: 18 }} />
-                    <Text style={[styles.RegSuccessTitle]}>注冊成功</Text>
+                    <Text style={[styles.RegSuccessTitle]}>註冊成功</Text>
                 </View>
                 <View style={{ marginTop: 30, }}>
                     <TouchableOpacity style={[styles.RegSuccessBtn, { backgroundColor: '#325C80' }]}

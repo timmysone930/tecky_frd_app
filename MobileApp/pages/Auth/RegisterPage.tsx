@@ -3,7 +3,7 @@ import { Checkbox, useToast } from 'native-base';
 import React, { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
-import { useGetLoginSMSMutation, usePostRegisterInfoMutation } from '../../API/AuthAPI';
+import { useGetLoginSMSMutation, useGetNotUserSMSMutation, usePostRegisterInfoMutation } from '../../API/AuthAPI';
 import { DropdownSelectComponent } from '../../components/utils/DropdownSelectComponent';
 import { BottomLineComponent } from '../../components/utils/BottomLineComponent';
 import { DatePickerComponent } from '../../components/utils/DatePickerComponent';
@@ -43,6 +43,7 @@ export const RegisterPage = (props: any) => {
     const [groupValues2, setGroupValues2] = React.useState([]);
     // SMS function
     const [getLoginSMS] = useGetLoginSMSMutation();
+    const [getNotUserSMS] = useGetNotUserSMSMutation();
     const [counter, setCounter] = useState(countTime);
     const [sendCodeBtn, setSendCodeBtn] = useState({
         isDisable: false,
@@ -69,7 +70,8 @@ export const RegisterPage = (props: any) => {
         // Fetching
         try {
             let phoneString = getValues('phoneCode') + getValues('regPhone')
-            const res: QueryReturnValue = await getLoginSMS({ 'phone':  parseInt(phoneString) })
+            const res: QueryReturnValue = await getNotUserSMS({ 'phone':  parseInt(phoneString) })
+            console.log(res);
             toast.show({
                 description: "已送出驗證碼"
             })
