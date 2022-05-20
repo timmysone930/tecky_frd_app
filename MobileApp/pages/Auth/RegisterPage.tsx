@@ -74,7 +74,7 @@ export const RegisterPage = (props: any) => {
                 description: "已送出驗證碼"
             })
             toast.show({
-                description: `SMS Code: ${JSON.stringify(res.data)}`
+                description: `SMS Code: ${res.data}`
             })
         } catch (e) {
             console.log(e)
