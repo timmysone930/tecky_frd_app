@@ -27,22 +27,21 @@ export const PrescriptionListPage = ({navigation}:any) => {
         "Authorization":`Bearer ${userToken}`,
       }
     })
+
+    if (resp.status != 200) {
+      setFetchData("")
+      return
+    }
+
     const data = await resp.json()
     const dataToDisplay = data.filter((item:any) => typeof item.prescription.payment == "string")
-    console.log(dataToDisplay);
-    if (dataToDisplay.length > 0) {
-      setFetchData(dataToDisplay)
-    } else {
-      setFetchData("")
-    }
+
+    dataToDisplay.length > 0 ? setFetchData(dataToDisplay): setFetchData("");
   }
-
-  const [fetched, setFetched] = useState(false)
-
+  
   useEffect(()=>{
       const unsubscribe = navigation.addListener('focus', () => {
         dataFetching()
-        setFetched(true)
       });
 
       return () => {unsubscribe}
@@ -50,18 +49,18 @@ export const PrescriptionListPage = ({navigation}:any) => {
 
   return (
       <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-        {fetched && fetchData != null && fetchData != "" &&
+        {fetchData != null && fetchData != "" &&
           <PrescriptionList 
             data={fetchData} 
             changePage={"藥單詳情"}
             navigation={navigation}
           />
         }
-        {fetched && fetchData == "" &&
+        {fetchData == "" &&
           <Text style={{textAlign:'center', fontSize:17, margin:20}}>沒有藥單記錄</Text>
         }
         {
-          !fetched &&
+          fetchData == null &&
           // Loading Spinner
           <HStack space={2} justifyContent="center" alignItems={'center'}>
               <Spinner color="#225D66" accessibilityLabel="Loading posts" />
