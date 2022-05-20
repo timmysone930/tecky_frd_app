@@ -72,20 +72,20 @@ export const reserveFormSlice = createSlice({
 export const { setFormData, setHealthFormMultiBox, setHealthFormInfo,setIDImage,setMemberCode,setAdditionalInfo } = reserveFormSlice.actions
 
 // to check user auth & status
-export const userStatusSlice = createSlice({
-    name: 'userStatus',
-    initialState: {
-        isLogin: false,
-        phone: null,
-    },
-    reducers: {
-        checkStatus: (state, action) => {
-            state.isLogin = action.payload.status
-            state.phone = action.payload.phone
-        }
-    }
-})
-export const { checkStatus } = userStatusSlice.actions
+// export const userStatusSlice = createSlice({
+//     name: 'userStatus',
+//     initialState: {
+//         isLogin: false,
+//         phone: null,
+//     },
+//     reducers: {
+//         checkStatus: (state, action) => {
+//             state.isLogin = action.payload.status
+//             state.phone = action.payload.phone
+//         }
+//     }
+// })
+// export const { checkStatus } = userStatusSlice.actions
 
 // Get the code of prescription the user currently checking
 export const prescriptionCheckingSlice = createSlice({

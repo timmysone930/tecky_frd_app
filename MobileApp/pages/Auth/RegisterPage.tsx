@@ -7,7 +7,7 @@ import { useGetLoginSMSMutation, useGetNotUserSMSMutation, usePostRegisterInfoMu
 import { DropdownSelectComponent } from '../../components/utils/DropdownSelectComponent';
 import { BottomLineComponent } from '../../components/utils/BottomLineComponent';
 import { DatePickerComponent } from '../../components/utils/DatePickerComponent';
-import { checkStatus } from '../../redux/AuthSlice';
+import { checkStatus, setUserInfo } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 import { RegisterSubmitProp } from './AuthType';
 import {styles} from '../../styles/AuthStyle'
@@ -110,8 +110,11 @@ export const RegisterPage = (props: any) => {
                 })
             }
         } else {
+            console.log("register", res)
             toast.show({ description: "成功註冊" })
-            store.dispatch(checkStatus({ status: true }))
+            store.dispatch(checkStatus({ status: true , phone:data.phoneCode + data.regPhone }))
+            let externalUserId = res.data.result.member_code.toString()
+            store.dispatch(setUserInfo({ member_code: externalUserId, token: externalUserId }))
             props.navigation.navigate({ name: '註冊成功' })
         }
     }
