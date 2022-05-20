@@ -111,11 +111,11 @@ export const RegisterPage = (props: any) => {
             }
         } else {
             console.log("register", res)
-            toast.show({ description: "成功注冊" })
+            toast.show({ description: "成功註冊" })
             store.dispatch(checkStatus({ status: true , phone:data.phoneCode + data.regPhone }))
             let externalUserId = res.data.result.member_code.toString()
             store.dispatch(setUserInfo({ member_code: externalUserId, token: externalUserId }))
-            props.navigation.navigate({ name: '注冊成功' })
+            props.navigation.navigate({ name: '註冊成功' })
         }
     }
 
