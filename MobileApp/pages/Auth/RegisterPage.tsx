@@ -71,7 +71,7 @@ export const RegisterPage = (props: any) => {
         try {
             let phoneString = getValues('phoneCode') + getValues('regPhone')
             const res: QueryReturnValue = await getNotUserSMS({ 'phone':  parseInt(phoneString) })
-            console.log(res);
+            console.log('SMSres',res);
             toast.show({
                 description: "已送出驗證碼"
             })
@@ -113,8 +113,8 @@ export const RegisterPage = (props: any) => {
             console.log("register", res)
             toast.show({ description: "成功註冊" })
             store.dispatch(checkStatus({ status: true , phone:data.phoneCode + data.regPhone }))
-            let externalUserId = res.data.result.member_code.toString()
-            store.dispatch(setUserInfo({ member_code: externalUserId, token: externalUserId }))
+            let externalUserId = res.data.member_code.toString()
+            store.dispatch(setUserInfo({ member_code: externalUserId, token: res.data.access_token }))
             props.navigation.navigate({ name: '註冊成功' })
         }
     }
