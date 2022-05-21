@@ -16,6 +16,7 @@ import { styles } from '../../styles/GeneralStyles'
 const backgroundStyle = { backgroundColor: 'white', };
 
 export const PaymentPage = (props: any) => {
+    // get JWT token
     const userToken = useSelector((state: any) => state.getUserStatus.token);
     const toast = useToast()
     // Radio Button
@@ -28,8 +29,6 @@ export const PaymentPage = (props: any) => {
     // const rosterSession = useGetReservedSessionByIdQuery({ rosterId: formData.reservedSession, token: userToken });
     // to get clinic code from roster table 
     const rosterClinicCode = useGetRosterByIdQuery(formData.reservedTime);
-    // convert date to server date
-    let convertedDate = formData.reservedDate.substring(0, 10)
     // Register
     const [postPatientRegister] = usePostPatientRegisterMutation();
     const submitData = new FormData();
@@ -64,7 +63,6 @@ export const PaymentPage = (props: any) => {
             return { status: 'error', data: { error } }
         }
     }
-    // console.log('123rosterSession',rosterSession)
     // submit
     const onPress = async () => {
         // non member
@@ -108,9 +106,9 @@ export const PaymentPage = (props: any) => {
                 // member
                 // reservation data
                 let resData = {
-                    'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': convertedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['clinic_code'], 'session_id': formData.reservedSession,
+                    'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': formData.reservedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['cli_code'], 'session_id': formData.reservedSession,
                     'status': 'booked', 'video_url': null, 'is_follow_up': true, 'channel': 'null', 'declare': {
-                        "isLeave": formData.leaveHK, "location": formData.Countries, "date_back": formData.backDate,
+                        "isLeave": formData.leaveHK, "location": formData.Countries, "date_back": formData.backDate ==='選擇日期'?'':formData.backDate,
                         "isFever": formData.isFever, "isCought": formData.isCough, "isVomit": formData.isVomit, "isCold": formData.isCold
                     }
                 }
@@ -130,7 +128,7 @@ export const PaymentPage = (props: any) => {
                             console.log('paymentRes', paymentRes)
                             store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
                             store.dispatch(setMemberCode({ memberCode: '' }))
-                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data, 'res_date': convertedDate, 'res_time': `${rosterSession.data.start_at}` } })
+                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data, 'res_date': formData.reservedDate, 'res_time': `${rosterSession.data.start_at}` } })
                         } else {
                             toast.show({
                                 description: "付款失敗"

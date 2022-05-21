@@ -8,6 +8,7 @@ import { styles } from '../../styles/GeneralStyles'
 import Config from 'react-native-config';
 // white background
 const backgroundStyle = {backgroundColor: 'white',};
+// row title
 const rowTitleArr = ['問診費用：', '選擇日期：', '選擇時間：', '應診者姓名：', '身份證類型：', '身份證編號：']
 
 export const ResDetailConfirmPage: React.FC = (props: any) => {
@@ -15,9 +16,10 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
     const docInfo = useSelector((state: any) => state.setDoctorID);
     // get form data
     const formData = useSelector((state: any) => state.getFormData);
+    // get JWT token
     const userToken = useSelector((state: any) => state.getUserStatus.token);
-    let reserveSession: string;
     // roster session
+    let reserveSession: string;
     const rosterSession = useGetReservedSessionByIdQuery({rosterId:formData.reservedSession, token:userToken});
     rosterSession.isSuccess ? reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}` : reserveSession = '載入中'
     const rowCellArr = [`$ ${Config.Res_code}`, formData.reservedDate, reserveSession, formData.name, formData.idType, formData.idNumber]

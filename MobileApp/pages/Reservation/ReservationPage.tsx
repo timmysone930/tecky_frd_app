@@ -43,6 +43,7 @@ const titleArr = ['先生', '小姐', '女士']
 const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
 
 export const ReservationPage = (props: any) => {
+  // to get the JWT token
   const userToken = useSelector((state: any) => state.getUserStatus.token);
   // get current users profile
   const userData = useGetUserInfoQuery(userToken)
@@ -71,6 +72,7 @@ export const ReservationPage = (props: any) => {
   const onSessionChange = (itemValue: string) => { setValue("reservedSession", itemValue) };
   // id value change function
   const onIDValueChange = (itemValue: string) => { setValue("idType", itemValue) };
+  // to get the roster data
   const rosterData = useGetRosterListByDocCodeQuery(id)
   // Form data submit and navigate
   const onSubmit = async (data: ReservationType) => {
@@ -84,9 +86,7 @@ export const ReservationPage = (props: any) => {
       store.dispatch(setMemberCode({ memberCode: patientStatus?.memberCode }))
     }
   }
-
   // refetch
-
   const [refreshing, setRefreshing] = React.useState(false);
   const onRefresh = React.useCallback(() => {
       try {
@@ -98,7 +98,7 @@ export const ReservationPage = (props: any) => {
           console.log(e)
       }
   }, []);
-
+  // refetch by navigation
   const navigation = useNavigation();
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
@@ -107,8 +107,6 @@ export const ReservationPage = (props: any) => {
 
     return () => { unsubscribe }
   }, [navigation])
-
-
   // auto input login users info once
   useEffect(() => {
     const updateUserInfo = async () => {

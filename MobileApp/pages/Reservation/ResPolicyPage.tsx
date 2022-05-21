@@ -12,6 +12,7 @@ const backgroundStyle = { backgroundColor: 'white',};
 export const ResPolicyPage: React.FC = (props: any) => {
     // get form data
     const formData = useSelector((state:any) => state.getFormData);
+    // get JWT token
     const userToken = useSelector((state: any) => state.getUserStatus.token);
     // roster session
     const rosterSession = useGetReservedSessionByIdQuery({rosterId:formData.reservedSession, token:userToken});
@@ -19,18 +20,6 @@ export const ResPolicyPage: React.FC = (props: any) => {
     // check Roster Status
     const onPress = async () => {
         props.navigation.navigate({ name: '確認預約資料' })
-        // rosterSession.refetch();
-        // if (rosterSession.isSuccess) {
-        //     if (rosterSession.currentData === []) {
-        //         store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
-        //         props.navigation.navigate({ name: '預約確認' })
-        //     } else {
-        //         props.navigation.navigate({ name: '確認預約資料' })
-        //     }
-        // }else if(rosterSession.isError){
-        //     store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
-        //     props.navigation.navigate({ name: '預約確認' })
-        // }
     }
 
     return (
