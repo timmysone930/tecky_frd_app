@@ -19,7 +19,6 @@ interface dataMapType {
 export const ResSessionComponent = (props: Props) => {
     let selectFunction;
     let sessionID = props.timeValue
-    console.log('ResSessionComponent', {id:sessionID, token:props.userToken})
     const sessionData = useGetRosterSessionQuery({id:sessionID, token:props.userToken})
 
     useEffect(() => {

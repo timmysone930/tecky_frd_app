@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { useSelector } from 'react-redux';
@@ -6,6 +6,9 @@ import { useGetReservedSessionByIdQuery } from '../../API/DoctorAPI';
 import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
 import { styles } from '../../styles/GeneralStyles'
 import Config from 'react-native-config';
+import { store } from '../../redux/store';
+import { checkRosterStatus } from '../../redux/PaymentSlice';
+import { setMemberCode } from '../../redux/slice';
 // white background
 const backgroundStyle = {backgroundColor: 'white',};
 // row title
@@ -20,9 +23,27 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
     const userToken = useSelector((state: any) => state.getUserStatus.token);
     // roster session
     let reserveSession: string;
+    let rowCellArr:any;
     const rosterSession = useGetReservedSessionByIdQuery({rosterId:formData.reservedSession, token:userToken});
-    rosterSession.isSuccess ? reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}` : reserveSession = '載入中'
-    const rowCellArr = [`$ ${Config.Res_code}`, formData.reservedDate, reserveSession, formData.name, formData.idType, formData.idNumber]
+    if(rosterSession.isSuccess){
+        reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}` 
+        rowCellArr= [`$ ${Config.Res_code}`, formData.reservedDate, reserveSession, formData.name, formData.idType, formData.idNumber]
+    }else if(rosterSession.isLoading){
+        reserveSession = '載入中'
+    }
+    useEffect(() => {
+        console.log('rosterSession',rosterSession)
+        if(rosterSession.isError){
+            store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
+            store.dispatch(setMemberCode({ memberCode: '' }))
+            props.navigation.navigate({ name: '預約確認' })
+        }
+      }, [rosterSession])
+
+
+
+
+
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>

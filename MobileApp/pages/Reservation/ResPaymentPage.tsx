@@ -25,8 +25,6 @@ export const PaymentPage = (props: any) => {
     const formData = useSelector((state: any) => state.getFormData);
     // selected doctor id
     const docInfo = useSelector((state: any) => state.setDoctorID);
-    // // roster session
-    // const rosterSession = useGetReservedSessionByIdQuery({ rosterId: formData.reservedSession, token: userToken });
     // to get clinic code from roster table 
     const rosterClinicCode = useGetRosterByIdQuery(formData.reservedTime);
     // Register
@@ -88,8 +86,10 @@ export const PaymentPage = (props: any) => {
                 return
             }
         }
+        // refetch
         rosterSession.refetch();
         rosterClinicCode.refetch();
+        // check session status
         if (rosterClinicCode.isSuccess) {
             if (rosterSession.currentData === []) {
                 // selected session not enable
@@ -97,60 +97,65 @@ export const PaymentPage = (props: any) => {
                 store.dispatch(setMemberCode({ memberCode: '' }))
                 props.navigation.navigate({ name: '預約確認' })
             } else {
-                // selected session are available
-                toast.show({
-                    description: "載入中"
-                })
-                // hold session
-                const holdRes = await putHoldSession(formData.reservedSession)
-                // member
-                // reservation data
-                let resData = {
-                    'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': formData.reservedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['cli_code'], 'session_id': formData.reservedSession,
-                    'status': 'booked', 'video_url': null, 'is_follow_up': true, 'channel': 'null', 'declare': {
-                        "isLeave": formData.leaveHK, "location": formData.Countries, "date_back": formData.backDate ==='選擇日期'?'':formData.backDate,
-                        "isFever": formData.isFever, "isCought": formData.isCough, "isVomit": formData.isVomit, "isCold": formData.isCold
-                    }
-                }
-                // create reservation table
                 try {
-                    const reservationRes: any = await postPatientReservation({ data: resData, token: userToken })
-                    if (reservationRes?.data) {
-                        // payment
-                        const paypalRes = await redirectPaypal();
-                        if (paypalRes.status === 'success') {
-                            toast.show({
-                                description: "付款成功"
-                            })
-                            // create payment table
-                            let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
-                            const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
-                            console.log('paymentRes', paymentRes)
-                            store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
-                            store.dispatch(setMemberCode({ memberCode: '' }))
-                            props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data, 'res_date': formData.reservedDate, 'res_time': `${rosterSession.data.start_at}` } })
-                        } else {
-                            toast.show({
-                                description: "付款失敗"
-                            })
-                            // enable the session 
-                            // const enableRes = await putEnableSession(formData.reservedSession)
-                            // console.log('enalbeResult', enableRes)
-                            store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
+                    // hold session
+                    const holdRes: any = await putHoldSession(formData.reservedSession)
+                    console.log('holderes', holdRes)
+                    if (holdRes !== undefined) {
+                        if (holdRes.error && holdRes?.error.status === 400) {
+                            store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
                             store.dispatch(setMemberCode({ memberCode: '' }))
                             props.navigation.navigate({ name: '預約確認' })
+                        } else if (holdRes.data && holdRes?.data.status === 'hold') {
+                            // selected session are available
+                            toast.show({
+                                description: "載入中"
+                            })
+                            // member
+                            // reservation data
+                            let resData = {
+                                'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': formData.reservedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['cli_code'], 'session_id': formData.reservedSession,
+                                'status': 'booked', 'video_url': null, 'is_follow_up': true, 'channel': 'null', 'declare': {
+                                    "isLeave": formData.leaveHK, "location": formData.Countries, "date_back": formData.backDate === '選擇日期' ? '' : formData.backDate,
+                                    "isFever": formData.isFever, "isCought": formData.isCough, "isVomit": formData.isVomit, "isCold": formData.isCold
+                                }
+                            }
+                            // create reservation data
+                            const reservationRes: any = await postPatientReservation({ data: resData, token: userToken })
+                            if (reservationRes?.data) {
+                                // payment
+                                const paypalRes = await redirectPaypal();
+                                if (paypalRes.status === 'success') {
+                                    toast.show({
+                                        description: "付款成功"
+                                    })
+                                    // create payment table
+                                    let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
+                                    const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
+                                    console.log('paymentRes', paymentRes)
+                                    store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
+                                    store.dispatch(setMemberCode({ memberCode: '' }))
+                                    props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data, 'res_date': formData.reservedDate, 'res_time': `${rosterSession.data.start_at}` } })
+                                } else {
+                                    toast.show({
+                                        description: "付款失敗"
+                                    })
+                                    store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
+                                    store.dispatch(setMemberCode({ memberCode: '' }))
+                                    props.navigation.navigate({ name: '預約確認' })
+                                }
+                            } else if (reservationRes.error.data.message === "This patient already have resrvation.") {
+                                toast.show({
+                                    description: "已有預約記錄，無法再次預約"
+                                })
+                                // enable the session 
+                                const enableRes = await putEnableSession(formData.reservedSession)
+                                console.log('enalbeResult', enableRes)
+                                store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
+                                store.dispatch(setMemberCode({ memberCode: '' }))
+                                props.navigation.navigate({ name: '預約確認' })
+                            }
                         }
-
-                    } else if (reservationRes.error.data.message === "This patient already have resrvation.") {
-                        toast.show({
-                            description: "已有預約記錄，無法再次預約"
-                        })
-                        // enable the session 
-                        const enableRes = await putEnableSession(formData.reservedSession)
-                        console.log('enalbeResult', enableRes)
-                        store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
-                        store.dispatch(setMemberCode({ memberCode: '' }))
-                        props.navigation.navigate({ name: '預約確認' })
                     }
                 } catch (err) {
                     console.log(err)
