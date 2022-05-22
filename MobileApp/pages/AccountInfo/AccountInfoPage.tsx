@@ -152,18 +152,6 @@ export function AccountInfoPage({navigation}:any) {
                                 會員資料存取失敗
                             </Text>
                             <Button 
-                                alignSelf={'center'} 
-                                marginX={2}
-                                marginBottom={5}
-                                padding={1} 
-                                height={10} 
-                                width={200} 
-                                size={"lg"} 
-                                onPress={editInfo}
-                            >
-                                編輯
-                            </Button>
-                            <Button 
                                 colorScheme={"danger"}
                                 alignSelf={'center'} 
                                 marginX={2}

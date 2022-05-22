@@ -17,9 +17,12 @@ import Config from 'react-native-config';
 
 
 export const PrescriptionPaymentConfirm = ({navigation}:any) => {
-    let fetching:any = null
-    fetching = useSelector((state:any)=>state.getPrescriptionCode).prescriptionSelecting;
-    const [fetchData, setFetchData] = useState(fetching)
+    let prescriptionCode:any = null
+    prescriptionCode = useSelector((state:any)=>state.getPrescriptionCode).prescriptionCode
+
+    let prescriptionSelecting:any = null
+    prescriptionSelecting = useSelector((state:any)=>state.getPrescriptionCode).prescriptionSelecting;
+    const [fetchData, setFetchData] = useState(prescriptionSelecting)
     
     let deliveryMethod:any = null
     deliveryMethod = useSelector((state:any)=>state.getPrescriptionPaymentPreset).deliveryMethod
@@ -63,7 +66,11 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
         const prescriptionDetail = {...fetchData}
         prescriptionDetail.prescription = presEditData
         console.log(prescriptionDetail);
-        store.dispatch(setPrescriptionCode({prescriptionDetail: prescriptionDetail}))
+        store.dispatch(setPrescriptionCode({
+            prescriptionCode,
+            prescriptionSelecting, 
+            prescriptionDetail: prescriptionDetail
+        }))
 
         navigation.navigate("藥單付款", {name: "付款"})
     }
@@ -78,7 +85,7 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
                             doctor={fetchData.doctor_name}
                             profession={fetchData.spec[0].spec_name}
                             created_at={fetchData.prescription.created_at.split("T")[0]}
-                            course_of_treatment={fetchData.prescription.treatment}
+                            course_of_treatment={fetchData.prescription.treatment.replace("/", "")}
                             patient_name={fetchData.name}
                             patient_id={fetchData.hkid}
                             orderStatusShow={false}

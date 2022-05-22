@@ -81,7 +81,7 @@ export function PrescriptionDetailPage({navigation}:any) {
                             doctor={fetchData.doctor_name}
                             profession={fetchData.spec[0].spec_name}
                             created_at={fetchData.prescription.created_at.split("T")[0]}
-                            course_of_treatment={fetchData.treatment}
+                            course_of_treatment={fetchData.prescription.treatment.replace("/", "")}
                             patient_name={fetchData.name}
                             patient_id={fetchData.hkid}
                             orderStatusShow={true}

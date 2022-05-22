@@ -163,6 +163,7 @@ export function UserAddressPage({navigation}:any) {
                 placement: "bottom"
             })
         }
+        infoFetching()
     }
 
     const [refreshing, setRefreshing] = useState(false);

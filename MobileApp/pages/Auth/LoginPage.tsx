@@ -62,8 +62,11 @@ export const LoginPage = (props: any) => {
             toast.show({
                 description: `SMS Code: ${res.data}`
             })
-        } catch (e) {
+        } catch (e: any) {
             console.log(e)
+            toast.show({
+                description: `SMS Code: ${e.data}`
+            })
         }
     }
 
