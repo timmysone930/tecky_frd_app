@@ -1,4 +1,4 @@
-import React, { useRef, useState} from 'react';
+import React, {useState} from 'react';
 import { SafeAreaView, ScrollView, Text } from 'react-native';
 import { AddressForm } from '../../components/address/AddressForm';
 import { styles } from '../../styles/GeneralStyles';
@@ -7,7 +7,7 @@ import { styles } from '../../styles/GeneralStyles';
 import { useSelector } from 'react-redux';
 
 // Native-base
-import { View, Button, useToast, Checkbox, Radio, HStack, Switch } from 'native-base';
+import { View, Button, useToast,HStack, Switch } from 'native-base';
 
 // .env
 import Config from 'react-native-config';
@@ -34,10 +34,6 @@ export function EditAddressPage({navigation}:any) {
 
     const [input, setInput] = (addressContent == null)? useState(blankContent) : useState(addressContent)
 
-    const defaultAddress = useRef(null as any)
-
-    
-
     const toggleSwitch = (value:boolean) => {setInput({...input, is_default: value})}; 
     
     // Toast: Save Successful
@@ -48,57 +44,23 @@ export function EditAddressPage({navigation}:any) {
             return
         }
 
-        // Fetch the existing default address
-        const defaultAddrResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, {
-            headers:{
-                "Authorization":`Bearer ${userToken}`,
-            }
-        })
-        const defaultAddrResult = await defaultAddrResp.json()
-        if (defaultAddrResult.address != null) {
-            // If there is a default address, then the defaultAddress.current will be assigned an object of the address info
-            // Otherwise, it would be null
-            defaultAddress.current = defaultAddrResult
-        }
-
-        let toDefaultResp: any;
-        let offSetOriginResp: any;
-
-        // Set the original default address's "is_default" to false (if the input's "is_default" want to set default)
-        if (input.is_default == true && defaultAddress.current != null) {
-            offSetOriginResp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
-                headers: {
-                    "Authorization":`Bearer ${userToken}`,
-                    'Content-Type': 'application/json'
-                },
-                method: "POST",
-                body: JSON.stringify({id: defaultAddress.current.id, is_default: 0})
-            })
-        }
+        let toFetchResp: any;
+        
         // Deal with (Add new address / Edit existing address)
         if (addressContent == null) {
-            // if (blankContent.is_default != input.is_default) {
-                
-            // }
-            const hkIdResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`, {
-                headers:{
-                    "Authorization":`Bearer ${userToken}`,
-                }
-            })
-            const hkId = (await hkIdResp.json()).id_number
-            toDefaultResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/new-addr-book`, {
+
+            toFetchResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/new-addr-book`, {
                 headers: {
                     "Authorization":`Bearer ${userToken}`,
                     'Content-Type': 'application/json'
                 },
                 method: "POST",
-                body: JSON.stringify({...input, hkid: hkId}),
+                body: JSON.stringify(input),
             })
-            console.log(toDefaultResp.status);
-            console.log({...input, hkid: hkId});
+            console.log(toFetchResp.status);
 
         } else {
-            toDefaultResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
+            toFetchResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
                 headers: {
                     "Authorization":`Bearer ${userToken}`,
                     'Content-Type': 'application/json'
@@ -111,7 +73,7 @@ export function EditAddressPage({navigation}:any) {
         navigation.navigate("我的地址")
 
         toast.show({
-            description: toDefaultResp.status == 201 ? "儲存成功" : "系統錯誤，儲存失敗"
+            description: toFetchResp.status == 201 ? "儲存成功" : "系統錯誤，儲存失敗"
         })
     }
     return (

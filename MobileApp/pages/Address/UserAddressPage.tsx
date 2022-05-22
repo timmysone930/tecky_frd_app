@@ -11,7 +11,6 @@ import { Radio, Text, View, Button, ScrollView, AlertDialog, useToast, Spinner, 
 
 // Redux
 import { store } from '../../redux/store';
-import { setAddressWannaDeleteID } from '../../redux/slice';
 import { setAddressEditContent } from '../../redux/slice';
 
 // .env
@@ -128,20 +127,6 @@ export function UserAddressPage({navigation}:any) {
     const setDefault = async () => {
         onClose()
 
-        // Fetch to set default address
-        let firstResp: any = null;
-        if (defaultAddressID != "") {
-
-            firstResp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
-                headers: {
-                    "Authorization":`Bearer ${userToken}`,
-                    'Content-Type': 'application/json'
-                },
-                method: "POST",
-                body: JSON.stringify({id: defaultAddressID, is_default: 0})
-            })
-        }
-
         const secondResp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {
             headers: {
                 "Authorization":`Bearer ${userToken}`,
@@ -151,7 +136,7 @@ export function UserAddressPage({navigation}:any) {
             body: JSON.stringify({id: addrToSetDefault, is_default: 1})
         })
 
-        if ((firstResp == null && secondResp.status == 201) || (firstResp.status == 201 && secondResp.status == 201)) {
+        if (secondResp.status == 201) {
             setDefaultAddressID(addrToSetDefault)
             toast.show({
                 title: "設定成功",
