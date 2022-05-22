@@ -10,6 +10,10 @@ import { store } from '../../redux/store';
 // Native-base
 import { useToast, Button } from 'native-base';
 import OneSignal from 'react-native-onesignal';
+import { DropdownSelectComponent } from '../../components/utils/DropdownSelectComponent';
+
+// 電話Code
+const phoneCodeArr = ['852', '853', '86']
 
 export const LoginPage = (props: any) => {
     // white background
@@ -18,10 +22,12 @@ export const LoginPage = (props: any) => {
     };
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
-        defaultValues: { phoneNo: '', loginSMS: '' }
+        defaultValues: {phoneCode: "852", phoneNo: '', loginSMS: '' }
     });
     // GET previous page 
     const previousPage = useSelector((state: any) => state.setDoctorID.currentPage);
+    // Phone value change function
+    const onPhoneCodeChange = (itemValue: string) => { setValue("phoneCode", itemValue) };
 
 
     const [getLoginSMS] = useGetLoginSMSMutation();
@@ -54,7 +60,7 @@ export const LoginPage = (props: any) => {
         }, 1000)
         // Fetching
         try {
-            const res: QueryReturnValue = await getLoginSMS({ 'phone': inputData.phoneNo })
+            const res: QueryReturnValue = await getLoginSMS({ 'phone': inputData.phoneCode + inputData.phoneNo })
             console.log('res',res)
             toast.show({
                 description: "已送出驗證碼"
@@ -77,7 +83,7 @@ export const LoginPage = (props: any) => {
     const onLoginPress = async (inputData: any) => {
 
         const data: { 'phone': number, 'smsCode': string } = {
-            "phone": inputData.phoneNo,
+            "phone": inputData.phoneCode + inputData.phoneNo,
             "smsCode": inputData.loginSMS
         }
         const res: any = await loginByPhone(data)
@@ -89,7 +95,7 @@ export const LoginPage = (props: any) => {
                 })
             }
         } else {
-            store.dispatch(checkStatus({ status: true, phone: inputData.phoneNo }))
+            store.dispatch(checkStatus({ status: true, phone: inputData.phoneCode + inputData.phoneNo }))
             clearInterval(intervalId.current)
             let externalUserId = res.data.member_code.toString()
             store.dispatch(setUserInfo({ member_code: externalUserId, token: res.data.access_token }))
@@ -118,12 +124,28 @@ export const LoginPage = (props: any) => {
                 </View>
                 <View style={styles.pageMargin}>
                     <Text style={styles.subTitle}>電話號碼:</Text>
-                    <Controller control={control} rules={{ required: true, }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput keyboardType={'numeric'} textContentType={'telephoneNumber'} style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="e.g: 85212345678" placeholderTextColor="#737474" />
-                        )}
-                        name="phoneNo"
-                    />
+                    <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                        <Controller control={control} rules={{ required: true, }}
+                            render={({ field: { value } }) => (
+                                <View style={{width: "30%"}}>
+                                    <DropdownSelectComponent 
+                                        placeholder={'電話區號 '} 
+                                        data={phoneCodeArr}
+                                        onChange={onPhoneCodeChange} 
+                                        mode='other'
+                                        selectedValue={getValues('phoneCode')}
+                                    />
+                                </View>
+                            )}
+                            name="phoneCode"
+                        />
+                        <Controller control={control} rules={{ required: true, }}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <TextInput keyboardType={'numeric'} textContentType={'telephoneNumber'} style={[styles.input,{width: "67%"}]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="e.g: 12345678" placeholderTextColor="#737474" />
+                            )}
+                            name="phoneNo"
+                        />
+                    </View>
                     {/* 必須填寫提示 */}
                     {errors.phoneNo && <Text style={styles.warning}>* 此項必須填寫</Text>}
                     <Text style={styles.subTitle}>獲取一次性短訊驗證碼</Text>
