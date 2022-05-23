@@ -97,6 +97,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     />
                     {errors.EmergencyContactPhone && <Text style={styles.warning}>* 請檢查電話號碼是否填寫或正確</Text>}
                     <Text style={[styles.subTitle, styles.mt_10]}>請上傳你的身份證照片正面</Text>
+                    <Text style={[styles.warning, {marginTop:10}]}>* 請提供小於4MB的照片</Text>
                     {/* Modal for camera */}
                     <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.uploadBtn}>
                         <Image source={{ uri: `${Config.REACT_APP_API_SERVER}/btn_IDCard.jpg`, }} style={{ width: 380, height: 200 }} resizeMode="contain" resizeMethod="scale" />
