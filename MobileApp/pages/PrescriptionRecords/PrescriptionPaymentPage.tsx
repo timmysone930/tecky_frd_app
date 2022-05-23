@@ -155,7 +155,7 @@ export const PrescriptionPaymentPage = (props: any) => {
                 <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>
                     <TouchableOpacity style={{ flexDirection: 'row' ,justifyContent:'flex-start'}} onPress={()=>setRadioValue("PayPal")}>
                         <RadioButton.Item label="" value="PayPal" mode='android' color='#6d7f99' style={{paddingTop:30}}/>
-                        <Image style={{ width: 200, height: 100, }} resizeMode="contain" resizeMethod="scale" source={require('../../images/logo_PayPal.png')} />
+                        <Image style={{ width: 200, height: 100, }} resizeMode="contain" resizeMethod="scale" source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_PayPal.png` }} />
                     </TouchableOpacity>
                 </RadioButton.Group>
 
