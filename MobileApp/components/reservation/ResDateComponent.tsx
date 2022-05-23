@@ -20,9 +20,15 @@ interface dataMapType {
 export const ResDateComponent = (props: Props) => {
     let selectFunction;
     const rosterDate = Object.entries(props.data)
+    let sortArr:any =[];
     // Check the picker mode
     if (props.mode === 'date') {
-        selectFunction = rosterDate.map((item: [string, string | [[Object]]], idx: number) => {
+        rosterDate.map((item:[string, string | [[Object]]])=>{
+            sortArr.push(item)
+        })
+        // sort the date
+        sortArr.sort()
+        selectFunction = sortArr.map((item: [string, string | [[Object]]], idx: number) => {
             return <Select.Item label={item[0]} value={item[0]} key={`picker_date_${idx}`} />
         })
     } else if (props.mode === 'time') {
