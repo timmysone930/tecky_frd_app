@@ -26,7 +26,7 @@ export const RegisterPage = (props: any) => {
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: {
-            regTitle: '', regName: '', regName_en: '', regIDType: '', regIDNumber: '', regBDay: '', regEmail: '', phoneCode: '', regPhone: '', regSMS: '',
+            regTitle: '', regName: '', regName_en: '', regIDType: '', regIDNumber: '', regBDay: '', regEmail: '', phoneCode: '852', regPhone: '', regSMS: '',
             regPolicyOne: [], regPolicyTwo: []
         }
     });
