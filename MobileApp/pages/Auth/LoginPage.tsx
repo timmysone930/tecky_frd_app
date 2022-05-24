@@ -22,7 +22,7 @@ export const LoginPage = (props: any) => {
     };
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
-        defaultValues: {phoneCode: "852", phoneNo: '', loginSMS: '' }
+        defaultValues: {phoneCode: '852', phoneNo: '', loginSMS: '' }
     });
     // GET previous page 
     const previousPage = useSelector((state: any) => state.setDoctorID.currentPage);
@@ -184,6 +184,7 @@ export const LoginPage = (props: any) => {
                     <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate({ name: '註冊界面' }) }}>
                         <Text style={styles.buttonText}>立即註冊</Text>
                     </TouchableOpacity>
+                    <View><Text style={styles.versionText}>版本：1.0</Text></View>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -239,4 +240,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: 16,
     },
+    versionText:{
+        color:'grey',
+        textAlign:'center',
+        fontSize: 12,
+        marginTop:10
+    }
 })

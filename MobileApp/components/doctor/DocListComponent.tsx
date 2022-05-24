@@ -8,17 +8,17 @@ export const DocListComponent = ({ props }: any) => {
     return (
         <>
             <View >
-                {props.img === null || props.img === 'undefined' || props.img === 'null'? <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{ uri: `${Config.REACT_APP_API_SERVER}/manage/doctor/default.jpg`, }
+                {props.img === null || props.img === 'undefined' || props.img === 'null'? <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{ uri: `${Config.REACT_APP_API_SERVER}/doctor/default.jpg`, }
                 } /> :
-                    <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{ uri: `${Config.REACT_APP_API_SERVER}/manage/doctor/${props.img}`, }} />}
+                    <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{ uri: `${Config.REACT_APP_API_SERVER}/doctor/${props.img}`, }} />}
             </View>
             <View style={styles.ml_20}>
-                <Text style={styles.title}>{props.name}{props.name_en}</Text>
+                <Text style={styles.title}>{props.name} {props.name_en}</Text>
 
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap', display:'flex', marginRight:100}}>
-                    <View style={[styles.infoBox, props.gender === 'Male' ? styles.blue : styles.red]} >
+                    {/* <View style={[styles.infoBox, props.gender === 'Male' ? styles.blue : styles.red]} >
                         <Text style={styles.gender}>{props.gender === 'Male' ? '男' : '女'}</Text>
-                    </View>
+                    </View> */}
 
                     {props.spec_name.map((item: string, idx: number) => (
                         <View style={styles.infoBox} key={`docSpec_${idx}`}>

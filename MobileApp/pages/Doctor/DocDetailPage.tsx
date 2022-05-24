@@ -16,7 +16,7 @@ export const DocDetailPage: React.FC = (props: any) => {
     // To get the param passing from the previous screen
     const { id, docData } = props.route.params;
     // to split the doctor des
-    let doctorDes = docData.doctor_des.split(',')
+    let doctorDes = docData.doctor_des.split('\n')
     // Check dr roaster time
     const rosterData = useGetRosterListByDocCodeQuery(id)
     return (

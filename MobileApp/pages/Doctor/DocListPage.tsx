@@ -33,25 +33,36 @@ const wait = (timeout: number) => {
 export const DocListPage: React.FC = (prop: any) => {
     const [searchQuery, setSearchQuery] = React.useState('');
     const [refreshing, setRefreshing] = React.useState(false);
+    const [dBList, setDbList] =React.useState<any>([])
     const { mode } = prop.route.params;
     let data:any;
     let isLoading;
     let isSuccess;
     let isError;
+    let listData;
     // fetch doctor list data
     if (mode === '西醫') {
         data = useGetDoctorListQuery();
         isLoading = useGetDoctorListQuery().isLoading;
         isError = useGetDoctorListQuery().isError;
         isSuccess = useGetDoctorListQuery().isSuccess;
+        listData = data.data
     }
+    // set dbLIst
+    useEffect(()=>{
+        setDbList(data.data)
+    },[isSuccess])
+
     // search function
-    if (searchQuery !== '') {
-        let newData = data.data.filter( (item:dataType) => (item.name.includes(searchQuery) || item.name_en.toLowerCase().includes(searchQuery.toLowerCase())
-        ||item.spec_name.toString().includes(searchQuery) )
-        );
-        data.data = newData
-    }
+    useEffect(()=>{
+        if(data.data){
+            let newData = data.data.filter( (item:dataType) => (item.name.includes(searchQuery) || item.name_en.toLowerCase().includes(searchQuery.toLowerCase())
+            ||item.spec_name.toString().includes(searchQuery) )
+            );
+            setDbList(newData)
+        }
+    },[searchQuery])
+
     // refresh
     const onRefresh = React.useCallback(async () => {
         try {
@@ -99,7 +110,7 @@ export const DocListPage: React.FC = (prop: any) => {
                 {isError && <Text style={[styles.title,,styles.t_center]}>載入出現錯誤...</Text>}
                 {isSuccess &&
                     <FlatList
-                        data={data.data}
+                        data={dBList}
                         refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={onRefresh} /> }
                         renderItem={renderItem}
                         keyExtractor={(item, idx) => `docList_${item.doctor_code}_${idx}`}

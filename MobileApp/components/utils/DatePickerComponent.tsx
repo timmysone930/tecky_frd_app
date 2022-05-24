@@ -27,6 +27,7 @@ export const DatePickerComponent = (props: datePickerProps) => {
         mode="date"
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
+        maximumDate={new Date()}
       />
     </View>
   )
