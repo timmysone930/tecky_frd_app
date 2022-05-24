@@ -51,7 +51,8 @@ export const DocListPage: React.FC = (prop: any) => {
     // set dbLIst
     useEffect(()=>{
         setDbList(data.data)
-    },[isSuccess])
+    },[useGetDoctorListQuery().isFetching])
+
 
     // search function
     useEffect(()=>{
@@ -79,7 +80,6 @@ export const DocListPage: React.FC = (prop: any) => {
         const unsubscribe = navigation.addListener('focus', () => {
             data.refetch();
         });
-
         return () => {unsubscribe}
     }, [navigation])
 
