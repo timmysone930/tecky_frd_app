@@ -24,12 +24,13 @@ const countTime = 60
 export const RegisterPage = (props: any) => {
     const toast = useToast()
     // Form element
-    const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
+    const { control, handleSubmit, formState: { dirtyFields, errors }, setValue, getValues } = useForm({
         defaultValues: {
             regTitle: '', regName: '', regName_en: '', regIDType: '', regIDNumber: '', regBDay: '', regEmail: '', phoneCode: '', regPhone: '', regSMS: '',
             regPolicyOne: [], regPolicyTwo: []
         }
     });
+
     // id value change function
     const onIDValueChange = (itemValue: string) => { setValue("regIDType", itemValue) };
     // Date value change function
@@ -255,8 +256,9 @@ export const RegisterPage = (props: any) => {
                 </View>
                 <BottomLineComponent />
                 {/* Button to go back and next page */}
-                <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]}
+                <TouchableOpacity style={[styles.button, { backgroundColor: Object.keys(dirtyFields).length < 6 ? "#93999e" : '#325C80' }]}
                     onPress={handleSubmit(onSubmit)}
+                    disabled={Object.keys(dirtyFields).length < 6}
                 >
                     <Text style={styles.buttonText}>繼續</Text></TouchableOpacity>
             </ScrollView>

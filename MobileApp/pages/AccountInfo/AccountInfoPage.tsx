@@ -28,7 +28,10 @@ export function AccountInfoPage({navigation}:any) {
             }
         })
         const result = resp.status === 200 ? (await resp.json()) : "";
-        setFetchData(result)
+        const member_code = "M000000".slice(0, -result.member_code.toString().length)
+        const displayMemberCode = member_code + result.member_code.toString()
+
+        setFetchData({...result, member_code: displayMemberCode})
         return result
     }
     
