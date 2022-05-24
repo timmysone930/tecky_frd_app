@@ -23,7 +23,7 @@ export const DropdownSelectComponent = (props: Props) => {
         ))
     }
     return (
-        <Select minWidth="120" accessibilityLabel={props.placeholder} placeholder={props.placeholder} _selectedItem={{
+        <Select accessibilityLabel={props.placeholder} placeholder={props.placeholder} _selectedItem={{
            endIcon: <CheckIcon size={5}/>
         }} mt="1.5" mb='1' fontSize="sm" borderColor="#737474" onValueChange={props.onChange} flex={1} borderRadius="3" borderWidth='0.7' selectedValue={props.selectedValue}>
             {selectFunction}
