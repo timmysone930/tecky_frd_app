@@ -11,6 +11,8 @@ import Config from "react-native-config";
 
 // Redux
 import { useSelector } from 'react-redux';
+import { store } from '../../redux/store';
+import { checkStatus } from '../../redux/AuthSlice';
 
 export function InfoEditPage({navigation}:any) {
 
@@ -24,6 +26,8 @@ export function InfoEditPage({navigation}:any) {
 
     // Assign the original phone number (8 digits) for comparison with the new input phone number
     const [originalPhone, setOriginalPhone] = useState("")
+
+    const realMemberCode = useRef()
 
     // New input
     const [input, setInput] = useState({
@@ -40,7 +44,10 @@ export function InfoEditPage({navigation}:any) {
             }
         })
         const result = await resp.json()
-        setFetchData(result)
+        realMemberCode.current = result.member_code
+        const member_code = "M000000".slice(0, -result.member_code.toString().length)
+        const displayMemberCode = member_code + result.member_code.toString()
+        setFetchData({...result, member_code: displayMemberCode})
         setInput({
             ...input,
             email: result.email,
@@ -98,7 +105,7 @@ export function InfoEditPage({navigation}:any) {
 
         if (resp.status == 201) {
             toast.show({
-                description: "已送出驗證碼"
+                description: `已送出驗證碼\n驗證碼: ${(await resp.json())}`
             })
         } else {
             toast.show({
@@ -162,7 +169,7 @@ export function InfoEditPage({navigation}:any) {
                     body: JSON.stringify({phone: fetchData.phone, smsCode: input.validCode})
                 })
                 console.log(resp.status);
-                if (resp.status == 400) {
+                if (resp.status != 201) {
                     toast.show({
                         description: "請確認輸入正確電話號碼及驗證碼"
                     })
@@ -173,6 +180,7 @@ export function InfoEditPage({navigation}:any) {
         
         const newInfo = {
             ...fetchData,
+            member_code: realMemberCode.current,
             email: input.email,
             phone: input.areaCode + input.phone,
         }
@@ -185,14 +193,21 @@ export function InfoEditPage({navigation}:any) {
             },
             body: JSON.stringify(newInfo)
         })
-        console.log(resp.status);
+        if (resp.status == 200) {
 
-        // const resp = await putEditInfo(newInfo)
-        
-        navigation.navigate("我的資料")
-        toast.show({
-            description: "成功儲存帳戶資料"
-        })
+            toast.show({
+                description: "成功儲存帳戶資料"
+            })
+            
+            if (originalPhone != input.phone) {
+                store.dispatch(checkStatus({name:"", status: false }))
+                return
+            }
+            
+            navigation.navigate("我的資料")
+
+        }
+
     }
 
     return (
