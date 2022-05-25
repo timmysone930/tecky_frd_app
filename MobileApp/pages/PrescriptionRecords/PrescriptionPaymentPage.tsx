@@ -9,6 +9,7 @@ import { useToast } from 'native-base';
 //Redux
 import { store } from '../../redux/store';
 import { setPrescriptionCode } from '../../redux/slice';
+import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
 
 export const PrescriptionPaymentPage = (props: any) => {
 
@@ -22,15 +23,15 @@ export const PrescriptionPaymentPage = (props: any) => {
     const toast = useToast()
 
     const [fetchData, setFetchData] = useState(null as any)
-    const redux = useSelector((state:any)=>state.getPrescriptionCode);
+    const redux = useSelector((state: any) => state.getPrescriptionCode);
     const prescriptionDetail = redux.prescriptionDetail
-    useEffect(()=>{
+    useEffect(() => {
         console.log(prescriptionDetail);
         if (fetchData == null) {
             setFetchData(prescriptionDetail)
         }
         console.log(fetchData);
-    },[])
+    }, [])
 
     // redirect to paypal
     const redirectPaypal = async () => {
@@ -69,51 +70,55 @@ export const PrescriptionPaymentPage = (props: any) => {
         }))
     }
 
+    // submit disable
+    const [submitStatus, setSubmitStatus] = React.useState(true);
+
     const nextStep = async () => {
         // const fetchData = prescriptionDetail
+        setSubmitStatus(false)
         toast.show({
             description: "載入中"
         })
-                
+
         const paypalRes = await redirectPaypal();
-        
+
 
         if (paypalRes.status == 'success') {
 
             const editPaymentResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/pay-pres`, {
                 method: "PUT",
                 headers: {
-                    "Authorization":`Bearer ${userToken}`,
+                    "Authorization": `Bearer ${userToken}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
                     payment: {
-                        id: fetchData.prescription.payment, 
-                        payment_id: paypalRes.data.nonce, 
-                        gateway: "Paypal", 
-                        amount: fetchData.pres_amount, 
-                        payment_status: true, 
-                        type: "prescription", 
+                        id: fetchData.prescription.payment,
+                        payment_id: paypalRes.data.nonce,
+                        gateway: "Paypal",
+                        amount: fetchData.pres_amount,
+                        payment_status: true,
+                        type: "prescription",
                         payment_type: "visa"
                     },
                     newPres: {
-                        pres_code: prescriptionDetail.prescription.pres_code, 
-                        address: prescriptionDetail.prescription.address, 
-                        area: prescriptionDetail.prescription.area, 
-                        courier_code: prescriptionDetail.prescription.courier_code, 
-                        delivery_contact: prescriptionDetail.prescription.delivery_contact, 
-                        delivery_phone: prescriptionDetail.prescription.delivery_phone, 
-                        district: prescriptionDetail.prescription.district, 
-                        is_delivery: prescriptionDetail.prescription.is_delivery, 
-                        payment: prescriptionDetail.prescription.payment, 
-                        pick_up_store: prescriptionDetail.prescription.pick_up_store, 
+                        pres_code: prescriptionDetail.prescription.pres_code,
+                        address: prescriptionDetail.prescription.address,
+                        area: prescriptionDetail.prescription.area,
+                        courier_code: prescriptionDetail.prescription.courier_code,
+                        delivery_contact: prescriptionDetail.prescription.delivery_contact,
+                        delivery_phone: prescriptionDetail.prescription.delivery_phone,
+                        district: prescriptionDetail.prescription.district,
+                        is_delivery: prescriptionDetail.prescription.is_delivery,
+                        payment: prescriptionDetail.prescription.payment,
+                        pick_up_store: prescriptionDetail.prescription.pick_up_store,
                         pres_details: prescriptionDetail.prescription.pres_details,
                         order_status: "paied",
                     }
                 })
             })
 
-            
+
             // "payment_id": paypalRes.data.nonce
             // const editPaymentResult = editPaymentResp.status == 200 ? (await editPaymentResp.json()) : null;
             console.log(editPaymentResp.status);
@@ -138,7 +143,7 @@ export const PrescriptionPaymentPage = (props: any) => {
             })
             props.navigation.navigate({ name: '付款完成' })
         }
-        
+
     }
 
     // Radio Button
@@ -146,27 +151,32 @@ export const PrescriptionPaymentPage = (props: any) => {
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
+           
                 {fetchData &&
                     <View>
                         <Text style={[styles.subTitle, { paddingHorizontal: 15, paddingTop: 15, }]}>藥單費用：${fetchData.pres_amount}</Text>
                     </View>
                 }
-
+                 {submitStatus ?
                 <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>
-                    <TouchableOpacity style={{ flexDirection: 'row' ,justifyContent:'flex-start'}} onPress={()=>setRadioValue("PayPal")}>
-                        <RadioButton.Item label="" value="PayPal" mode='android' color='#6d7f99' style={{paddingTop:30}}/>
+                    <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start' }} onPress={() => setRadioValue("PayPal")}>
+                        <RadioButton.Item label="" value="PayPal" mode='android' color='#6d7f99' style={{ paddingTop: 30 }} />
                         <Image style={{ width: 200, height: 100, }} resizeMode="contain" resizeMethod="scale" source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_PayPal.png` }} />
                     </TouchableOpacity>
                 </RadioButton.Group>
+                :
+                <SpinnerComponent />
+                 }
 
             </ScrollView>
             {/* Button to go back and next page */}
             <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={[styles.button, { backgroundColor: '#325C80' }]}
                     onPress={nextStep}
+                    disabled={!submitStatus}
                 >
                     <Text style={styles.buttonText}>下一步</Text>
                 </TouchableOpacity>

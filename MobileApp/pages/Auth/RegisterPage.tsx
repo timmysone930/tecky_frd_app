@@ -164,7 +164,7 @@ export const RegisterPage = (props: any) => {
                     />
                     {errors.regIDType && <Text style={styles.warning}>* 此項必須選擇</Text>}
                     <Text style={styles.subTitle}>身份證明文件號碼<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
-                    <Controller control={control} rules={{ required: true, pattern:/^[A-Za-z0-9_-]*$/}}
+                    <Controller control={control} rules={{ required: true, pattern:/^[A-Za-z0-9]*$/}}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="e.g P1234567" placeholderTextColor="#737474" />
                         )}
