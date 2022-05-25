@@ -19,19 +19,19 @@ import { wait } from '../ResRecordPage';
 // fetch to check patient status
 const checkPatient = async (id: string, token: string) => {
   try {
-    const response = await fetch(`${Config.REACT_APP_API_SERVER}/patient/search?column=hkid&where=${id}`,
+    const response = await fetch(`${Config.REACT_APP_API_SERVER}/patient/${id}`,
       {
         headers: {
           "Authorization": `Bearer ${token}`,
         },
       }
     );
-    const json = await response.json();
-    console.log('json', json)
-    if (json.message && json.message === 'Not Found') {
+    if(response.status === 200){
+      const json = await response.json();
+      console.log('json', json)
+      return { message: 'Found', memberCode: json.member_code }
+    }else{
       return { message: 'Not Found' }
-    } else {
-      return { message: 'Found', memberCode: json[0].member_code }
     }
   } catch (error) {
     console.error(error);
@@ -205,13 +205,13 @@ export const ReservationPage = (props: any) => {
                 )}
                 name="idType"
               />
-              <Controller control={control} rules={{ required: true, }}
+              <Controller control={control} rules={{ required: true, pattern:/^[A-Za-z0-9_-]*$/}}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="身份證明文件號碼" placeholderTextColor="#737474" />
                 )}
                 name="idNumber"
               />
-              {errors.idNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
+              {errors.idNumber && <Text style={styles.warning}>* 此項必須正確填寫（應為英文字母及數字組成）</Text>}
             </View>
           }
         </ScrollView>
