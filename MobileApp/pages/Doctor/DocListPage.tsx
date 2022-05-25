@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
-import { useGetDoctorListQuery } from '../../API/DoctorAPI';
+import { useGetAllDoctorBySpecQuery, useGetDoctorListQuery } from '../../API/DoctorAPI';
 import { DocListComponent } from '../../components/doctor/DocListComponent';
 import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
 import { SearchComponent } from '../../components/utils/SearchComponent';
@@ -41,17 +41,23 @@ export const DocListPage: React.FC = (prop: any) => {
     let isError;
     let listData;
     // fetch doctor list data
-    if (mode === '西醫') {
+    if (mode === '所有專科') {
         data = useGetDoctorListQuery();
-        isLoading = useGetDoctorListQuery().isLoading;
-        isError = useGetDoctorListQuery().isError;
-        isSuccess = useGetDoctorListQuery().isSuccess;
+        isLoading = data.isLoading;
+        isError = data.isError;
+        isSuccess = data.isSuccess;
+        listData = data.data
+    }else{
+        data = useGetAllDoctorBySpecQuery(mode);
+        isLoading = data.isLoading;
+        isError = data.isError;
+        isSuccess = data.isSuccess;
         listData = data.data
     }
     // set dbLIst
     useEffect(()=>{
         setDbList(data.data)
-    },[useGetDoctorListQuery().isFetching])
+    },[data.isFetching])
 
 
     // search function
