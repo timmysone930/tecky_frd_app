@@ -45,8 +45,8 @@ export function InfoEditPage({navigation}:any) {
         })
         const result = await resp.json()
         realMemberCode.current = result.member_code
-        const member_code = "M000000".slice(0, -result.member_code.toString().length)
-        const displayMemberCode = member_code + result.member_code.toString()
+        const member_code = "M000000".slice(0, -result?.member_code.toString().length)
+        const displayMemberCode = member_code + result?.member_code.toString()
         setFetchData({...result, member_code: displayMemberCode})
         setInput({
             ...input,
