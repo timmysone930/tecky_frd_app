@@ -43,7 +43,7 @@ export const DocSpecCardComponent = (props: any) => {
                 {spec.isLoading && <SpinnerComponent />}
                 {spec.isError && <Text style={[styles.title, , styles.t_center]}>載入出現錯誤...</Text>}
                 {spec.isSuccess &&
-                    < View style={{ flexWrap: 'wrap', flexDirection: 'row', marginHorizontal: 15, }}>
+                    < View style={{ flexWrap: 'wrap', flexDirection: 'row', marginHorizontal: 15, marginBottom:20 }}>
                         <TouchableHighlight key={`dr_type_${0}`} style={styles.drTypeCard} onPress={() => { props.props.navigation.navigate({ name: '醫生列表', params: { mode: '所有專科' } }) }} activeOpacity={1} underlayColor="#6d7f99" onHideUnderlay={() => setIsPress(0)}
                             onShowUnderlay={() => { setIsPress(0 + 1) }}>
                             <>

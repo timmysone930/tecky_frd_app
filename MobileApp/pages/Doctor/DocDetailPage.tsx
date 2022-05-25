@@ -33,7 +33,7 @@ export const DocDetailPage: React.FC = (props: any) => {
                         }),
                             store.dispatch(setDoctorID({ id: id, currentPage: '預約醫生' }) )
                         store.dispatch(setDoctorData({ docData: docData }))
-                    }} style={styles.videoButton} disabled={rosterData.isError || rosterData.isLoading ? true : false}>
+                    }} style={styles.videoButton} disabled={rosterData.isError || rosterData.isLoading ? true : false || docData.status === 'stop'}>
                         線上視像諮詢
                     </Button>
                 </>
