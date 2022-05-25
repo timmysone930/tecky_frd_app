@@ -12,6 +12,7 @@ import { useToast } from 'native-base';
 import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
 import { setMemberCode } from '../../redux/slice';
 import { styles } from '../../styles/GeneralStyles'
+import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
 // white background
 const backgroundStyle = { backgroundColor: 'white', };
 
@@ -40,6 +41,8 @@ export const PaymentPage = (props: any) => {
     const [putHoldSession] = usePutHoldSessionMutation();
     // create payment 
     const [postNewPayment] = usePostNewPaymentMutation()
+    // submit disable
+    const [submitStatus, setSubmitStatus] = React.useState(true);
     // redirect to paypal
     const redirectPaypal = async () => {
         try {  // For one time payments
@@ -63,6 +66,7 @@ export const PaymentPage = (props: any) => {
     }
     // submit
     const onPress = async () => {
+        setSubmitStatus(false)
         // non member
         if (formData.memberCode === '') {
             // create member
@@ -171,22 +175,30 @@ export const PaymentPage = (props: any) => {
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
-                <View>
-                    <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>問診費用：$ {Config.Res_code}</Text>
-                    <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>如在十五分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約</Text>
-                </View>
-                <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>
-                    <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start' }} onPress={() => setRadioValue("PayPal")}>
-                        <RadioButton.Item label="" value="PayPal" mode='android' color='#6d7f99' style={{ paddingTop: 30 }} />
-                        <Image style={{ width: 200, height: 100, }} resizeMode="contain" resizeMethod="scale" source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_PayPal.png`, }} />
-                    </TouchableOpacity>
-                </RadioButton.Group>
+                {submitStatus ?
+                    <>
+                        <View>
+                            <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>問診費用：$ {Config.Res_code}</Text>
+                            <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>如在十五分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約</Text>
+                        </View>
+                        <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>
+                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start' }} onPress={() => setRadioValue("PayPal")}>
+                                <RadioButton.Item label="" value="PayPal" mode='android' color='#6d7f99' style={{ paddingTop: 30 }} />
+                                <Image style={{ width: 200, height: 100, }} resizeMode="contain" resizeMethod="scale" source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_PayPal.png`, }} />
+                            </TouchableOpacity>
+                        </RadioButton.Group>
+                    </>
+                    :
+                    <>
+                        <SpinnerComponent />
+                    </>
+                }
             </ScrollView>
             {/* Button to go back and next page */}
             <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
-                <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={onPress}>
+                <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={onPress} disabled={!submitStatus}>
                     <Text style={styles.buttonText}>下一步</Text></TouchableOpacity>
             </View>
         </SafeAreaView>
