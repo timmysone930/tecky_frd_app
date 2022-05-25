@@ -100,8 +100,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             reservationData.video_url == null &&
             fullDate == resFullDate &&
             isInRange(currentFullTime, range)) {
-            // enable the button
-            setButtonText(ButtonText.start)
+
             // Start Fetching every mins
             intervalId.current = setInterval(async () => {
                 // refetching
@@ -112,13 +111,15 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
                 // Get current time
                 time.current = new Date()
-                time.current.setUTCHours(time.current.getUTCHours() + 8)
+                // time.current.setUTCHours(time.current.getUTCHours() + 8)
                 hours = time.current.getHours()
                 mins = time.current.getMinutes()
                 // current fulltime 
                 currentFullTime = `${hours}:${mins < 10 ? (`0` + mins) : mins}`
 
-                if (!isInRange(currentFullTime, range)) {
+                if (!isInRange(currentFullTime, range) && url != null) {
+                    // enable the button
+                    setButtonText(ButtonText.start)
                     clearInterval(intervalId.current)
                 }
             }, 60000)
