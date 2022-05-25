@@ -164,13 +164,13 @@ export const RegisterPage = (props: any) => {
                     />
                     {errors.regIDType && <Text style={styles.warning}>* 此項必須選擇</Text>}
                     <Text style={styles.subTitle}>身份證明文件號碼<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
-                    <Controller control={control} rules={{ required: true, }}
+                    <Controller control={control} rules={{ required: true, pattern:/^[A-Za-z0-9_-]*$/}}
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="身份證明文件號碼" placeholderTextColor="#737474" />
+                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="e.g P1234567" placeholderTextColor="#737474" />
                         )}
                         name="regIDNumber"
                     />
-                    {errors.regIDNumber && <Text style={styles.warning}>* 此項必須填寫</Text>}
+                    {errors.regIDNumber && <Text style={styles.warning}>* 此項必須正確填寫（應為英文字母及數字組成）</Text>}
 
                     <Text style={styles.subTitle}>生日日期<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <Controller control={control} rules={{ required: true, validate: value => {let today = new Date(); let inputDay = new Date(value);return inputDay < today} }}
