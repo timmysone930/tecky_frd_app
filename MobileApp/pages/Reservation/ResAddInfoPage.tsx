@@ -1,5 +1,5 @@
 import { useToast } from 'native-base';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image, TextInput, Platform } from 'react-native'
 import { CameraModalComponent } from '../../components/reservation/CameraModalComponent'; // react-native-image-picker
@@ -9,6 +9,8 @@ import { store } from '../../redux/store';
 import { AddInfoSubmitType } from './ResType';
 import Config from 'react-native-config';
 import { styles } from '../../styles/GeneralStyles'
+import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
+import { useSelector } from 'react-redux';
 // white background
 const backgroundStyle = { backgroundColor: 'white', };
 
@@ -20,6 +22,10 @@ export const ResAddInfoPage: React.FC = (props: any) => {
     // set the modal
     const [modalVisible, setModalVisible] = useState(false);
     const onSetModalVisible = (status: boolean) => { setModalVisible(status); };
+    // to get the JWT token
+    const userToken = useSelector((state: any) => state.getUserStatus.token);
+    // get current users profile
+    const userData = useGetUserInfoQuery(userToken)
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: { phone: '', bDay: '', email: '', EmergencyContactName: '', EmergencyContactPhone: '', name_en: '' }
@@ -42,6 +48,20 @@ export const ResAddInfoPage: React.FC = (props: any) => {
         }
     }
 
+    // auto input login users info once
+    useEffect(() => {
+        console.log(userData.data)
+        const updateUserInfo = async () => {
+            if (userData.isSuccess) {
+                await setValue('phone', userData.data.phone)
+                await setValue('bDay', userData.data.birthday)
+                await setValue('email', userData.data.email)
+                await setValue('name_en', userData.data.name_en)
+            }
+        }
+        updateUserInfo();
+    }, [userData.isSuccess]);
+
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', padding: 15, paddingTop: 25, marginBottom: 2, }}>
@@ -56,7 +76,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     {errors.name_en && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
                     <Text style={[styles.subTitle, styles.mt_10]}>生日日期</Text>
-                    <Controller control={control} rules={{ required: true, validate: value => {let today = new Date(); let inputDay = new Date(value);return inputDay < today} }}
+                    <Controller control={control} rules={{ required: true, validate: value => { let today = new Date(); let inputDay = new Date(value); return inputDay < today } }}
                         render={({ field: { value } }) => (
                             <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('bDay')} />
                         )}
@@ -65,7 +85,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     {/* 必須填寫提示 */}
                     {errors.bDay && <Text style={styles.warning}>* 請檢查生日日期是否填寫或正確</Text>}
                     <Text style={[styles.subTitle, styles.mt_10]}>電郵地址</Text>
-                    <Controller control={control} rules={{ required: true,  pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ }}
+                    <Controller control={control} rules={{ required: true, pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/ }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請填寫收發通知用的電郵地址" placeholderTextColor="#737474" />
                         )}
@@ -74,7 +94,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     {errors.email && <Text style={styles.warning}>* 請檢查電郵地址是否填寫或正確</Text>}
 
                     <Text style={[styles.subTitle, styles.mt_10]}>流動電話號碼</Text>
-                    <Controller control={control} rules={{ required: true,  pattern: /^(0|[1-9]\d*)(\.\d+)?$/ }}
+                    <Controller control={control} rules={{ required: true, pattern: /^(0|[1-9]\d*)(\.\d+)?$/ }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput textContentType={'telephoneNumber'} keyboardType={'numeric'} style={[styles.input]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="e.g 85212345678" placeholderTextColor="#737474" />
                         )}
@@ -89,7 +109,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                         name="EmergencyContactName"
                     />
                     {errors.EmergencyContactName && <Text style={styles.warning}>* 此項必須填寫</Text>}
-                    <Controller control={control} rules={{ required: true, pattern: /^(0|[1-9]\d*)(\.\d+)?$/}}
+                    <Controller control={control} rules={{ required: true, pattern: /^(0|[1-9]\d*)(\.\d+)?$/ }}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput keyboardType={'numeric'} style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="緊急聯絡人電話 (e.g 85212345678)" placeholderTextColor="#737474" />
                         )}
@@ -97,7 +117,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     />
                     {errors.EmergencyContactPhone && <Text style={styles.warning}>* 請檢查電話號碼是否填寫或正確</Text>}
                     <Text style={[styles.subTitle, styles.mt_10]}>請上傳你的身份證照片正面</Text>
-                    <Text style={[styles.warning, {marginTop:10}]}>* 請提供小於4MB的照片</Text>
+                    <Text style={[styles.warning, { marginTop: 10 }]}>* 請提供小於4MB的照片</Text>
                     {/* Modal for camera */}
                     <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.uploadBtn}>
                         <Image source={{ uri: `${Config.REACT_APP_API_SERVER}/btn_IDCard.jpg`, }} style={{ width: 380, height: 200 }} resizeMode="contain" resizeMethod="scale" />
