@@ -8,10 +8,10 @@ export const DocSpecPage = (props:any) => {
     const backgroundStyle = {backgroundColor:'white',};
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-                <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
+                {/* <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}> */}
                     {/* Card component */}
                     <DocSpecCardComponent props={props}/>
-                </ScrollView>
+                {/* </ScrollView> */}
         </SafeAreaView>
     )
 }

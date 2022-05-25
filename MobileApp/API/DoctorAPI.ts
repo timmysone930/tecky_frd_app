@@ -48,8 +48,17 @@ export const doctorAPI = createApi({
         }
       }),
     }),
+    getAllSpec: builder.query<any, void>({
+      query: () => `/doctors/allDocSpec`,
+    }),
+    getAllDoctorBySpec:builder.query({
+      query: (specName) => ({
+        url: `/doctors/allInfoBySpec?specName=${specName}`,
+      })
+    }),
+    
   })
 })
 
 // Export the auto-generated hook for the query endpoint
-export const { useGetDoctorListQuery, useGetRosterListByDocCodeQuery, useGetRosterSessionQuery, useGetRosterByIdQuery, useGetReservedSessionByIdQuery, useGetOneDoctorQuery } = doctorAPI
+export const { useGetDoctorListQuery, useGetRosterListByDocCodeQuery, useGetRosterSessionQuery, useGetRosterByIdQuery, useGetReservedSessionByIdQuery, useGetOneDoctorQuery,useGetAllSpecQuery,useGetAllDoctorBySpecQuery } = doctorAPI
