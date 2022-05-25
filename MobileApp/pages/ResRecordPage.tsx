@@ -54,13 +54,13 @@ export const ResRecordPage = (props: any) => {
                     /> 
                     :
                     <ScrollView
-                    refreshControl={
-                      <RefreshControl
-                        refreshing={refreshing}
-                        onRefresh={onRefresh}
-                      />
-                    }
-                  >
+                        refreshControl={
+                        <RefreshControl
+                            refreshing={refreshing}
+                            onRefresh={onRefresh}
+                        />
+                        }
+                    >
                       <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>
                   </ScrollView>
                 }

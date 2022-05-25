@@ -47,7 +47,10 @@ export const AddressForm = (props: Props) => {
              parseInt(props.phone) != NaN &&
              props.area.length > 0 &&
              props.district.length > 0 && 
-             props.addr.length > 0  ) {
+             props.addr.split('/nl/')[0].length > 0  &&
+             props.addr.split('/nl/')[1].length > 0  &&
+             props.addr.split('/nl/')[0] != "undefined" &&
+             props.addr.split('/nl/')[1] != "undefined" ) {
 
             props.setAllFilled(true)
         }
@@ -200,7 +203,7 @@ export const AddressForm = (props: Props) => {
                         })
                     }}
                 />
-                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.addr.length == 0}>
+                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={addr.first == "" || addr.first == undefined}>
                     此項必須填寫
                 </FormControl.ErrorMessage>
 
@@ -219,7 +222,7 @@ export const AddressForm = (props: Props) => {
                         })
                     }}
                 />
-                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.addr.length == 0}>
+                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={addr.second == "" || addr.second == undefined}>
                     此項必須填寫
                 </FormControl.ErrorMessage>
                 
