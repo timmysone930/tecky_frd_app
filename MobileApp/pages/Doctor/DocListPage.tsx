@@ -113,7 +113,7 @@ export const DocListPage: React.FC = (prop: any) => {
             <SearchComponent placeholder={"搜索醫生以及科目"} searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <View style={[backgroundStyle, { flex: 1 }]}>
                 {isLoading && <SpinnerComponent />}
-                {isError && <Text style={[styles.title,,styles.t_center]}>載入出現錯誤...</Text>}
+                {isError && <Text style={[styles.title,,styles.t_center]}>沒有醫生</Text>}
                 {isSuccess &&
                     <FlatList
                         data={dBList}
