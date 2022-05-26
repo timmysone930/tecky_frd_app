@@ -210,6 +210,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderWidth: 0.7,
         marginVertical: 8,
+        color:'black',
     },
     warning: {
         fontSize: 12,
