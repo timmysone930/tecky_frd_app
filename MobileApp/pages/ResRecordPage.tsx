@@ -34,7 +34,7 @@ export const ResRecordPage = (props: any) => {
         const unsubscribe = navigation.addListener('focus', () => {
                 recordData.refetch();
         });
-
+            
         return () => {unsubscribe}
     }, [navigation])
 

@@ -6,6 +6,7 @@ import { styles } from '../../styles/GeneralStyles';
 import { store } from '../../redux/store';
 import { checkStatus } from '../../redux/AuthSlice';
 import { useSelector } from 'react-redux';
+import { setUserInfo } from '../../redux/AuthSlice';
 
 // Native-base
 import { View, Button, useToast, HStack, Spinner} from 'native-base';
@@ -62,7 +63,8 @@ export function AccountInfoPage({navigation}:any) {
     }
 
     const logOut = () => {
-        store.dispatch(checkStatus({name:"", status: false }))
+        store.dispatch(checkStatus({isLogin: false, phone: null }))
+        store.dispatch(setUserInfo({ member_code:'',token:'' }))
         toast.show({
             description: "已登出"
         })
