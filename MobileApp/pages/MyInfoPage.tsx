@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
     },
     TextStyle: {
-        fontSize: 23
+        fontSize: 23,
+        color:'black'
     }
 })
