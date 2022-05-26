@@ -39,5 +39,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderWidth: 0.7,
     marginVertical: 12,
+    color:'black',
   }
 });
