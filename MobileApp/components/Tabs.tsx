@@ -1,10 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
+// to store the token permanently
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   Image
 } from 'react-native';
+
+// redux
+import { store } from '../redux/store';
+import { checkStatus } from '../redux/AuthSlice';
+import { setUserInfo } from '../redux/AuthSlice';
 
 // pages && components
 import { Home } from '../pages/Home';
@@ -22,8 +30,36 @@ import Config from 'react-native-config';
 const Tab = createBottomTabNavigator();
 
 export const Tabs = () => {
+
+  // const [isLogin, setIsLogin] = useState(false)
   
   // get user status
+  useEffect(()=> {
+    console.log("hi Tab");
+    const getData = (async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('@storage_Key')
+        if (jsonValue != null) {
+          const result : {
+            status:  boolean;
+            phone: string;
+            member_code: string;
+            token: string;
+          } = JSON.parse(jsonValue)
+          store.dispatch(checkStatus({ status: true, phone: result.phone }))
+          store.dispatch(setUserInfo({ member_code: result.member_code, token: result.token }))
+          return result
+        }
+        return null;
+
+      } catch (e) {
+        console.log(e);
+        return null;
+      }
+    })()
+    console.log(getData);
+  },[])
+
   const isLogin = useSelector((state: any) => state.getUserStatus.isLogin);
   return (
     <Tab.Navigator initialRouteName="醫生" screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center', tabBarStyle:{paddingBottom:10} }}>

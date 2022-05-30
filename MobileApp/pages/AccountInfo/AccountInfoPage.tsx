@@ -11,6 +11,9 @@ import { setUserInfo } from '../../redux/AuthSlice';
 // Native-base
 import { View, Button, useToast, HStack, Spinner} from 'native-base';
 
+// Async Storage
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // .env
 import Config from "react-native-config";
 
@@ -62,9 +65,10 @@ export function AccountInfoPage({navigation}:any) {
         navigation.navigate("變更帳戶資料")
     }
 
-    const logOut = () => {
+    const logOut = async() => {
         store.dispatch(checkStatus({isLogin: false, phone: null }))
         store.dispatch(setUserInfo({ member_code:'',token:'' }))
+        await AsyncStorage.removeItem('@storage_Key')
         toast.show({
             description: "已登出"
         })
