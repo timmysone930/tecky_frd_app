@@ -12,8 +12,27 @@ import { useToast, Button } from 'native-base';
 import OneSignal from 'react-native-onesignal';
 import { DropdownSelectComponent } from '../../components/utils/DropdownSelectComponent';
 
+// Async Storage
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // 電話Code
 const phoneCodeArr = ['852', '853', '86']
+
+interface AsyncStorageData {
+    status: boolean;
+    phone: string;
+    member_code: string;
+    token: string;
+}
+const storeData = async (value: AsyncStorageData) => {
+    try {
+        const jsonValue = JSON.stringify(value)
+        await AsyncStorage.setItem('@storage_Key', jsonValue)
+        return true
+    } catch (e) {
+        return false
+    }
+}
 
 export const LoginPage = (props: any) => {
     // white background
@@ -99,6 +118,13 @@ export const LoginPage = (props: any) => {
             clearInterval(intervalId.current)
             let externalUserId = res.data.member_code.toString()
             store.dispatch(setUserInfo({ member_code: externalUserId, token: res.data.access_token }))
+            // AsyncStorage
+            storeData({
+                status: true, 
+                phone: inputData.phoneCode + inputData.phoneNo,
+                member_code: externalUserId, 
+                token: res.data.access_token,
+            })
             // setExternalUserId
             OneSignal.setExternalUserId(externalUserId, (results) => {
                 // The results will contain push and email success statuses
