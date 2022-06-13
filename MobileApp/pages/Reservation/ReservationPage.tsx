@@ -124,7 +124,7 @@ export const ReservationPage = (props: any) => {
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"} style={styles.container}
       >
-        <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white' }} 
+        <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white'}} 
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -138,7 +138,7 @@ export const ReservationPage = (props: any) => {
           {rosterData.isLoading && userData.isLoading && <SpinnerComponent />}
           {rosterData.isSuccess && userData.isSuccess &&
 
-            <View style={styles.pageMargin}>
+            <View style={[styles.pageMargin,{paddingBottom:'15%'}]}>
               <Text style={styles.subTitle}>應診日期</Text>
               <Controller control={control} rules={{ required: true, }}
                 render={({ field: { value } }) => (
