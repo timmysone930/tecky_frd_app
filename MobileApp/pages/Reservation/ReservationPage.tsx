@@ -50,7 +50,7 @@ export const ReservationPage = (props: any) => {
   // To get the param passing from the previous screen
   const { id, docData } = props.route.params;
   // Form element
-  const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
+  const { control, handleSubmit, formState: { errors }, setValue, getValues, reset } = useForm({
     defaultValues: { name: '', reservedDate: '', reservedTime: '', reservedSession: '', idType: '香港身份證', idNumber: '', title: '' }
   });
   // Title value change function
@@ -92,12 +92,17 @@ export const ReservationPage = (props: any) => {
       try {
           setRefreshing(true);
           rosterData.refetch();
+          setValue('reservedDate','');
+          setValue('reservedTime','');
+          setValue('reservedSession','');
           wait(2000).then(() => setRefreshing(false));
 
       } catch (e) {
           console.log(e)
       }
   }, []);
+  
+
   // refetch by navigation
   const navigation = useNavigation();
   useEffect(() => {
