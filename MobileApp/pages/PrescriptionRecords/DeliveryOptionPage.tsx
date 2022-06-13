@@ -46,9 +46,6 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
     const reduxData = useSelector((state: any) => state.getPrescriptionCode)
     const [prescriptionSelecting, setPrescriptionSelecting] = useState(null as any) ;
-    
-    // const prescriptionDetail= (useSelector((state:any)=>state.getPrescriptionCode)).prescriptionDetail
-    // console.log(prescriptionDetail);
 
 
     // deliveryOption: 'pick-up' || 'deliver'
@@ -73,11 +70,11 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
     const dataFetching = async () => {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, init)
         const result = resp.status === 200 ? (await resp.json()) : null
-        console.log(result);
 
         setInput(result.defaultAddress != null ? result.defaultAddress[0] : "")
 
         setAllowPickUp(result.pickUpStores != null ? result.pickUpStores : "")
+        console.log(result.pickUpStores);
     }
 
     const submitHandler = () => {
@@ -105,7 +102,6 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
     const [fetched, setFetched] = useState(false)
     useEffect(()=>{
-        console.log(reduxData.prescriptionSelecting)
         setPrescriptionSelecting(reduxData.prescriptionSelecting)
     }, [reduxData])
   
@@ -188,7 +184,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                     >
                                         
                                         {allowPickUp.map((item: any) => (
-                                            <Select.Item label={item.area+"分店"} value={item.clinic_code} key={item.clinic_code}/>
+                                            <Select.Item label={`${item.area} - ${item.clinic_name}`} value={item.clinic_code} key={item.clinic_code}/>
                                         ))}
 
                                     </Select>
