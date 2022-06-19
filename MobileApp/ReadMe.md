@@ -22,3 +22,22 @@ npx react-native start
 npx react-native run-ios
 npx react-native run-android
 ```
+
+#### Build android apps with Windows  
+
+Follow https://reactnative.dev/docs/environment-setup and https://reactnative.dev/docs/signed-apk-android for generate the my-upload-key.keystore  
+Warning: Before generate the key, Please see the ```android/gradle.properties``` for the password and make sure the key name is ```my-release-key.keystore```  NOT ```my-upload-key.keystore```
+
+build APK  
+```
+cd android
+./gradlew assembleRelease
+```
+Ref: https://www.react-native.cn/docs/signed-apk-android  
+
+build AAB    
+```
+cd android
+./gradlew bundleRelease
+```
+Ref: https://reactnative.dev/docs/signed-apk-android  
