@@ -18,6 +18,7 @@ export const ResRecordPage = (props: any) => {
     let recordData = useGetReservationListQuery(userToken);
     const navigation = useNavigation(); 
     const [refreshing, setRefreshing] = React.useState(false);
+
     const onRefresh = React.useCallback(() => {
         try {
             setRefreshing(true);
@@ -32,10 +33,10 @@ export const ResRecordPage = (props: any) => {
     
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
-                recordData.refetch();
+            recordData.refetch();
         });
             
-        return () => {unsubscribe}
+        return () => { unsubscribe }
     }, [navigation])
 
     return (

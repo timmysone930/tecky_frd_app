@@ -9,8 +9,8 @@ import { styles } from '../../styles/GeneralStyles';
 import { useGetReservationListQuery } from '../../API/PatientAPI';
 import Config from 'react-native-config';
 import { requestOneTimePayment } from 'react-native-paypal';
-import { store } from '../../redux/store';
-import { checkRosterStatus } from '../../redux/PaymentSlice';
+// import { store } from '../../redux/store';
+// import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
 import { useToast } from 'native-base';
 import { setNotification } from '../Reservation/ResPaymentConfirmPage';
@@ -208,15 +208,20 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                     purus auctor malesuada.
                 </Text>
                 <BottomLineComponent />
+
                 {docData.isLoading && <SpinnerComponent />}
                 {docData.isSuccess &&
                     rowTitleArr.map((item, idx) => (
-                        <View style={[backgroundStyle, styles.flexRow, { marginBottom: 1, marginHorizontal: 15 }]} key={`confirm_row_${idx}`}>
+                        <View 
+                            style={[backgroundStyle, styles.flexRow, { marginBottom: 1, marginHorizontal: 15 }]} 
+                            key={`confirm_row_${idx}`}
+                        >
                             <View style={{ flex: 1.3 }}><Text style={styles.rowTitle}>{item}</Text></View>
                             <View style={{ flex: 3 }}><Text style={styles.rowCellText}>{rowCellArr[idx]}</Text></View>
                         </View>
                     ))
                 }
+
                 {reservationData.status !== 'finish' ?
                     <TouchableOpacity
                         disabled={buttonText == ButtonText.start ? false : true}
@@ -225,7 +230,12 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                     >
                         <Text style={styles.buttonText}>{buttonText}</Text></TouchableOpacity> :
                     null}
-                {reservationData.status === 'cancel' ? <Text style={[styles.warning, styles.textCenter, { marginVertical: 20, }]}>* 請聯絡客服了解預約詳情</Text> : null}
+
+                {reservationData.status === 'cancel' 
+                    ? <Text style={[styles.warning, styles.textCenter, { marginVertical: 20, }]}>* 請聯絡客服了解預約詳情</Text> 
+                    : null
+                }
+
                 {reservationData.payment === null &&
                     <>
                         <TouchableOpacity style={styles.fullButton} onPress={onClickPaypal}>

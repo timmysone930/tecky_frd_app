@@ -1,9 +1,9 @@
 import { Checkbox } from 'native-base';
 import React from 'react'
 
-interface checkBoxProps{
+interface checkBoxProps {
     groupValues: string[],
-    onChange:(item:[])=>void, 
+    onChange:(item:[]) => void, 
 }
 
 const data = ['發燒', '咳嗽、呼吸困難或咽喉痛', '腹瀉或嘔吐', '流感症狀']

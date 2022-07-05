@@ -8,9 +8,9 @@ export const DocListComponent = ({ props }: any) => {
     return (
         <>
             <View >
-                {props.img === null || props.img === 'undefined' || props.img === 'null'? <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{ uri: `${Config.REACT_APP_API_SERVER}/doctor/default.jpg`, }
-                } /> :
-                    <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{ uri: `${Config.REACT_APP_API_SERVER}/doctor/${props.img}`, }} />}
+                {props.img === null || props.img === 'undefined' || props.img === 'null' 
+                ? <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{ uri: `${Config.REACT_APP_API_SERVER}/doctor/default.jpg`, }} /> 
+                : <Image style={{ width: 75, height: 75, borderRadius: 50 }} resizeMode="contain" source={{ uri: `${Config.REACT_APP_API_SERVER}/doctor/${props.img}`, }} />}
             </View>
             <View style={styles.ml_20}>
                 <Text style={styles.title}>{props.name} {props.name_en}</Text>

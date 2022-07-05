@@ -24,8 +24,14 @@ export const CameraModalComponent = (props: modalProps) => {
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log("You can use the camera");
-                launchCamera({ saveToPhotos: true, mediaType: 'photo', includeBase64: false, cameraType: 'back', }, props.setResponse);
-            } else {
+                launchCamera({ 
+                    saveToPhotos: true,
+                    mediaType: 'photo',
+                    includeBase64: false,
+                    cameraType: 'back',
+                }, props.setResponse);
+            } 
+            else {
                 console.log("Camera permission denied");
             }
     };

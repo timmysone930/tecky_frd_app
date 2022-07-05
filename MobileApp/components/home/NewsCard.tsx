@@ -9,10 +9,7 @@ import {
 } from 'react-native';
 import Config from 'react-native-config';
 
-import {
-    Colors,
-} from 'react-native/Libraries/NewAppScreen';
-
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 
 export const NewsCard = () => {

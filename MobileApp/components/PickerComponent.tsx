@@ -37,8 +37,9 @@ export const TimePickerComponent = () => {
 
 // Modal picker
 export const ModalPickerComponent = () => {
-    const [textInputValue, setTextInputValue] = useState('');
+    // const [textInputValue, setTextInputValue] = useState('');
     let index = 0;
+
     const data = [
         { key: index++, section: true, label: 'Fruits' },
         { key: index++, label: 'Red Apples' },
@@ -70,21 +71,32 @@ export const PickerComponent = (props: any) => {
     let pickerPlaceholder;
     // Check the picker mode
     if (props.mode === 'date') {
-        pickerPlaceholder =<Picker.Item label={`${props.placeholder}`} value={`${props.placeholder}`} />
-        pickerFunction = data.map((item: any, idx: Number) => (<Picker.Item label={`${item['date']}`} value={`${item['date']}`} key={`picker_date_${item['id']}`} />))
-    } else if (props.mode === 'time') {
+        pickerPlaceholder = <Picker.Item label={`${props.placeholder}`} value={`${props.placeholder}`} />
+        pickerFunction = data.map((item: any, idx: Number) => (
+            <Picker.Item label={`${item['date']}`} value={`${item['date']}`} key={`picker_date_${item['id']}`} />
+        ))
+    } 
+    else if (props.mode === 'time') {
         if (props.dateValue !== '請選擇應診日期') {
+
             pickerPlaceholder =<Picker.Item label={`${props.placeholder}`} value={`${props.placeholder}`} />
             data.map((item: any) => {
                 if (item['date'] === props.dateValue) {
-                    pickerFunction = item['time'].map((item: any, idx: Number) => (<Picker.Item label={`${item}`} value={`${item}`} key={`picker_time+${item['id']}`} />))
+                    pickerFunction = item['time'].map((item: any, idx: Number) => (
+                        <Picker.Item label={`${item}`} value={`${item}`} key={`picker_time+${item['id']}`} />
+                    ))
                 }
             })
-        }else{
-            pickerPlaceholder =<Picker.Item label={`請先選擇應診日期`} value="請先選擇應診日期" />
+
         }
-    }else if(props.mode === 'id'){
-        pickerFunction = data.map((item: any, idx: Number) => (<Picker.Item label={`${item}`} value={`${item}`} key={`picker_date_${idx}`} />))
+        else{
+            pickerPlaceholder = <Picker.Item label={`請先選擇應診日期`} value="請先選擇應診日期" />
+        }
+    }
+    else if(props.mode === 'id'){
+        pickerFunction = data.map((item: any, idx: Number) => (
+            <Picker.Item label={`${item}`} value={`${item}`} key={`picker_date_${idx}`} />
+        ))
 
     }
 

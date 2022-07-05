@@ -10,7 +10,6 @@ export const PrescriptionDetail = (props: Props) => {
 
     const treatments = props.treatmentItems
 
-
     return (
         <>
             <Text style={[styles.mb_10, styles.mt_30 , styles.title]}>

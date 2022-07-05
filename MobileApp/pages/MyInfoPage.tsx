@@ -7,14 +7,17 @@ import {
 
 export const MyInfoPage = ({navigation}:any) => {
 
-    const listItems = ["帳戶資料", "預約記錄 ", "藥單記錄", "送藥地址"] ;
+    const listItems = ["帳戶資料", "預約記錄 ", "藥單記錄", "送藥地址"];
+
     // Set background to white
     const backgroundStyle = {
         backgroundColor:'white',
     };
+
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={backgroundStyle}>
+                
                 {/* List component */}
                 {listItems.map((item, key) => (
                     <TouchableHighlight underlayColor={"rgba(0, 0, 0, 0.4)"} key={key} onPress={() => navigation.navigate(item)}>
@@ -22,7 +25,6 @@ export const MyInfoPage = ({navigation}:any) => {
                             <Text style={[styles.TextStyle]}>{item}</Text>
                         </View>
                     </TouchableHighlight>
-                    
                 ))}
                 
             </ScrollView>

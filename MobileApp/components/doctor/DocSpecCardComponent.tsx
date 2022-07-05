@@ -14,8 +14,10 @@ const windowHeight = Dimensions.get('window').height;
 export const DocSpecCardComponent = (props: any) => {
     // Card isPress Status
     const [isPress, setIsPress] = React.useState(0);
+
     // fetch data
-    const spec = useGetAllSpecQuery()
+    const spec = useGetAllSpecQuery();
+
     // refetch
     const [refreshing, setRefreshing] = React.useState(false);
     const onRefresh = React.useCallback(() => {
@@ -40,8 +42,10 @@ export const DocSpecCardComponent = (props: any) => {
                 }
             >
                 <Text style={styles.indexTitle}>選擇專科服務類型</Text>
+
                 {spec.isLoading && <SpinnerComponent />}
                 {spec.isError && <Text style={[styles.title, , styles.t_center]}>載入出現錯誤...</Text>}
+
                 {spec.isSuccess &&
                     < View style={{ flexWrap: 'wrap', flexDirection: 'row', marginHorizontal: 15, marginBottom:20 }}>
                         <TouchableHighlight key={`dr_type_${0}`} style={styles.drTypeCard} onPress={() => { props.props.navigation.navigate({ name: '醫生列表', params: { mode: '所有專科' } }) }} activeOpacity={1} underlayColor="#6d7f99" onHideUnderlay={() => setIsPress(0)}
@@ -53,8 +57,15 @@ export const DocSpecCardComponent = (props: any) => {
                         </TouchableHighlight>
                         {
                             spec.data.map((item:any, idx:number) => (
-                                <TouchableHighlight key={`dr_type_${idx}`} style={styles.drTypeCard} onPress={() => { props.props.navigation.navigate({ name: '醫生列表', params: { mode: item} }) }} activeOpacity={1} underlayColor="#6d7f99" onHideUnderlay={() => setIsPress(0)}
-                                    onShowUnderlay={() => { setIsPress(idx + 2) }} >
+                                <TouchableHighlight 
+                                    key={`dr_type_${idx}`} 
+                                    style={styles.drTypeCard} 
+                                    onPress={ () => { props.props.navigation.navigate({ name: '醫生列表', params: { mode: item} }) }} 
+                                    activeOpacity={1} 
+                                    underlayColor="#6d7f99" 
+                                    onHideUnderlay={() => setIsPress(0)}
+                                    onShowUnderlay={() => { setIsPress(idx + 2) }}
+                                >
                                     <>
                                         <Icon name={'hospital-o'} size={30} color={isPress === (idx + 2) ? 'white' : 'grey'} style={{ marginBottom: 10 }} />
                                         <Text style={isPress === (idx + 2) ? styles.drTypeTextAfterPressed : styles.drTypeTextBeforePressed}>{item}</Text>

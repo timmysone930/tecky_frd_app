@@ -7,6 +7,7 @@ import {
     Image,
     TouchableHighlight,
 } from 'react-native';
+
 import Config from 'react-native-config';
 
 export const TipsCard = () => {

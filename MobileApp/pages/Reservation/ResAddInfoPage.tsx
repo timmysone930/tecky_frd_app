@@ -16,22 +16,29 @@ const backgroundStyle = { backgroundColor: 'white', };
 
 export const ResAddInfoPage: React.FC = (props: any) => {
     const toast = useToast()
+
     // upload image
     const [response, setResponse] = useState<any>(null);
     const onSetResponse = (item: any) => { setResponse(item); };
+
     // set the modal
     const [modalVisible, setModalVisible] = useState(false);
     const onSetModalVisible = (status: boolean) => { setModalVisible(status); };
+
     // to get the JWT token
     const userToken = useSelector((state: any) => state.getUserStatus.token);
+
     // get current users profile
     const userData = useGetUserInfoQuery(userToken)
+
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: { phone: '', bDay: '', email: '', EmergencyContactName: '', EmergencyContactPhone: '', name_en: '' }
     });
+
     // Date value change function
     const onDateChange = (itemValue: string) => { setValue("bDay", itemValue) };
+
     // Next page
     const isUploaded = async (data: AddInfoSubmitType) => {
         if (response === null) {
@@ -40,8 +47,11 @@ export const ResAddInfoPage: React.FC = (props: any) => {
             })
         } else {
             let image = {
-                name: response.assets[0].fileName, type: response.assets[0].type, uri: Platform.OS === 'android' ? response.assets[0].uri : response.assets[0].uri.replace('file://', ''),
+                name: response.assets[0].fileName, 
+                type: response.assets[0].type, 
+                uri: Platform.OS === 'android' ? response.assets[0].uri : response.assets[0].uri.replace('file://', ''),
             }
+
             store.dispatch(setIDImage(image))
             store.dispatch(setAdditionalInfo(data))
             props.navigation.navigate({ name: '健康申報表' })
@@ -50,6 +60,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
 
     // auto input login users info once
     useEffect(() => {
+        
         console.log(userData.data)
         const updateUserInfo = async () => {
             if (userData.isSuccess) {
@@ -59,7 +70,9 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                 await setValue('name_en', userData.data.name_en)
             }
         }
+
         updateUserInfo();
+
     }, [userData.isSuccess]);
 
     return (
