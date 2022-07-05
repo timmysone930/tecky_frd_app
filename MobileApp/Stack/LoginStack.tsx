@@ -9,7 +9,9 @@ const LoginStack = createStackNavigator();
 
 export const LoginStacks = () => {
     return (
-        <LoginStack.Navigator screenOptions={{ headerStyle: { backgroundColor: 'white' }, headerTintColor: 'black', headerTitleAlign: 'center' }} >
+        <LoginStack.Navigator 
+            screenOptions={{ headerStyle: { backgroundColor: 'white' }, headerTintColor: 'black', headerTitleAlign: 'center' }} 
+        >
            <LoginStack.Screen name="會員登入" component={LoginPage} />
         </LoginStack.Navigator>
     )
@@ -18,9 +20,16 @@ export const LoginStacks = () => {
 const InnerLoginStack = createStackNavigator();
 export const InnerLoginStacks = () => {
     return (
-        <InnerLoginStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' , headerTitleAlign: 'center' }} initialRouteName="註冊">
+        <InnerLoginStack.Navigator 
+            screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' , headerTitleAlign: 'center' }} 
+            initialRouteName="註冊"
+        >
             <InnerLoginStack.Screen name="註冊" component={RegisterPage} />
-            <InnerLoginStack.Screen name="註冊成功" component={RegSuccessPage} options={{ headerShown: false, animationEnabled:false}} />
+            <InnerLoginStack.Screen 
+                name="註冊成功" 
+                component={RegSuccessPage} 
+                options={{ headerShown: false, animationEnabled:false}}
+            />
         </InnerLoginStack.Navigator>
     )
 }

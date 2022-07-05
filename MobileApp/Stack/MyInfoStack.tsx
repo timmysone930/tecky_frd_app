@@ -13,7 +13,10 @@ const MyInfoStack = createStackNavigator();
 
 export const MyInfoStacks = () => {
     return (
-        <MyInfoStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} initialRouteName="查看">
+        <MyInfoStack.Navigator 
+            screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }} 
+            initialRouteName="查看"
+        >
             <MyInfoStack.Screen name="查看" component={MyInfoPage} options={{ headerShown: true }} />
             <MyInfoStack.Screen name="帳戶資料" component={UserInfoStacks} options={{ headerShown: false}}/>
             <MyInfoStack.Screen name="預約記錄 " component={ResRecordStacks} options={{ headerShown: false }}/>

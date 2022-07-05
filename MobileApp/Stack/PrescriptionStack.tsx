@@ -1,22 +1,24 @@
 import React from 'react';
-import { PrescriptionListPage } from '../pages/PrescriptionRecords/PrescriptionListPage';
 import { createStackNavigator } from '@react-navigation/stack';
-import {PrescriptionDetailPage } from '../pages/PrescriptionRecords/PrescriptionDetailPage';
+
 import { DeliveryOptionPage } from '../pages/PrescriptionRecords/DeliveryOptionPage';
-import { PrescriptionPaymentConfirm } from '../pages/PrescriptionRecords/PrescriptionPaymentConfirmPage';
+import { PrescriptionListPage } from '../pages/PrescriptionRecords/PrescriptionListPage';
+import { PrescriptionDetailPage } from '../pages/PrescriptionRecords/PrescriptionDetailPage';
 import { PrescriptionNewAddrPage } from '../pages/PrescriptionRecords/PrescriptionNewAddrPage';
+import { PrescriptionPaymentConfirm } from '../pages/PrescriptionRecords/PrescriptionPaymentConfirmPage';
 
 const PrescriptionStack = createStackNavigator();
 
 export const PrescriptionStacks = () => {
     return (
-        <PrescriptionStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }}>
+        <PrescriptionStack.Navigator 
+            screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white', headerTitleAlign: 'center' }}
+        >
             <PrescriptionStack.Screen name="藥單記錄表" component={PrescriptionListPage} options={{ headerTitle: "藥單記錄", headerShown: true }}/>
             <PrescriptionStack.Screen name="藥單詳情" component={PrescriptionDetailPage} options={{ headerShown: true }}/>
             <PrescriptionStack.Screen name="新增地址" component={PrescriptionNewAddrPage} options={{ headerShown: true }}/>
             <PrescriptionStack.Screen name="地址確認" component={DeliveryOptionPage} options={{ headerShown: true }}/>
             <PrescriptionStack.Screen name="付款確認" component={PrescriptionPaymentConfirm} options={{ headerShown: true }}/>
-            
         </PrescriptionStack.Navigator>
     )
 }

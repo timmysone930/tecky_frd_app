@@ -29,17 +29,25 @@ export const InnerDoctorStacks = () => {
     // get user status
     const isLogin = useSelector((state: any) => state.getUserStatus.isLogin);
     return (
-        <InnerDoctorStack.Navigator screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} initialRouteName="醫生詳情">
+        <InnerDoctorStack.Navigator 
+            screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }} 
+            initialRouteName="醫生詳情"
+        >
             <InnerDoctorStack.Screen name="醫生詳情" component={DocDetailPage} />
-            {isLogin?<InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} options={{headerShown: true }}/>:
-            <InnerDoctorStack.Screen name="預約醫生" component={LoginStacks} options={{headerShown: false }}/>
+            {isLogin
+                ? <InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} options={{headerShown: true }}/>
+                : <InnerDoctorStack.Screen name="預約醫生" component={LoginStacks} options={{headerShown: false }}/>
             }
             <InnerDoctorStack.Screen name="上傳身份證明文件" component={ResAddInfoPage} />
             <InnerDoctorStack.Screen name="健康申報表" component={ResHealthFormPage} />
             <InnerDoctorStack.Screen name="預約須知" component={ResPolicyPage} />
             <InnerDoctorStack.Screen name="確認預約資料" component={ResDetailConfirmPage} />
             <InnerDoctorStack.Screen name="付款" component={PaymentPage} />
-            <InnerDoctorStack.Screen name="預約確認" component={ResPaymentConfirmPage} options={{ headerShown: false, animationEnabled: false }} />
+            <InnerDoctorStack.Screen 
+                name="預約確認" 
+                component={ResPaymentConfirmPage} 
+                options={{ headerShown: false, animationEnabled: false }}
+            />
         </InnerDoctorStack.Navigator>
     )
 }

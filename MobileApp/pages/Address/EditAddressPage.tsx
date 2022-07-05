@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, Text } from 'react-native';
 import { AddressForm } from '../../components/address/AddressForm';
 import { styles } from '../../styles/GeneralStyles';
@@ -12,12 +12,12 @@ import { View, Button, useToast,HStack, Switch } from 'native-base';
 // .env
 import Config from 'react-native-config';
 
-
 export function EditAddressPage({navigation}:any) {
 
     const userToken = useSelector((state: any) => state.getUserStatus.token);
 
     const addressContent = useSelector((state:any) => state.getAddressData).addressEditContent
+
     const blankContent = {
         hkid:"",
         name:"",
@@ -28,7 +28,6 @@ export function EditAddressPage({navigation}:any) {
         address:"",
         is_default: false
     }
-    
 
     const [formFilled, setFormFilled] = useState(false)
 

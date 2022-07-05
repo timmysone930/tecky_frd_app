@@ -3,7 +3,7 @@ import { SafeAreaView, ScrollView, Image, Text } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
 // Native-base
-import { View, Button, useToast, Input, FormControl, WarningOutlineIcon, HStack, Spinner} from 'native-base';
+import { View, Button, useToast, Input, FormControl, WarningOutlineIcon, HStack, Spinner } from 'native-base';
 
 // API
 import { useGetUserInfoQuery, usePutEditInfoMutation } from '../../API/UserInfoAPI';
@@ -14,13 +14,13 @@ import { useSelector } from 'react-redux';
 import { store } from '../../redux/store';
 import { checkStatus } from '../../redux/AuthSlice';
 
-export function InfoEditPage({navigation}:any) {
+export function InfoEditPage({ navigation }: any) {
 
     const userToken = useSelector((state: any) => state.getUserStatus.token);
-    
+
     // Toast
     const toast = useToast()
-    
+
     // Data fetching
     const [fetchData, setFetchData] = useState(null as any)
 
@@ -38,16 +38,19 @@ export function InfoEditPage({navigation}:any) {
     })
 
     const infoFetching = async () => {
-        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`, {
-            headers:{
-                "Authorization":`Bearer ${userToken}`,
+        const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/profile`, {
+            headers: {
+                "Authorization": `Bearer ${userToken}`,
             }
         })
+
         const result = await resp.json()
         realMemberCode.current = result.member_code
+
         const member_code = "M000000".slice(0, -result?.member_code.toString().length)
         const displayMemberCode = member_code + result?.member_code.toString()
-        setFetchData({...result, member_code: displayMemberCode})
+
+        setFetchData({ ...result, member_code: displayMemberCode })
         setInput({
             ...input,
             email: result.email,
@@ -56,16 +59,18 @@ export function InfoEditPage({navigation}:any) {
         })
         setOriginalPhone(result.phone.slice(3, 12))
     }
-    
+
     const [fetched, setFetched] = useState(false)
 
-    useEffect(()=>{
+    useEffect(() => {
+
         if (!fetched) {
-            infoFetching() 
+            infoFetching()
             setFetched(true)
         }
-        return ()=> clearInterval(intervalId.current)
-    },[])
+
+        return () => clearInterval(intervalId.current)
+    }, [])
 
     // Determine The inputs are enable or not
     const [isDisable, setIsDisable] = useState({
@@ -74,15 +79,15 @@ export function InfoEditPage({navigation}:any) {
         warning: false,
         phoneInput: false,
     })
-    
+
     // 電話輸入欄
     const phoneInputHandler = (phone: any) => {
-        setInput({...input, phone: phone})
+        setInput({ ...input, phone: phone })
 
         if (originalPhone != phone && phone.length == 8) {
-            setIsDisable({...isDisable, button: false})
+            setIsDisable({ ...isDisable, button: false })
         } else {
-            setIsDisable({...isDisable, button: true})
+            setIsDisable({ ...isDisable, button: true })
         }
     }
 
@@ -94,13 +99,13 @@ export function InfoEditPage({navigation}:any) {
     const verifyButtonHandler = async () => {
         // Fetching
         const phoneNum = input.areaCode + input.phone
-        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/auth/send-sm/change/`, {
+        const resp = await fetch(`${Config.REACT_APP_API_SERVER}/auth/send-sm/change/`, {
             method: "POST",
             headers: {
-                "Authorization":`Bearer ${userToken}`,
+                "Authorization": `Bearer ${userToken}`,
                 'content-type': 'application/json'
             },
-            body: JSON.stringify({phone: phoneNum})
+            body: JSON.stringify({ phone: phoneNum })
         })
 
         if (resp.status == 201) {
@@ -119,24 +124,23 @@ export function InfoEditPage({navigation}:any) {
         setIsActive(true)
 
         let t = countTime
-        intervalId.current = setInterval(()=>{
+        intervalId.current = setInterval(() => {
             t = t - 1
             setCounter(t)
             if (t < 0) {
                 clearInterval(intervalId.current)
                 setIsActive(false)
-                setIsDisable({...isDisable, input: false, phoneInput: true, button: false})
+                setIsDisable({ ...isDisable, input: false, phoneInput: true, button: false })
             }
-        },1000)
-        setIsDisable({...isDisable, input: false, phoneInput: true, button: true})
+        }, 1000)
+        setIsDisable({ ...isDisable, input: false, phoneInput: true, button: true })
 
     }
-    
+
     // 驗證碼輸入欄
     const verifyCodeInputHandler = (value: any) => {
-        setInput({...input, validCode: value})
+        setInput({ ...input, validCode: value })
     }
-
 
     // Save all
     const [putEditInfo] = usePutEditInfoMutation();
@@ -156,17 +160,17 @@ export function InfoEditPage({navigation}:any) {
         }
         if (originalPhone != input.phone) {
             if (input.validCode.length == 0) {
-                setIsDisable({...isDisable, warning: true})
+                setIsDisable({ ...isDisable, warning: true })
                 return
             } else {
                 const phoneNum = input.areaCode + input.phone
-                const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/phone`, {
+                const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/phone`, {
                     method: "POST",
                     headers: {
-                        "Authorization":`Bearer ${userToken}`,
+                        "Authorization": `Bearer ${userToken}`,
                         'content-type': 'application/json'
                     },
-                    body: JSON.stringify({phone: fetchData.phone, smsCode: input.validCode})
+                    body: JSON.stringify({ phone: fetchData.phone, smsCode: input.validCode })
                 })
                 console.log(resp.status);
                 if (resp.status != 201) {
@@ -177,7 +181,7 @@ export function InfoEditPage({navigation}:any) {
                 }
             }
         }
-        
+
         const newInfo = {
             ...fetchData,
             member_code: realMemberCode.current,
@@ -185,10 +189,10 @@ export function InfoEditPage({navigation}:any) {
             phone: input.areaCode + input.phone,
         }
 
-        const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-profile`, {
+        const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-profile`, {
             method: "PUT",
             headers: {
-                "Authorization":`Bearer ${userToken}`,
+                "Authorization": `Bearer ${userToken}`,
                 'content-type': 'application/json'
             },
             body: JSON.stringify(newInfo)
@@ -198,12 +202,12 @@ export function InfoEditPage({navigation}:any) {
             toast.show({
                 description: "成功儲存帳戶資料"
             })
-            
+
             if (originalPhone != input.phone) {
-                store.dispatch(checkStatus({name:"", status: false }))
+                store.dispatch(checkStatus({ name: "", status: false }))
                 return
             }
-            
+
             navigation.navigate("我的資料")
 
         }
@@ -211,45 +215,45 @@ export function InfoEditPage({navigation}:any) {
     }
 
     return (
-        <SafeAreaView style={{ backgroundColor: 'white'}}>
+        <SafeAreaView style={{ backgroundColor: 'white' }}>
             <ScrollView>
                 <View style={[styles.viewContainer]}>
-                    { fetched && fetchData != null ?
+                    {fetched && fetchData != null ?
                         <>
                             <View justifyContent={"space-between"} height={400} marginY={5}>
                                 <View flexDirection={'row'}>
-                                    <Text style={[{width: 130}, styles.contentText]}>
-                                        會員編號: 
+                                    <Text style={[{ width: 130 }, styles.contentText]}>
+                                        會員編號:
                                     </Text>
                                     <Text style={[styles.subTitle]}>
                                         {fetchData.member_code}
                                     </Text>
                                 </View>
                                 <View flexDirection={'row'}>
-                                    <Text style={[{width: 130}, styles.contentText]}>
-                                        姓名: 
+                                    <Text style={[{ width: 130 }, styles.contentText]}>
+                                        姓名:
                                     </Text>
                                     <Text style={[styles.subTitle]}>
                                         {fetchData.name}
                                     </Text>
                                 </View>
                                 <View flexDirection={'row'}>
-                                    <Text style={[{width: 130}, styles.contentText]}>性別: </Text>
+                                    <Text style={[{ width: 130 }, styles.contentText]}>性別: </Text>
                                     <Text style={[styles.subTitle]}>{fetchData.gender}</Text>
                                 </View>
                                 <View flexDirection={'row'}>
-                                    <Text style={[{width: 130}, styles.contentText]}>出生日期: </Text>
+                                    <Text style={[{ width: 130 }, styles.contentText]}>出生日期: </Text>
                                     <Text style={[styles.subTitle]}>{fetchData.birthday}</Text>
                                 </View>
 
                                 {/* Email */}
                                 <FormControl isInvalid={input.email == ""}>
-                                    <Text style={[{width: 130}, styles.contentText]}>Email: </Text>
+                                    <Text style={[{ width: 130 }, styles.contentText]}>Email: </Text>
                                     <Input
                                         size="lg"
-                                        placeholder="Email" 
-                                        value={input.email} 
-                                        onChangeText={email => setInput({...input, email: email})}
+                                        placeholder="Email"
+                                        value={input.email}
+                                        onChangeText={email => setInput({ ...input, email: email })}
                                     />
                                     <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
                                         此項必須填寫
@@ -258,24 +262,24 @@ export function InfoEditPage({navigation}:any) {
 
                                 {/* 手提電話號碼 */}
                                 <FormControl isInvalid={input.phone == ""} >
-                                    <Text style={[{width: 130}, styles.contentText]}>手提電話號碼: </Text>
+                                    <Text style={[{ width: 130 }, styles.contentText]}>手提電話號碼: </Text>
                                     <View flexDirection={"row"}>
-                                        <Input 
+                                        <Input
                                             flex={1}
                                             value={input.areaCode}
                                             isDisabled={true}
-                                            size="lg" 
+                                            size="lg"
                                             keyboardType="numeric"
-                                            placeholder="區號" 
+                                            placeholder="區號"
                                             onChangeText={phoneInputHandler}
                                         />
                                         <Input
                                             flex={4}
                                             isDisabled={isDisable.phoneInput}
-                                            size="lg" 
+                                            size="lg"
                                             keyboardType="numeric"
-                                            placeholder="手提電話號碼" 
-                                            value={input.phone} 
+                                            placeholder="手提電話號碼"
+                                            value={input.phone}
                                             onChangeText={phoneInputHandler}
                                         />
                                     </View>
@@ -290,30 +294,30 @@ export function InfoEditPage({navigation}:any) {
 
                             </View>
                             <View flexDirection={"row"}>
-                                <Button 
+                                <Button
                                     isDisabled={isDisable.button}
                                     colorScheme={"danger"}
-                                    alignSelf={'flex-start'} 
+                                    alignSelf={'flex-start'}
                                     marginBottom={5}
-                                    padding={1} 
-                                    height={10} 
-                                    flex={2} 
+                                    padding={1}
+                                    height={10}
+                                    flex={2}
                                     size={"lg"}
                                     onPress={verifyButtonHandler}
-                                    >
-                                        <Text style={{color: "white"}}>
-                                            驗證碼 {isActive &&`(${counter})`}
-                                        </Text>
+                                >
+                                    <Text style={{ color: "white" }}>
+                                        驗證碼 {isActive && `(${counter})`}
+                                    </Text>
                                 </Button>
                                 <FormControl isInvalid={isDisable.warning} flex={4}>
                                     <Input
                                         isDisabled={isDisable.input}
                                         height={10}
-                                        size="lg"  
-                                        placeholder="請輸入短訊驗證碼" 
+                                        size="lg"
+                                        placeholder="請輸入短訊驗證碼"
                                         onChangeText={verifyCodeInputHandler}
                                     />
-                                    
+
                                     <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
                                         此項必須填寫
                                     </FormControl.ErrorMessage>
@@ -321,14 +325,14 @@ export function InfoEditPage({navigation}:any) {
                             </View>
 
                             <View justifyContent={"center"} height={50} marginY={5} >
-                                <Button 
-                                    alignSelf={'center'} 
+                                <Button
+                                    alignSelf={'center'}
                                     marginX={2}
                                     marginBottom={5}
-                                    padding={1} 
-                                    height={10} 
-                                    width={200} 
-                                    size={"lg"} 
+                                    padding={1}
+                                    height={10}
+                                    width={200}
+                                    size={"lg"}
                                     onPress={save}
                                 >
                                     儲存變更
@@ -336,12 +340,12 @@ export function InfoEditPage({navigation}:any) {
                             </View>
                         </>
                         :
-                            // Loading Spinner
+                        // Loading Spinner
                         <HStack space={2} justifyContent="center" alignItems={'center'}>
                             <Spinner color="#225D66" accessibilityLabel="Loading posts" />
                         </HStack>
                     }
-                    
+
                 </View>
             </ScrollView>
         </SafeAreaView>

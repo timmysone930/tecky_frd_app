@@ -4,7 +4,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import Config from "react-native-config";
 
-
 // Define our single API slice object
 export const paymentAPI = createApi({
   reducerPath: 'paymentAPI',
@@ -26,5 +25,4 @@ export const paymentAPI = createApi({
   })
 })
 
-// Export the auto-generated hook for the query endpoint
-export const { usePostNewPaymentMutation} = paymentAPI
+export const { usePostNewPaymentMutation } = paymentAPI
