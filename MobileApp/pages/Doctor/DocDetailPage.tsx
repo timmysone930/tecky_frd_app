@@ -33,12 +33,16 @@ export const DocDetailPage: React.FC = (props: any) => {
                     </View>
                     <InfoCardComponent title={'醫療服務包括'} array={docData.spec_name ? docData.spec_name : []} />
                     <InfoCardComponent title={'專業資格'} array={doctorDes} />
-                    <Button mode="contained" color='#325C80' onPress={() => {
-                        props.navigation.navigate({ name: '預約醫生', params: { docData: docData, id: id }
-                        }),
+                    <Button 
+                        mode="contained" 
+                        color='#325C80' 
+                        onPress={() => {
+                            props.navigation.navigate({ name: '預約醫生', params: { docData: docData, id: id }}),
                             store.dispatch(setDoctorID({ id: id, currentPage: '預約醫生' }) )
-                        store.dispatch(setDoctorData({ docData: docData }))
-                    }} style={styles.videoButton} disabled={rosterData.isError || rosterData.isLoading ? true : false || docData.status === 'stop'}>
+                            store.dispatch(setDoctorData({ docData: docData }))
+                        }} 
+                        style={styles.videoButton} 
+                        disabled={rosterData.isError || rosterData.isLoading ? true : false || docData.status === 'stop'}>
                         線上視像諮詢
                     </Button>
                 </>

@@ -73,6 +73,7 @@ export function AccountInfoPage({ navigation }: any) {
             description: "已登出"
         })
     }
+    
     return (
         <SafeAreaView style={{ backgroundColor: 'white', height: "100%" }}>
             <ScrollView>

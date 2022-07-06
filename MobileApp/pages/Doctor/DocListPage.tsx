@@ -63,8 +63,10 @@ export const DocListPage: React.FC = (prop: any) => {
     // search function
     useEffect(()=>{
         if(data.data){
-            let newData = data.data.filter( (item:dataType) => (item.name.includes(searchQuery) || item.name_en.toLowerCase().includes(searchQuery.toLowerCase())
-            ||item.spec_name.toString().includes(searchQuery) )
+            let newData = data.data.filter( (item:dataType) => (
+                item.name.includes(searchQuery) 
+                ||  item.name_en.toLowerCase().includes(searchQuery.toLowerCase())
+                ||  item.spec_name.toString().includes(searchQuery) )
             );
             setDbList(newData)
         }
@@ -98,8 +100,16 @@ export const DocListPage: React.FC = (prop: any) => {
                 screen: '醫生詳情',
                 params: {
                     id: props.item.doctor_code, docData: {
-                        name: props.item.name, gender: props.item.gender, id: props.item.doctor_code, doctor_des: props.item.doctor_des,
-                        img: props.item.img, name_en: props.item.name_en, clinic: props.item.clinic, spec_name: props.item.spec_name, video_diag_fee:props.item.video_diag_fee, status:props.item.status
+                        name: props.item.name, 
+                        gender: props.item.gender, 
+                        id: props.item.doctor_code, 
+                        doctor_des: props.item.doctor_des,
+                        img: props.item.img, 
+                        name_en: props.item.name_en, 
+                        clinic: props.item.clinic, 
+                        spec_name: props.item.spec_name, 
+                        video_diag_fee:props.item.video_diag_fee, 
+                        status:props.item.status
                     }
                 },
             })
