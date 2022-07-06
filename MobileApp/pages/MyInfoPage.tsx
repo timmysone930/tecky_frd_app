@@ -20,7 +20,11 @@ export const MyInfoPage = ({navigation}:any) => {
                 
                 {/* List component */}
                 {listItems.map((item, key) => (
-                    <TouchableHighlight underlayColor={"rgba(0, 0, 0, 0.4)"} key={key} onPress={() => navigation.navigate(item)}>
+                    <TouchableHighlight 
+                        underlayColor={"rgba(0, 0, 0, 0.4)"} 
+                        key={key} 
+                        onPress={() => navigation.navigate(item)}
+                    >
                         <View style={[styles.MyInfoButton]}>
                             <Text style={[styles.TextStyle]}>{item}</Text>
                         </View>

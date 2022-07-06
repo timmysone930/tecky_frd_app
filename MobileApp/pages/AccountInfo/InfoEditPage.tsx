@@ -91,7 +91,7 @@ export function InfoEditPage({ navigation }: any) {
         }
     }
 
-    const countTime = 60
+    const countTime = 30
     const [counter, setCounter] = useState(countTime);
     const [isActive, setIsActive] = useState(false)
     const intervalId = useRef(0 as any)

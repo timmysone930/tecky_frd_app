@@ -96,10 +96,11 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         // console.log(rowCellArr[0]);
         console.log(currentFullTime, range);
         console.log(reservationData);
-        if (reservationData.status == 'booked' &&
-            reservationData.video_url == null &&
-            fullDate == resFullDate &&
-            isInRange(currentFullTime, range)) {
+        if (reservationData.status == 'booked' 
+            && reservationData.video_url == null 
+            && fullDate == resFullDate 
+            && isInRange(currentFullTime, range)
+        ) {
 
             // Start Fetching every mins
             intervalId.current = setInterval(async () => {
@@ -123,18 +124,24 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                     clearInterval(intervalId.current)
                 }
             }, 60000)
-        } else if (reservationData.status == 'booked' &&
+        } 
+        else if (reservationData.status == 'booked' &&
                     reservationData.video_url != null &&
                     fullDate == resFullDate &&
-                    isInRange(currentFullTime, range)) {
+                    isInRange(currentFullTime, range)
+        ) {
             setButtonText(ButtonText.start)
-        } else if (reservationData.status == 'cancel') {
+        } 
+        else if (reservationData.status == 'cancel') {
             setButtonText(ButtonText.cancel)
-        } else if (reservationData.status == 'finish') {
+        } 
+        else if (reservationData.status == 'finish') {
             setButtonText(ButtonText.finish)
-        } else {
+        } 
+        else {
             setButtonText(ButtonText.outOfTime)
         }
+
         return () => clearInterval(intervalId.current)
     }, [navigation])
 
@@ -201,7 +208,17 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             })
 
             // create payment table
-            let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationData.res_code, "session_id": reservationData.session_id }
+            let paymentData = { 
+                "gateway": "paypal",
+                "payment_id": paypalRes.data.nonce,
+                "amount": `${Config.Res_code}`,
+                "payment_status": true,
+                "type": "reservation",
+                "payment_type": "paypal",
+                "res_code": reservationData.res_code,
+                "session_id": reservationData.session_id 
+            }
+
             const paymentRes: any = await postNewPayment({data:paymentData, token:userToken})
             console.log('paymentRes', paymentRes)
             let time = parseInt(data.item.res_time.replace(':', ''), 10)
@@ -266,8 +283,11 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 {reservationData.payment === null &&
                     <>
                         <TouchableOpacity style={styles.fullButton} onPress={onClickPaypal}>
-                            <Text style={styles.buttonText}>進行付款</Text></TouchableOpacity>
-                        <Text style={[styles.warning, styles.textCenter, { marginVertical: 10, }]}>*請於創建預約後十五分鐘內付款，否則預約會被取消</Text>
+                            <Text style={styles.buttonText}>進行付款</Text>
+                        </TouchableOpacity>
+                        <Text style={[styles.warning, styles.textCenter, { marginVertical: 10, }]}>
+                            *請於創建預約後十五分鐘內付款，否則預約會被取消
+                        </Text>
                     </>
                 }
             </ScrollView>

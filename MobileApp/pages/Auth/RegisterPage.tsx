@@ -19,14 +19,23 @@ const titleArr = ['先生', '小姐', '女士']
 const phoneCodeArr = ['852', '853', '86']
 // 身份證明文件
 const idTypeArr = ['香港身份證', '香港出生證明書（非香港身份證持有人）', '領事團身份證', '持有申請香港身份證收據', '豁免登記證明書']
-const countTime = 60
+const countTime = 30
 
 export const RegisterPage = (props: any) => {
     const toast = useToast()
     // Form element
     const { control, handleSubmit, formState: { dirtyFields, errors }, setValue, getValues } = useForm({
         defaultValues: {
-            regTitle: '', regName: '', regName_en: '', regIDType: '', regIDNumber: '', regBDay: '', regEmail: '', phoneCode: '852', regPhone: '', regSMS: '',
+            regTitle: '',
+            regName: '',
+            regName_en: '',
+            regIDType: '',
+            regIDNumber: '',
+            regBDay: '',
+            regEmail: '',
+            phoneCode: '852',
+            regPhone: '',
+            regSMS: '',
             regPolicyOne: [], regPolicyTwo: []
         }
     });
@@ -39,6 +48,7 @@ export const RegisterPage = (props: any) => {
     const onTitleChange = (itemValue: string) => { setValue("regTitle", itemValue) };
     // Phone value change function
     const onPhoneCodeChange = (itemValue: string) => { setValue("phoneCode", itemValue) };
+
     // Multi Box     
     const [groupValues, setGroupValues] = React.useState([]);
     const [groupValues2, setGroupValues2] = React.useState([]);
@@ -49,6 +59,7 @@ export const RegisterPage = (props: any) => {
     const [sendCodeBtn, setSendCodeBtn] = useState({
         isDisable: false,
     })
+
     const intervalId = useRef(0 as any)
     const onSMSPress = async (inputData: any) => {
         // Reset counter to 60s
@@ -58,7 +69,7 @@ export const RegisterPage = (props: any) => {
             isDisable: true, 
         });
         let t = countTime
-        intervalId.current = setInterval(()=>{
+        intervalId.current = setInterval(() => {
             t = t - 1
             setCounter(t)
             if (t < 0) {
@@ -77,7 +88,8 @@ export const RegisterPage = (props: any) => {
                 description: "已送出驗證碼"
             })
             toast.show({
-                description: `SMS Code: ${res.data}`
+                description: `SMS Code: ${res.data}`,
+                duration: 12000
             })
         } catch (e) {
             console.log(e)

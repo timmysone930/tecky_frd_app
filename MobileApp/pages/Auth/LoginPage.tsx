@@ -52,7 +52,7 @@ export const LoginPage = (props: any) => {
     const [getLoginSMS] = useGetLoginSMSMutation();
     // Get login SMS (sample:85255332211)
 
-    const countTime = 60
+    const countTime = 30
     const [counter, setCounter] = useState(countTime);
     const [sendCodeBtn, setSendCodeBtn] = useState({
         isDisable: false,
@@ -85,11 +85,13 @@ export const LoginPage = (props: any) => {
                 description: "已送出驗證碼"
             })
             toast.show({
+                duration: 12000,
                 description: `SMS Code: ${res.data}`
             })
         } catch (e: any) {
             console.log(e)
             toast.show({
+                duration: 12000,
                 description: `SMS Code: ${e.data}`
             })
         }

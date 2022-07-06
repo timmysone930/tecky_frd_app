@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import {
     SafeAreaView,
@@ -24,8 +24,11 @@ export const Home =  () => {
                 contentInsetAdjustmentBehavior="automatic"
                 style={backgroundStyle}>
                 {/* Banner image */}
-                <Image resizeMode='cover' style={{ flex: 1, height: 150, width: undefined }} source={{uri: `${Config.REACT_APP_API_SERVER}/banner_01.jpeg`,}
-                  } />
+                <Image 
+                    resizeMode='cover' 
+                    style={{ flex: 1, height: 150, width: undefined }} 
+                    source={{uri: `${Config.REACT_APP_API_SERVER}/images/banner_01.jpeg`,}} 
+                />
                 <View style={backgroundStyle}>
                     {/* Tips Card component */}
                     <TipsCard />
