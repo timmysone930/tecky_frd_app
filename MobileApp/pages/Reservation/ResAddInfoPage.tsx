@@ -89,7 +89,19 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     {errors.name_en && <Text style={styles.warning}>* 此項必須填寫</Text>}
 
                     <Text style={[styles.subTitle, styles.mt_10]}>生日日期</Text>
-                    <Controller control={control} rules={{ required: true, validate: value => { let today = new Date(); let inputDay = new Date(value); return inputDay < today } }}
+                    <Controller 
+                        control={control} 
+                        rules={{ 
+                            required: true, 
+                            validate: value => { 
+                                let today = new Date();
+
+                                let dateSplit:string[] = value.split("-")
+                                let inputDay = new Date(+dateSplit[0], +dateSplit[1] - 1, +dateSplit[2] + 1);
+
+                                return inputDay < today 
+                            } 
+                        }}
                         render={({ field: { value } }) => (
                             <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('bDay')} />
                         )}
@@ -133,7 +145,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                     <Text style={[styles.warning, { marginTop: 10 }]}>* 請提供小於4MB的照片</Text>
                     {/* Modal for camera */}
                     <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.uploadBtn}>
-                        <Image source={{ uri: `${Config.REACT_APP_API_SERVER}/btn_IDCard.jpg`, }} style={{ width: 380, height: 200 }} resizeMode="contain" resizeMethod="scale" />
+                        <Image source={{ uri: `${Config.REACT_APP_API_SERVER}/images/btn_IDCard.jpg`, }} style={{ width: 380, height: 200 }} resizeMode="contain" resizeMethod="scale" />
                     </TouchableOpacity>
                     <CameraModalComponent modalVisible={modalVisible} setModalVisible={onSetModalVisible} setResponse={onSetResponse} />
                     {/* Show the uploaded photo */}

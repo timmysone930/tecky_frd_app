@@ -29,6 +29,7 @@ export const setNotification = async (res_date: string, userCode: string, pushTi
         },
         body: JSON.stringify(data)
     })
+    
     const json = await res.json();
     console.log('json', json.id)
     let submitData:any = { "res_code":resCode, "one_signal":json.id }

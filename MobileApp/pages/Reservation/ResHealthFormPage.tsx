@@ -13,15 +13,19 @@ import {styles} from '../../styles/GeneralStyles'
 const backgroundStyle = { backgroundColor: 'white', };
 
 export const ResHealthFormPage: React.FC = (props: any) => {
+
     // Check Box Value
     const [groupValues, setGroupValues] = React.useState([]);
+
     // checkbox Onchange
     const onCheckBoxChange = (values: []) => {
         setGroupValues(values || []);
         store.dispatch(setHealthFormMultiBox({ symptoms: values }))
     }
+
     // Date value change function
     const onDateChange = (itemValue: string) => { setValue("backDate", itemValue) };
+
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: { Countries: '', leaveHKRadio: '', backDate: '選擇日期' }
@@ -30,6 +34,7 @@ export const ResHealthFormPage: React.FC = (props: any) => {
         props.navigation.navigate({ name: '預約須知' })
         store.dispatch(setHealthFormInfo(data))
     }
+
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', padding: 15, paddingTop: 25, marginBottom: 2, }}>
@@ -37,13 +42,19 @@ export const ResHealthFormPage: React.FC = (props: any) => {
                     <Text style={[styles.subTitle,styles.mt_10]}>過去14日內曾否離開過香港？</Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { value } }) => (
-                            <RadioButton.Group onValueChange={value => { setValue("leaveHKRadio", value) }} value={getValues('leaveHKRadio')}>
+                            <RadioButton.Group 
+                                onValueChange={ value => { 
+                                    setValue("leaveHKRadio", value) 
+                                }} 
+                                value={getValues('leaveHKRadio')}
+                            >
                                 <RadioButton.Item label="是" value="true" mode='android' color='#6d7f99' />
                                 <RadioButton.Item label="否" value="false" mode='android' color='#6d7f99' />
                             </RadioButton.Group>
                         )}
                         name="leaveHKRadio"
                     />
+                    
                     {/* 必須填寫提示 */}
                     {errors.leaveHKRadio && <Text style={styles.warning}>* 此項必須選擇</Text>}
                     <BottomLineComponent />
@@ -59,7 +70,8 @@ export const ResHealthFormPage: React.FC = (props: any) => {
                         )}
                         name="backDate"
                     />
-                     {errors.backDate && <Text style={styles.warning}>* 請檢查回港日期是否填寫正確</Text>}
+
+                    {errors.backDate && <Text style={styles.warning}>* 請檢查回港日期是否填寫正確</Text>}
                     <View style={{ marginTop: 10 }}><BottomLineComponent /></View>
                     <Text style={[styles.subTitle,styles.mt_10]}>你是否有以下的病徵？</Text>
                     <ResCheckBoxComponent groupValues={groupValues} onChange={onCheckBoxChange} />

@@ -45,19 +45,46 @@ export const PaymentPage = (props: any) => {
     const [submitStatus, setSubmitStatus] = React.useState(true);
     // redirect to paypal
     const redirectPaypal = async () => {
-        try {  // For one time payments
-            const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
-                `${Config.PAYPAL}`
-                , {
-                    amount: `${Config.Res_code}`, // required
-                    currency: 'HKD',
-                    localeCode: 'zh_HK',
-                    shippingAddressRequired: false,
-                    userAction: 'commit', // display 'Pay Now' on the PayPal review page
-                    intent: 'authorize',
-                }
-            );
-            return { status: 'success', data: { 'nonce': nonce, 'payerId': payerId, 'email': email, "firstName": firstName, "lastName": lastName, "phone": phone } }
+        try {  
+
+            // now just assume the payment is always success (06/07/2022)
+            return { 
+                status: 'success', 
+                data: { 
+                    'nonce': "DummyDummyDummyDummy", 
+                    'payerId': "4124-4242-4242-4242", 
+                    'email': "dummy@gmail.com", 
+                    "firstName": "dummy", 
+                    "lastName": "Chan", 
+                    "phone": "85298765432" 
+                } 
+            }
+
+            // For one time payments
+            // const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
+            //     `${Config.PAYPAL}`
+            //     , {
+            //         amount: `${Config.Res_code}`, // required
+            //         currency: 'HKD',
+            //         localeCode: 'zh_HK',
+            //         shippingAddressRequired: false,
+            //         userAction: 'commit', // display 'Pay Now' on the PayPal review page
+            //         intent: 'authorize',
+            //     }
+            // );
+
+            // return { 
+            //     status: 'success', 
+            //     data: { 
+            //         'nonce': nonce, 
+            //         'payerId': payerId, 
+            //         'email': email, 
+            //         "firstName": firstName, 
+            //         "lastName": lastName, 
+            //         "phone": phone 
+            //     } 
+            // }
+
         } catch (error) {
             console.error(error);
             console.log('error' + JSON.stringify(error));
@@ -81,7 +108,9 @@ export const PaymentPage = (props: any) => {
             submitData.append('phone', formData.phone)
             submitData.append('birthday', formData.bDay)
             submitData.append('hkid_img', formData['idImg'])
-            const res: any = await postPatientRegister(submitData)
+            const res: any = await postPatientRegister(submitData);
+
+
             if (res.error) {
                 console.log('member', res.error)
                 store.dispatch(checkRosterStatus({ paymentRoster: 'error' }))
@@ -95,7 +124,7 @@ export const PaymentPage = (props: any) => {
         rosterClinicCode.refetch();
         // check session status
         if (rosterClinicCode.isSuccess) {
-            if (rosterSession.currentData === []) {
+            if (rosterSession.currentData && Array.isArray(rosterSession.currentData) && rosterSession.currentData.length === 0) {
                 // selected session not enable
                 store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
                 store.dispatch(setMemberCode({ memberCode: '' }))
@@ -127,8 +156,10 @@ export const PaymentPage = (props: any) => {
                             // create reservation data
                             const reservationRes: any = await postPatientReservation({ data: resData, token: userToken })
                             if (reservationRes?.data) {
+
                                 // payment
                                 const paypalRes = await redirectPaypal();
+
                                 if (paypalRes.status === 'success') {
                                     toast.show({
                                         description: "付款成功"
@@ -174,17 +205,35 @@ export const PaymentPage = (props: any) => {
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-            <ScrollView contentInsetAdjustmentBehavior="automatic" style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}>
+            <ScrollView 
+                contentInsetAdjustmentBehavior="automatic" 
+                style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}
+            >
                 {submitStatus ?
                     <>
                         <View>
-                            <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>問診費用：$ {Config.Res_code}</Text>
-                            <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>如在十五分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約</Text>
+                            <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>
+                                問診費用：$ {Config.Res_code}
+                            </Text>
+                            <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>
+                                如在十五分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約
+                            </Text>
                         </View>
-                        <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>
-                            <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start' }} onPress={() => setRadioValue("PayPal")}>
+                        <RadioButton.Group 
+                            onValueChange={value => { setRadioValue(value) }} 
+                            value={radioValue}
+                        >
+                            <TouchableOpacity 
+                                style={{ flexDirection: 'row', justifyContent: 'flex-start' }} 
+                                onPress={() => setRadioValue("PayPal")}
+                            >
                                 <RadioButton.Item label="" value="PayPal" mode='android' color='#6d7f99' style={{ paddingTop: 30 }} />
-                                <Image style={{ width: 200, height: 100, }} resizeMode="contain" resizeMethod="scale" source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_PayPal.png`, }} />
+                                <Image 
+                                    style={{ width: 200, height: 100, }} 
+                                    resizeMode="contain" 
+                                    resizeMethod="scale" 
+                                    source={{ uri: `${Config.REACT_APP_API_SERVER}/images/logo_PayPal.png`, }} 
+                                />
                             </TouchableOpacity>
                         </RadioButton.Group>
                     </>
@@ -196,10 +245,21 @@ export const PaymentPage = (props: any) => {
             </ScrollView>
             {/* Button to go back and next page */}
             <View style={{ flexDirection: 'row' }}>
-                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
-                    <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
-                <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={onPress} disabled={!submitStatus}>
-                    <Text style={styles.buttonText}>下一步</Text></TouchableOpacity>
+
+                <TouchableOpacity 
+                    style={styles.button} 
+                    onPress={() => props.navigation.navigate({ name: '醫生' })}
+                >
+                    <Text style={styles.buttonText}>返回主頁</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity 
+                    style={[styles.button, { backgroundColor: '#325C80' }]} 
+                    onPress={onPress} 
+                    disabled={!submitStatus}
+                >
+                    <Text style={styles.buttonText}>下一步</Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     )

@@ -140,19 +140,45 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
     // redirect to paypal
     const redirectPaypal = async () => {
-        try {  // For one time payments
-            const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
-                `${Config.PAYPAL}`
-                , {
-                    amount: `${Config.Res_code}`, // required
-                    currency: 'HKD',
-                    localeCode: 'zh_HK',
-                    shippingAddressRequired: false,
-                    userAction: 'commit', // display 'Pay Now' on the PayPal review page
-                    intent: 'authorize',
-                }
-            );
-            return { status: 'success', data: { 'nonce': nonce, 'payerId': payerId, 'email': email, "firstName": firstName, "lastName": lastName, "phone": phone } }
+        try {  
+
+            // now just assume the payment is always success (06/07/2022)
+            return { 
+                status: 'success', 
+                data: { 
+                    'nonce': "DummyDummyDummyDummy", 
+                    'payerId': "4124-4242-4242-4242", 
+                    'email': "dummy@gmail.com", 
+                    "firstName": "dummy", 
+                    "lastName": "Chan", 
+                    "phone": "85298765432" 
+                } 
+            }
+            
+            // // For one time payments
+            // const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
+            //     `${Config.PAYPAL}`
+            //     , {
+            //         amount: `${Config.Res_code}`, // required
+            //         currency: 'HKD',
+            //         localeCode: 'zh_HK',
+            //         shippingAddressRequired: false,
+            //         userAction: 'commit', // display 'Pay Now' on the PayPal review page
+            //         intent: 'authorize',
+            //     }
+            // );
+
+            // return { 
+            //     status: 'success',
+            //     data: { 
+            //         'nonce': nonce,
+            //         'payerId': payerId,
+            //         'email': email,
+            //         "firstName": firstName,
+            //         "lastName": lastName,
+            //         "phone": phone
+            //     } 
+            // }
         } catch (error) {
             console.error(error);
             console.log('error' + JSON.stringify(error));
@@ -173,6 +199,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             toast.show({
                 description: "付款成功"
             })
+
             // create payment table
             let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationData.res_code, "session_id": reservationData.session_id }
             const paymentRes: any = await postNewPayment({data:paymentData, token:userToken})
