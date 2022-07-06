@@ -95,9 +95,17 @@ export const RegisterPage = (props: any) => {
     const [postRegisterInfo] = usePostRegisterInfoMutation();
     const onSubmit = async (data: RegisterSubmitProp) => {
         let registerData = {
-            "id_type": data.regIDType, "id_number": data.regIDNumber, "name": data.regName, "name_en": data.regName_en, "gender": data.regTitle, "birthday": data.regBDay,
-            "email": data.regEmail, "phone": data.phoneCode + data.regPhone, 'smsCode': data.regSMS
+            "id_type": data.regIDType,
+            "id_number": data.regIDNumber,
+            "name": data.regName,
+            "name_en": data.regName_en,
+            "gender": data.regTitle,
+            "birthday": data.regBDay,
+            "email": data.regEmail,
+            "phone": data.phoneCode + data.regPhone,
+            'smsCode': data.regSMS
         }
+
         const res: any = await postRegisterInfo(registerData)
         // check the login status
         if (res['error']) {
@@ -110,7 +118,8 @@ export const RegisterPage = (props: any) => {
                     description: "請檢查輸入的資料正確！"
                 })
             }
-        } else {
+        } 
+        else {
             console.log("register", res)
             toast.show({ description: "成功註冊" })
             store.dispatch(checkStatus({ status: true , phone:data.phoneCode + data.regPhone }))
@@ -173,7 +182,20 @@ export const RegisterPage = (props: any) => {
                     {errors.regIDNumber && <Text style={styles.warning}>* 此項必須正確填寫（應為英文字母及數字組成）</Text>}
 
                     <Text style={styles.subTitle}>生日日期<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
-                    <Controller control={control} rules={{ required: true, validate: value => {let today = new Date(); let inputDay = new Date(value);return inputDay < today} }}
+                    <Controller 
+                        control={control} 
+                        rules={{ 
+                            required: true,
+                            validate: value => {
+                                // console.log("Date", value)
+                                let today = new Date();
+
+                                let dateSplit:string[] = value.split("-")
+                                let inputDay = new Date(+dateSplit[0], +dateSplit[1] - 1, +dateSplit[2] + 1);
+
+                                return inputDay < today
+                            } 
+                        }}
                         render={({ field: { value } }) => (
                             <DatePickerComponent setDateTitle={onDateChange} DateTitle={getValues('regBDay')} />
                         )}
