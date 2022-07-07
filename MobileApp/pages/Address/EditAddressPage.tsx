@@ -31,7 +31,7 @@ export function EditAddressPage({navigation}:any) {
 
     const [formFilled, setFormFilled] = useState(false)
 
-    const [input, setInput] = (addressContent == null)? useState(blankContent) : useState(addressContent)
+    const [input, setInput] = (addressContent == null) ? useState(blankContent) : useState(addressContent)
 
     const toggleSwitch = (value:boolean) => {setInput({...input, is_default: value})}; 
     

@@ -40,9 +40,15 @@ export const PrescriptionList = (props: Props) => {
                         }}
                     >
                         <View>
-                            <Text style={[styles.resCode]}>{item.prescription.pres_code}</Text>
-                            <Text style={[styles.resDoctor]}>醫生: {item.doctor_name}</Text>
-                            <Text style={[styles.contentFont]}>開藥日期: {item.prescription.created_at.split("T")[0]}</Text>
+                            <Text style={[styles.resCode]}>
+                                {item.prescription.pres_code}
+                            </Text>
+                            <Text style={[styles.resDoctor]}>
+                                醫生: {item.doctor_name}
+                            </Text>
+                            <Text style={[styles.contentFont]}>
+                                開藥日期: {item.prescription.created_at.split("T")[0]}
+                            </Text>
                         </View>
                         <View>
                             <DisplayOrderStatus orderStatus={statueDisplay[item.prescription.order_status]} />

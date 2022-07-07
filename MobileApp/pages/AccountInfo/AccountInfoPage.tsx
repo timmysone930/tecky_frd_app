@@ -4,9 +4,9 @@ import { styles } from '../../styles/GeneralStyles';
 
 // Redux
 import { store } from '../../redux/store';
-import { checkStatus, logoutAction } from '../../redux/AuthSlice';
+import { logoutAction } from '../../redux/AuthSlice';
 import { useSelector } from 'react-redux';
-import { setUserInfo } from '../../redux/AuthSlice';
+// import { setUserInfo } from '../../redux/AuthSlice';
 
 // Native-base
 import { View, Button, useToast, HStack, Spinner } from 'native-base';
@@ -26,20 +26,25 @@ export function AccountInfoPage({ navigation }: any) {
     async function infoFetching() {
         // const resp = useGetUserInfoQuery('');
         // const { isLoading, data, error } = resp;
+
         const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/profile`, {
             headers: {
                 "Authorization": `Bearer ${userToken}`,
             }
         })
+
         const result = resp.status === 200 ? (await resp.json()) : "";
+
         if (resp.status === 200) {
             const member_code = "M000000".slice(0, -result.member_code.toString().length)
             const displayMemberCode = member_code + result.member_code.toString()
 
             setFetchData({ ...result, member_code: displayMemberCode })
-        } else {
+        } 
+        else {
             setFetchData(result)
         }
+
         return result
     }
 

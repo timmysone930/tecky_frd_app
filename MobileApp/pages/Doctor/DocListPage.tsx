@@ -31,15 +31,19 @@ const wait = (timeout: number) => {
 }
 
 export const DocListPage: React.FC = (prop: any) => {
+
     const [searchQuery, setSearchQuery] = React.useState('');
     const [refreshing, setRefreshing] = React.useState(false);
-    const [dBList, setDbList] =React.useState<any>([])
+    const [dBList, setDbList] =React.useState<any>([]);
+
     const { mode } = prop.route.params;
+
     let data:any;
     let isLoading;
     let isSuccess;
     let isError;
     let listData;
+
     // fetch doctor list data
     if (mode === '所有專科') {
         data = useGetDoctorListQuery();
@@ -55,7 +59,7 @@ export const DocListPage: React.FC = (prop: any) => {
         listData = data.data
     }
     // set dbLIst
-    useEffect(()=>{
+    useEffect( () => {
         setDbList(data.data)
     },[data.isFetching])
 

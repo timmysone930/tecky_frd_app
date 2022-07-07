@@ -43,7 +43,11 @@ export const LoginPage = (props: any) => {
 
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
-        defaultValues: {phoneCode: '852', phoneNo: '', loginSMS: '' }
+        defaultValues: {
+            phoneCode: '852',
+            phoneNo: '',
+            loginSMS: ''
+        }
     });
 
     // GET previous page 
@@ -56,11 +60,11 @@ export const LoginPage = (props: any) => {
     // Get login SMS (sample:85255332211)
 
     const countTime = 30
-    const [counter, setCounter] = useState(countTime);
+    const [counter, setCounter] = useState<number>(countTime);
     const [sendCodeBtn, setSendCodeBtn] = useState({
         isDisable: false,
     })
-    
+
     const intervalId = useRef(0 as any)
     const onSMSPress = async (inputData: any) => {
         // Reset counter to 60s
@@ -76,9 +80,7 @@ export const LoginPage = (props: any) => {
             setCounter(t)
             if (t < 0) {
                 clearInterval(intervalId.current)
-                setSendCodeBtn({
-                    isDisable: false,
-                });
+                setSendCodeBtn({ isDisable: false, });
             }
         }, 1000)
         // Fetching
@@ -103,6 +105,7 @@ export const LoginPage = (props: any) => {
 
 
     const [loginByPhone] = useLoginByPhoneMutation();
+
     // login
     const toast = useToast()
     const onLoginPress = async (inputData: any) => {
@@ -125,6 +128,7 @@ export const LoginPage = (props: any) => {
             clearInterval(intervalId.current)
             let externalUserId = res.data.member_code.toString()
             store.dispatch(setUserInfo({ member_code: externalUserId, token: res.data.access_token }))
+
             // AsyncStorage
             storeData({
                 status: true, 
@@ -132,16 +136,20 @@ export const LoginPage = (props: any) => {
                 member_code: externalUserId, 
                 token: res.data.access_token,
             })
+
             // setExternalUserId
             OneSignal.setExternalUserId(externalUserId, (results) => {
                 // The results will contain push and email success statuses
                 console.log('Results of setting external user id', results);
             });
+
             if (previousPage === '') {
                 props.navigation.navigate({ name: '預約Tab', })
-            } else {
+            } 
+            else {
                 props.navigation.navigate({ name: '相關醫生', })
             }
+            
             toast.show({
                 description: "成功登入"
             })
@@ -153,7 +161,12 @@ export const LoginPage = (props: any) => {
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView>
                 <View style={styles.logoStyle}>
-                    <Image style={{ width: 200, height: 120 }} resizeMode="contain" resizeMethod="scale" source={{ uri: `${Config.REACT_APP_API_SERVER}/logo.png`, }} />
+                    <Image 
+                        style={{ width: 200, height: 120 }} 
+                        resizeMode="contain" 
+                        resizeMethod="scale" 
+                        source={{ uri: `${Config.REACT_APP_API_SERVER}/images/logo.png`, }} 
+                    />
                 </View>
                 <View style={styles.pageMargin}>
                     <Text style={styles.subTitle}>電話號碼:</Text>

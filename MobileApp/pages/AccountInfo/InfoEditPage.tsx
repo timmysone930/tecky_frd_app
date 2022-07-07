@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { SafeAreaView, ScrollView, Image, Text } from 'react-native';
+import { SafeAreaView, ScrollView, Text } from 'react-native';
 import { styles } from '../../styles/GeneralStyles';
 
 // Native-base
@@ -132,7 +132,8 @@ export function InfoEditPage({ navigation }: any) {
                 setIsActive(false)
                 setIsDisable({ ...isDisable, input: false, phoneInput: true, button: false })
             }
-        }, 1000)
+        }, 1000);
+
         setIsDisable({ ...isDisable, input: false, phoneInput: true, button: true })
 
     }
@@ -143,7 +144,7 @@ export function InfoEditPage({ navigation }: any) {
     }
 
     // Save all
-    const [putEditInfo] = usePutEditInfoMutation();
+    // const [putEditInfo] = usePutEditInfoMutation();
     const save = async () => {
         if (input.email == fetchData.email && input.phone == fetchData.phone) {
             toast.show({
@@ -163,7 +164,7 @@ export function InfoEditPage({ navigation }: any) {
                 setIsDisable({ ...isDisable, warning: true })
                 return
             } else {
-                const phoneNum = input.areaCode + input.phone
+                // const phoneNum = input.areaCode + input.phone
                 const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/phone`, {
                     method: "POST",
                     headers: {
@@ -196,7 +197,8 @@ export function InfoEditPage({ navigation }: any) {
                 'content-type': 'application/json'
             },
             body: JSON.stringify(newInfo)
-        })
+        });
+
         if (resp.status == 200) {
 
             toast.show({
@@ -211,7 +213,6 @@ export function InfoEditPage({ navigation }: any) {
             navigation.navigate("我的資料")
 
         }
-
     }
 
     return (
@@ -238,8 +239,12 @@ export function InfoEditPage({ navigation }: any) {
                                     </Text>
                                 </View>
                                 <View flexDirection={'row'}>
-                                    <Text style={[{ width: 130 }, styles.contentText]}>性別: </Text>
-                                    <Text style={[styles.subTitle]}>{fetchData.gender}</Text>
+                                    <Text style={[{ width: 130 }, styles.contentText]}>
+                                        性別: 
+                                    </Text>
+                                    <Text style={[styles.subTitle]}>
+                                        {fetchData.gender}
+                                    </Text>
                                 </View>
                                 <View flexDirection={'row'}>
                                     <Text style={[{ width: 130 }, styles.contentText]}>出生日期: </Text>

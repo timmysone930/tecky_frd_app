@@ -70,7 +70,7 @@ export const reserveFormSlice = createSlice({
             state.symptoms = action.payload.symptoms
         },
         setHealthFormInfo: (state, action) => {
-            state.leaveHK = action.payload.leaveHKRadio === 'true'? true:false
+            state.leaveHK = action.payload.leaveHKRadio === 'true' ? true : false
             state.Countries = action.payload.Countries
             state.backDate = action.payload.backDate
         },
