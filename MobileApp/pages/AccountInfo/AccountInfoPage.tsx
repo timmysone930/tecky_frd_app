@@ -4,7 +4,7 @@ import { styles } from '../../styles/GeneralStyles';
 
 // Redux
 import { store } from '../../redux/store';
-import { checkStatus } from '../../redux/AuthSlice';
+import { checkStatus, logoutAction } from '../../redux/AuthSlice';
 import { useSelector } from 'react-redux';
 import { setUserInfo } from '../../redux/AuthSlice';
 
@@ -66,9 +66,12 @@ export function AccountInfoPage({ navigation }: any) {
     }
 
     const logOut = async () => {
-        store.dispatch(checkStatus({ isLogin: false, phone: null }))
-        store.dispatch(setUserInfo({ member_code: '', token: '' }))
-        await AsyncStorage.removeItem('@storage_Key')
+        // store.dispatch(checkStatus({ isLogin: false, phone: null }))
+        // store.dispatch(setUserInfo({ member_code: '', token: '' }))
+        store.dispatch(logoutAction())
+
+        await AsyncStorage.removeItem('@storage_Key');
+
         toast.show({
             description: "已登出"
         })

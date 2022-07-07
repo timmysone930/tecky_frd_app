@@ -4,7 +4,9 @@ import { createSlice } from '@reduxjs/toolkit'
 export const doctorIDSlice = createSlice({
     name: 'doctorID',
     initialState: {
-        id: '', currentPage:'', docData:'',
+        id: '',
+        currentPage:'',
+        docData:'',
     },
     reducers: {
         setDoctorID: (state, action) => {
@@ -23,9 +25,29 @@ export const { setDoctorID,setDoctorData } = doctorIDSlice.actions
 export const reserveFormSlice = createSlice({
     name: 'reserveForm',
     initialState: {
-        name: '', name_en:'' ,reservedDate: '', reservedTime: '',  reservedSession: '', idType: '香港身份證', idNumber: '', EmergencyContactName: '', EmergencyContactPhone: '',
-        leaveHK: false, Countries: '', backDate: '', symptoms:[], idImg:[], memberCode:'', title:'',phone:'',email:'',bDay:'',isFever: false, isCough: false,
-        isVomit: false, isCold: false
+        name: '',
+        name_en:'' ,
+        reservedDate: '',
+        reservedTime: '',
+        reservedSession: '',
+        idType: '香港身份證',
+        idNumber: '',
+        EmergencyContactName: '',
+        EmergencyContactPhone: '',
+        leaveHK: false,
+        Countries: '',
+        backDate: '',
+        symptoms:[],
+        idImg:[],
+        memberCode:'',
+        title:'',
+        phone:'',
+        email:'',
+        bDay:'',
+        isFever: false,
+        isCough: false,
+        isVomit: false,
+        isCold: false
     },
     reducers: {
         setFormData: (state, action) => {

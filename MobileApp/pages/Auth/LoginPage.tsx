@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { useGetLoginSMSMutation, useLoginByPhoneMutation } from '../../API/AuthAPI';
 import { checkStatus, setUserInfo } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
+
 // Native-base
 import { useToast, Button } from 'native-base';
 import OneSignal from 'react-native-onesignal';
@@ -39,15 +40,17 @@ export const LoginPage = (props: any) => {
     const backgroundStyle = {
         backgroundColor: 'white',
     };
+
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
         defaultValues: {phoneCode: '852', phoneNo: '', loginSMS: '' }
     });
+
     // GET previous page 
     const previousPage = useSelector((state: any) => state.setDoctorID.currentPage);
+
     // Phone value change function
     const onPhoneCodeChange = (itemValue: string) => { setValue("phoneCode", itemValue) };
-
 
     const [getLoginSMS] = useGetLoginSMSMutation();
     // Get login SMS (sample:85255332211)
@@ -57,6 +60,7 @@ export const LoginPage = (props: any) => {
     const [sendCodeBtn, setSendCodeBtn] = useState({
         isDisable: false,
     })
+    
     const intervalId = useRef(0 as any)
     const onSMSPress = async (inputData: any) => {
         // Reset counter to 60s
@@ -115,7 +119,8 @@ export const LoginPage = (props: any) => {
                     description: "請確認輸入電話號碼及驗證碼正確！"
                 })
             }
-        } else {
+        } 
+        else {
             store.dispatch(checkStatus({ status: true, phone: inputData.phoneCode + inputData.phoneNo }))
             clearInterval(intervalId.current)
             let externalUserId = res.data.member_code.toString()
