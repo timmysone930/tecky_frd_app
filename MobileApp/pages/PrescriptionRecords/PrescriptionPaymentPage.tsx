@@ -100,7 +100,7 @@ export const PrescriptionPaymentPage = (props: any) => {
                         amount: fetchData.bill[0].totel_amount,
                         payment_status: true,
                         type: "prescription",
-                        payment_type: "visa",
+                        payment_type: "visa",   
                         bill: fetchData.bill[0]
                     },
                     newPres: {

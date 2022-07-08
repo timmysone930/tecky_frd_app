@@ -96,10 +96,11 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         // console.log(rowCellArr[0]);
         console.log(currentFullTime, range);
         console.log(reservationData);
+        console.log(fullDate, resFullDate)
         if (reservationData.status == 'booked' 
             && reservationData.video_url == null 
             && fullDate == resFullDate 
-            && isInRange(currentFullTime, range)
+            // && isInRange(currentFullTime, range)
         ) {
 
             // Start Fetching every mins
@@ -127,8 +128,8 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         } 
         else if (reservationData.status == 'booked' &&
                     reservationData.video_url != null &&
-                    fullDate == resFullDate &&
-                    isInRange(currentFullTime, range)
+                    fullDate == resFullDate
+                    // isInRange(currentFullTime, range)
         ) {
             setButtonText(ButtonText.start)
         } 
