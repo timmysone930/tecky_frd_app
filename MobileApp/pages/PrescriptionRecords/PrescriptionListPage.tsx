@@ -34,7 +34,7 @@ export const PrescriptionListPage = ({navigation}:any) => {
     }
 
     const data = await resp.json()
-    const dataToDisplay = data.filter((item:any) => typeof item.prescription.payment == "string")
+    const dataToDisplay = data //.filter((item:any) => typeof item.prescription.payment == "string")
 
     dataToDisplay.length > 0 ? setFetchData(dataToDisplay): setFetchData("");
   }

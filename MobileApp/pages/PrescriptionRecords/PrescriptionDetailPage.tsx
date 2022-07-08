@@ -63,7 +63,7 @@ export function PrescriptionDetailPage({navigation}:any) {
             dataFetching()
             setFetched(true)
         }
-        // console.log(fetchData);
+        console.log(fetchData);
     },[])
     
     // const fetchData = FakeData
@@ -81,7 +81,7 @@ export function PrescriptionDetailPage({navigation}:any) {
                             doctor={fetchData.doctor_name}
                             profession={fetchData.spec[0].spec_name}
                             created_at={fetchData.prescription.created_at.split("T")[0]}
-                            course_of_treatment={fetchData.prescription.treatment.replace("/", "")}
+                            course_of_treatment={fetchData.bill[0].treatment_days + " " + fetchData.bill[0].treatment_unit}
                             patient_name={fetchData.name}
                             patient_id={fetchData.hkid}
                             orderStatusShow={true}
@@ -89,7 +89,7 @@ export function PrescriptionDetailPage({navigation}:any) {
                         />
 
                         {/* Component */}
-                        <CostDisplay cost={fetchData.pres_amount}/>
+                        <CostDisplay cost={fetchData.bill[0].totel_amount}/>
 
                         <PayButton title={"前往付款"} disabled={fetchData.prescription.order_status != "waiting"} onPressFunction={goToPay}/>
 
