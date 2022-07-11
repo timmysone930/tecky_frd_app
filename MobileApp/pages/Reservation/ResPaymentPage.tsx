@@ -147,10 +147,25 @@ export const PaymentPage = (props: any) => {
                             // member
                             // reservation data
                             let resData = {
-                                'patient_hkid': formData.idNumber, 'doc_code': docInfo.id, 'res_date': formData.reservedDate, 'res_time': `${rosterSession.data.start_at}:00`, 'res_type': 'online', 'cli_code': rosterClinicCode.data[formData.reservedDate][0]['cli_code'], 'session_id': formData.reservedSession,
-                                'status': 'booked', 'video_url': null, 'is_follow_up': true, 'channel': 'null', 'declare': {
-                                    "isLeave": formData.leaveHK, "location": formData.Countries, "date_back": formData.backDate === '選擇日期' ? '' : formData.backDate,
-                                    "isFever": formData.isFever, "isCought": formData.isCough, "isVomit": formData.isVomit, "isCold": formData.isCold
+                                'patient_hkid': formData.idNumber,
+                                'doc_code': docInfo.id,
+                                'res_date': formData.reservedDate,
+                                'res_time': `${rosterSession.data.start_at}:00`,
+                                'res_type': 'online',
+                                'cli_code': rosterClinicCode.data[formData.reservedDate][0]['cli_code'],
+                                'session_id': formData.reservedSession,
+                                'status': 'booked',
+                                'video_url': null,
+                                'is_follow_up': true,
+                                'channel': 'null',
+                                'declare': {
+                                    "isLeave": formData.leaveHK,
+                                    "location": formData.Countries,
+                                    "date_back": formData.backDate === '選擇日期' ? '' : formData.backDate,
+                                    "isFever": formData.isFever,
+                                    "isCought": formData.isCough,
+                                    "isVomit": formData.isVomit,
+                                    "isCold": formData.isCold
                                 }
                             }
                             // create reservation data
@@ -165,13 +180,34 @@ export const PaymentPage = (props: any) => {
                                         description: "付款成功"
                                     })
                                     // create payment table
-                                    let paymentData = { "gateway": "paypal", "payment_id": paypalRes.data.nonce, "amount": `${Config.Res_code}`, "payment_status": true, "type": "reservation", "payment_type": "paypal", "res_code": reservationRes.data, "session_id": formData.reservedSession }
+                                    let paymentData = { 
+                                        "gateway": "paypal", 
+                                        "payment_id": paypalRes.data.nonce,
+                                        "amount": `${Config.Res_code}`,
+                                        "payment_status": true,
+                                        "type": "reservation",
+                                        "payment_type": "paypal",
+                                        "res_code": reservationRes.data,
+                                        "session_id": formData.reservedSession
+                                    }
+
                                     const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
                                     console.log('paymentRes', paymentRes)
+
                                     store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
                                     store.dispatch(setMemberCode({ memberCode: '' }))
-                                    props.navigation.navigate({ name: '預約確認', params: { 'resCode': reservationRes.data, 'res_date': formData.reservedDate, 'res_time': `${rosterSession.data.start_at}` } })
-                                } else {
+
+                                    props.navigation.navigate({ 
+                                        name: '預約確認',
+                                        params: { 
+                                            'resCode': reservationRes.data,
+                                            'res_date': formData.reservedDate,
+                                            'res_time': `${rosterSession.data.start_at}`
+                                        }
+                                    })
+
+                                } 
+                                else {
                                     toast.show({
                                         description: "付款失敗"
                                     })
@@ -179,13 +215,16 @@ export const PaymentPage = (props: any) => {
                                     store.dispatch(setMemberCode({ memberCode: '' }))
                                     props.navigation.navigate({ name: '預約確認' })
                                 }
-                            } else if (reservationRes.error.data.message === "This patient already have resrvation.") {
+                            }
+                            else if (reservationRes.error.data.message === "This patient already have resrvation.") {
                                 toast.show({
                                     description: "已有預約記錄，無法再次預約"
                                 })
+
                                 // enable the session 
                                 const enableRes = await putEnableSession(formData.reservedSession)
                                 console.log('enalbeResult', enableRes)
+                                
                                 store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
                                 store.dispatch(setMemberCode({ memberCode: '' }))
                                 props.navigation.navigate({ name: '預約確認' })

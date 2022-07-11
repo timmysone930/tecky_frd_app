@@ -26,7 +26,10 @@ export const ResRecordStatus = (props: Props) => {
     <>    
       {Object.keys(statusColor).map((key , idx)=> (
         props.resStatus == key && 
-        <View style={[styles.resStatus, {backgroundColor: statusColor[key as keyof statusType]}]} key={`resRecordStatus_${idx}`}>
+        <View 
+          style={[styles.resStatus, {backgroundColor: statusColor[key as keyof statusType]}]} 
+          key={`resRecordStatus_${idx}`}
+        >
           <Text style={[styles.resStatusFont]}>{statusText[key as keyof statusType]}</Text>
         </View>
       ))}

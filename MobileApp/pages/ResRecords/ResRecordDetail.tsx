@@ -42,13 +42,18 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
     const [reservationData, setReservationData] = useState(data.item)
 
-    let recordData = useGetReservationListQuery();
+    // let recordData = useGetReservationListQuery();
     // get doctor name
     const docData = useGetOneDoctorQuery({docCode:docCode, token:userToken});
     // console.log('docData',docData)
     let rowCellArr: [string, string, string, string];
     if (docData.isSuccess) {
-        rowCellArr = [resCode, docData.data[0].name, data.item.res_date, data.item.res_time.substring(0, 5)]
+        rowCellArr = [
+            resCode,
+            docData.data[0].name,
+            data.item.res_date,
+            data.item.res_time.substring(0, 5)
+        ]
     }
 
     const isInRange = (value: any, range: any) => {
@@ -222,14 +227,18 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
             const paymentRes: any = await postNewPayment({data:paymentData, token:userToken})
             console.log('paymentRes', paymentRes)
+
             let time = parseInt(data.item.res_time.replace(':', ''), 10)
             if(time % 100 - 10 < 0){
                 time = time - 50 
-            }else {
+            }
+            else {
                 time = time -10
             }
+
             let pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
             setNotification(reservationData.res_date, userCode, pushTime, reservationData.res_code, userToken)
+
             props.navigation.navigate({ name: '預約記錄' })
         } else {
             toast.show({
@@ -277,14 +286,18 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                     null}
 
                 {reservationData.status === 'cancel' 
-                    ? <Text style={[styles.warning, styles.textCenter, { marginVertical: 20, }]}>* 請聯絡客服了解預約詳情</Text> 
+                    ?   <Text style={[styles.warning, styles.textCenter, { marginVertical: 20, }]}>
+                            * 請聯絡客服了解預約詳情
+                        </Text> 
                     : null
                 }
 
                 {reservationData.payment === null &&
                     <>
                         <TouchableOpacity style={styles.fullButton} onPress={onClickPaypal}>
-                            <Text style={styles.buttonText}>進行付款</Text>
+                            <Text style={styles.buttonText}>
+                                進行付款
+                            </Text>
                         </TouchableOpacity>
                         <Text style={[styles.warning, styles.textCenter, { marginVertical: 10, }]}>
                             *請於創建預約後十五分鐘內付款，否則預約會被取消
