@@ -61,7 +61,15 @@ export const ReservationPage = (props: any) => {
 
     // Form element
     const { control, handleSubmit, formState: { errors }, setValue, getValues, reset } = useForm({
-        defaultValues: { name: '', reservedDate: '', reservedTime: '', reservedSession: '', idType: '香港身份證', idNumber: '', title: '' }
+        defaultValues: { 
+            name: '',
+            reservedDate: '',
+            reservedTime: '',
+            reservedSession: '',
+            idType: '香港身份證',
+            idNumber: '',
+            title: ''
+        }
     });
 
     // Title value change function
@@ -84,26 +92,35 @@ export const ReservationPage = (props: any) => {
     };
 
     // Session value change
-    const onSessionChange = (itemValue: string) => { setValue("reservedSession", itemValue) };
+    const onSessionChange = (itemValue: string) => { 
+        setValue("reservedSession", itemValue)
+    };
 
     // id value change function
-    const onIDValueChange = (itemValue: string) => { setValue("idType", itemValue) };
+    const onIDValueChange = (itemValue: string) => { 
+        setValue("idType", itemValue)
+    };
 
     // to get the roster data
-    const rosterData = useGetRosterListByDocCodeQuery(id)
+    const rosterData = useGetRosterListByDocCodeQuery(id);
+    // console.log(rosterData);
 
     // Form data submit and navigate
     const onSubmit = async (data: ReservationType) => {
+        
         let patientStatus: ReservationSubmitType1 | ReservationSubmitType2 | undefined = await checkPatient(data.idNumber, userToken)
+        
         if (patientStatus?.message === 'Not Found') {
             props.navigation.navigate({ name: '上傳身份證明文件' })
             store.dispatch(setFormData(data))
-        } else if (patientStatus?.message === 'Found') {
+        }
+        else if (patientStatus?.message === 'Found') {
             props.navigation.navigate({ name: '健康申報表' })
             store.dispatch(setFormData(data))
             store.dispatch(setMemberCode({ memberCode: patientStatus?.memberCode }))
         }
     }
+
     // refetch
     const [refreshing, setRefreshing] = React.useState(false);
     const onRefresh = React.useCallback(() => {
@@ -164,9 +181,15 @@ export const ReservationPage = (props: any) => {
 
                         <View style={[styles.pageMargin, { paddingBottom: '15%' }]}>
                             <Text style={styles.subTitle}>應診日期</Text>
-                            <Controller control={control} rules={{ required: true, }}
+                            <Controller 
+                                control={control} 
+                                rules={{ required: true, }}
                                 render={({ field: { value } }) => (
-                                    <ResDateComponent onChange={onValueChange} data={rosterData.currentData} mode='date' placeholder={'請選擇應診日期'}
+                                    <ResDateComponent 
+                                        onChange={onValueChange}
+                                        data={rosterData.currentData}
+                                        mode='date'
+                                        placeholder={'請選擇應診日期'}
                                         dateValue={getValues('reservedDate')}
                                     />
                                 )}
@@ -177,7 +200,11 @@ export const ReservationPage = (props: any) => {
                             <Text style={styles.subTitle}>應診時段</Text>
                             <Controller control={control} rules={{ required: true, }}
                                 render={({ field: { value } }) => (
-                                    <ResDateComponent onChange={onTimeValueChange} data={rosterData.currentData} mode='time' placeholder={'請選擇應診時段'}
+                                    <ResDateComponent
+                                        onChange={onTimeValueChange}
+                                        data={rosterData.currentData}
+                                        mode='time'
+                                        placeholder={'請選擇應診時段'}
                                         dateValue={getValues('reservedDate')}
                                     />
                                 )}
@@ -188,22 +215,41 @@ export const ReservationPage = (props: any) => {
                             <Text style={styles.subTitle}>應診時間</Text>
                             <Controller control={control} rules={{ required: true, }}
                                 render={({ field: { value } }) => (
-                                    <ResSessionComponent onChange={onSessionChange} placeholder={'請選擇應診時間'} timeValue={getValues('reservedTime')} userToken={userToken}
+                                    <ResSessionComponent
+                                        onChange={onSessionChange}
+                                        placeholder={'請選擇應診時間'}
+                                        timeValue={getValues('reservedTime')}
+                                        userToken={userToken}
                                     />
                                 )}
                                 name="reservedSession"
                             />
                             {errors.reservedSession && <Text style={styles.warning}>* 此項必須選擇</Text>}
 
-                            <View style={{ borderBottomColor: '#B5B5B5', borderBottomWidth: 0.8, marginTop: 5, marginBottom: 10, }}>
-                                <Text style={styles.subTitle}>問診費用： ${Config.Res_code}</Text>
-                                <Text style={styles.infoText}>（此費用不包括醫生處方藥物）</Text>
+                            <View 
+                                style={{ 
+                                    borderBottomColor: '#B5B5B5',
+                                    borderBottomWidth: 0.8,
+                                    marginTop: 5,
+                                    marginBottom: 10,
+                                }}
+                            >
+                                <Text style={styles.subTitle}>
+                                    問診費用： ${Config.Res_code}
+                                </Text>
+                                <Text style={styles.infoText}>
+                                    （此費用不包括醫生處方藥物
+                                </Text>
                             </View>
 
                             <Text style={styles.subTitle}>稱謂</Text>
                             <Controller control={control} rules={{ required: true, }}
                                 render={({ field: { value } }) => (
-                                    <DropdownSelectComponent placeholder={'請選擇稱謂'} data={titleArr} onChange={onTitleChange} mode='other'
+                                    <DropdownSelectComponent
+                                        placeholder={'請選擇稱謂'}
+                                        data={titleArr}
+                                        onChange={onTitleChange}
+                                        mode='other'
                                         selectedValue={getValues('title')}
                                     />
                                 )}
@@ -215,7 +261,14 @@ export const ReservationPage = (props: any) => {
                             <Text style={styles.subTitle}>應診者姓名</Text>
                             <Controller control={control} rules={{ required: true, }}
                                 render={({ field: { onChange, onBlur, value } }) => (
-                                    <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
+                                    <TextInput 
+                                        style={styles.input} 
+                                        onBlur={onBlur} 
+                                        onChangeText={onChange} 
+                                        value={value} 
+                                        placeholder="姓名（須與身份證明文件相符）" 
+                                        placeholderTextColor="#737474"
+                                    />
                                 )}
                                 name="name"
                             />
@@ -223,7 +276,11 @@ export const ReservationPage = (props: any) => {
                             <Text style={styles.subTitle}>身份證明文件</Text>
                             <Controller control={control}
                                 render={({ field: { value } }) => (
-                                    <DropdownSelectComponent placeholder={'請選擇身份證明文件類別'} data={idTypeArr} onChange={onIDValueChange} mode='id'
+                                    <DropdownSelectComponent
+                                        placeholder={'請選擇身份證明文件類別'}
+                                        data={idTypeArr}
+                                        onChange={onIDValueChange}
+                                        mode='id'
                                         selectedValue={getValues('idType')}
                                     />
                                 )}
@@ -231,7 +288,14 @@ export const ReservationPage = (props: any) => {
                             />
                             <Controller control={control} rules={{ required: true, pattern: /^[A-Za-z0-9_-]*$/ }}
                                 render={({ field: { onChange, onBlur, value } }) => (
-                                    <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="身份證明文件號碼" placeholderTextColor="#737474" />
+                                    <TextInput 
+                                        style={styles.input}
+                                        onBlur={onBlur}
+                                        onChangeText={onChange}
+                                        value={value}
+                                        placeholder="身份證明文件號碼" 
+                                        placeholderTextColor="#737474" 
+                                    />
                                 )}
                                 name="idNumber"
                             />
@@ -240,6 +304,7 @@ export const ReservationPage = (props: any) => {
                     }
                 </ScrollView>
             </KeyboardAvoidingView>
+
             {/* Button to go back and next page */}
             <View style={{ flexDirection: 'row' }}>
                 <TouchableOpacity 

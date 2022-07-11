@@ -22,10 +22,9 @@ export const DocDetailPage: React.FC = (props: any) => {
     let doctorDes = docData.doctor_des.split('\n')
 
     // Check dr roaster time
-
     const rosterData = useGetRosterListByDocCodeQuery(id);
 
-    console.log(rosterData);
+    // console.log(rosterData);
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
@@ -41,8 +40,17 @@ export const DocDetailPage: React.FC = (props: any) => {
                         color='#325C80' 
                         onPress={() => {
                             props.navigation.navigate({ name: '預約醫生', params: { docData: docData, id: id }}),
-                            store.dispatch(setDoctorID({ id: id, currentPage: '預約醫生' }) )
-                            store.dispatch(setDoctorData({ docData: docData }))
+                            store.dispatch(
+                                setDoctorID({ 
+                                    id: id,
+                                    currentPage: '預約醫生'
+                                })
+                            )
+                            store.dispatch(
+                                setDoctorData({ 
+                                    docData: docData
+                                })
+                            )
                         }} 
                         style={styles.videoButton} 
                         disabled={rosterData.isError || rosterData.isLoading ? true : false || docData.status === 'stop'}>

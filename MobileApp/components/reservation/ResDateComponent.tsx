@@ -10,6 +10,7 @@ interface Props {
 }
 interface dataMapType {
     "clinic_code": string, 
+    "cli_code"?: string, 
     "doctor_code": string, 
     "from_time": string, 
     "id": string, 
@@ -36,11 +37,21 @@ export const ResDateComponent = (props: Props) => {
         if (props.dateValue !== '') {
             let found: any = rosterDate.find((x: [string, string | [[Object]]]) => x[0] === props.dateValue)
             // 檢查醫生有沒有時間提供
-            if (found[1] !== []) {
+            // if (found[1] !== []) {
+            if (Array.isArray(found[1]) && found[1].length >= 1) {
                 let numbersCopy = [...found[1]];
+
                 numbersCopy.sort(function (a, b) { return a.from_time.substring(0, 2) - b.from_time.substring(0, 2); });
+
+                console.log(numbersCopy);
                 selectFunction = numbersCopy.map((item: dataMapType, idx: number) => {
-                    return <Select.Item label={`${item['from_time']} - ${item['to_time']}`} value={item['id']} key={`picker_time_${idx}`} />
+                    return (
+                        <Select.Item 
+                            label={`${item['from_time']} - ${item['to_time']} (${item['cli_code']})`} 
+                            value={item['id']}
+                            key={`picker_time_${idx}`}
+                        />
+                    )
                 })
             } else {
                 selectFunction = <Select.Item label={`沒有可供應時間`} value={`沒有可供應時間`} />
