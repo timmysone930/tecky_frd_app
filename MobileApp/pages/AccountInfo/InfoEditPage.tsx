@@ -93,8 +93,10 @@ export function InfoEditPage({ navigation }: any) {
 
     const countTime = 30
     const [counter, setCounter] = useState(countTime);
-    const [isActive, setIsActive] = useState(false)
+    const [isActive, setIsActive] = useState<boolean>(false)
+
     const intervalId = useRef(0 as any)
+
     // 驗證碼掣
     const verifyButtonHandler = async () => {
         // Fetching
@@ -118,6 +120,7 @@ export function InfoEditPage({ navigation }: any) {
             })
             return
         }
+
         // Reset counter to 60s
         setCounter(countTime)
         // Activate 60s count down and Disable the button
@@ -130,7 +133,12 @@ export function InfoEditPage({ navigation }: any) {
             if (t < 0) {
                 clearInterval(intervalId.current)
                 setIsActive(false)
-                setIsDisable({ ...isDisable, input: false, phoneInput: true, button: false })
+                setIsDisable({ 
+                    ...isDisable,
+                    input: false,
+                    phoneInput: true,
+                    button: false
+                })
             }
         }, 1000);
 
@@ -146,34 +154,45 @@ export function InfoEditPage({ navigation }: any) {
     // Save all
     // const [putEditInfo] = usePutEditInfoMutation();
     const save = async () => {
+
         if (input.email == fetchData.email && input.phone == fetchData.phone) {
             toast.show({
                 description: "帳戶資料未有變更，請輸入新的帳戶資料並儲存。"
             })
             return
         }
+
         // If the input of email and phone are empty, not save
-        if (input.email.length == 0 || input.phone.length == 0) {
+        if (input.email.length === 0 || input.phone.length === 0) {
             toast.show({
                 description: "請輸入新的帳戶資料並儲存。"
             })
             return
         }
         if (originalPhone != input.phone) {
+
             if (input.validCode.length == 0) {
                 setIsDisable({ ...isDisable, warning: true })
                 return
-            } else {
+            }
+            else {
                 // const phoneNum = input.areaCode + input.phone
+
+                console.log(originalPhone);
                 const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/phone`, {
                     method: "POST",
                     headers: {
                         "Authorization": `Bearer ${userToken}`,
                         'content-type': 'application/json'
                     },
-                    body: JSON.stringify({ phone: fetchData.phone, smsCode: input.validCode })
+                    body: JSON.stringify({ 
+                        phone: fetchData.phone, 
+                        smsCode: input.validCode,
+                        originalPhone: "852" + originalPhone
+                    })
                 })
                 console.log(resp.status);
+
                 if (resp.status != 201) {
                     toast.show({
                         description: "請確認輸入正確電話號碼及驗證碼"
@@ -189,6 +208,8 @@ export function InfoEditPage({ navigation }: any) {
             email: input.email,
             phone: input.areaCode + input.phone,
         }
+
+        console.log(newInfo)
 
         const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-profile`, {
             method: "PUT",
@@ -289,12 +310,19 @@ export function InfoEditPage({ navigation }: any) {
                                         />
                                     </View>
 
-                                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={input.phone.length != 8}>
+                                    <FormControl.ErrorMessage 
+                                        leftIcon={<WarningOutlineIcon size="xs" />}
+                                        isInvalid={input.phone.length != 8}
+                                    >
                                         此項必須為 8 位數字電話號碼
                                     </FormControl.ErrorMessage>
-                                    <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />}>
+
+                                    <FormControl.ErrorMessage
+                                        leftIcon={<WarningOutlineIcon size="xs" />}
+                                    >
                                         此項必須填寫
                                     </FormControl.ErrorMessage>
+
                                 </FormControl>
 
                             </View>

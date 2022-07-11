@@ -222,7 +222,12 @@ export function UserAddressPage({navigation}:any) {
                                             </Radio>
 
                                             {/* [ 編輯, 刪除 ] button */}
-                                            <View flexDirection={'row'} justifyContent={'flex-end'} alignItems={'center'} marginTop={3}>
+                                            <View 
+                                                flexDirection={'row'}
+                                                justifyContent={'flex-end'}
+                                                alignItems={'center'}
+                                                marginTop={3}
+                                            >
                                                 <Button padding={1} height={10} width={100} marginX={5} size={"lg"} onPress={editButtonHandler(address)}>
                                                     編輯
                                                 </Button>

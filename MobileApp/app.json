@@ -4,12 +4,12 @@
   "splash": {
     "image": "./images/logo.png",
     "resizeMode": "cover",
-    "backgroundColor": "#ffffff"
+    "backgroundColor": "#000000"
   },
   "android": {
     "adaptiveIcon": {
       "foregroundImage": "./images/logo.png",
-      "backgroundColor": "#FFFFFF"
+      "backgroundColor": "#000000"
     }
   }
 }
