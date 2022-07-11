@@ -34,9 +34,9 @@ export const ResRecordComponent = (props: Props) => {
                             <Text style={[styles.resCode]}>{item.res_code}</Text>
                             <Text style={[styles.contentFont]}>預約日期: {item.res_date}</Text>
                             <Text style={[styles.contentFont]}>預約時間: {item.res_time.substring(0, 5)}</Text>
-                            {item.payment === null && 
+                            {item.payment !== null && 
                                 <Text style={[styles.contentFont, { color: 'red' }]}>
-                                    (待付款中) {item.payment} 
+                                     {item.payment.payment_status ? "(已付款)" : "(待付款中)" } 
                                 </Text>
                             }
                         </View>

@@ -13,7 +13,9 @@ export const wait = (timeout: number) => {
 }
 
 export const ResRecordPage = (props: any) => {
+
     const userToken = useSelector((state: any) => state.getUserStatus.token);
+    
     // fetch the resRecord
     let recordData = useGetReservationListQuery(userToken);
     const navigation = useNavigation(); 

@@ -22,7 +22,10 @@ export const DocDetailPage: React.FC = (props: any) => {
     let doctorDes = docData.doctor_des.split('\n')
 
     // Check dr roaster time
-    const rosterData = useGetRosterListByDocCodeQuery(id)
+
+    const rosterData = useGetRosterListByDocCodeQuery(id);
+
+    console.log(rosterData);
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
