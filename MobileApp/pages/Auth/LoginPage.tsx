@@ -165,7 +165,7 @@ export const LoginPage = (props: any) => {
                         style={{ width: 200, height: 120 }} 
                         resizeMode="contain" 
                         resizeMethod="scale" 
-                        source={{ uri: `${Config.REACT_APP_API_SERVER}/images/logo.png`, }} 
+                        source={{ uri: `${Config.REACT_APP_API_SERVER}/logo.png`, }} 
                     />
                 </View>
                 <View style={styles.pageMargin}>

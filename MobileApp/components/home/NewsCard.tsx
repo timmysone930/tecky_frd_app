@@ -20,22 +20,22 @@ export const NewsCard = () => {
             {/* News Card boxes */}
             <View style={{ flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'center' }}>
                 <TouchableOpacity style={styles.newsCard}>
-                    <Image resizeMode='contain' style={{ height:120, width:100, marginTop:10,}} source={{uri: `${Config.REACT_APP_API_SERVER}/images/news_test_01.jpeg`,}} />
+                    <Image resizeMode='contain' style={{ height:120, width:100, marginTop:10,}} source={{uri: `${Config.REACT_APP_API_SERVER}/news_test_01.jpeg`,}} />
                     <Text style={styles.cardDate}>12/11/2021</Text>
                     <Text style={styles.cardTitle}>抗體檢查測試</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.newsCard}>
-                    <Image resizeMode='contain' style={{ height: 120, width:100, marginTop:10 }} source={{uri: `${Config.REACT_APP_API_SERVER}/images/news_test_02.jpeg`,}} />
+                    <Image resizeMode='contain' style={{ height: 120, width:100, marginTop:10 }} source={{uri: `${Config.REACT_APP_API_SERVER}/news_test_02.jpeg`,}} />
                     <Text style={styles.cardDate}>15/10/2021</Text>
                     <Text style={styles.cardTitle}>國際乳癌關注月 - 乳房X光造影及超聲波檢查套餐</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.newsCard}>
-                    <Image resizeMode='contain' style={{ height:120, width:100, marginTop:10,}} source={{uri: `${Config.REACT_APP_API_SERVER}/images/news_test_01.jpeg`,}} />
+                    <Image resizeMode='contain' style={{ height:120, width:100, marginTop:10,}} source={{uri: `${Config.REACT_APP_API_SERVER}/news_test_01.jpeg`,}} />
                     <Text style={styles.cardDate}>12/11/2021</Text>
                     <Text style={styles.cardTitle}>抗體檢查測試</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.newsCard}>
-                    <Image resizeMode='contain' style={{ height: 120, width:100, marginTop:10 }}source={{uri: `${Config.REACT_APP_API_SERVER}/images/news_test_02.jpeg`,}} />
+                    <Image resizeMode='contain' style={{ height: 120, width:100, marginTop:10 }}source={{uri: `${Config.REACT_APP_API_SERVER}/news_test_02.jpeg`,}} />
                     <Text style={styles.cardDate}>15/10/2021</Text>
                     <Text style={styles.cardTitle}>國際乳癌關注月 - 乳房X光造影及超聲波檢查套餐</Text>
                 </TouchableOpacity>

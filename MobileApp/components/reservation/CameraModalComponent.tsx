@@ -9,35 +9,43 @@ interface modalProps{
 }
 
 export const CameraModalComponent = (props: modalProps) => {
+
     // Permission for open camera (Android version)
     const requestCameraPermission = async () => {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.CAMERA,
-                {
-                    title: "App Camera Permission",
-                    message:
-                        "This App needs to access to your camera for you to upload the id card",
-                    buttonNeutral: "Ask Me Later",
-                    buttonNegative: "Cancel",
-                    buttonPositive: "OK"
-                }
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log("You can use the camera");
-                launchCamera({ 
-                    saveToPhotos: true,
-                    mediaType: 'photo',
-                    includeBase64: false,
-                    cameraType: 'back',
-                }, props.setResponse);
-            } 
-            else {
-                console.log("Camera permission denied");
+        
+        const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+                title: "App Camera Permission",
+                message:
+                    "This App needs to access to your camera for you to upload the id card",
+                buttonNeutral: "Ask Me Later",
+                buttonNegative: "Cancel",
+                buttonPositive: "OK"
             }
+        );
+
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            console.log("You can use the camera");
+            launchCamera({ 
+                saveToPhotos: true,
+                mediaType: 'photo',
+                includeBase64: false,
+                cameraType: 'back',
+            }, props.setResponse);
+        } 
+        else {
+            console.log("Camera permission denied");
+        }
     };
 
     const iosButton = () => {
-        launchCamera({ saveToPhotos: true, mediaType: 'photo', includeBase64: false, cameraType: 'back', }, props.setResponse)
+        launchCamera({ 
+            saveToPhotos: true,
+            mediaType: 'photo',
+            includeBase64: false,
+            cameraType: 'back',
+        }, props.setResponse)
     }
     return (
         <View>
@@ -52,21 +60,26 @@ export const CameraModalComponent = (props: modalProps) => {
                 {/* Click outside will close the modal */}
                 <TouchableWithoutFeedback onPressOut={() => (props.setModalVisible(false))}>
                     <View style={styles.centeredView}  >
+
                         {/* Click inside will not close the modal */}
                         <TouchableWithoutFeedback onPressOut={() => (props.setModalVisible(true))}>
                             <View style={styles.modalView} >
+
                                 {/* Take Photo */}
                                 <TouchableOpacity onPress={Platform.OS === 'ios' ? iosButton : requestCameraPermission}>
                                     <Text style={styles.textStyle}>拍照</Text>
                                 </TouchableOpacity>
+
                                 {/* Upload image*/}
                                 <TouchableOpacity onPress={() => { launchImageLibrary({ selectionLimit: 1, mediaType: 'photo', includeBase64: false, }, props.setResponse) }}>
                                     <Text style={styles.textStyle}>從相冊上傳照片</Text>
                                 </TouchableOpacity>
+
                                 {/* Close the modal*/}
                                 <TouchableOpacity onPressOut={() => props.setModalVisible(!props.modalVisible)} style={styles.modalButton}>
                                     <Text style={styles.textStyle}>取消</Text>
                                 </TouchableOpacity>
+
                             </View>
                         </TouchableWithoutFeedback>
                     </View>

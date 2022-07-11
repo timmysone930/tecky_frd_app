@@ -224,7 +224,7 @@ export const PaymentPage = (props: any) => {
                                 // enable the session 
                                 const enableRes = await putEnableSession(formData.reservedSession)
                                 console.log('enalbeResult', enableRes)
-                                
+
                                 store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
                                 store.dispatch(setMemberCode({ memberCode: '' }))
                                 props.navigation.navigate({ name: '預約確認' })
@@ -271,7 +271,7 @@ export const PaymentPage = (props: any) => {
                                     style={{ width: 200, height: 100, }} 
                                     resizeMode="contain" 
                                     resizeMethod="scale" 
-                                    source={{ uri: `${Config.REACT_APP_API_SERVER}/images/logo_PayPal.png`, }} 
+                                    source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_PayPal.png`, }} 
                                 />
                             </TouchableOpacity>
                         </RadioButton.Group>

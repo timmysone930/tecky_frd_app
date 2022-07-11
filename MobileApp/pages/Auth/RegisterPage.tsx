@@ -121,11 +121,17 @@ export const RegisterPage = (props: any) => {
         const res: any = await postRegisterInfo(registerData)
         // check the login status
         if (res['error']) {
-            if (res['error']['data']['message'] === 'Repeat ID') {
+            if (res['error']['data']['message'] === 'Repeated ID') {
                 toast.show({
                     description: "輸入的身份證明文件號碼已被使用！"
                 })
-            } else if (res['error']['status'] === 400) {
+            }
+            else if (res['error']['data']['message'] === 'Repeated Phone') {
+                toast.show({
+                    description: "輸入的電話已被使用！"
+                })
+            }
+            else if (res['error']['status'] === 400) {
                 toast.show({
                     description: "請檢查輸入的資料正確！"
                 })
@@ -160,15 +166,37 @@ export const RegisterPage = (props: any) => {
                     <Text style={styles.subTitle}>姓名<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
+                            <TextInput 
+                                style={styles.input} 
+                                onBlur={onBlur} 
+                                onChangeText={onChange} 
+                                value={value} 
+                                placeholder="姓名（須與身份證明文件相符）" 
+                                placeholderTextColor="#737474" 
+                            />
                         )}
                         name="regName"
                     />
                     {errors.regName && <Text style={styles.warning}>* 此項必須填寫</Text>}
-                    <Text style={styles.subTitle}>英文姓名<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
+
+                    <Text 
+                        style={styles.subTitle}>
+                        英文姓名
+                        <Text style={{ color: 'red', fontSize: 12 }}> 
+                            *
+                        </Text>
+                    </Text>
+
                     <Controller control={control} rules={{ required: true, }}
                         render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="姓名（須與身份證明文件相符）" placeholderTextColor="#737474" />
+                            <TextInput 
+                                style={styles.input}
+                                onBlur={onBlur}
+                                onChangeText={onChange}
+                                value={value}
+                                placeholder="姓名（須與身份證明文件相符）"
+                                placeholderTextColor="#737474"
+                            />
                         )}
                         name="regName_en"
                     />
@@ -184,7 +212,10 @@ export const RegisterPage = (props: any) => {
                         name="regIDType"
                     />
                     {errors.regIDType && <Text style={styles.warning}>* 此項必須選擇</Text>}
-                    <Text style={styles.subTitle}>身份證明文件號碼<Text style={{ color: 'red', fontSize: 12 }}> *</Text></Text>
+                        <Text style={styles.subTitle}>
+                            身份證明文件號碼
+                            <Text style={{ color: 'red', fontSize: 12 }}> *</Text>
+                        </Text>
                     <Controller control={control} rules={{ required: true, pattern:/^[A-Za-z0-9]*$/}}
                         render={({ field: { onChange, onBlur, value } }) => (
                             <TextInput style={styles.input} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="e.g P1234567" placeholderTextColor="#737474" />

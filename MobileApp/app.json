@@ -1,4 +1,15 @@
 {
   "name": "telemedicine",
-  "displayName": "telemedicine"
+  "displayName": "telemedicine",
+  "splash": {
+    "image": "./images/logo.png",
+    "resizeMode": "cover",
+    "backgroundColor": "#ffffff"
+  },
+  "android": {
+    "adaptiveIcon": {
+      "foregroundImage": "./images/logo.png",
+      "backgroundColor": "#FFFFFF"
+    }
+  }
 }

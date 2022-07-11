@@ -27,7 +27,7 @@ export const Home =  () => {
                 <Image 
                     resizeMode='cover' 
                     style={{ flex: 1, height: 150, width: undefined }} 
-                    source={{uri: `${Config.REACT_APP_API_SERVER}/images/banner_01.jpeg`,}} 
+                    source={{uri: `${Config.REACT_APP_API_SERVER}/banner_01.jpeg`,}} 
                 />
                 <View style={backgroundStyle}>
                     {/* Tips Card component */}
