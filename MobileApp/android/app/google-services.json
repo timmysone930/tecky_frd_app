@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "33402240354",
+    "project_id": "telemedicine-tecky-apps",
+    "storage_bucket": "telemedicine-tecky-apps.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33402240354:android:93f8e0f395a9ce01f9403b",
+        "android_client_info": {
+          "package_name": "com.tecky.telemedicine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "33402240354-n7oinua5iafosp7fl54ek5qehs4baai3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjZQD6EJslPtBWQam9XUKfsIWexbgJapc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "33402240354-n7oinua5iafosp7fl54ek5qehs4baai3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

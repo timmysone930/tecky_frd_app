@@ -1,5 +1,7 @@
 apply plugin: "com.android.application"
 
+apply plugin: 'com.google.gms.google-services'
+
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -284,10 +286,15 @@ dependencies {
     implementation project(':react-native-config')
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+
     // native paypal
-   implementation project(':react-native-paypal')
-   implementation "com.braintreepayments.api:braintree:3.+"
-   implementation "com.braintreepayments.api:data-collector:3.+"
+    implementation project(':react-native-paypal')
+    implementation "com.braintreepayments.api:braintree:3.+"
+    implementation "com.braintreepayments.api:data-collector:3.+"
+
+    //firebase
+    implementation platform('com.google.firebase:firebase-bom:30.2.0')
+    implementation 'com.google.firebase:firebase-analytics'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
