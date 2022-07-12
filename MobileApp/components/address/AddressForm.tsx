@@ -31,7 +31,11 @@ interface Props {
     input: any,
     setInput: any
 }
-const areaForMap: any = {"香港":"HK", "新界":"NT", "九龍":"KLN"}
+const areaForMap: any = {
+    "香港":"HK",
+    "新界":"NT",
+    "九龍":"KLN"
+}
 
 // Component
 export const AddressForm = (props: Props) => {
@@ -41,17 +45,19 @@ export const AddressForm = (props: Props) => {
         first: props.addr.split("/nl/")[0],
         second: props.addr.split("/nl/")[1]
     })
-    useEffect(()=>{
-        if ( props.name.length > 0 &&
-             props.phone.length == 11 &&
-             parseInt(props.phone) != NaN &&
-             props.area.length > 0 &&
-             props.district.length > 0 && 
-             props.addr.split('/nl/')[0].length > 0  &&
-             props.addr.split('/nl/')[1].length > 0  &&
-             props.addr.split('/nl/')[0] != "undefined" &&
-             props.addr.split('/nl/')[1] != "undefined" ) {
 
+    useEffect( () => {
+        if ( 
+            props.name.length > 0 &&
+            props.phone.length == 11 &&
+            parseInt(props.phone) != NaN &&
+            props.area.length > 0 &&
+            props.district.length > 0 && 
+            props.addr.split('/nl/')[0].length > 0  &&
+            props.addr.split('/nl/')[1].length > 0  &&
+            props.addr.split('/nl/')[0] != "undefined" &&
+            props.addr.split('/nl/')[1] != "undefined" ) 
+        {
             props.setAllFilled(true)
         }
         else {
@@ -110,10 +116,18 @@ export const AddressForm = (props: Props) => {
                         onChangeText={text => props.setInput({...props.input, phone: props.phone.slice(0, 3) + text})}
                     />
                 </View>
-                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={ !(parseInt(props.phone) != NaN && props.phone.slice(3).length == 8) }>
+
+                <FormControl.ErrorMessage 
+                    leftIcon={<WarningOutlineIcon size="xs" />}
+                    isInvalid={ !(parseInt(props.phone) != NaN && props.phone.slice(3).length == 8) }
+                >
                     此項必須為 8 位數字電話號碼
                 </FormControl.ErrorMessage>
-                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.phone.slice(3).length == 0}>
+
+                <FormControl.ErrorMessage 
+                    leftIcon={<WarningOutlineIcon size="xs" />} 
+                    isInvalid={props.phone.slice(3).length == 0}
+                >
                     此項必須填寫
                 </FormControl.ErrorMessage>
             
@@ -146,15 +160,18 @@ export const AddressForm = (props: Props) => {
 
                         {Object.keys(areaForMap).map((item: any) => (
                             <Select.Item label={item} value={item} key={areaForMap[item]}/>
-                            ))}
+                        ))}
 
                     </Select>
                 </FormControl>
+
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.area == ""}>
                     此項必須選擇
                 </FormControl.ErrorMessage>
 
-                <FormControl.Label>地區</FormControl.Label>
+                <FormControl.Label>
+                    地區
+                </FormControl.Label>
 
                 <FormControl isInvalid={props.district == ""}>
                     <Select 
@@ -184,7 +201,10 @@ export const AddressForm = (props: Props) => {
                     </Select>
                 
                 </FormControl>
-                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.district == ""}>
+                <FormControl.ErrorMessage 
+                    leftIcon={<WarningOutlineIcon size="xs" />}
+                    isInvalid={props.district == ""}
+                >
                     此項必須選擇
                 </FormControl.ErrorMessage>
 
@@ -203,7 +223,10 @@ export const AddressForm = (props: Props) => {
                         })
                     }}
                 />
-                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={addr.first == "" || addr.first == undefined}>
+                <FormControl.ErrorMessage 
+                    leftIcon={<WarningOutlineIcon size="xs" />} 
+                    isInvalid={addr.first == "" || addr.first == undefined}
+                >
                     此項必須填寫
                 </FormControl.ErrorMessage>
 
@@ -222,7 +245,10 @@ export const AddressForm = (props: Props) => {
                         })
                     }}
                 />
-                <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={addr.second == "" || addr.second == undefined}>
+                <FormControl.ErrorMessage 
+                    leftIcon={<WarningOutlineIcon size="xs" />} 
+                    isInvalid={addr.second == "" || addr.second == undefined}
+                >
                     此項必須填寫
                 </FormControl.ErrorMessage>
                 
