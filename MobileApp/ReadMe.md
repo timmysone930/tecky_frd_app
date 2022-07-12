@@ -13,6 +13,11 @@ cd ..
 
 ```bash
 touch .env
+
+OR
+
+touch .env.development
+touch .env.production
 ```
 
 #### Start program
@@ -32,6 +37,10 @@ build APK
 ```
 cd android
 ./gradlew assembleRelease
+
+OR
+
+yarn run buildAndroidAPK
 ```
 Ref: https://www.react-native.cn/docs/signed-apk-android  
 
@@ -39,6 +48,8 @@ build AAB
 ```
 cd android
 ./gradlew bundleRelease
+
+yarn run buildAndroidAAB
 ```
 Ref: https://reactnative.dev/docs/signed-apk-android  
 
