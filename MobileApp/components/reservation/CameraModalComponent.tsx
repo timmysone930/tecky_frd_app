@@ -5,7 +5,7 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 interface modalProps{
     modalVisible:boolean,
     setModalVisible:(status: boolean) => void, 
-    setResponse: (item:any) =>void ,
+    setResponse: (item:any) => void ,
 }
 
 export const CameraModalComponent = (props: modalProps) => {
@@ -24,6 +24,8 @@ export const CameraModalComponent = (props: modalProps) => {
                 buttonPositive: "OK"
             }
         );
+
+        console.log(granted)
 
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
             console.log("You can use the camera");
