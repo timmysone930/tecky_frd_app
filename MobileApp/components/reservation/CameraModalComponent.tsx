@@ -25,11 +25,22 @@ export const CameraModalComponent = (props: modalProps) => {
             }
         );
 
+        const grantedGallery = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+              title: "App Gallery Permission",
+              message:"App needs access to your photos",
+              buttonNeutral: "Ask Me Later",
+              buttonNegative: "Cancel",
+              buttonPositive: "OK"
+            }
+        );
+
         console.log(granted)
 
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        if (granted === PermissionsAndroid.RESULTS.GRANTED && grantedGallery === PermissionsAndroid.RESULTS.GRANTED) {
             console.log("You can use the camera");
-            launchCamera({ 
+            await launchCamera({ 
                 saveToPhotos: true,
                 mediaType: 'photo',
                 includeBase64: false,
@@ -41,14 +52,15 @@ export const CameraModalComponent = (props: modalProps) => {
         }
     };
 
-    const iosButton = () => {
-        launchCamera({ 
+    const iosButton = async () => {
+        await launchCamera({ 
             saveToPhotos: true,
             mediaType: 'photo',
             includeBase64: false,
             cameraType: 'back',
         }, props.setResponse)
     }
+
     return (
         <View>
             <Modal
@@ -68,17 +80,30 @@ export const CameraModalComponent = (props: modalProps) => {
                             <View style={styles.modalView} >
 
                                 {/* Take Photo */}
-                                <TouchableOpacity onPress={Platform.OS === 'ios' ? iosButton : requestCameraPermission}>
+                                <TouchableOpacity 
+                                    onPress={Platform.OS === 'ios' ? iosButton : requestCameraPermission}
+                                >
                                     <Text style={styles.textStyle}>拍照</Text>
                                 </TouchableOpacity>
 
                                 {/* Upload image*/}
-                                <TouchableOpacity onPress={() => { launchImageLibrary({ selectionLimit: 1, mediaType: 'photo', includeBase64: false, }, props.setResponse) }}>
+                                <TouchableOpacity 
+                                onPress={() => { 
+                                    launchImageLibrary({ 
+                                        selectionLimit: 1,
+                                        mediaType: 'photo',
+                                        includeBase64: false,
+                                    }, props.setResponse)
+                                    }}
+                                >
                                     <Text style={styles.textStyle}>從相冊上傳照片</Text>
                                 </TouchableOpacity>
 
                                 {/* Close the modal*/}
-                                <TouchableOpacity onPressOut={() => props.setModalVisible(!props.modalVisible)} style={styles.modalButton}>
+                                <TouchableOpacity 
+                                    onPressOut={() => props.setModalVisible(!props.modalVisible)}
+                                    style={styles.modalButton}
+                                >
                                     <Text style={styles.textStyle}>取消</Text>
                                 </TouchableOpacity>
 
