@@ -47,8 +47,13 @@ Ref: https://reactnative.dev/docs/signed-apk-android
 ## Remark
 version id in ```c19-frd-project-03-tw\MobileApp\android\app\build.gradle```   
 
-0.4  
-Added firebase core, performances and crashed report plugins
+1.04    
+Added firebase core, performances and crashed report plugins  
 
-0.6
-Fixed the apps will crashed after a re-login actions with try catch compoments
+1.06  
+Fixed the apps will crashed after a re-login actions with try catch compoments  
+
+1.07  
+Fixed camera not active in physical devices due to permission issues  
+https://stackoverflow.com/questions/72248267/launchcamera-in-react-native-image-picker-doesnt-open-anything-when-installed  
+  
