@@ -3,11 +3,12 @@
   "version": "0.0.5",
   "private": true,
   "scripts": {
-    "android": "react-native run-android",
     "ios": "react-native run-ios",
     "ad": "react-native run-android --appIdSuffix beta",
-    "runAndroid": "SET ENVFILE=.env.development react-native run-android",
+    "android": "react-native run-android",
+    "runAndroid": "SET ENVFILE=.env.development && react-native run-android",
     "buildAndroidAPK": "SET ENVFILE=.env.production && cd android && ./gradlew assembleRelease",
+    "buildAndroidAAB": "SET ENVFILE=.env.production && cd android && ./gradlew bundleRelease",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
