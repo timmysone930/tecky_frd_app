@@ -127,6 +127,8 @@ export const LoginPage = (props: any) => {
             store.dispatch(checkStatus({ status: true, phone: inputData.phoneCode + inputData.phoneNo }))
             clearInterval(intervalId.current)
             let externalUserId = res.data.member_code.toString()
+            console.log('external id', externalUserId);
+            
             store.dispatch(setUserInfo({ member_code: externalUserId, token: res.data.access_token }))
 
             // AsyncStorage

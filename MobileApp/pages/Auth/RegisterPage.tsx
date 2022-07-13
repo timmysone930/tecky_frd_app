@@ -11,6 +11,7 @@ import { checkStatus, setUserInfo } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 import { RegisterSubmitProp } from './AuthType';
 import {styles} from '../../styles/AuthStyle'
+import OneSignal from 'react-native-onesignal';
 // white background
 const backgroundStyle = { backgroundColor: 'white', };
 // 稱謂
@@ -144,6 +145,10 @@ export const RegisterPage = (props: any) => {
             let externalUserId = res.data.member_code.toString()
             store.dispatch(setUserInfo({ member_code: externalUserId, token: res.data.access_token }))
             props.navigation.navigate({ name: '註冊成功' })
+            OneSignal.setExternalUserId(externalUserId, (results) => {
+                // The results will contain push and email success statuses
+                console.log('Results of setting external user id', results);
+            });
         }
     }
 
