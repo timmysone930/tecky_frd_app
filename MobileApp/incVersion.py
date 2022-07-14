@@ -1,5 +1,3 @@
-from pydrive.auth import GoogleAuth
-from pydrive.drive import GoogleDrive
 import re
 
 def readVersion(gradle_path = "./android/app/build.gradle"):
@@ -17,8 +15,6 @@ def readVersion(gradle_path = "./android/app/build.gradle"):
 
             print(f"Old version: {version_num_str}")
             print(f"New version: {new_version}")
-
-            # final_str += v.replace(version_num_str, new_version)
             
             strs[i] = v.replace(version_num_str, new_version)
             break
