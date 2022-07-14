@@ -1,8 +1,8 @@
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
 
-apk_path = "D:/c19-frd-project-03-tw/MobileApp/android/app/build/outputs/apk/release/app-release.apk"
-secret_path = "D:/c19-frd-project-03-tw/MobileApp/client_secrets.json"
+apk_path = "./android/app/build/outputs/apk/release/app-release.apk"
+secret_path = "./client_secrets.json"
 
 gauth = GoogleAuth()
 gauth.LocalWebserverAuth() # client_secrets.json need to be in the same directory as the script
