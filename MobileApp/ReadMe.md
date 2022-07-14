@@ -53,6 +53,10 @@ yarn run buildAndroidAAB
 ```
 Ref: https://reactnative.dev/docs/signed-apk-android  
 
+## Firebase cli upload
+1. firebase login
+   
+2. firebase appdistribution:distribute ./android/app/build/outputs/apk/release/app-release.apk --app 1:33402240354:android:93f8e0f395a9ce01f9403b --release-notes "Bug fixes and improvements" --groups "internal-group"
 
 
 ## Remark
@@ -68,3 +72,5 @@ Fixed the apps will crashed after a re-login actions with try catch compoments
 Fixed camera not active in physical devices due to permission issues  
 https://stackoverflow.com/questions/72248267/launchcamera-in-react-native-image-picker-doesnt-open-anything-when-installed  
   
+1.08  
+Fixed email display issues and notifications to phone
