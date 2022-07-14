@@ -16,6 +16,7 @@ def mainFunc(apps_name = "telemedicineApps.apk"):
     file1.SetContentFile(apk_path)
     file1.Upload() # Upload the file.
     print('title: %s, id: %s' % (file1['title'], file1['id']))
+    print("Upload done.")
     
 secret_path = "./client_secrets.json"
 apk_path = "./android/app/build/outputs/apk/release/app-release.apk"
