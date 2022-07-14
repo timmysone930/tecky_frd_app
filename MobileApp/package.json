@@ -7,6 +7,7 @@
     "ad": "react-native run-android --appIdSuffix beta",
     "android": "react-native run-android",
     "runAndroid": "SET ENVFILE=.env.development && react-native run-android",
+    "ra": "SET ENVFILE=.env.development && react-native run-android",
     "buildAndroidAPK": "SET ENVFILE=.env.production && cd android && ./gradlew assembleRelease",
     "buildAndroidAAB": "SET ENVFILE=.env.production && cd android && ./gradlew bundleRelease",
     "start": "react-native start",

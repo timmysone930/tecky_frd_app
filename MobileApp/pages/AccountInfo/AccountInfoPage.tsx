@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Image, Text } from 'react-native';
+import { SafeAreaView, ScrollView, Image} from 'react-native';
+import { Text } from 'native-base';
 import { styles } from '../../styles/GeneralStyles';
 
 // Redux
@@ -16,6 +17,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // .env
 import Config from "react-native-config";
+
+const widthSidespacing = 96;
 
 export function AccountInfoPage({ navigation }: any) {
 
@@ -91,53 +94,59 @@ export function AccountInfoPage({ navigation }: any) {
                         <>
                             <View justifyContent={"space-between"} height={200} marginY={5} >
                                 <View flexDirection={'row'}>
-                                    <Text style={[{ width: 130 }, styles.contentText]}>
+                                    <Text style={[{ width: widthSidespacing }, styles.contentText]}>
                                         會員編號:
                                     </Text>
                                     <Text style={[styles.subTitle]}>
                                         {fetchData.member_code}
                                     </Text>
                                 </View>
+
                                 <View flexDirection={'row'}>
-                                    <Text style={[{ width: 130 }, styles.contentText]}>
+                                    <Text style={[{ width: widthSidespacing }, styles.contentText]}>
                                         姓名:
                                     </Text>
                                     <Text style={[styles.subTitle]}>
                                         {fetchData.name}
                                     </Text>
                                 </View>
+
                                 <View flexDirection={'row'}>
-                                    <Text style={[{ width: 130 }, styles.contentText]}>
+                                    <Text style={[{ width: widthSidespacing }, styles.contentText]}>
                                         性別:
                                     </Text>
                                     <Text style={[styles.subTitle]}>
                                         {fetchData.gender}
                                     </Text>
                                 </View>
+
                                 <View flexDirection={'row'}>
-                                    <Text style={[{ width: 130 }, styles.contentText]}>
+                                    <Text style={[{ width: widthSidespacing }, styles.contentText]}>
                                         出生日期:
                                     </Text>
                                     <Text style={[styles.subTitle]}>
                                         {fetchData.birthday}
                                     </Text>
                                 </View>
+
                                 <View flexDirection={'row'}>
-                                    <Text style={[{ width: 130 }, styles.contentText]}>
+                                    <Text style={[{ width: widthSidespacing }, styles.contentText]}>
                                         Email:
                                     </Text>
-                                    <Text style={[styles.subTitle]}>
+                                    <Text fontSize={"xs"}>
                                         {fetchData.email}
                                     </Text>
                                 </View>
+
                                 <View flexDirection={'row'}>
-                                    <Text style={[{ width: 130 }, styles.contentText]}>
-                                        手提電話號碼:
+                                    <Text style={[{ width: widthSidespacing }, styles.contentText]}>
+                                        手提電話:
                                     </Text>
                                     <Text style={[styles.subTitle]}>
                                         {fetchData.phone.slice(0, 3)}&nbsp;{fetchData.phone.slice(3)}
                                     </Text>
                                 </View>
+                                
                             </View>
                             <View justifyContent={"space-between"} height={130} marginY={8} >
                                 <Button
