@@ -44,6 +44,9 @@ export const ResSessionComponent = (props: Props) => {
             else {
                 // 有時間提供
                 // console.log(sessionData.currentData)
+                const currentTime = (new Date()).toLocaleTimeString("zh-HK");
+                console.log(currentTime);
+
                 selectFunction = sessionData.currentData.map((item: dataMapType, idx: number) => (
                     <Select.Item label={`${item['start_at']} - ${item['end_at']}`} value={item['id']} key={`picker_date_${idx}`} />
                 ))
