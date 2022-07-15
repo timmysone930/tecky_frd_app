@@ -85,20 +85,24 @@ export const LoginPage = (props: any) => {
         }, 1000)
         // Fetching
         try {
-            const res: QueryReturnValue = await getLoginSMS({ 'phone': inputData.phoneCode + inputData.phoneNo })
+            const res: any = await getLoginSMS({ 'phone': inputData.phoneCode + inputData.phoneNo })
+            let code = res.data ? res.data : res.error.data.message ? res.error.data.message : res.error.data
+            // let code = (res.error && res.error.data) ? res.error.data.message ? res.error.data.message : res.error.data : ( res.data ? res.data : null);
+
             console.log(res)
             toast.show({
                 description: "已送出驗證碼"
             })
             toast.show({
                 duration: 12000,
-                description: `SMS Code: ${res.data}`
+                description: `SMS Code: ${code}`
             })
         } catch (e: any) {
-            console.log(e)
+            let code = e.error && e.error.data ? e.error.data : null
+            console.log('dllm', e)
             toast.show({
                 duration: 12000,
-                description: `SMS Code: ${e.data}`
+                description: `SMS Code: ${code}`
             })
         }
     }

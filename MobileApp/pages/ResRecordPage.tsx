@@ -55,7 +55,7 @@ export const ResRecordPage = (props: any) => {
                         refreshing={refreshing}
                         onRefresh={onRefresh} 
                     /> 
-                    :
+                    : recordData.isLoading?
                     <ScrollView
                         refreshControl={
                         <RefreshControl
@@ -64,8 +64,9 @@ export const ResRecordPage = (props: any) => {
                         />
                         }
                     >
-                      <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄</Text>
-                  </ScrollView>
+                  </ScrollView> :                      
+                  <Text style={{ textAlign: 'center', fontSize: 17, margin: 20 }}>沒有預約記錄，請先預約或重新登入</Text>
+
                 }
         </SafeAreaView>
     )
