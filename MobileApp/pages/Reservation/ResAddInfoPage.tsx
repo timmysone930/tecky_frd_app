@@ -156,6 +156,21 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                         </Text>
                     }
 
+                    {/* Show the uploaded photo */}                  
+                    {response?.assets &&
+                        response?.assets.map(({ uri }: any) => (
+                            <View key={uri}>
+                                <Text style={[styles.subTitle, styles.mt_10]}>上傳的身份證照片:</Text>
+                                <Image 
+                                    resizeMode="contain"
+                                    resizeMethod="scale"
+                                    style={{ width: 380, height: 240, marginBottom: 50, }}
+                                    source={{ uri: uri }}
+                                />
+                            </View>
+                        ))
+                    }
+
                     <Text style={[styles.subTitle, styles.mt_10]}>
                         請上傳你的身份證照片正面
                     </Text>
@@ -179,20 +194,6 @@ export const ResAddInfoPage: React.FC = (props: any) => {
                         setResponse={onSetResponse}
                     />
 
-                    {/* Show the uploaded photo */}                  
-                    {response?.assets &&
-                        response?.assets.map(({ uri }: any) => (
-                            <View key={uri}>
-                                <Text style={[styles.subTitle, styles.mt_10]}>上傳的身份證照片:</Text>
-                                <Image 
-                                    resizeMode="contain"
-                                    resizeMethod="scale"
-                                    style={{ width: 380, height: 240, marginBottom: 50, }}
-                                    source={{ uri: uri }}
-                                />
-                            </View>
-                        ))
-                    }
                     {/* {response?.assets && response?.assets.map(({ uri }: any) => (console.log(uri)))} */}
                 </View>
             </ScrollView>

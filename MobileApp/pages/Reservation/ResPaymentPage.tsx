@@ -252,7 +252,7 @@ export const PaymentPage = (props: any) => {
                     <>
                         <View>
                             <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>
-                                問診費用：$ {Config.Res_code}
+                                問診費用：$ {docInfo.docData.video_diag_fee || 9999}
                             </Text>
                             <Text style={[styles.warning, styles.ph_10, styles.mb_10]}>
                                 如在十五分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約

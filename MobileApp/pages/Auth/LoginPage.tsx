@@ -236,7 +236,7 @@ export const LoginPage = (props: any) => {
                     <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate({ name: '註冊界面' }) }}>
                         <Text style={styles.buttonText}>立即註冊</Text>
                     </TouchableOpacity>
-                    <View><Text style={styles.versionText}>版本：1.04</Text></View>
+                    <View><Text style={styles.versionText}>版本：1.12</Text></View>
                 </View>
             </ScrollView>
         </SafeAreaView>

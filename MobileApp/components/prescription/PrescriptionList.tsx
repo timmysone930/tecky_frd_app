@@ -19,14 +19,16 @@ interface Props {
 }
 
 export const statueDisplay: any = {
-    paied: "已付款",
+    paid: "已付款",
     waiting: "待付款",
     cancel: "已取消",
-    sended: "已送出",
+    sent: "已送出",
     received: "已取"
 }
 
 export const PrescriptionList = (props: Props) => {
+    console.log("JNIKJNIJNIJNI", props.data);
+
     return (
         <FlatList
             data={props.data}

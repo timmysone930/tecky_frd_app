@@ -35,9 +35,11 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
 
     const rosterSession = useGetReservedSessionByIdQuery({ rosterId: formData.reservedSession, token: userToken });
     if (rosterSession.isSuccess) {
+        // console.log(formData)
+        // console.log("docInfo", docInfo.docData.video_diag_fee)
         reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}`
         rowCellArr = [
-            `$ ${Config.Res_code}`,
+            `$ ${docInfo.docData.video_diag_fee || 9999}`,
             formData.reservedDate,
             reserveSession,
             formData.name,
@@ -69,8 +71,12 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
                         </View>
                         {rowTitleArr.map((item, idx) => (
                             <View style={[backgroundStyle, { flexDirection: 'row', marginBottom: 1, marginHorizontal: 15 }]} key={`confirm_row_${idx}`}>
-                                <View style={{ flex: 1.3 }}><Text style={styles.rowTitle}>{item}</Text></View>
-                                <View style={{ flex: 3 }}><Text style={styles.rowCellText}>{rowCellArr[idx]}</Text></View>
+                                <View style={{ flex: 1.3 }}>
+                                    <Text style={styles.rowTitle}>{item}</Text>
+                                </View>
+                                <View style={{ flex: 3 }}>
+                                    <Text style={styles.rowCellText}>{rowCellArr[idx]}</Text>
+                                </View>
                             </View>
                         ))}
                     </>

@@ -72,6 +72,8 @@ export const ReservationPage = (props: any) => {
         }
     });
 
+    console.log(docData.video_diag_fee)
+
     // Title value change function
     const onTitleChange = (itemValue: string) => { setValue("title", itemValue) };
 
@@ -235,10 +237,13 @@ export const ReservationPage = (props: any) => {
                                 }}
                             >
                                 <Text style={styles.subTitle}>
-                                    問診費用： ${Config.Res_code}
+                                    問診費用： ${docData.video_diag_fee || 9999}
                                 </Text>
                                 <Text style={styles.infoText}>
-                                    （此費用不包括醫生處方藥物
+                                    （此費用不包括醫生處方藥物)
+                                </Text>
+                                <Text style={styles.infoText}>
+                                    如病人與會員資料不同，請在下方修改
                                 </Text>
                             </View>
 
