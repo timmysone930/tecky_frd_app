@@ -21,11 +21,11 @@ export function PrescriptionDetailPage({navigation}:any) {
     try {
         
         const userToken = useSelector((state: any) => state.getUserStatus.token);
-        const init = {
-            headers:{
-                "Authorization":`Bearer ${userToken}`,
-            }
-        }
+        // const init = {
+        //     headers:{
+        //         "Authorization":`Bearer ${userToken}`,
+        //     }
+        // }
     
         const reduxData = useSelector((state: any) => state.getPrescriptionCode)
         
@@ -65,7 +65,8 @@ export function PrescriptionDetailPage({navigation}:any) {
                 dataFetching()
                 setFetched(true)
             }
-            console.log(fetchData);
+            // console.log("fetchData", fetchData);
+            // console.log(fetchData.prescription.order_status)
         },[])
         
         // const fetchData = FakeData
@@ -105,7 +106,7 @@ export function PrescriptionDetailPage({navigation}:any) {
                                 onPress={()=>{Linking.openURL(`tel:${fetchData.contact_number}`);} }
                                 style={[styles.subTitle, styles.textCenter, styles.mb_10]}
                             >
-                                如布疑問請致電 {fetchData.clinic_phone} 查詢。 
+                                如有疑問，請致電 2951 1988 查詢。 
                             </Text>
                             
                         </View>

@@ -225,7 +225,11 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 "session_id": reservationData.session_id 
             }
 
-            const paymentRes: any = await postNewPayment({data:paymentData, token:userToken})
+            const paymentRes: any = await postNewPayment({
+                data: paymentData,
+                token: userToken
+            })
+
             console.log('paymentRes', paymentRes)
 
             let time = parseInt(data.item.res_time.replace(':', ''), 10)
@@ -233,7 +237,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 time = time - 50 
             }
             else {
-                time = time -10
+                time = time - 10
             }
 
             let pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
@@ -292,7 +296,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                     : null
                 }
 
-                {reservationData.payment === null &&
+                { (reservationData.payment === null || !reservationData.payment.payment_status) &&
                     <>
                         <TouchableOpacity style={styles.fullButton} onPress={onClickPaypal}>
                             <Text style={styles.buttonText}>
