@@ -46,6 +46,8 @@ export const CameraModalComponent = (props: modalProps) => {
                 includeBase64: false,
                 cameraType: 'back',
             }, props.setResponse);
+
+            props.setModalVisible(false);
         } 
         else {
             console.log("Camera permission denied");
@@ -58,7 +60,9 @@ export const CameraModalComponent = (props: modalProps) => {
             mediaType: 'photo',
             includeBase64: false,
             cameraType: 'back',
-        }, props.setResponse)
+        }, props.setResponse);
+
+        props.setModalVisible(false);
     }
 
     return (
