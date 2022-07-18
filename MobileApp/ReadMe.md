@@ -84,3 +84,6 @@ https://stackoverflow.com/questions/72248267/launchcamera-in-react-native-image-
   
 1.08  
 Fixed email display issues and notifications to phone
+
+
+yarn react-native generate-bootsplash images/telemedicineLogo.png --background-color=FFFFFF --logo-width=100 --assets-path=assets --flavor=main

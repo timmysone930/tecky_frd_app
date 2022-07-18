@@ -143,7 +143,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "1.13"
+        versionName "1.19"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         // config
         resValue "string", "build_config_package", "com.tecky.telemedicine"
@@ -289,10 +289,13 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    // react-native-bootsplash
+    implementation "androidx.core:core-splashscreen:1.0.0-rc01"
+
     // native paypal
-    implementation project(':react-native-paypal')
-    implementation "com.braintreepayments.api:braintree:3.+"
-    implementation "com.braintreepayments.api:data-collector:3.+"
+    // implementation project(':react-native-paypal')
+    // implementation "com.braintreepayments.api:braintree:3.+"
+    // implementation "com.braintreepayments.api:data-collector:3.+"
 
     // firebase core
     implementation platform('com.google.firebase:firebase-bom:30.2.0')

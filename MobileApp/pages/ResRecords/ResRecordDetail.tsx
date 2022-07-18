@@ -8,7 +8,7 @@ import { styles } from '../../styles/GeneralStyles';
 // API
 import { useGetReservationListQuery } from '../../API/PatientAPI';
 import Config from 'react-native-config';
-import { requestOneTimePayment } from 'react-native-paypal';
+// import { requestOneTimePayment } from 'react-native-paypal';
 // import { store } from '../../redux/store';
 // import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
