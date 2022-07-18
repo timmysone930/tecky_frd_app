@@ -4,7 +4,7 @@ import { AddressForm } from '../../components/address/AddressForm';
 import { styles } from '../../styles/GeneralStyles';
 
 // Redux
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 
 // Native-base
 import { View, Button, useToast, Radio } from 'native-base';
@@ -13,7 +13,7 @@ import { View, Button, useToast, Radio } from 'native-base';
 import Config from 'react-native-config';
 
 
-export function PrescriptionNewAddrPage({navigation}:any) {
+export function PrescriptionNewAddrPage({ navigation }:any) {
 
     const blankContent = {
         hkid:"",
@@ -26,7 +26,6 @@ export function PrescriptionNewAddrPage({navigation}:any) {
         is_defaultValue: false
     }
     
-
     const [formFilled, setFormFilled] = useState(false)
 
     const [input, setInput] = useState(blankContent)
@@ -41,16 +40,26 @@ export function PrescriptionNewAddrPage({navigation}:any) {
             return
         }
 
-        const hkIdResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`)
-        const hkId = (await hkIdResp.json()).id_number
+        const hkIdResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`);
+
+        const hkId = (await hkIdResp.json()).id_number;
+        // console.log(hkIdResp);
+        console.log(hkId);
 
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/new-addr-book`, {
             headers: {
                 'Content-Type': 'application/json'
             },
             method: "POST",
-            body: JSON.stringify({...input, hkid: hkId, is_default: true})
-        })
+            body: JSON.stringify({
+                ...input,
+                hkid: hkId,
+                is_default: true
+            })
+        });
+
+        // console.log(resp);
+        console.log(resp.status);
 
         
         navigation.navigate("地址確認")

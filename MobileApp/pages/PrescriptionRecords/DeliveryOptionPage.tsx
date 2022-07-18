@@ -65,7 +65,9 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
     // const defaultInput = FakeAddr.filter((obj:any) => obj.is_default == true)[0]
     const [input, setInput] = useState(null as any)
-    const [formFilled, setFormFilled] = useState(false)
+    const [formFilled, setFormFilled] = useState(false);
+
+    const [ isValidToSubmit, setIsValidToSubmit ] = useState<boolean>(true);
 
     const dataFetching = async () => {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, init)
@@ -79,15 +81,17 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
     const submitHandler = () => {
         if (pickUpClinic.clinic_code == "" && deliveryOption == "pick-up") {
-            
             return
         }
+
         if (!formFilled && deliveryOption == "deliver") {
+
             if (input == "") {
                 toast.show({
                     description: "暫無任何地址記錄，請點選新增地址新增記錄，或選擇分店自取。"
                 })
             }
+
             return
         }
 
@@ -96,6 +100,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
             pickUpStore: pickUpClinic, 
             deliverAddress: input
         }))
+
         navigation.navigate("付款確認")
     }
 
@@ -157,7 +162,10 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                 供自取分店
                             </Text>
                             
-                            <FormControl isRequired isDisabled={deliveryOption === 'deliver'} isInvalid={pickUpClinic.clinic_code == "" && deliveryOption == "pick-up"}>
+                            <FormControl 
+                                isRequired isDisabled={deliveryOption === 'deliver'} 
+                                isInvalid={pickUpClinic.clinic_code == "" && deliveryOption == "pick-up"}
+                            >
                                 {/* <FormControl.Label>分店自取</FormControl.Label> */}
 
                                     <Select 
@@ -184,7 +192,11 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                     >
                                         
                                         {allowPickUp.map((item: any) => (
-                                            <Select.Item label={`${item.area} - ${item.clinic_name}`} value={item.clinic_code} key={item.clinic_code}/>
+                                            <Select.Item 
+                                                label={`${item.area} - ${item.clinic_name}`} 
+                                                value={item.clinic_code} 
+                                                key={item.clinic_code}
+                                            />
                                         ))}
 
                                     </Select>
@@ -203,7 +215,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                             </View>
                             
                             {/* Select Method: 上門送藥 */}
-                            <Radio value="deliver" my={1}>
+                            <Radio value="deliver" my={1} isDisabled={input == "" && input != null}>
                                 <Text style={[styles.contentFont, styles.mh_10]}>
                                     上門送藥 (運費到付)
                                 </Text>
@@ -215,12 +227,15 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                         {
                             input == "" && input != null ?
                             <>
-                                <Text style={[styles.subTitle, styles.mv_10, styles.textCenter]}>
+                                <Text>
+                                    請先返回頁面，我的 {'>'} 送藥地址 {'>'} 按"新增送貨地址"。
+                                </Text>
+                                {/* <Text style={[styles.subTitle, styles.mv_10, styles.textCenter]}>
                                     沒有地址記錄
                                 </Text>
                                 <Button size={"lg"} onPress={() => navigation.navigate("新增地址")}>
                                     新增地址
-                                </Button>
+                                </Button> */}
                             </>
                             :
                             <View>
@@ -245,7 +260,9 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                         <Text style={[styles.mt_30, styles.mb_10]}>
                             付款前，請詳細核對送貨地址。
                         </Text>
-                        <PayButton title={"確定及付款"} disabled={false} onPressFunction={submitHandler}/>
+
+
+                        <PayButton title={"確定及付款"} disabled={!isValidToSubmit} onPressFunction={submitHandler}/>
 
 
                     </View>

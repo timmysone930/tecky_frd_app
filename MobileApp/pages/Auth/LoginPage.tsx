@@ -206,7 +206,15 @@ export const LoginPage = (props: any) => {
 
                         <Controller control={control}
                             render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput keyboardType={'numeric'} style={[styles.input, { width: '74%', flex: 1 }]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="請輸入短訊驗證碼" placeholderTextColor="#737474" />
+                                <TextInput 
+                                    keyboardType={'numeric'} 
+                                    style={[styles.input, { width: '74%', flex: 1 }]} 
+                                    onBlur={onBlur} 
+                                    onChangeText={onChange} 
+                                    value={value} 
+                                    placeholder="請輸入短訊驗證碼" 
+                                    placeholderTextColor="#737474" 
+                                />
                             )}
                             name="loginSMS"
                         />
