@@ -230,6 +230,9 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                 <Text>
                                     請先返回頁面，我的 {'>'} 送藥地址 {'>'} 按"新增送貨地址"。
                                 </Text>
+                                <Text>
+                                    記得啟用 "設定預設送貨地址"，否則將不會顯示。
+                                </Text>
                                 {/* <Text style={[styles.subTitle, styles.mv_10, styles.textCenter]}>
                                     沒有地址記錄
                                 </Text>
