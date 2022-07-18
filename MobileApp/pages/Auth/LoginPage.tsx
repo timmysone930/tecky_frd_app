@@ -8,6 +8,7 @@ import { useGetLoginSMSMutation, useLoginByPhoneMutation } from '../../API/AuthA
 import { checkStatus, setUserInfo } from '../../redux/AuthSlice';
 import { store } from '../../redux/store';
 
+
 // Native-base
 import { useToast, Button } from 'native-base';
 import OneSignal from 'react-native-onesignal';
@@ -236,7 +237,7 @@ export const LoginPage = (props: any) => {
                     <TouchableOpacity style={styles.button} onPress={() => { props.navigation.navigate({ name: '註冊界面' }) }}>
                         <Text style={styles.buttonText}>立即註冊</Text>
                     </TouchableOpacity>
-                    <View><Text style={styles.versionText}>版本：1.12</Text></View>
+                    <View><Text style={styles.versionText}>版本： {Config.VERSION_NUM || 1.13}</Text></View>
                 </View>
             </ScrollView>
         </SafeAreaView>
