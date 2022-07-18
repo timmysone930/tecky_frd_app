@@ -44,107 +44,113 @@ export const setNotification = async (res_date: string, userCode: string, pushTi
     })
 }
 
-
-
 export const ResPaymentConfirmPage = (props: any) => {
-    const rosterStatus = useSelector((state: any) => state.getPaymentStatus);
-    const userCode = useSelector((state: any) => state.getUserStatus.member_code);
-    const userToken = useSelector((state: any) => state.getUserStatus.token);
 
-    if (rosterStatus.paymentRoster === 'true') {
-        // To get the param passing from the previous screen
-        const { resCode, res_date, res_time } = props.route.params;
-        console.log('resCode', resCode)
-        let time = parseInt(res_time.replace(':', ''), 10)
-        if(time % 100 - 10 < 0){
-            time = time - 50 
-        }else {
-            time = time -10
+    try {
+        
+        const rosterStatus = useSelector((state: any) => state.getPaymentStatus);
+        const userCode = useSelector((state: any) => state.getUserStatus.member_code);
+        const userToken = useSelector((state: any) => state.getUserStatus.token);
+    
+        if (rosterStatus.paymentRoster === 'true') {
+            // To get the param passing from the previous screen
+            const { resCode, res_date, res_time } = props.route.params;
+    
+            console.log('resCode', resCode)
+            let time = parseInt(res_time.replace(':', ''), 10)
+            if(time % 100 - 10 < 0){
+                time = time - 50 
+            }else {
+                time = time -10
+            }
+            let pushTime;
+            if(time.toString().length === 3){
+                pushTime = `0${time.toString().substring(0,1)}:${time.toString().substring(1, 3)}`
+            }else{
+                pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
+            }
+            console.log(pushTime)
+            setNotification(res_date, userCode, pushTime, resCode, userToken);
         }
-        let pushTime;
-        if(time.toString().length === 3){
-            pushTime = `0${time.toString().substring(0,1)}:${time.toString().substring(1, 3)}`
-        }else{
-            pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
-        }
-        console.log(pushTime)
-        setNotification(res_date, userCode, pushTime, resCode, userToken);
+    
+        return (
+            <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
+                <View style={{ paddingTop: windowHeight * (1 / 7) }}>
+                    {rosterStatus.paymentRoster === 'true' &&
+                        <>
+                            <View style={{ marginTop: 20 }}>
+                                <Icon name="check-circle" size={100} color="#325C80" style={{ textAlign: 'center', marginBottom: 18 }} />
+                                <Text style={[styles.subTitle]}>預約確認</Text>
+                            </View>
+                            <View style={{ marginTop: 20, }}>
+                                <Text style={[styles.contentText]}>預約編號：{props.route.params.resCode}</Text>
+                                <Text style={[styles.contentText]}>收據已發送到你的電郵</Text>
+                                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '搜尋醫生' })}>
+                                    <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
+                            </View>
+                        </>
+                    }
+                    {rosterStatus.paymentRoster === 'full' &&
+                        <>
+                            <View style={{ marginTop: 20 }}>
+                                <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
+                                <Text style={[styles.subTitle]}>預約失敗</Text>
+                            </View>
+                            <View style={{ marginTop: 20, }}>
+                                <Text style={[styles.contentText]}>該時段已滿</Text>
+                                <Text style={[styles.contentText]}>請重新選擇時段</Text>
+                                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
+                                    <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
+                            </View>
+                        </>
+                    }
+                    {rosterStatus.paymentRoster === 'booked' &&
+                        <>
+                            <View style={{ marginTop: 20 }}>
+                                <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
+                                <Text style={[styles.subTitle]}>預約失敗</Text>
+                            </View>
+                            <View style={{ marginTop: 20, }}>
+                                <Text style={[styles.contentText]}>你已有預約記錄</Text>
+                                <Text style={[styles.contentText]}>如有疑問，請與相關職員聯絡</Text>
+                                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
+                                    <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
+                            </View>
+                        </>
+                    }
+                    {rosterStatus.paymentRoster === 'error' &&
+                        <>
+                            <View style={{ marginTop: 20 }}>
+                                <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
+                                <Text style={[styles.subTitle]}>預約失敗</Text>
+                            </View>
+                            <View style={{ marginTop: 20, }}>
+                                <Text style={[styles.contentText]}>系統出現錯誤</Text>
+                                <Text style={[styles.contentText]}>請與相關職員聯絡</Text>
+                                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
+                                    <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
+                            </View>
+                        </>
+                    }
+                    {rosterStatus.paymentRoster === 'false' &&
+                        <>
+                            <View style={{ marginTop: 20 }}>
+                                <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
+                                <Text style={[styles.subTitle]}>付款失敗</Text>
+                            </View>
+                            <View style={{ marginTop: 20, }}>
+                                <Text style={[styles.contentText]}>未能完成付款程序</Text>
+                                <Text style={[styles.contentText, { fontSize: 14 }]}>請於創建預約後十五分鐘內付款，否則預約會被取消</Text>
+                                <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
+                                    <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
+                            </View>
+                        </>
+                    }
+                </View>
+            </SafeAreaView>
+        )
+    } catch (error) {
+        return (<></>)
     }
 
-    return (
-        <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-            <View style={{ paddingTop: windowHeight * (1 / 7) }}>
-                {rosterStatus.paymentRoster === 'true' &&
-                    <>
-                        <View style={{ marginTop: 20 }}>
-                            <Icon name="check-circle" size={100} color="#325C80" style={{ textAlign: 'center', marginBottom: 18 }} />
-                            <Text style={[styles.subTitle]}>預約確認</Text>
-                        </View>
-                        <View style={{ marginTop: 20, }}>
-                            <Text style={[styles.contentText]}>預約編號：{props.route.params.resCode}</Text>
-                            <Text style={[styles.contentText]}>收據已發送到你的電郵</Text>
-                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '搜尋醫生' })}>
-                                <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
-                        </View>
-                    </>
-                }
-                {rosterStatus.paymentRoster === 'full' &&
-                    <>
-                        <View style={{ marginTop: 20 }}>
-                            <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
-                            <Text style={[styles.subTitle]}>預約失敗</Text>
-                        </View>
-                        <View style={{ marginTop: 20, }}>
-                            <Text style={[styles.contentText]}>該時段已滿</Text>
-                            <Text style={[styles.contentText]}>請重新選擇時段</Text>
-                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
-                                <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
-                        </View>
-                    </>
-                }
-                {rosterStatus.paymentRoster === 'booked' &&
-                    <>
-                        <View style={{ marginTop: 20 }}>
-                            <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
-                            <Text style={[styles.subTitle]}>預約失敗</Text>
-                        </View>
-                        <View style={{ marginTop: 20, }}>
-                            <Text style={[styles.contentText]}>你已有預約記錄</Text>
-                            <Text style={[styles.contentText]}>如有疑問，請與相關職員聯絡</Text>
-                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
-                                <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
-                        </View>
-                    </>
-                }
-                {rosterStatus.paymentRoster === 'error' &&
-                    <>
-                        <View style={{ marginTop: 20 }}>
-                            <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
-                            <Text style={[styles.subTitle]}>預約失敗</Text>
-                        </View>
-                        <View style={{ marginTop: 20, }}>
-                            <Text style={[styles.contentText]}>系統出現錯誤</Text>
-                            <Text style={[styles.contentText]}>請與相關職員聯絡</Text>
-                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
-                                <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
-                        </View>
-                    </>
-                }
-                {rosterStatus.paymentRoster === 'false' &&
-                    <>
-                        <View style={{ marginTop: 20 }}>
-                            <Icon name="info-circle" size={100} color="red" style={{ textAlign: 'center', marginBottom: 18 }} />
-                            <Text style={[styles.subTitle]}>付款失敗</Text>
-                        </View>
-                        <View style={{ marginTop: 20, }}>
-                            <Text style={[styles.contentText]}>未能完成付款程序</Text>
-                            <Text style={[styles.contentText, { fontSize: 14 }]}>請於創建預約後十五分鐘內付款，否則預約會被取消</Text>
-                            <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '醫生' })}>
-                                <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
-                        </View>
-                    </>
-                }
-            </View>
-        </SafeAreaView>
-    )
 }

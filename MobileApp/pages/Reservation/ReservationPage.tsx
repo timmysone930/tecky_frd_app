@@ -72,7 +72,7 @@ export const ReservationPage = (props: any) => {
         }
     });
 
-    console.log(docData.video_diag_fee)
+    // console.log(docData.video_diag_fee)
 
     // Title value change function
     const onTitleChange = (itemValue: string) => { setValue("title", itemValue) };
@@ -154,8 +154,11 @@ export const ReservationPage = (props: any) => {
     useEffect(() => {
         const updateUserInfo = async () => {
             if (userData.isSuccess) {
-                await setValue('name', userData.data.name)
-                await setValue('idNumber', userData.data.id_number)
+                setValue('name', userData.data.name);
+                setValue('idNumber', userData.data.id_number);
+                console.log(userData.data.id_type)
+                setValue("idType", userData.data.id_type || "香港身份證");
+
                 setSelectedRoster('Updated');
             }
         }
