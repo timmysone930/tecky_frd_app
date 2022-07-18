@@ -35,7 +35,7 @@ export const Tabs = () => {
 
     // get user status
     useEffect(() => {
-        console.log("hi Tab");
+        // console.log("hi Tab");
 
         const getData = (async () => {
             try {
