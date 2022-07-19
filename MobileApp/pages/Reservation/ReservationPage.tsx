@@ -153,11 +153,15 @@ export const ReservationPage = (props: any) => {
     // auto input login users info once
     useEffect(() => {
         const updateUserInfo = async () => {
-            if (userData.isSuccess) {
+            if (userData.isSuccess && userData.data) {
+                console.log(userData.data);
+
                 setValue('name', userData.data.name);
                 setValue('idNumber', userData.data.id_number);
-                console.log(userData.data.id_type)
                 setValue("idType", userData.data.id_type || "香港身份證");
+
+                setValue("title", userData.data.gender || '先生');
+
 
                 setSelectedRoster('Updated');
             }
