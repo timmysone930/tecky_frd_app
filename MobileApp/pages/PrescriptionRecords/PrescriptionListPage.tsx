@@ -47,18 +47,22 @@ export const PrescriptionListPage = ({navigation}:any) => {
       return () => {unsubscribe}
   },[navigation])
 
+  console.log(fetchData);
+
   return (
       <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
         {fetchData != null && fetchData != "" &&
           <PrescriptionList 
-            data={fetchData} 
+            data={fetchData.filter( (v:any) => v.bill && Array.isArray(v.bill) && v.bill.length >= 1)} 
             changePage={"藥單詳情"}
             navigation={navigation}
           />
         }
+
         {fetchData == "" &&
           <Text style={{textAlign:'center', fontSize:17, margin:20}}>沒有藥單記錄</Text>
         }
+
         {
           fetchData == null &&
           // Loading Spinner
