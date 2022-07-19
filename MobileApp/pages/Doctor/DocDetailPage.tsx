@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, SafeAreaView, ScrollView, } from 'react-native';
 import { Button } from 'react-native-paper';
 import { useSelector } from 'react-redux';
@@ -63,6 +63,14 @@ export const DocDetailPage: React.FC = (props: any) => {
         )
         
     } catch (error:any) {
+
+        useEffect(() => {
+            if(props && props.navigation){
+                console.log("Yeah");
+                props.navigation.navigate({ name: '搜尋醫生' })
+            }
+        }, []);
+
         return(
             <></>
         )
