@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { DisplayOrderStatus } from '../prescription/DisplayOrderStatus'
+import { DisplayPaymentStatus } from '../prescription/DisplayOrderStatus'
 import { styles } from '../../styles/GeneralStyles'
 
 // props.data = {
@@ -36,7 +36,7 @@ export const PrescriptionBasicInfo = (props: any) => {
         <>
             <View style={[styles.RowCenterBetween, styles.mb_10]}>
                 <Text style={[styles.title]}>{props.pres_code}</Text>
-                {props.orderStatusShow && <DisplayOrderStatus orderStatus={props.order_status} />}
+                {props.orderStatusShow && <DisplayPaymentStatus paymentStatus={props.payment_status} />}
             </View>
             <View>
 

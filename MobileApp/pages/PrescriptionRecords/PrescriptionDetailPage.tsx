@@ -88,13 +88,13 @@ export function PrescriptionDetailPage({navigation}:any) {
                                 patient_name={fetchData.name}
                                 patient_id={fetchData.hkid}
                                 orderStatusShow={true}
-                                order_status={statueDisplay[fetchData.prescription.order_status]}
+                                payment_status={statueDisplay[fetchData.prescription.payment_status]}
                             />
     
                             {/* Component */}
                             <CostDisplay cost={fetchData.bill[0].totel_amount}/>
     
-                            <PayButton title={"前往付款"} disabled={fetchData.prescription.order_status != "waiting"} onPressFunction={goToPay}/>
+                            <PayButton title={"前往付款"} disabled={fetchData.prescription.payment_status != "waiting"} onPressFunction={goToPay}/>
     
                             {/* Component */}
                             <PrescriptionDetail treatmentItems={fetchData.treatmentItems}/>

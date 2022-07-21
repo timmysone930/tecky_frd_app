@@ -3,10 +3,10 @@ import { View, Text } from "react-native"
 import { styles } from "../../styles/RecordListStyle"
 
 interface Props {
-    orderStatus: string
+    paymentStatus: string
 }
 
-export const DisplayOrderStatus = (props: Props) => {
+export const DisplayPaymentStatus = (props: Props) => {
     const statusColor: any = {
         "已付款": "#3333ff",
         "待付款": "#9999ff",
@@ -17,7 +17,7 @@ export const DisplayOrderStatus = (props: Props) => {
     return (
         <>
         {Object.keys(statusColor).map((key) => (
-            props.orderStatus == key &&
+            props.paymentStatus == key &&
             <View key={key} style={[styles.resStatus, { backgroundColor: statusColor[key] }]}>
                 <Text style={[styles.resStatusFont]}>{key}</Text>
             </View>
