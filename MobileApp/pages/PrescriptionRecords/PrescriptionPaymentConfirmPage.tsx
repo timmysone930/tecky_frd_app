@@ -90,7 +90,7 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
                             patient_id={fetchData.hkid}
                             orderStatusShow={false}
                             pres_code={fetchData.prescription.pres_code}
-                            order_status={fetchData.prescription.order_status}
+                            payment_status={fetchData.prescription.payment_status}
                         />
                         {/* Component */}
                         <PrescriptionDetail treatmentItems={fetchData.treatmentItems}/>

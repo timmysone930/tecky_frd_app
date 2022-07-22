@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { DisplayPaymentStatus } from '../prescription/DisplayOrderStatus'
+import { DisplayPaymentStatus } from './DisplayPaymentStatus'
 import { styles } from '../../styles/GeneralStyles'
 
 // props.data = {

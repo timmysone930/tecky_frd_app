@@ -125,7 +125,7 @@ export const PrescriptionPaymentPage = (props: any) => {
                         payment: prescriptionDetail.prescription.payment,
                         pick_up_store: prescriptionDetail.prescription.pick_up_store,
                         pres_details: prescriptionDetail.prescription.pres_details,
-                        order_status: "paid",
+                        payment_status: "paid",
                     }
                 })
             })

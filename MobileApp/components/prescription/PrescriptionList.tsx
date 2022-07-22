@@ -1,6 +1,6 @@
 import React from 'react'
 import { FlatList, View, Text, TouchableOpacity } from 'react-native';
-import { DisplayOrderStatus } from "./DisplayOrderStatus"
+import { DisplayPaymentStatus } from "./DisplayPaymentStatus"
 import { styles } from "../../styles/RecordListStyle"
 //Redux
 import { store } from '../../redux/store';
@@ -11,7 +11,7 @@ interface Props {
         pres_code: string,
         doctor_name: string,
         created_at: string,
-        order_status: string,
+        payment_status: string,
         prescription: any
     }>,
     changePage: string,
@@ -53,7 +53,7 @@ export const PrescriptionList = (props: Props) => {
                             </Text>
                         </View>
                         <View>
-                            <DisplayOrderStatus orderStatus={statueDisplay[item.prescription.order_status]} />
+                            <DisplayPaymentStatus paymentStatus={statueDisplay[item.prescription.payment_status]} />
                         </View>
                     </TouchableOpacity>
                 )
