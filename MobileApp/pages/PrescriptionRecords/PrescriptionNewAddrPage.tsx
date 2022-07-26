@@ -26,24 +26,25 @@ export function PrescriptionNewAddrPage({ navigation }:any) {
         is_defaultValue: false
     }
     
-    const [formFilled, setFormFilled] = useState(false)
-
+    const [formFilled, setFormFilled] = useState<boolean>(false)
     const [input, setInput] = useState(blankContent)
-
     const [defaultValue, setDefaultValue] = useState("true");
     
     // Toast: Save Successful
     const toast = useToast();
 
     const save = async () => {
+
+        console.log("oh___no")
+
         if (!formFilled) {
+            console.log("oh no")
             return
         }
 
         const hkIdResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`);
-
         const hkId = (await hkIdResp.json()).id_number;
-        // console.log(hkIdResp);
+        
         console.log(hkId);
 
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/new-addr-book`, {
@@ -58,10 +59,7 @@ export function PrescriptionNewAddrPage({ navigation }:any) {
             })
         });
 
-        // console.log(resp);
         console.log(resp.status);
-
-        
         navigation.navigate("地址確認")
 
         toast.show({
@@ -113,6 +111,7 @@ export function PrescriptionNewAddrPage({ navigation }:any) {
                     width={200} 
                     size={"lg"} 
                     onPress={save}
+                    // isDisabled={!formFilled}
                 >
                     儲存
                 </Button>

@@ -46,7 +46,10 @@ export const AddressForm = (props: Props) => {
         second: props.addr.split("/nl/")[1]
     })
 
+
     useEffect( () => {
+
+        // console.log("Onh noooo")
         if ( 
             props.name.length > 0 &&
             props.phone.length == 11 &&
@@ -61,9 +64,11 @@ export const AddressForm = (props: Props) => {
             props.setAllFilled(true)
         }
         else {
+
             props.setAllFilled(false)
         }
-    })
+        
+    },[props])
 
     return (
         <>
@@ -81,6 +86,7 @@ export const AddressForm = (props: Props) => {
                 <FormControl.ErrorMessage leftIcon={<WarningOutlineIcon size="xs" />} isInvalid={props.name == ""}>
                     此項必須填寫
                 </FormControl.ErrorMessage>
+
                 <Input 
                     size="m"  
                     placeholder="聯絡人 (英文姓名)" 
@@ -264,7 +270,6 @@ export const AddressForm = (props: Props) => {
                     <Picker.Item label={item.chi} value={item.chi} key={item.eng}/>
                 ))} */}
 
-            
         </>
     )
 }
