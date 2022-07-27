@@ -182,7 +182,7 @@ export const LoginPage = (props: any) => {
                             render={({ field: { value } }) => (
                                 <View style={{width: "30%"}}>
                                     <DropdownSelectComponent 
-                                        placeholder={'電話區號 '} 
+                                        placeholder={'電話區號'} 
                                         data={phoneCodeArr}
                                         onChange={onPhoneCodeChange} 
                                         mode='other'
@@ -194,7 +194,16 @@ export const LoginPage = (props: any) => {
                         />
                         <Controller control={control} rules={{ required: true, }}
                             render={({ field: { onChange, onBlur, value } }) => (
-                                <TextInput keyboardType={'numeric'} textContentType={'telephoneNumber'} style={[styles.input,{width: "67%"}]} onBlur={onBlur} onChangeText={onChange} value={value} placeholder="e.g: 12345678" placeholderTextColor="#737474" />
+                                <TextInput 
+                                    keyboardType={'numeric'} 
+                                    textContentType={'telephoneNumber'} 
+                                    style={[ styles.input,{ width: "67%" }]} 
+                                    onBlur={onBlur} 
+                                    onChangeText={onChange} 
+                                    value={value} 
+                                    placeholder="e.g: 12345678" 
+                                    placeholderTextColor="#737474"
+                                />
                             )}
                             name="phoneNo"
                         />
@@ -269,6 +278,8 @@ const styles = StyleSheet.create({
     input: {
         borderColor: '#737474',
         padding: 10,
+        borderRadius: 2,
+
         borderWidth: 0.7,
         marginVertical: 8,
         color:'black',
