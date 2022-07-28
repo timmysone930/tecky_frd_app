@@ -48,19 +48,30 @@ export const DocSpecCardComponent = (props: any) => {
 
                 {spec.isSuccess &&
                     < View style={{ flexWrap: 'wrap', flexDirection: 'row', marginHorizontal: 15, marginBottom:20 }}>
-                        <TouchableHighlight key={`dr_type_${0}`} style={styles.drTypeCard} onPress={() => { props.props.navigation.navigate({ name: '醫生列表', params: { mode: '所有專科' } }) }} activeOpacity={1} underlayColor="#6d7f99" onHideUnderlay={() => setIsPress(0)}
+                        {/* <TouchableHighlight 
+                            key={`dr_type_${0}`} 
+                            style={styles.drTypeCard} 
+                            onPress={() => { props.props.navigation.navigate({ name: '醫生列表', params: { mode: '所有專科' } }) }} 
+                            activeOpacity={1} 
+                            underlayColor="#6d7f99" 
+                            onHideUnderlay={() => setIsPress(0)}
                             onShowUnderlay={() => { setIsPress(0 + 1) }}>
                             <>
                                 <Icon name={'hospital-o'} size={30} color={isPress === (0 + 1) ? 'white' : 'grey'} style={{ marginBottom: 10 }} />
                                 <Text style={isPress === (0 + 1) ? styles.drTypeTextAfterPressed : styles.drTypeTextBeforePressed}>所有專科</Text>
                             </>
-                        </TouchableHighlight>
+                        </TouchableHighlight> */}
                         {
                             spec.data.map((item:any, idx:number) => (
                                 <TouchableHighlight 
                                     key={`dr_type_${idx}`} 
                                     style={styles.drTypeCard} 
-                                    onPress={ () => { props.props.navigation.navigate({ name: '醫生列表', params: { mode: item} }) }} 
+                                    onPress={ () => { 
+                                        props.props.navigation.navigate({ 
+                                            name: '醫生列表',
+                                            params: { mode: item }
+                                        }) 
+                                    }} 
                                     activeOpacity={1} 
                                     underlayColor="#6d7f99" 
                                     onHideUnderlay={() => setIsPress(0)}
