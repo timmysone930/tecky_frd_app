@@ -111,9 +111,19 @@ export function InfoEditPage({ navigation }: any) {
         })
 
         if (resp.status == 201) {
-            toast.show({
-                description: `已送出驗證碼\n驗證碼: ${(await resp.json())}`
-            })
+            const backData = await resp.json();
+
+            if(backData.status){
+                toast.show({
+                    description: `已送出驗證碼\n驗證碼: ${backData.msg}`
+                })
+            }
+            else{
+                toast.show({
+                    description: `Error: ${backData.msg}`
+                })
+            }
+
         } else {
             toast.show({
                 description: "驗證碼發送故障，請再嘗試。"
