@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import { CheckIcon, Select } from 'native-base'
 import { useGetRosterSessionQuery } from '../../API/DoctorAPI';
+import moment from 'moment-timezone';
 
 interface Props {
     onChange: (value:string) => void,
     placeholder: string,
     timeValue: string,
     userToken:string,
+    selectedTime?: string
 }
 
 interface dataMapType {
@@ -25,6 +27,7 @@ export const ResSessionComponent = (props: Props) => {
 
     useEffect(() => {
         sessionData.refetch();
+        
     }, [sessionID])
     
     // 已選擇時段
@@ -42,14 +45,37 @@ export const ResSessionComponent = (props: Props) => {
                 selectFunction = <Select.Item label={`沒有可供應選擇的時段`} value={`沒有可供應選擇的時段`} />
             } 
             else {
-                // 有時間提供
-                // console.log(sessionData.currentData)
-                // const currentTime = new Date();
-                // console.log(currentTime);
 
-                selectFunction = sessionData.currentData.map((item: dataMapType, idx: number) => (
-                    <Select.Item label={`${item['start_at']} - ${item['end_at']}`} value={item['id']} key={`picker_date_${idx}`} />
-                ))
+                const currentTime = moment();
+                let hkTime = currentTime.clone().tz('Asia/Hong_Kong').format();
+
+                const currentTimeHours = hkTime.slice(11,16); // 15:31
+                const currentday = hkTime.slice(0,10); // 2022-08-01
+
+                // add 30 mins
+                let splitTime = currentTimeHours.split(":").map( (v) => +v );
+                if(splitTime[1] + 30 >= 60){
+                    splitTime[0] += 1;
+                    splitTime[1] -= 60;
+                }
+                const finalMinutesTime = splitTime.join(":")
+
+
+                if(props.selectedTime && currentday === props.selectedTime){
+        
+                    selectFunction = sessionData.currentData
+                    .filter( (v:any) => v.start_at >= finalMinutesTime)
+                    .map((item: dataMapType, idx: number) => (
+                        <Select.Item label={`${item['start_at']} - ${item['end_at']}`} value={item['id']} key={`picker_date_${idx}`} />
+                    ))
+                }
+                else{
+
+                    selectFunction = sessionData.currentData.map((item: dataMapType, idx: number) => (
+                        <Select.Item label={`${item['start_at']} - ${item['end_at']}`} value={item['id']} key={`picker_date_${idx}`} />
+                    ))
+                }
+
             }
         } else if (sessionData.isLoading) {
             selectFunction = <Select.Item label={`載入中...`} value={`載入中...`} />
@@ -58,6 +84,7 @@ export const ResSessionComponent = (props: Props) => {
         // 未選擇時段
         selectFunction = <Select.Item label={`請先選擇應診日期及時間`} value={`請先選擇應診日期及時間`} />
     }
+
     return (
         <Select 
             minWidth="120"

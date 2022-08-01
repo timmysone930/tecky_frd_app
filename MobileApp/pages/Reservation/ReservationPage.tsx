@@ -22,6 +22,7 @@ import { DropdownSelectComponent } from '../../components/utils/DropdownSelectCo
 
 import { styles } from '../../styles/GeneralStyles'
 
+
 // fetch to check patient status
 const checkPatient = async (id: string, token: string) => {
     try {
@@ -33,7 +34,7 @@ const checkPatient = async (id: string, token: string) => {
 
         if (response.status === 200) {
             const json = await response.json();
-            console.log('json', json)
+            // console.log('json', json)
             return { message: 'Found', memberCode: json.member_code }
         } 
         else {
@@ -72,8 +73,6 @@ export const ReservationPage = (props: any) => {
         }
     });
 
-    // console.log(docData.video_diag_fee)
-
     // Title value change function
     const onTitleChange = (itemValue: string) => { setValue("title", itemValue) };
 
@@ -105,7 +104,7 @@ export const ReservationPage = (props: any) => {
 
     // to get the roster data
     const rosterData = useGetRosterListByDocCodeQuery(id);
-    // console.log(rosterData);
+
 
     // Form data submit and navigate
     const onSubmit = async (data: ReservationType) => {
@@ -154,7 +153,7 @@ export const ReservationPage = (props: any) => {
     useEffect(() => {
         const updateUserInfo = async () => {
             if (userData.isSuccess && userData.data) {
-                console.log(userData.data);
+                // console.log(userData.data);
 
                 setValue('name', userData.data.name);
                 setValue('idNumber', userData.data.id_number);
@@ -229,6 +228,7 @@ export const ReservationPage = (props: any) => {
                                         placeholder={'請選擇應診時間'}
                                         timeValue={getValues('reservedTime')}
                                         userToken={userToken}
+                                        selectedTime={getValues('reservedDate')}
                                     />
                                 )}
                                 name="reservedSession"
