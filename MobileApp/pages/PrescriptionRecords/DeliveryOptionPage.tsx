@@ -73,7 +73,9 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, init)
         const result = resp.status === 200 ? (await resp.json()) : null
 
-        setInput(result.defaultAddress != null ? result.defaultAddress[0] : "")
+        setInput(result.defaultAddress != null ? result.defaultAddress[0] : "");
+
+        console.log("PICKUP store", result.pickUpStores)
 
         setAllowPickUp(result.pickUpStores != null ? result.pickUpStores : "")
         console.log(result.pickUpStores);
@@ -180,8 +182,9 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                             bg: "teal.600",
                                             endIcon: <CheckIcon size={5} />
                                         }}
+
                                         onValueChange={(itemValue) => {
-                                            const selectedStore = allowPickUp.filter((item: any)=> item.clinic_code == itemValue)[0]
+                                            const selectedStore = allowPickUp.filter( (item: any) => item.clinic_code == itemValue)[0]
                                             setPickUpClinic({
                                                 clinic_code: itemValue,
                                                 area: selectedStore.area,
@@ -191,11 +194,14 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
                                         }}
                                     >
                                         
-                                        {allowPickUp.map((item: any) => (
+                                        {allowPickUp
+                                        .filter( (v:any) => v.status)
+                                        .map( (item: any) => (
                                             <Select.Item 
                                                 label={`${item.area} - ${item.clinic_name}`} 
                                                 value={item.clinic_code} 
                                                 key={item.clinic_code}
+                                                isDisabled={!item.status}
                                             />
                                         ))}
 
