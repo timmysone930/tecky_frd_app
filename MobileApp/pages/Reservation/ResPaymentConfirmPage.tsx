@@ -31,9 +31,12 @@ export const setNotification = async (res_date: string, userCode: string, pushTi
     })
     
     const json = await res.json();
-    console.log('json', json.id)
-    let submitData:any = { "res_code":resCode, "one_signal":json.id }
-    console.log('submitData', submitData)
+
+    let submitData:any = { 
+        "res_code" : resCode,
+        "one_signal" : json.id
+    }
+    
     await fetch(`${Config.REACT_APP_API_SERVER}/reserve/oneSignal`, {
         method: 'PUT',
         headers: {
@@ -60,13 +63,16 @@ export const ResPaymentConfirmPage = (props: any) => {
             let time = parseInt(res_time.replace(':', ''), 10)
             if(time % 100 - 10 < 0){
                 time = time - 50 
-            }else {
+            }
+            else {
                 time = time -10
             }
+
             let pushTime;
             if(time.toString().length === 3){
                 pushTime = `0${time.toString().substring(0,1)}:${time.toString().substring(1, 3)}`
-            }else{
+            }
+            else{
                 pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
             }
             console.log(pushTime)

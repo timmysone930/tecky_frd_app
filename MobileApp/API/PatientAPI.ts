@@ -7,9 +7,7 @@ import Config from "react-native-config";
 // Define our single API slice object
 export const patientAPI = createApi({
   reducerPath: 'patientAPI',
-  // All of our requests will have URLs starting with '/http://XXXX'
   baseQuery: fetchBaseQuery({ baseUrl: `${Config.REACT_APP_API_SERVER}` }),
-  // The "endpoints" represent operations and requests for this server
   endpoints: builder => ({
     postPatientRegister: builder.mutation<QueryReturnValue, any>({
       query: (data) => ({
