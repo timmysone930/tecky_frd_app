@@ -53,11 +53,14 @@ export const ResSessionComponent = (props: Props) => {
                 const currentday = hkTime.slice(0,10); // 2022-08-01
 
                 // add 30 mins
-                let splitTime = currentTimeHours.split(":").map( (v) => +v );
-                if(splitTime[1] + 30 >= 60){
+                let splitTime = currentTimeHours.split(":").map( (v:string) => +v );
+                splitTime[1] += 30;
+
+                if(splitTime[1] >= 60){
                     splitTime[0] += 1;
                     splitTime[1] -= 60;
                 }
+               
                 const finalMinutesTime = splitTime.join(":")
 
                 if(props.selectedTime && currentday === props.selectedTime){
