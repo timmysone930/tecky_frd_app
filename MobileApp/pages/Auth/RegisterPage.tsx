@@ -1,6 +1,6 @@
 import { QueryReturnValue } from '@reduxjs/toolkit/dist/query/baseQueryTypes';
 import { Checkbox, useToast } from 'native-base';
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form';
 import { View, Text, SafeAreaView, TouchableOpacity, Image, TextInput, ScrollView } from 'react-native';
 import { useGetLoginSMSMutation, useGetNotUserSMSMutation, usePostRegisterInfoMutation } from '../../API/AuthAPI';
@@ -60,6 +60,10 @@ export const RegisterPage = (props: any) => {
     const [sendCodeBtn, setSendCodeBtn] = useState({
         isDisable: false,
     })
+
+    useEffect(() => {
+        console.log(groupValues2);
+    }, [groupValues2]);
 
     const intervalId = useRef(0 as any)
     const onSMSPress = async (inputData: any) => {
@@ -326,9 +330,13 @@ export const RegisterPage = (props: any) => {
                 </View>
                 <BottomLineComponent />
                 {/* Button to go back and next page */}
-                <TouchableOpacity style={[styles.button, { backgroundColor: Object.keys(dirtyFields).length < 6 ? "#93999e" : '#325C80' }]}
+                <TouchableOpacity 
+                    style={[styles.button, { 
+                        backgroundColor: 
+                            Object.keys(dirtyFields).length < 6 || getValues("regPolicyTwo").length === 0 || getValues("regPolicyOne").length === 0? "#93999e" : '#325C80' 
+                    }]}
                     onPress={handleSubmit(onSubmit)}
-                    disabled={Object.keys(dirtyFields).length < 6}
+                    disabled={Object.keys(dirtyFields).length < 6 || getValues("regPolicyTwo").length === 0 || getValues("regPolicyOne").length === 0}
                 >
                     <Text style={styles.buttonText}>繼續</Text></TouchableOpacity>
             </ScrollView>

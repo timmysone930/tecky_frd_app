@@ -25,7 +25,7 @@ export const ResRecordPage = (props: any) => {
         try {
             setRefreshing(true);
             recordData.refetch();
-            // console.log('recordData.data',recordData.data);
+            console.log('recordData.data', recordData);
             wait(2000).then(() => setRefreshing(false));
 
         } catch (e) {

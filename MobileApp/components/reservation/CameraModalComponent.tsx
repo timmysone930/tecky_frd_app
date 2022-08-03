@@ -92,12 +92,14 @@ export const CameraModalComponent = (props: modalProps) => {
 
                                 {/* Upload image*/}
                                 <TouchableOpacity 
-                                onPress={() => { 
-                                    launchImageLibrary({ 
-                                        selectionLimit: 1,
-                                        mediaType: 'photo',
-                                        includeBase64: false,
-                                    }, props.setResponse)
+                                onPress={async () => { 
+                                        await launchImageLibrary({ 
+                                            selectionLimit: 1,
+                                            mediaType: 'photo',
+                                            includeBase64: false,
+                                        }, props.setResponse);
+
+                                        props.setModalVisible(false);
                                     }}
                                 >
                                     <Text style={styles.textStyle}>從相冊上傳照片</Text>

@@ -2,6 +2,7 @@ import React from 'react'
 import { FlatList, View, Text, TouchableOpacity, RefreshControl } from 'react-native';
 import { ResRecordStatus } from './ResRecordStatus';
 import { styles } from '../../styles/RecordListStyle';
+import moment from 'moment';
 
 interface Props {
     data: readonly any[] | null | undefined,
@@ -11,7 +12,7 @@ interface Props {
 }
 
 export const ResRecordComponent = (props: Props) => {
-    console.log(props.data)
+    // console.log("props.data", props.data)
     return (
         <FlatList 
             data={props.data}
@@ -32,11 +33,16 @@ export const ResRecordComponent = (props: Props) => {
                         }} >
                         <View>
                             <Text style={[styles.resCode]}>{item.res_code}</Text>
-                            <Text style={[styles.contentFont]}>預約日期: {item.res_date}</Text>
+                            <Text style={[styles.contentFont]}>預約日期: {moment(item.res_date).format("YYYY-MM-DD")}</Text>
                             <Text style={[styles.contentFont]}>預約時間: {item.res_time.substring(0, 5)}</Text>
-                            {item.payment !== null && 
+                            {/* {item.payment !== null && 
                                 <Text style={[styles.contentFont, { color: 'red' }]}>
                                     {item.payment.payment_status ? "(已付款)" : "(待付款中)"} 
+                                </Text>
+                            } */}
+                            {item.payment_status !== null && 
+                                <Text style={[styles.contentFont, { color: 'red' }]}>
+                                    {item.payment_status ? "(已付款)" : "(待付款中)"} 
                                 </Text>
                             }
                         </View>
