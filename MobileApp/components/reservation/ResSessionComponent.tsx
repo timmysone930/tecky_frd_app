@@ -63,9 +63,7 @@ export const ResSessionComponent = (props: Props) => {
                
                 const finalMinutesTime = splitTime.join(":")
 
-
                 if(props.selectedTime && currentday === props.selectedTime){
-        
                     selectFunction = sessionData.currentData
                     .filter( (v:any) => v.start_at >= finalMinutesTime)
                     .map((item: dataMapType, idx: number) => (
@@ -73,7 +71,6 @@ export const ResSessionComponent = (props: Props) => {
                     ))
                 }
                 else{
-
                     selectFunction = sessionData.currentData.map((item: dataMapType, idx: number) => (
                         <Select.Item label={`${item['start_at']} - ${item['end_at']}`} value={item['id']} key={`picker_date_${idx}`} />
                     ))

@@ -19,7 +19,8 @@ const backgroundStyle = { backgroundColor: 'white', };
 export const PaymentPage = (props: any) => {
     // get JWT token
     const userToken = useSelector((state: any) => state.getUserStatus.token);
-    const toast = useToast()
+    const toast = useToast();
+
     // Radio Button
     const [radioValue, setRadioValue] = React.useState('PayPal');
     // get form data
@@ -31,6 +32,7 @@ export const PaymentPage = (props: any) => {
     // Register
     const [postPatientRegister] = usePostPatientRegisterMutation();
     const submitData = new FormData();
+
     // roster session
     const rosterSession = useGetReservedSessionByIdQuery({ rosterId: formData.reservedSession, token: userToken });
     // Reservation 
@@ -44,6 +46,7 @@ export const PaymentPage = (props: any) => {
     // submit disable
     const [submitStatus, setSubmitStatus] = React.useState(true);
     // redirect to paypal
+
     const redirectPaypal = async () => {
         try {  
 
@@ -91,6 +94,7 @@ export const PaymentPage = (props: any) => {
             return { status: 'error', data: { error } }
         }
     }
+
     // submit
     const onPress = async () => {
         setSubmitStatus(false)
@@ -118,32 +122,43 @@ export const PaymentPage = (props: any) => {
                 props.navigation.navigate({ name: '預約確認' })
                 return
             }
+
         }
+
         // refetch
         rosterSession.refetch();
         rosterClinicCode.refetch();
+
         // check session status
         if (rosterClinicCode.isSuccess) {
+
             if (rosterSession.currentData && Array.isArray(rosterSession.currentData) && rosterSession.currentData.length === 0) {
                 // selected session not enable
                 store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
                 store.dispatch(setMemberCode({ memberCode: '' }))
                 props.navigation.navigate({ name: '預約確認' })
-            } else {
+            } 
+            else {
                 try {
                     // hold session
                     const holdRes: any = await putHoldSession(formData.reservedSession)
                     console.log('holderes', holdRes)
+
                     if (holdRes !== undefined) {
+
                         if (holdRes.error && holdRes?.error.status === 400) {
                             store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
                             store.dispatch(setMemberCode({ memberCode: '' }))
                             props.navigation.navigate({ name: '預約確認' })
-                        } else if (holdRes.data && holdRes?.data.status === 'hold') {
+                        } 
+                        else if (holdRes.data && holdRes?.data.status === 'hold') {
                             // selected session are available
                             toast.show({
                                 description: "載入中"
                             })
+
+                            console.log(docInfo)
+
                             // member
                             // reservation data
                             let resData = {
@@ -168,8 +183,13 @@ export const PaymentPage = (props: any) => {
                                     "isCold": formData.isCold
                                 }
                             }
+
                             // create reservation data
-                            const reservationRes: any = await postPatientReservation({ data: resData, token: userToken })
+                            const reservationRes: any = await postPatientReservation({ 
+                                data: resData,
+                                token: userToken
+                            })
+
                             if (reservationRes?.data) {
 
                                 // payment
@@ -211,6 +231,7 @@ export const PaymentPage = (props: any) => {
                                     toast.show({
                                         description: "付款失敗"
                                     })
+
                                     store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
                                     store.dispatch(setMemberCode({ memberCode: '' }))
                                     props.navigation.navigate({ name: '預約確認' })
@@ -231,11 +252,13 @@ export const PaymentPage = (props: any) => {
                             }
                         }
                     }
-                } catch (err) {
+                } 
+                catch (err) {
                     console.log(err)
                 }
             }
-        } else if (rosterClinicCode.isError) {
+        } 
+        else if (rosterClinicCode.isError) {
             store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
             store.dispatch(setMemberCode({ memberCode: '' }))
             props.navigation.navigate({ name: '預約確認' })
@@ -282,6 +305,7 @@ export const PaymentPage = (props: any) => {
                     </>
                 }
             </ScrollView>
+
             {/* Button to go back and next page */}
             <View style={{ flexDirection: 'row' }}>
 
