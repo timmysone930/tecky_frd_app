@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "33402240354",
-    "project_id": "telemedicine-tecky-apps",
-    "storage_bucket": "telemedicine-tecky-apps.appspot.com"
+    "project_number": "367116338304",
+    "project_id": "telemodicineonesolution",
+    "storage_bucket": "telemodicineonesolution.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:33402240354:android:93f8e0f395a9ce01f9403b",
+        "mobilesdk_app_id": "1:367116338304:android:40aeb36aee3c01dff99265",
         "android_client_info": {
-          "package_name": "com.tecky.telemedicine"
+          "package_name": "com.onesolution.telemedicine"
         }
       },
       "oauth_client": [
         {
-          "client_id": "33402240354-n7oinua5iafosp7fl54ek5qehs4baai3.apps.googleusercontent.com",
+          "client_id": "367116338304-lfps8scuplkiuq3c3p41782pibh6oie5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAjZQD6EJslPtBWQam9XUKfsIWexbgJapc"
+          "current_key": "AIzaSyCnIlNYyyEHLTeehIJfW97jIS4Du2A3kJY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "33402240354-n7oinua5iafosp7fl54ek5qehs4baai3.apps.googleusercontent.com",
+              "client_id": "367116338304-lfps8scuplkiuq3c3p41782pibh6oie5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

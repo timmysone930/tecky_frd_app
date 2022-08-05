@@ -1,4 +1,4 @@
-package com.tecky.telemedicine.newarchitecture.modules;
+package com.onesolution.telemedicine.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

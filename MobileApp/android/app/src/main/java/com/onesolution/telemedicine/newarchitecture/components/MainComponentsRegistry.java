@@ -1,4 +1,4 @@
-package com.tecky.telemedicine.newarchitecture.components;
+package com.onesolution.telemedicine.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

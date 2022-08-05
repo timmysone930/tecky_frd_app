@@ -1,4 +1,4 @@
-package com.tecky.telemedicine.newarchitecture;
+package com.onesolution.telemedicine.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.tecky.telemedicine.BuildConfig;
-import com.tecky.telemedicine.newarchitecture.components.MainComponentsRegistry;
-import com.tecky.telemedicine.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.onesolution.telemedicine.BuildConfig;
+import com.onesolution.telemedicine.newarchitecture.components.MainComponentsRegistry;
+import com.onesolution.telemedicine.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
