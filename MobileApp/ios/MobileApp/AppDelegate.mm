@@ -7,7 +7,7 @@
 #import <React/RCTAppSetupUtils.h>
 
 // paypal
-// #import "RNPaypal.h"
+#import "RNPaypal.h"
 
 #if RCT_NEW_ARCH_ENABLED
 #import <React/CoreModulesPlugins.h>
