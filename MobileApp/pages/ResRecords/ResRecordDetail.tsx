@@ -296,7 +296,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                     : null
                 }
 
-                { (reservationData.payment_status === null || !reservationData.payment_status) &&
+                { (reservationData.payment_status === null || !reservationData.payment_status ) && reservationData.approval_status === "wait_for_payment" &&
                     <>
                         <TouchableOpacity style={styles.fullButton} onPress={onClickPaypal}>
                             <Text style={styles.buttonText}>

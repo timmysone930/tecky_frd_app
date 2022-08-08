@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, SafeAreaView, TouchableOpacity, Dimensions, } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useSelector } from 'react-redux';
@@ -54,6 +54,10 @@ export const ResPaymentConfirmPage = (props: any) => {
         const rosterStatus = useSelector((state: any) => state.getPaymentStatus);
         const userCode = useSelector((state: any) => state.getUserStatus.member_code);
         const userToken = useSelector((state: any) => state.getUserStatus.token);
+
+        useEffect(() => {
+            console.log(rosterStatus.paymentRoster)
+        }, [rosterStatus.paymentRoster]);
     
         if (rosterStatus.paymentRoster === 'true') {
             // To get the param passing from the previous screen
@@ -96,6 +100,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                             </View>
                         </>
                     }
+
                     {rosterStatus.paymentRoster === 'full' &&
                         <>
                             <View style={{ marginTop: 20 }}>
@@ -110,6 +115,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                             </View>
                         </>
                     }
+
                     {rosterStatus.paymentRoster === 'booked' &&
                         <>
                             <View style={{ marginTop: 20 }}>
@@ -124,6 +130,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                             </View>
                         </>
                     }
+
                     {rosterStatus.paymentRoster === 'error' &&
                         <>
                             <View style={{ marginTop: 20 }}>
@@ -138,6 +145,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                             </View>
                         </>
                     }
+
                     {rosterStatus.paymentRoster === 'false' &&
                         <>
                             <View style={{ marginTop: 20 }}>
@@ -152,6 +160,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                             </View>
                         </>
                     }
+
                 </View>
             </SafeAreaView>
         )
