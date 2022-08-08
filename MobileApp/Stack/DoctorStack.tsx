@@ -12,6 +12,7 @@ import { PaymentPage } from '../pages/Reservation/ResPaymentPage';
 import { ResPaymentConfirmPage } from '../pages/Reservation/ResPaymentConfirmPage';
 import { useSelector } from 'react-redux';
 import { LoginStacks } from './LoginStack';
+import { ResPaymentBookingConfirmPage } from '../pages/Reservation/ResPaymentBookingConfirmPage';
 
 const DoctorStack = createStackNavigator();
 
@@ -43,6 +44,7 @@ export const InnerDoctorStacks = () => {
             <InnerDoctorStack.Screen name="預約須知" component={ResPolicyPage} />
             <InnerDoctorStack.Screen name="確認預約資料" component={ResDetailConfirmPage} />
             <InnerDoctorStack.Screen name="付款" component={PaymentPage} />
+            <InnerDoctorStack.Screen name="確認審判預約" component={ResPaymentBookingConfirmPage} />
             <InnerDoctorStack.Screen 
                 name="預約確認" 
                 component={ResPaymentConfirmPage} 

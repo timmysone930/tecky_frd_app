@@ -87,3 +87,7 @@ Fixed email display issues and notifications to phone
 
 
 yarn react-native generate-bootsplash images/telemedicineLogo.png --background-color=FFFFFF --logo-width=100 --assets-path=assets --flavor=main
+
+https://developer.paypal.com/api/rest/authentication/
+
+curl -v -X POST "https://api-m.sandbox.paypal.com/v1/oauth2/token" -u "AaEw72ZqVvA71FfmlZRmj6k-rSJrfD1CJsKe-j7tZk_O_fgRHKbZOFVo3A77vjTAeToR8damXiWGnloO:EAAQX3S73WjUwj3klcXAMFgWvqzVHPsjkf37lKRnxxg_17wSbbYtCUvcKKAB2sgLkSxZ1Dmu2NKH4Gna" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=client_credentials"

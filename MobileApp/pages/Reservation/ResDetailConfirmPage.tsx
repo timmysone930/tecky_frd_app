@@ -33,7 +33,11 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
     let reserveSession: string;
     let rowCellArr: any;
 
-    const rosterSession = useGetReservedSessionByIdQuery({ rosterId: formData.reservedSession, token: userToken });
+    const rosterSession = useGetReservedSessionByIdQuery({ 
+        rosterId: formData.reservedSession,
+        token: userToken
+    });
+
     if (rosterSession.isSuccess) {
         // console.log(formData)
         // console.log("docInfo", docInfo.docData.video_diag_fee)
@@ -59,6 +63,10 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
             props.navigation.navigate({ name: '預約確認' })
         }
     }, [rosterSession])
+
+    useEffect(() => {
+        console.log(docInfo.docData)
+    }, []);
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
@@ -94,9 +102,14 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
 
                 <TouchableOpacity 
                     style={[styles.button, { backgroundColor: '#325C80' }]}
-                    onPress={() => props.navigation.navigate({ name: '付款' })}
+                    // onPress={() => props.navigation.navigate({ 
+                    //     name: docInfo.docData.approve_needed === 1 ? '確認審判預約' : '付款'
+                    // })}
+                    onPress={() => props.navigation.navigate({ 
+                        name: '付款'
+                    })}
                 >
-                    <Text style={styles.buttonText}>前往付款</Text>
+                    <Text style={styles.buttonText}>{ docInfo.docData.approve_needed === 1 ? "前往預約" : "前往付款"}</Text>
                 </TouchableOpacity>
 
             </View>

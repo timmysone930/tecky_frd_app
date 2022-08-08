@@ -7,7 +7,7 @@ import { SearchComponent } from '../../components/utils/SearchComponent';
 import {styles} from '../../styles/DoctorStyle';
 import { useNavigation } from '@react-navigation/native';
 
-interface dataType{
+interface dataType {
     "clinic": [[Object]], 
     "doctor_code": string, 
     "doctor_des": string, 
@@ -34,7 +34,7 @@ export const DocListPage: React.FC = (prop: any) => {
 
     const [searchQuery, setSearchQuery] = React.useState('');
     const [refreshing, setRefreshing] = React.useState(false);
-    const [dBList, setDbList] =React.useState<any>([]);
+    const [dBList, setDbList] = React.useState<any>([]);
 
     const { mode } = prop.route.params;
 
@@ -61,6 +61,7 @@ export const DocListPage: React.FC = (prop: any) => {
     // set dbLIst
     useEffect( () => {
         setDbList(data.data)
+        console.log("DATA", data.data)
     },[data.isFetching])
 
 
@@ -103,7 +104,8 @@ export const DocListPage: React.FC = (prop: any) => {
             prop.navigation.navigate('相關醫生', {
                 screen: '醫生詳情',
                 params: {
-                    id: props.item.doctor_code, docData: {
+                    id: props.item.doctor_code, 
+                    docData: {
                         name: props.item.name, 
                         gender: props.item.gender, 
                         id: props.item.doctor_code, 
@@ -113,7 +115,8 @@ export const DocListPage: React.FC = (prop: any) => {
                         clinic: props.item.clinic, 
                         spec_name: props.item.spec_name, 
                         video_diag_fee:props.item.video_diag_fee, 
-                        status:props.item.status
+                        status:props.item.status,
+                        approve_needed: props.item.approve_needed
                     }
                 },
             })
