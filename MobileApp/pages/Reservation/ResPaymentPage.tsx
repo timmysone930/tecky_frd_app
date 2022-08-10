@@ -66,8 +66,8 @@ export const PaymentPage = (props: any) => {
             const totalPay = docInfo.docData.video_diag_fee+"" || "9999"
             // For one time payments
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
-                // `${Config.PAYPAL}`
-                `sandbox_v2wcsz62_4f9xyp2kmsgdt7d9`
+                `${Config.PAYPAL}`
+                // `sandbox_v2wcsz62_4f9xyp2kmsgdt7d9`
                 , {
                     amount: totalPay, // required
                     currency: 'HKD',

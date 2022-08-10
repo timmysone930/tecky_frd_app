@@ -153,7 +153,7 @@ export const ResPaymentBookingConfirmPage = (props: any) => {
                                 toast.show({
                                     description: "預約成功"
                                 })
-                                console.log("first")
+                                // console.log("first")
 
                                 store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
                                 store.dispatch(setMemberCode({ memberCode: '' }))
