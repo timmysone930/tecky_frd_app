@@ -7,7 +7,7 @@ import { useGetReservedSessionByIdQuery, useGetRosterByIdQuery } from '../../API
 import { usePostPatientRegisterMutation, usePostPatientReservationMutation, usePutEnableSessionMutation, usePutHoldSessionMutation } from '../../API/PatientAPI';
 import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { store } from '../../redux/store';
-// import { requestOneTimePayment } from 'react-native-paypal';
+import { requestOneTimePayment } from 'react-native-paypal';
 import { useToast } from 'native-base';
 import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
 import { setMemberCode } from '../../redux/slice';
@@ -51,42 +51,43 @@ export const PaymentPage = (props: any) => {
         try {  
 
             // now just assume the payment is always success (06/07/2022)
-            return { 
-                status: 'success', 
-                data: { 
-                    'nonce': "DummyDummyDummyDummy", 
-                    'payerId': "4124-4242-4242-4242", 
-                    'email': "dummy@gmail.com", 
-                    "firstName": "dummy", 
-                    "lastName": "Chan", 
-                    "phone": "85298765432" 
-                } 
-            }
-
-            // For one time payments
-            // const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
-            //     `${Config.PAYPAL}`
-            //     , {
-            //         amount: `${Config.Res_code}`, // required
-            //         currency: 'HKD',
-            //         localeCode: 'zh_HK',
-            //         shippingAddressRequired: false,
-            //         userAction: 'commit', // display 'Pay Now' on the PayPal review page
-            //         intent: 'authorize',
-            //     }
-            // );
-
             // return { 
             //     status: 'success', 
             //     data: { 
-            //         'nonce': nonce, 
-            //         'payerId': payerId, 
-            //         'email': email, 
-            //         "firstName": firstName, 
-            //         "lastName": lastName, 
-            //         "phone": phone 
+            //         'nonce': "DummyDummyDummyDummy", 
+            //         'payerId': "4124-4242-4242-4242", 
+            //         'email': "dummy@gmail.com", 
+            //         "firstName": "dummy", 
+            //         "lastName": "Chan", 
+            //         "phone": "85298765432" 
             //     } 
             // }
+
+            // For one time payments
+            const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
+                // `${Config.PAYPAL}`
+                `sandbox_v2wcsz62_4f9xyp2kmsgdt7d9`
+                , {
+                    amount: `300`, // required
+                    currency: 'HKD',
+                    localeCode: 'zh_HK',
+                    shippingAddressRequired: false,
+                    userAction: 'commit', // display 'Pay Now' on the PayPal review page
+                    intent: 'authorize',
+                }
+            );
+
+            return { 
+                status: 'success', 
+                data: { 
+                    'nonce': nonce, 
+                    'payerId': payerId, 
+                    'email': email, 
+                    "firstName": firstName, 
+                    "lastName": lastName, 
+                    "phone": phone 
+                } 
+            }
 
         } catch (error) {
             console.error(error);

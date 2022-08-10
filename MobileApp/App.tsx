@@ -10,7 +10,7 @@ import { InnerLoginStacks } from './Stack/LoginStack';
 import { InnerPrescriptionStacks } from './Stack/PrescriptionStack';
 
 import { NativeBaseProvider } from 'native-base';
-import RNBootSplash from "react-native-bootsplash";
+// import RNBootSplash from "react-native-bootsplash";
 
 const Stack = createStackNavigator();
 
@@ -18,7 +18,8 @@ const App = () => {
   return (
     <Provider store={store}>
       <NativeBaseProvider>
-        <NavigationContainer onReady={() => RNBootSplash.hide()}>
+        {/* <NavigationContainer onReady={() => RNBootSplash.hide()}> */}
+        <NavigationContainer>
           <Stack.Navigator 
             initialRouteName='返回' 
             screenOptions={{ headerStyle: { backgroundColor: '#245C84' }, headerTintColor: 'white' }}

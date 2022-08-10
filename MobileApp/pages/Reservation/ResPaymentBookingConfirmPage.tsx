@@ -7,7 +7,6 @@ import { useGetReservedSessionByIdQuery, useGetRosterByIdQuery } from '../../API
 import { usePostPatientRegisterMutation, usePostPatientReservationMutation, usePutEnableSessionMutation, usePutHoldSessionMutation } from '../../API/PatientAPI';
 import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { store } from '../../redux/store';
-// import { requestOneTimePayment } from 'react-native-paypal';
 import { useToast } from 'native-base';
 // import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
 import { setMemberCode } from '../../redux/slice';
