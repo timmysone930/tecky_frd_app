@@ -173,7 +173,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             //     } 
             // }
 
-            let totalPay = reservationData.res_fee+"" || 9999+""
+            const totalPay = reservationData.res_fee+"" || 9999+""
             // For one time payments
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
                 `${Config.PAYPAL}`
@@ -190,6 +190,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             return { 
                 status: 'success',
                 data: { 
+                    'payAmount': totalPay,
                     'nonce': nonce,
                     'payerId': payerId,
                     'email': email,
@@ -223,7 +224,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             let paymentData = { 
                 "gateway": "paypal",
                 "payment_id": paypalRes.data.nonce,
-                "amount": `${Config.Res_code}`,
+                "amount": paypalRes.data.payAmount,
                 "payment_status": true,
                 "type": "reservation",
                 "payment_type": "paypal",

@@ -63,12 +63,13 @@ export const PaymentPage = (props: any) => {
             //     } 
             // }
 
+            const totalPay = docInfo.docData.video_diag_fee+"" || "9999"
             // For one time payments
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
                 // `${Config.PAYPAL}`
                 `sandbox_v2wcsz62_4f9xyp2kmsgdt7d9`
                 , {
-                    amount: `300`, // required
+                    amount: totalPay, // required
                     currency: 'HKD',
                     localeCode: 'zh_HK',
                     shippingAddressRequired: false,
@@ -79,7 +80,8 @@ export const PaymentPage = (props: any) => {
 
             return { 
                 status: 'success', 
-                data: { 
+                data: {
+                    'payAmount': totalPay,
                     'nonce': nonce, 
                     'payerId': payerId, 
                     'email': email, 
@@ -204,7 +206,7 @@ export const PaymentPage = (props: any) => {
                                     let paymentData = { 
                                         "gateway": "paypal", 
                                         "payment_id": paypalRes.data.nonce,
-                                        "amount": `${Config.Res_code}`,
+                                        "amount": paypalRes.data.payAmount,
                                         "payment_status": true,
                                         "type": "reservation",
                                         "payment_type": "paypal",
