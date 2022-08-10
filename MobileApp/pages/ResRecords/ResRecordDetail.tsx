@@ -43,6 +43,10 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
     const [reservationData, setReservationData] = useState(data.item)
 
+    useEffect(() => {
+        console.log("reservationDatareservationData", reservationData)
+    }, [reservationData]);
+
     // let recordData = useGetReservationListQuery();
     // get doctor name
     const docData = useGetOneDoctorQuery({docCode:docCode, token:userToken});
@@ -168,12 +172,13 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             //         "phone": "85298765432" 
             //     } 
             // }
-            
+
+            let totalPay = reservationData.res_fee+"" || 9999+""
             // For one time payments
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
                 `${Config.PAYPAL}`
                 , {
-                    amount: `200`, // required
+                    amount: totalPay, // required
                     currency: 'HKD',
                     localeCode: 'zh_HK',
                     shippingAddressRequired: false,
