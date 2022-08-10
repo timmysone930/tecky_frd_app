@@ -7,7 +7,7 @@ import com.facebook.react.ReactApplication;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 
 // paypal
-// import com.smarkets.paypal.RNPaypalPackage;
+import com.smarkets.paypal.RNPaypalPackage;
 
 import com.imagepicker.ImagePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -37,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
+          packages.add(new RNPaypalPackage());
           return packages;
         }
 
