@@ -6,6 +6,7 @@
     "ios": "react-native run-ios",
     "ad": "react-native run-android --appIdSuffix beta",
     "android": "react-native run-android",
+    "runIos": "SET ENVFILE=.env.development && react-native run-ios",
     "runAndroid": "SET ENVFILE=.env.development && react-native run-android --verbose",
     "ra": "SET ENVFILE=.env.development && react-native run-android --verbose",
     "buildAndroidAAB": "python incVersion.py && SET ENVFILE=.env.production && cd android && ./gradlew bundleRelease",
