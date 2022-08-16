@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.org.reactjs.native.example.MobileApp20220423.onesignal</string>
+		<string>group.telemedicine.onesolution.hk.onesignal</string>
 	</array>
 </dict>
 </plist>
