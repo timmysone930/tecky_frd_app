@@ -169,10 +169,11 @@ export const LoginPage = (props: any) => {
             <ScrollView>
                 <View style={styles.logoStyle}>
                     <Image 
-                        style={{ width: 200, height: 120 }} 
+                        style={{ width: 300, height: 120 }} 
                         resizeMode="contain" 
                         resizeMethod="scale" 
-                        source={{ uri: `${Config.REACT_APP_API_SERVER}/swindonLogo.jpg`, }} 
+                        source={{ uri: `https://telemedicine-web.vercel.app/swindonLogoBigger.jpg`, }} 
+                        // source={{ uri: `${Config.REACT_APP_API_SERVER}/swindonLogo.jpg`, }} 
                     />
                 </View>
                 <View style={styles.pageMargin}>
@@ -264,7 +265,7 @@ export const LoginPage = (props: any) => {
 const styles = StyleSheet.create({
     logoStyle: {
         marginVertical: 20,
-        paddingLeft: '25%',
+        paddingLeft: '11%',
     },
     pageMargin: {
         padding: 15,
