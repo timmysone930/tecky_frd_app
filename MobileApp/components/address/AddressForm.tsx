@@ -41,9 +41,12 @@ const areaForMap: any = {
 export const AddressForm = (props: Props) => {
 
     // Handle Address
-    const [addr, setAddr] = useState({
+    const [addr, setAddr] = props.addr.includes('/nl/') ? useState({
         first: props.addr.split("/nl/")[0],
         second: props.addr.split("/nl/")[1]
+    }) : useState({
+        first: props.addr,
+        second: ''
     })
 
 
@@ -56,10 +59,12 @@ export const AddressForm = (props: Props) => {
             parseInt(props.phone) != NaN &&
             props.area.length > 0 &&
             props.district.length > 0 && 
-            props.addr.split('/nl/')[0].length > 0  &&
-            props.addr.split('/nl/')[1].length > 0  &&
-            props.addr.split('/nl/')[0] != "undefined" &&
-            props.addr.split('/nl/')[1] != "undefined" ) 
+            props.addr.length > 0 
+            // props.addr.split('/nl/')[0].length > 0  &&
+            // props.addr.split('/nl/')[1].length > 0  &&
+            // props.addr.split('/nl/')[0] != "undefined" &&
+            // props.addr.split('/nl/')[1] != "undefined" 
+            ) 
         {
             props.setAllFilled(true)
         }
@@ -242,18 +247,21 @@ export const AddressForm = (props: Props) => {
                     mb='1' 
                     placeholder={"地址行 2"} 
                     value={addr.second} 
-                    isInvalid={props.addr.length == 0} 
+                    isRequired={false}
+                    // isInvalid={props.addr.length == 0} 
                     onChangeText={text =>{
-                        setAddr({...addr, second: text})
-                        props.setInput({
-                            ...props.input,
-                            address: addr.first+"/nl/"+text
-                        })
+                        if (text) {
+                            setAddr({...addr, second: text})
+                            props.setInput({
+                                ...props.input,
+                                address: addr.first+"/nl/"+text
+                            })
+                        } 
                     }}
                 />
                 <FormControl.ErrorMessage 
                     leftIcon={<WarningOutlineIcon size="xs" />} 
-                    isInvalid={addr.second == "" || addr.second == undefined}
+                    // isInvalid={addr.second == "" || addr.second == undefined}
                 >
                     此項必須填寫
                 </FormControl.ErrorMessage>
