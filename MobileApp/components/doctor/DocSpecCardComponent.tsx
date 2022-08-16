@@ -41,7 +41,7 @@ export const DocSpecCardComponent = (props: any) => {
                     />
                 }
             >
-                <Text style={styles.indexTitle}>選擇專科服務類型</Text>
+                {/* <Text style={styles.indexTitle}>選擇專科服務類型</Text> */}
 
                 {spec.isLoading && <SpinnerComponent />}
                 {spec.isError && <Text style={[styles.title, , styles.t_center]}>載入出現錯誤...</Text>}
