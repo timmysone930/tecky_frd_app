@@ -87,10 +87,17 @@ export const LoginPage = (props: any) => {
         // Fetching
         try {
             const res: any = await getLoginSMS({ 'phone': inputData.phoneCode + inputData.phoneNo })
+
             let code = res.data ? res.data : res.error.data.message ? res.error.data.message : res.error.data
             // let code = (res.error && res.error.data) ? res.error.data.message ? res.error.data.message : res.error.data : ( res.data ? res.data : null);
 
-            console.log(res)
+            console.log(res);
+
+            if(code === "Phone number not found"){
+                props.navigation.navigate({ name: '註冊界面', });
+                return
+            }
+
             toast.show({
                 description: "已送出驗證碼"
             })
@@ -98,9 +105,15 @@ export const LoginPage = (props: any) => {
                 duration: 12000,
                 description: `SMS Code: ${code}`
             })
+
         } catch (e: any) {
             let code = e.error && e.error.data ? e.error.data : null
-            console.log('dllm', e)
+
+            if(code === "Phone number not found"){
+                props.navigation.navigate({ name: '註冊界面', });
+                return
+            }
+
             toast.show({
                 duration: 12000,
                 description: `SMS Code: ${code}`

@@ -51,7 +51,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
     // get doctor name
     const docData = useGetOneDoctorQuery({docCode:docCode, token:userToken});
     // console.log('docData',docData)
-    let rowCellArr: [string, string, string, string];
+    let rowCellArr: [string, string, string, string]; // code, doctorName, resDate, restime
     if (docData.isSuccess) {
         rowCellArr = [
             resCode,
@@ -86,17 +86,19 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         let currentFullTime = `${hours}:${mins < 10 ? (`0` + mins) : mins}`
 
         // reservation time
-        const resFullDate = data.item.res_date
+        const resFullDate = data.item.res_date.slice(0,10)
         const resHours = parseInt(data.item.res_time.split(":")[0])
         const resMins = parseInt(data.item.res_time.split(":")[1]) - 5
 
         // reservation end time
         let resEndHours: number = resHours
         let resEndMins: number = resMins + 30
+
         if (resEndMins >= 60) {
             resEndHours += 1
             resEndMins -= 60
         }
+
         // reservation time range
         const resStart = `${resHours}:${resMins < 10 ? (`0` + resMins) : resMins}`
         const resEnd = `${resEndHours}:${resEndMins < 10 ? (`0` + resEndMins) : resEndMins}`
@@ -107,12 +109,19 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         console.log(currentFullTime, range);
         console.log(reservationData);
         console.log(fullDate, resFullDate)
-        if (reservationData.status == 'booked' 
+
+        // if(reservationData.video_url !== null){
+        //     setButtonText(ButtonText.start);
+        //     return
+        // }
+
+        if (
+            reservationData.status == 'booked' 
             && reservationData.video_url == null 
             && fullDate == resFullDate 
             // && isInRange(currentFullTime, range)
         ) {
-
+       
             // Start Fetching every mins
             intervalId.current = setInterval(async () => {
                 // refetching
@@ -275,14 +284,24 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 <BottomLineComponent />
 
                 {docData.isLoading && <SpinnerComponent />}
+
                 {docData.isSuccess &&
                     rowTitleArr.map((item, idx) => (
                         <View 
                             style={[backgroundStyle, styles.flexRow, { marginBottom: 1, marginHorizontal: 15 }]} 
                             key={`confirm_row_${idx}`}
                         >
-                            <View style={{ flex: 1.3 }}><Text style={styles.rowTitle}>{item}</Text></View>
-                            <View style={{ flex: 3 }}><Text style={styles.rowCellText}>{rowCellArr[idx]}</Text></View>
+                            <View style={{ flex: 1.3 }}>
+                                <Text style={styles.rowTitle}>
+                                    {item}
+                                </Text>
+                            </View>
+
+                            <View style={{ flex: 3 }}>
+                                <Text style={styles.rowCellText}>
+                                    { idx === 2 ? rowCellArr[idx].slice(0,10) : rowCellArr[idx] }
+                                </Text>
+                            </View>
                         </View>
                     ))
                 }
@@ -293,8 +312,12 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                         style={buttonText == ButtonText.start ? styles.fullButton : styles.disableButton}
                         onPress={() => Linking.openURL(reservationData.video_url)}
                     >
-                        <Text style={styles.buttonText}>{buttonText}</Text></TouchableOpacity> :
-                    null}
+                        <Text style={styles.buttonText}>
+                            {buttonText}
+                        </Text>
+                    </TouchableOpacity> 
+                    : null
+                }
 
                 {reservationData.status === 'cancel' 
                     ?   <Text style={[styles.warning, styles.textCenter, { marginVertical: 20, }]}>

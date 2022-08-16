@@ -103,7 +103,7 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
                 <TouchableOpacity 
                     style={[styles.button, { backgroundColor: '#325C80' }]}
                     onPress={() => props.navigation.navigate({ 
-                        name: docInfo.docData.approve_needed === 1 ? '確認審判預約' : '付款'
+                        name: docInfo.docData.approve_needed === 1 ? '確認審批預約' : '付款'
                     })}
                     // onPress={() => props.navigation.navigate({ 
                     //     name: '付款'

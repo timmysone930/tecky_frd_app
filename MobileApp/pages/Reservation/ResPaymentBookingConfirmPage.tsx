@@ -1,19 +1,18 @@
 import React from 'react'
-import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image, Platform } from 'react-native';
+import { View, Text, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native';
 import Config from 'react-native-config';
-// import { RadioButton } from 'react-native-paper';
+
 import { useSelector } from 'react-redux';
 import { useGetReservedSessionByIdQuery, useGetRosterByIdQuery } from '../../API/DoctorAPI';
-import { usePostPatientRegisterMutation, usePostPatientReservationMutation, usePutEnableSessionMutation, usePutHoldSessionMutation } from '../../API/PatientAPI';
+import { usePostPatientRegisterMutation, usePutHoldSessionMutation } from '../../API/PatientAPI';
 import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { store } from '../../redux/store';
 import { useToast } from 'native-base';
-// import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
+
 import { setMemberCode } from '../../redux/slice';
 
 import { styles } from '../../styles/GeneralStyles'
-// import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
-// import { ResRecordStatus } from '../../components/reservationRecord/ResRecordStatus';
+
 
 function timer(t:number):Promise<boolean>{
     return new Promise( rec => {
@@ -202,14 +201,51 @@ export const ResPaymentBookingConfirmPage = (props: any) => {
                 style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}
             >
                 <View>
-                    <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>
-                        預約費用：$ 0
+                    {/* <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>
+                        預約編號: {formData.idNumber}
+                    </Text> */}
+
+                    <Text  style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>
+                        預約日期: {formData.reservedDate}
+                    </Text>
+
+                    <Text style={[styles.subTitle, styles.ph_10,  { marginLeft: 5 }]}>
+                        預約時段: {`${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}`}
+                    </Text>
+
+                    {/* if you can read this, I just realize they dont upload or store the regarding booking spec_name to the end*/}
+                    {/* Add oil if you can fix this and discover it */}
+                    <Text style={[styles.subTitle,  styles.ph_10,  { marginLeft: 5, marginTop: 20 }]}>
+                        科目: { docInfo.docData.spec_name[0] }
                     </Text>
 
                     <Text style={[styles.subTitle, styles.ph_10, { marginLeft: 5 }]}>
                         醫生：{ docInfo.docData.name }
                     </Text>
 
+                    <Text style={[styles.subTitle, styles.ph_10, { marginLeft: 5, marginTop: 20 }]}>
+                        應診者： { formData.name }
+                    </Text>
+
+                    <Text style={[styles.subTitle, styles.ph_10, { marginLeft: 5 }]}>
+                        身份證類型：{ formData.idType }
+                    </Text>
+
+                    <Text style={[styles.subTitle, styles.ph_10, { marginLeft: 5 }]}>
+                        身份證編號：{ formData.idNumber }
+                    </Text>
+                    
+                    <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>
+                        預約費用：待更新 
+                    </Text>
+
+                    <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>
+                        此為預約請求，問診費用待確定後會更新及另收取。注意手機應用程式通知，謝謝。
+                    </Text>
+
+                    <Text style={[styles.subTitle, styles.mv_15, styles.ph_10, styles.pv_10, { marginLeft: 5 }]}>
+                        如有查詢可致電+852 2951 1988 
+                    </Text>
          
     
                 </View>

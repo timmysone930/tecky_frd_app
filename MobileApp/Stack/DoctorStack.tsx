@@ -36,15 +36,15 @@ export const InnerDoctorStacks = () => {
         >
             <InnerDoctorStack.Screen name="醫生詳情" component={DocDetailPage} />
             {isLogin
-                ? <InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} options={{headerShown: true }}/>
-                : <InnerDoctorStack.Screen name="預約醫生" component={LoginStacks} options={{headerShown: false }}/>
+                ? <InnerDoctorStack.Screen name="預約醫生" component={ReservationPage} options={{ headerShown: true }}/>
+                : <InnerDoctorStack.Screen name="預約醫生" component={LoginStacks} options={{ headerShown: false }}/>
             }
             <InnerDoctorStack.Screen name="上傳身份證明文件" component={ResAddInfoPage} />
             <InnerDoctorStack.Screen name="健康申報表" component={ResHealthFormPage} />
             <InnerDoctorStack.Screen name="預約須知" component={ResPolicyPage} />
             <InnerDoctorStack.Screen name="確認預約資料" component={ResDetailConfirmPage} />
             <InnerDoctorStack.Screen name="付款" component={PaymentPage} />
-            <InnerDoctorStack.Screen name="確認審判預約" component={ResPaymentBookingConfirmPage} />
+            <InnerDoctorStack.Screen name="確認審批預約" component={ResPaymentBookingConfirmPage} options={{ title: "預約詳情" }} />
             <InnerDoctorStack.Screen 
                 name="預約確認" 
                 component={ResPaymentConfirmPage} 
