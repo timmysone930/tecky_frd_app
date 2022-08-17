@@ -2,7 +2,7 @@ import 'react-native-gesture-handler';
 
 import { Platform, AppRegistry } from 'react-native';
 import App from './App';
-import { name as appName } from './app.json';
+// import { name as appName } from './app.json';
 // one signal
 import OneSignal from 'react-native-onesignal';
 import Config from "react-native-config";
