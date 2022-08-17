@@ -26,7 +26,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>org.reactjs.native.example.MobileApp20220423.payments</string>
+			<string>telemedicine.onesolution.hk.payments</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>payments</string>
@@ -102,8 +102,6 @@
 	<array>
 		<string>armv7</string>
 	</array>
-	<key>UIRequiresFullScreen</key>
-	<true/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
