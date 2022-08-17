@@ -691,7 +691,7 @@
 				CODE_SIGN_ENTITLEMENTS = MobileApp/MobileApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 5N5D5YW3R6;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = MobileApp/Info.plist;
@@ -725,7 +725,7 @@
 				CODE_SIGN_ENTITLEMENTS = MobileApp/MobileApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = 5N5D5YW3R6;
 				INFOPLIST_FILE = MobileApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -760,7 +760,7 @@
 				CODE_SIGN_ENTITLEMENTS = OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 5N5D5YW3R6;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -802,7 +802,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 14;
+				CURRENT_PROJECT_VERSION = 15;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 5N5D5YW3R6;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
