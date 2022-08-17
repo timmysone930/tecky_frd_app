@@ -7,7 +7,7 @@ import { name as appName } from './app.json';
 import OneSignal from 'react-native-onesignal';
 import Config from "react-native-config";
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent("MobileApp", () => App);
 
 //OneSignal Init Code
 OneSignal.setLogLevel(6, 0);

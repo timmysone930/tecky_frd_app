@@ -43,7 +43,7 @@
 {
   RCTAppSetupPrepareApp(application);
   [[RNPaypal sharedInstance] configure];
-  [BTAppSwitch setReturnURLScheme:@"org.reactjs.native.example.MobileApp20220423.payments"];
+  [BTAppSwitch setReturnURLScheme:@"telemedicine.onesolution.hk.payments"];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
 
 #if RCT_NEW_ARCH_ENABLED
