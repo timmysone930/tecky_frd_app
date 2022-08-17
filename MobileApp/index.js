@@ -1,13 +1,15 @@
 import 'react-native-gesture-handler';
 
-import { AppRegistry } from 'react-native';
+import { Platform, AppRegistry } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
 // one signal
 import OneSignal from 'react-native-onesignal';
 import Config from "react-native-config";
 
-AppRegistry.registerComponent("MobileApp", () => App);
+let appNameFinal = Platform.OS === "android" ? "telemedicine" : "MobileApp";
+AppRegistry.registerComponent(appNameFinal, () => App); 
+// AppRegistry.registerComponent("MobileApp", () => App); 
 
 //OneSignal Init Code
 OneSignal.setLogLevel(6, 0);
