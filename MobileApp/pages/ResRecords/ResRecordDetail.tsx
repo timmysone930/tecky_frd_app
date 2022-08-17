@@ -166,8 +166,12 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
     }, [navigation])
 
     // redirect to paypal
-    const redirectPaypal = async () => {
+    const redirectPaypal = async (totalPay:string) => {
         try {  
+
+            if(!totalPay){
+                throw new Error("No input amount")
+            }
 
             // now just assume the payment is always success (06/07/2022)
             // return { 
@@ -182,7 +186,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             //     } 
             // }
 
-            const totalPay = reservationData.res_fee+"" || 9999+""
+            // const totalPay = reservationData.res_fee+"" || 9999+""
             // For one time payments
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
                 `${Config.PAYPAL}`
@@ -222,7 +226,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         toast.show({
             description: "載入中"
         })
-        const paypalRes = await redirectPaypal();
+        const paypalRes = await redirectPaypal(reservationData.res_fee+"" || 9999+"");
 
         if (paypalRes.status === 'success') {
             toast.show({

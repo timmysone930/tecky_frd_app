@@ -54,7 +54,8 @@ export const ResAddInfoPage: React.FC = (props: any) => {
 
             store.dispatch(setIDImage(image))
             store.dispatch(setAdditionalInfo(data))
-            props.navigation.navigate({ name: '健康申報表' })
+            props.navigation.navigate({ name: '預約須知' })
+            // props.navigation.navigate({ name: '健康申報表' })
         }
     }
 

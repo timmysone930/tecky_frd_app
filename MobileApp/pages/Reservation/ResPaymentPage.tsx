@@ -47,8 +47,12 @@ export const PaymentPage = (props: any) => {
     const [submitStatus, setSubmitStatus] = React.useState(true);
     // redirect to paypal
 
-    const redirectPaypal = async () => {
-        try {  
+    const redirectPaypal = async (totalPay:string) => {
+        try { 
+
+            if(!totalPay){
+                throw new Error("No input amount")
+            }
 
             // now just assume the payment is always success (06/07/2022)
             // return { 
@@ -63,7 +67,7 @@ export const PaymentPage = (props: any) => {
             //     } 
             // }
 
-            const totalPay = docInfo.docData.video_diag_fee+"" || "9999"
+            // const totalPay = docInfo.docData.video_diag_fee+"" || "9999"
             // For one time payments
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
                 `${Config.PAYPAL}`
@@ -177,13 +181,13 @@ export const PaymentPage = (props: any) => {
                                 'is_follow_up': true,
                                 'channel': 'null',
                                 'declare': {
-                                    "isLeave": formData.leaveHK,
-                                    "location": formData.Countries,
+                                    "isLeave": formData.leaveHK || false,
+                                    "location": formData.Countries || "",
                                     "date_back": formData.backDate === '選擇日期' ? '' : formData.backDate,
-                                    "isFever": formData.isFever,
-                                    "isCought": formData.isCough,
-                                    "isVomit": formData.isVomit,
-                                    "isCold": formData.isCold
+                                    "isFever": formData.isFever || false,
+                                    "isCought": formData.isCough || false,
+                                    "isVomit": formData.isVomit || false,
+                                    "isCold": formData.isCold || false
                                 }
                             }
 
@@ -196,7 +200,7 @@ export const PaymentPage = (props: any) => {
                             if (reservationRes?.data) {
 
                                 // payment
-                                const paypalRes = await redirectPaypal();
+                                const paypalRes = await redirectPaypal(docInfo.docData.video_diag_fee+"" || "9999");
 
                                 if (paypalRes.status === 'success') {
                                     toast.show({
