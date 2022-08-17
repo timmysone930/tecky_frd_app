@@ -34,7 +34,7 @@ export const PrescriptionPaymentPage = (props: any) => {
     }, [])
 
     // redirect to paypal
-    const redirectPaypal = async () => {
+    const redirectPaypal = async (totalPay:string) => {
         const fetchData = prescriptionDetail
         // return { 
         //     status: 'success',
@@ -51,7 +51,7 @@ export const PrescriptionPaymentPage = (props: any) => {
         try {
             // For one time payments
 
-            const totalPay = fetchData.bill[0].totel_amount+"" || 9999+""
+            // const totalPay = fetchData.bill[0].totel_amount+"" || 9999+""
 
 
             const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
@@ -108,7 +108,7 @@ export const PrescriptionPaymentPage = (props: any) => {
             description: "載入中"
         })
 
-        const paypalRes = await redirectPaypal();
+        const paypalRes = await redirectPaypal(fetchData.bill[0].totel_amount+"" || 9999+"");
 
         console.log(paypalRes)
         if (paypalRes.status == 'success') {
