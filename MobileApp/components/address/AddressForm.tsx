@@ -7,6 +7,7 @@ import { Input, Select, FormControl, CheckIcon, Box, WarningOutlineIcon, View } 
 
 // Data of Hong Kong District
 import { districtSelection } from '../../pages/Address/HongKongDistrictSelect';
+import Config from 'react-native-config';
 
 // Type of props
 export interface Addr {
@@ -40,6 +41,8 @@ const areaForMap: any = {
 // Component
 export const AddressForm = (props: Props) => {
 
+    const [districtData, setDistrictData] = useState([])
+
     // Handle Address
     const [addr, setAddr] = props.addr.includes('/nl/') ? useState({
         first: props.addr.split("/nl/")[0],
@@ -48,6 +51,10 @@ export const AddressForm = (props: Props) => {
         first: props.addr,
         second: ''
     })
+
+    useEffect( ()=>{
+        fetchAreaData()
+    }, [])
 
 
     useEffect( () => {
@@ -60,10 +67,6 @@ export const AddressForm = (props: Props) => {
             props.area.length > 0 &&
             props.district.length > 0 && 
             props.addr.length > 0 
-            // props.addr.split('/nl/')[0].length > 0  &&
-            // props.addr.split('/nl/')[1].length > 0  &&
-            // props.addr.split('/nl/')[0] != "undefined" &&
-            // props.addr.split('/nl/')[1] != "undefined" 
             ) 
         {
             props.setAllFilled(true)
@@ -74,6 +77,12 @@ export const AddressForm = (props: Props) => {
         }
         
     },[props])
+
+    async function fetchAreaData() {
+        let result = await fetch(`${Config.REACT_APP_API_SERVER}/locations/by_area`)
+        let area = await result.json()
+        setDistrictData(area)
+    }
 
     return (
         <>
@@ -168,11 +177,10 @@ export const AddressForm = (props: Props) => {
                             })
                         }}
                     >
-
-                        {Object.keys(areaForMap).map((item: any) => (
-                            <Select.Item label={item} value={item} key={areaForMap[item]}/>
-                        ))}
-
+                        
+                        {districtData.length > 0 ? districtData.map((area:any)=>(
+                            <Select.Item label={area.area} value={area.area} key={area.area}/>
+                        )) : <Select.Item label={'---'} value={''}/>}
                     </Select>
                 </FormControl>
 
@@ -204,10 +212,9 @@ export const AddressForm = (props: Props) => {
                             })
                         }}
                     >
-                        {districtSelection[areaForMap[props.area]] &&
-                            districtSelection[areaForMap[props.area]].map((item:any) => 
-                                <Select.Item label={item.chi} value={item.chi} key={item.eng}/>
-                            )
+                        {props.area.length > 0 ? 
+                        (districtData.filter((area:any)=>area.area==props.area)[0] as any).district.map((district:any)=>(<Select.Item label={district.name} key={district.name_en} value={district.name}/>)):
+                        <Select.Item label={'---'} value={''}/>
                         }
                     </Select>
                 
