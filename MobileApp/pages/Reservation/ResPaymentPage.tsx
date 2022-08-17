@@ -181,13 +181,13 @@ export const PaymentPage = (props: any) => {
                                 'is_follow_up': true,
                                 'channel': 'null',
                                 'declare': {
-                                    "isLeave": formData.leaveHK,
-                                    "location": formData.Countries,
+                                    "isLeave": formData.leaveHK || false,
+                                    "location": formData.Countries || "",
                                     "date_back": formData.backDate === '選擇日期' ? '' : formData.backDate,
-                                    "isFever": formData.isFever,
-                                    "isCought": formData.isCough,
-                                    "isVomit": formData.isVomit,
-                                    "isCold": formData.isCold
+                                    "isFever": formData.isFever || false,
+                                    "isCought": formData.isCough || false,
+                                    "isVomit": formData.isVomit || false,
+                                    "isCold": formData.isCold || false
                                 }
                             }
 

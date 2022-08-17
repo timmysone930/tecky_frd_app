@@ -116,7 +116,8 @@ export const ReservationPage = (props: any) => {
             store.dispatch(setFormData(data))
         }
         else if (patientStatus?.message === 'Found') {
-            props.navigation.navigate({ name: '健康申報表' })
+            props.navigation.navigate({ name: '預約須知' })
+            // props.navigation.navigate({ name: '健康申報表' })
             store.dispatch(setFormData(data))
             store.dispatch(setMemberCode({ memberCode: patientStatus?.memberCode }))
         }
