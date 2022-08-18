@@ -16,7 +16,7 @@ import Config from 'react-native-config';
 
 import { statueDisplay } from '../../components/prescription/PrescriptionList';
 
-export function PrescriptionDetailPage({navigation}:any) {
+export function PrescriptionDetailPage({ navigation }:any) {
 
     try {
         
@@ -94,7 +94,11 @@ export function PrescriptionDetailPage({navigation}:any) {
                             {/* Component */}
                             <CostDisplay cost={fetchData.bill[0].totel_amount}/>
     
-                            <PayButton title={"前往付款"} disabled={fetchData.prescription.payment_status != "waiting"} onPressFunction={goToPay}/>
+                            <PayButton 
+                                title={"前往付款"} 
+                                disabled={fetchData.prescription.payment_status != "waiting"} 
+                                onPressFunction={goToPay}
+                            />
     
                             {/* Component */}
                             <PrescriptionDetail treatmentItems={fetchData.treatmentItems}/>
