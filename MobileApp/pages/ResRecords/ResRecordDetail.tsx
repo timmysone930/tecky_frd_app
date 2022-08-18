@@ -61,6 +61,12 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         ]
     }
 
+    
+
+    // useEffect(() => {
+    //     console.log("YOOOO", data.item.final_res_fee);
+    // }, [data.item]);
+
     const isInRange = (value: any, range: any) => {
         return value >= range[0] && value <= range[1];
     }
@@ -226,7 +232,9 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         toast.show({
             description: "載入中"
         })
-        const paypalRes = await redirectPaypal(reservationData.res_fee+"" || 9999+"");
+
+        let finalPayFee = data && data.item && data.item.final_res_fee ? data.item.final_res_fee+"" : "9999";
+        const paypalRes = await redirectPaypal(finalPayFee);
 
         if (paypalRes.status === 'success') {
             toast.show({
