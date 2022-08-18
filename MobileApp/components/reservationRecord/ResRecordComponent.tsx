@@ -49,7 +49,7 @@ export const ResRecordComponent = (props: Props) => {
                                 )
                             }
 
-                            {item.approval_status === "pending" && (
+                            {item.status !== "cancel" && item.approval_status === "pending" && (
                                 <>
                                 <Text style={[styles.contentFont, { color: 'red' }]}>
                                     (審批中)
