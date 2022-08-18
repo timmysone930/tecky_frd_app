@@ -142,8 +142,8 @@ android {
         applicationId "com.onesolution.telemedicine"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "2.09"
+        versionCode 4
+        versionName "2.1"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         // config
         resValue "string", "build_config_package", "com.onesolution.telemedicine"
