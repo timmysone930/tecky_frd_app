@@ -8,6 +8,7 @@ interface Props {
     placeholder: string,
     dateValue: string,
 }
+
 interface dataMapType {
     "clinic_code": string, 
     "cli_code"?: string, 
@@ -20,19 +21,23 @@ interface dataMapType {
 
 export const ResDateComponent = (props: Props) => {
     let selectFunction;
+
     const rosterDate = Object.entries(props.data)
-    let sortArr:any =[];
+    let sortArr:any = [];
+
     // Check the picker mode
     if (props.mode === 'date') {
         rosterDate.map((item:[string, string | [[Object]]])=>{
             sortArr.push(item)
         })
         // sort the date
-        sortArr.sort()
+        sortArr.sort();
         selectFunction = sortArr.map((item: [string, string | [[Object]]], idx: number) => {
             return <Select.Item label={item[0]} value={item[0]} key={`picker_date_${idx}`} />
         })
-    } else if (props.mode === 'time') {
+    } 
+    else if (props.mode === 'time') {
+
         // 檢查用戶有選擇日期
         if (props.dateValue !== '') {
             let found: any = rosterDate.find((x: [string, string | [[Object]]]) => x[0] === props.dateValue)
@@ -41,7 +46,9 @@ export const ResDateComponent = (props: Props) => {
             if (Array.isArray(found[1]) && found[1].length >= 1) {
                 let numbersCopy = [...found[1]];
 
-                numbersCopy.sort(function (a, b) { return a.from_time.substring(0, 2) - b.from_time.substring(0, 2); });
+                numbersCopy.sort(function (a, b) { 
+                    return a.from_time.substring(0, 2) - b.from_time.substring(0, 2);
+                });
 
                 console.log(numbersCopy);
                 selectFunction = numbersCopy.map((item: dataMapType, idx: number) => {
@@ -53,17 +60,28 @@ export const ResDateComponent = (props: Props) => {
                         />
                     )
                 })
-            } else {
+            } 
+            else {
                 selectFunction = <Select.Item label={`沒有可供應時間`} value={`沒有可供應時間`} />
             }
-        } else {
+        } 
+        else {
             selectFunction = <Select.Item label={`請先選擇應診日期`} value={`請先選擇應診日期`} />
         }
     }
+
     return (
-        <Select minWidth="120" accessibilityLabel={props.placeholder} placeholder={props.placeholder}
+        <Select 
+            minWidth="120" 
+            accessibilityLabel={props.placeholder} 
+            placeholder={props.placeholder}
             _selectedItem={{endIcon: <CheckIcon size={5} />}}
-            mt="1.5" mb='1' fontSize="sm" borderColor="#737474" onValueChange={props.onChange} flex={1} borderRadius="3" borderWidth='0.7'>
+            mt="1.5" mb='1' fontSize="sm" borderColor="#737474" 
+            onValueChange={props.onChange} 
+            flex={1} 
+            borderRadius="3" 
+            borderWidth='0.7'
+        >
             {selectFunction}
         </Select>
     )
