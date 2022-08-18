@@ -282,8 +282,10 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 {/* Info */}
                 <Text style={[styles.subTitle, styles.mv_10, { paddingTop: 25, paddingHorizontal: 15 }]}>應診提示</Text>
                 <Text style={styles.greyInfoText}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sit amet est ipsum. Nullam sagittis eu elit nec porta. Nulla sollicitudin magna non
-                    purus auctor malesuada.
+                    用戶須於15分鐘內完成付款程序。逾期未付款之相關預約將會被自動取消,不會另行通知。  
+                    預約費用一經收取,將不會退還。(預約費用不包括應診後之相關藥費)
+                    已付款之預約, 用戶將會在視診開始前15分鐘,收到手機應用程式提示訊息。請留意手機應用程式通知並準時出席視診。 
+                    如有查詢, 請致電:(852) 29511988
                 </Text>
                 <BottomLineComponent />
 
