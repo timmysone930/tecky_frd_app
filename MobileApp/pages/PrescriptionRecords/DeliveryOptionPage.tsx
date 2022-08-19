@@ -51,7 +51,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
     // deliveryOption: 'pick-up' || 'deliver'
     const [deliveryOption, setDeliveryOption] = useState('pick-up');
     // Allow pick Up clinic
-    const [allowPickUp, setAllowPickUp] = useState(null as any)
+    const [allowPickUp, setAllowPickUp] = useState<any>([])
 
     // pickUpClinic: The selected pick-up store
     const [pickUpClinic, setPickUpClinic] = useState({
@@ -73,11 +73,11 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, init)
         const result = resp.status === 200 ? (await resp.json()) : null
 
-        setInput(result.defaultAddress != null ? result.defaultAddress[0] : "");
+        setInput(result.defaultAddress != null ? result.defaultAddress[0] : null);
 
         console.log("PICKUP store", result.pickUpStores)
 
-        setAllowPickUp(result.pickUpStores != null ? result.pickUpStores : "")
+        setAllowPickUp(result.pickUpStores != null ? result.pickUpStores : [])
         console.log(result.pickUpStores);
     }
 
@@ -233,7 +233,7 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
 
 
                         {
-                            input == "" && input != null ?
+                            (input === "" || input === null) ?
                             <>
                                 <Text>
                                     請先返回頁面，我的 {'>'} 送藥地址 {'>'} 按"新增送貨地址"。
