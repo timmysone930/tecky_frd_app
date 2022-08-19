@@ -73,7 +73,16 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/default-address`, init)
         const result = resp.status === 200 ? (await resp.json()) : null
 
-        setInput(result.defaultAddress != null ? result.defaultAddress[0] : null);
+        setInput(result.defaultAddress != null ? result.defaultAddress[0] : {
+            hkid:"",
+            name:"",
+            name_en:"",
+            phone:"852",
+            area:"",
+            district:"",
+            address:"",
+            is_default: false
+        });
 
         console.log("PICKUP store", result.pickUpStores)
 
