@@ -20,7 +20,7 @@ export function PrescriptionDetailPage({ navigation }:any) {
 
     try {
         
-        const userToken = useSelector((state: any) => state.getUserStatus.token);
+        // const userToken = useSelector((state: any) => state.getUserStatus.token);
         // const init = {
         //     headers:{
         //         "Authorization":`Bearer ${userToken}`,
