@@ -20,7 +20,7 @@ export function PrescriptionDetailPage({ navigation }:any) {
 
     try {
         
-        const userToken = useSelector((state: any) => state.getUserStatus.token);
+        // const userToken = useSelector((state: any) => state.getUserStatus.token);
         // const init = {
         //     headers:{
         //         "Authorization":`Bearer ${userToken}`,
@@ -30,6 +30,7 @@ export function PrescriptionDetailPage({ navigation }:any) {
         const reduxData = useSelector((state: any) => state.getPrescriptionCode)
         
         const [fetchData, setFetchData] = useState(null as any)
+        
         
         const dataFetching = async () => {
             const prescriptionSelecting = reduxData.prescriptionSelecting ;
@@ -55,7 +56,9 @@ export function PrescriptionDetailPage({ navigation }:any) {
       
         const goToPay = () => {
             store.dispatch(setPrescriptionCode({prescriptionSelecting: fetchData}))
-            navigation.navigate("地址確認")
+            // navigation.navigate("地址確認")
+            navigation.navigate({name: "地址確認"})
+
         }
     
         const [fetched, setFetched] = useState(false)
@@ -120,6 +123,8 @@ export function PrescriptionDetailPage({ navigation }:any) {
         );
     } 
     catch (error:any) {
+        console.log(error.message);
+
         return(
         <SafeAreaView>
         <ScrollView>

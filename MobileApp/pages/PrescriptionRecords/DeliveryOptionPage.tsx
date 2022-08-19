@@ -118,7 +118,9 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
             setFetched(true)
         });
 
-        return () => {unsubscribe}
+        // return () => {unsubscribe}
+        return unsubscribe
+
     },[navigation])
 
     return (
