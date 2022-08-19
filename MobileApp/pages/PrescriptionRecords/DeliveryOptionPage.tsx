@@ -18,7 +18,6 @@ import { PayButton } from '../../components/prescription/PayButton';
 
 // Config
 import Config from 'react-native-config';
-import { removeListener } from '@reduxjs/toolkit';
 
 
 const wait = (timeout:any) => {
@@ -114,17 +113,13 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
     }, [reduxData])
   
     useEffect(()=>{
-        function unsubscribeFunc (){
+        const unsubscribe = navigation.addListener('focus', () => {
             dataFetching()
             setFetched(true)
-        }
-
-        navigation.addListener('focus', unsubscribeFunc);
+        });
 
         // return () => {unsubscribe}
-        return () => {
-            navigation.removeListener('focus', unsubscribeFunc)
-        }
+        return unsubscribe
 
     },[navigation])
 
