@@ -31,6 +31,7 @@ export function PrescriptionDetailPage({ navigation }:any) {
         
         const [fetchData, setFetchData] = useState(null as any)
         
+        
         const dataFetching = async () => {
             const prescriptionSelecting = reduxData.prescriptionSelecting ;
             const data = prescriptionSelecting
@@ -55,7 +56,9 @@ export function PrescriptionDetailPage({ navigation }:any) {
       
         const goToPay = () => {
             store.dispatch(setPrescriptionCode({prescriptionSelecting: fetchData}))
-            navigation.navigate("地址確認")
+            // navigation.navigate("地址確認")
+            navigation.navigate({name: "地址確認"})
+
         }
     
         const [fetched, setFetched] = useState(false)
@@ -120,7 +123,8 @@ export function PrescriptionDetailPage({ navigation }:any) {
         );
     } 
     catch (error:any) {
-        console.log(error.message)
+        console.log(error.message);
+
         return(
         <SafeAreaView>
         <ScrollView>
