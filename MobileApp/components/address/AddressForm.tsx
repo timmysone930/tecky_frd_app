@@ -42,7 +42,7 @@ const areaForMap: any = {
 export const AddressForm = (props: Props) => {
 
     const [ districtData, setDistrictData ] = useState([])
-    const [ currentDistrictSelected, setCurrentDistrictSelected ] = useState(false);
+    const [ currentDistrictSelected, setCurrentDistrictSelected ] = useState(props.area !== "");
 
     // Handle Address
     const [addr, setAddr] = props.addr.includes('/nl/') ? useState({
