@@ -41,7 +41,8 @@ const areaForMap: any = {
 // Component
 export const AddressForm = (props: Props) => {
 
-    const [districtData, setDistrictData] = useState([])
+    const [ districtData, setDistrictData ] = useState([])
+    const [ currentDistrictSelected, setCurrentDistrictSelected ] = useState(false);
 
     // Handle Address
     const [addr, setAddr] = props.addr.includes('/nl/') ? useState({
@@ -174,7 +175,11 @@ export const AddressForm = (props: Props) => {
                                 ...props.input,
                                 area: itemValue,
                                 district: ""
-                            })
+                            });
+
+                            if(itemValue !== ""){
+                                setCurrentDistrictSelected(true)
+                            }
                         }}
                     >
                         
@@ -212,22 +217,14 @@ export const AddressForm = (props: Props) => {
                             })
                         }}
                     >
-                        {/* {Array.isArray(districtData) && districtData.length > 0 && props.area ? 
+                        {Array.isArray(districtData) && districtData.length > 0 && props.area && currentDistrictSelected? 
                             (
                                 districtData.filter((area:any) => area.area == props.area)[0] as any)
-                                .district
-                                .map((district:any)=>(
-                                    <Select.Item label={district.name} key={district.name_en} value={district.name}/>
-                                )
+                                .district.map((district:any)=>(<Select.Item label={district.name} key={district.name_en} value={district.name}/>)
                             ):
                         <Select.Item label={'---'} value={''}/>
-                        } */}
+                        }
                         {/* <Select.Item label={'---'} value={''}/> */}
-                        { Array.isArray(districtData) && districtData.length > 0 && props.area && (
-                            <>
-                            <DistrictDataItems districtData={districtData} targetArea={props.area} />
-                            </>
-                        )}
 
 
                     </Select>
@@ -301,20 +298,4 @@ export const AddressForm = (props: Props) => {
 
         </>
     )
-
-
-}
-
-function DistrictDataItems({ districtData, targetArea }:{districtData:any[], targetArea:string}):any{
-    let filteredDistrict = districtData.filter((area:any) => area.area == targetArea)
-
-    if(filteredDistrict.length !== 0){
-        return filteredDistrict.map( (district:any)=>(
-            <Select.Item label={district.name} key={district.name_en} value={district.name}/>
-        ))
-        
-    }
-
-    return <Select.Item label={'---'} value={''}/>
-
 }
