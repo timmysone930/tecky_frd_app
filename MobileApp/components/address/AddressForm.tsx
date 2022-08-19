@@ -212,10 +212,24 @@ export const AddressForm = (props: Props) => {
                             })
                         }}
                     >
-                        {Array.isArray(districtData) && districtData.length > 0 ? 
-                        (districtData.filter((area:any)=>area.area==props.area)[0] as any).district.map((district:any)=>(<Select.Item label={district.name} key={district.name_en} value={district.name}/>)):
+                        {/* {Array.isArray(districtData) && districtData.length > 0 && props.area ? 
+                            (
+                                districtData.filter((area:any) => area.area == props.area)[0] as any)
+                                .district
+                                .map((district:any)=>(
+                                    <Select.Item label={district.name} key={district.name_en} value={district.name}/>
+                                )
+                            ):
                         <Select.Item label={'---'} value={''}/>
-                        }
+                        } */}
+                        {/* <Select.Item label={'---'} value={''}/> */}
+                        { Array.isArray(districtData) && districtData.length > 0 && props.area && (
+                            <>
+                            <DistrictDataItems districtData={districtData} targetArea={props.area} />
+                            </>
+                        )}
+
+
                     </Select>
                 
                 </FormControl>
@@ -287,4 +301,20 @@ export const AddressForm = (props: Props) => {
 
         </>
     )
+
+
+}
+
+function DistrictDataItems({ districtData, targetArea }:{districtData:any[], targetArea:string}):any{
+    let filteredDistrict = districtData.filter((area:any) => area.area == targetArea)
+
+    if(filteredDistrict.length !== 0){
+        return filteredDistrict.map( (district:any)=>(
+            <Select.Item label={district.name} key={district.name_en} value={district.name}/>
+        ))
+        
+    }
+
+    return <Select.Item label={'---'} value={''}/>
+
 }

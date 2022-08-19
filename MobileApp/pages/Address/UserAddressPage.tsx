@@ -25,32 +25,37 @@ export function UserAddressPage({navigation}:any) {
 
     const userToken = useSelector((state: any) => state.getUserStatus.token);
 
-    const [fetchData, setFetchData] = useState(null as any)
+    const [fetchData, setFetchData] = useState<any>([])
     const [defaultAddressID, setDefaultAddressID] = useState(null as any);
     
     const toast = useToast()
     
     const infoFetching = async () => {
+
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/addr-book`, {
             headers:{
                 "Authorization":`Bearer ${userToken}`,
             }
         })
+
         const data = await resp.json()
-        data.length > 0 ? setFetchData(data) : setFetchData("")
+        Array.isArray(data) && data.length > 0 ? setFetchData(data) : setFetchData([])
+
         let findDefaultAddressID:any;
+
         try {
             findDefaultAddressID = data.filter((obj:any) => obj.is_default == true)[0].id
         } catch (e) {
             findDefaultAddressID = ""
         }
+
         setDefaultAddressID(findDefaultAddressID)
         
     }
 
     const [fetched, setFetched] = useState(false)
 
-    useEffect(()=>{
+    useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             if (!fetched) {
                 infoFetching() 
@@ -176,7 +181,7 @@ export function UserAddressPage({navigation}:any) {
                     {
                         fetchData != null ?
                         (
-                            defaultAddressID != null && fetchData != "" ?
+                            defaultAddressID != null && fetchData != "" && Array.isArray(fetchData) ?
                             <Radio.Group 
                                     name="myRadioGroup" 
                                     accessibilityLabel="favorite number" 
