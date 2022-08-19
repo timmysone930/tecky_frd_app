@@ -120,6 +120,7 @@ export function PrescriptionDetailPage({ navigation }:any) {
         );
     } 
     catch (error:any) {
+        console.log(error.message)
         return(
         <SafeAreaView>
         <ScrollView>
