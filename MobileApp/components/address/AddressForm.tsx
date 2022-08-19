@@ -212,7 +212,7 @@ export const AddressForm = (props: Props) => {
                             })
                         }}
                     >
-                        {props.area.length > 0 ? 
+                        {Array.isArray(districtData) && districtData.length > 0 ? 
                         (districtData.filter((area:any)=>area.area==props.area)[0] as any).district.map((district:any)=>(<Select.Item label={district.name} key={district.name_en} value={district.name}/>)):
                         <Select.Item label={'---'} value={''}/>
                         }
