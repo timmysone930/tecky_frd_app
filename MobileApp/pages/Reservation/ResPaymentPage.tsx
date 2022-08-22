@@ -110,7 +110,7 @@ export const PaymentPage = (props: any) => {
                 "Content-Type": 'application/json'
             },
             body: JSON.stringify({
-                pres_code: res_code
+                res_code: res_code
             })
         })
     

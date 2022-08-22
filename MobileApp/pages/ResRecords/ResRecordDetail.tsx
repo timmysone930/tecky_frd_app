@@ -236,7 +236,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 "Content-Type": 'application/json'
             },
             body: JSON.stringify({
-                pres_code: res_code
+                res_code: res_code
             })
         })
     
