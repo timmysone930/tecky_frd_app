@@ -127,7 +127,7 @@ export const PrescriptionPaymentPage = (props: any) => {
                         amount: paypalRes.data.payAmount,
                         payment_status: true,
                         type: "prescription",
-                        payment_type: "visa",   
+                        payment_type: "paypal",   
                         bill: fetchData.bill[0]
                     },
                     newPres: {
