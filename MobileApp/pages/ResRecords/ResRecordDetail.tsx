@@ -229,7 +229,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
     console.log('reservationData',reservationData.session_id)
 
     async function emailReceipt(res_code:string) {
-        const email = await fetch(`${Config.REACT_APP_API_SERVER}/receipt/reserve`, {
+        const email = await fetch(`${Config.REACT_APP_API_SERVER}/payment/receipt/reserve`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${userToken}`,

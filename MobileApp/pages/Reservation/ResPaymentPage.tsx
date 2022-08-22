@@ -103,7 +103,7 @@ export const PaymentPage = (props: any) => {
     }
 
     async function emailReceipt(res_code:string) {
-        const email = await fetch(`${Config.REACT_APP_API_SERVER}/receipt/reserve`, {
+        const email = await fetch(`${Config.REACT_APP_API_SERVER}/payment/receipt/reserve`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${userToken}`,

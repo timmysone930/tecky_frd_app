@@ -147,7 +147,7 @@ export const PrescriptionPaymentPage = (props: any) => {
                 })
             })
 
-            const email = await fetch(`${Config.REACT_APP_API_SERVER}/receipt/diagnosis`, {
+            const email = await fetch(`${Config.REACT_APP_API_SERVER}/payment/receipt/diagnosis`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${userToken}`,
