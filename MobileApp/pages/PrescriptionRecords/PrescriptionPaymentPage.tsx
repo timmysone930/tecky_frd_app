@@ -147,6 +147,20 @@ export const PrescriptionPaymentPage = (props: any) => {
                 })
             })
 
+            const email = await fetch(`${Config.REACT_APP_API_SERVER}/receipt/diagnosis`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify({
+                    pres_code: prescriptionDetail.prescription.pres_code
+                })
+            })
+
+            console.log(email);
+            
+
 
             // "payment_id": paypalRes.data.nonce
             // const editPaymentResult = editPaymentResp.status == 200 ? (await editPaymentResp.json()) : null;
