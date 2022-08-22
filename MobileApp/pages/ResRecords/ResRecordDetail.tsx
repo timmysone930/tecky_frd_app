@@ -227,6 +227,24 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
     // create payment 
     const [postNewPayment] = usePostNewPaymentMutation()
     console.log('reservationData',reservationData.session_id)
+
+    async function emailReceipt(res_code:string) {
+        const email = await fetch(`${Config.REACT_APP_API_SERVER}/payment/receipt/reserve`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${userToken}`,
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify({
+                res_code: res_code
+            })
+        })
+    
+        console.log(email);
+    }
+
+
+    
     // paypal
     const onClickPaypal = async () => {
         toast.show({
@@ -240,6 +258,8 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             toast.show({
                 description: "付款成功"
             })
+
+            emailReceipt(reservationData.res_code)
 
             // create payment table
             let paymentData = { 

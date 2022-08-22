@@ -102,6 +102,21 @@ export const PaymentPage = (props: any) => {
         }
     }
 
+    async function emailReceipt(res_code:string) {
+        const email = await fetch(`${Config.REACT_APP_API_SERVER}/payment/receipt/reserve`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${userToken}`,
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify({
+                res_code: res_code
+            })
+        })
+    
+        console.log(email);
+    }
+
     // submit
     const onPress = async () => {
         setSubmitStatus(false)
@@ -206,6 +221,8 @@ export const PaymentPage = (props: any) => {
                                     toast.show({
                                         description: "付款成功"
                                     })
+
+                                    emailReceipt(reservationRes.data)
                                     // create payment table
                                     let paymentData = { 
                                         "gateway": "paypal", 
