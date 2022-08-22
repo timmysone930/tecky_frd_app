@@ -222,7 +222,6 @@ export const PaymentPage = (props: any) => {
                                         description: "付款成功"
                                     })
 
-                                    emailReceipt(reservationRes.data)
                                     // create payment table
                                     let paymentData = { 
                                         "gateway": "paypal", 
@@ -234,9 +233,11 @@ export const PaymentPage = (props: any) => {
                                         "res_code": reservationRes.data,
                                         "session_id": formData.reservedSession
                                     }
-
+                                    
                                     const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
                                     console.log('paymentRes', paymentRes)
+                                    
+                                    emailReceipt(reservationRes.data)
 
                                     store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
                                     store.dispatch(setMemberCode({ memberCode: '' }))

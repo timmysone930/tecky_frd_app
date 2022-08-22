@@ -259,7 +259,6 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 description: "付款成功"
             })
 
-            emailReceipt(reservationData.res_code)
 
             // create payment table
             let paymentData = { 
@@ -278,8 +277,10 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 token: userToken
             })
 
+            
+            
             console.log('paymentRes', paymentRes)
-
+            
             let time = parseInt(data.item.res_time.replace(':', ''), 10)
             if(time % 100 - 10 < 0){
                 time = time - 50 
@@ -287,6 +288,8 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             else {
                 time = time - 10
             }
+
+            emailReceipt(reservationData.res_code)
 
             let pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
             setNotification(reservationData.res_date, userCode, pushTime, reservationData.res_code, userToken)
