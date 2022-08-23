@@ -276,8 +276,6 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 data: paymentData,
                 token: userToken
             })
-
-            
             
             console.log('paymentRes', paymentRes)
             
