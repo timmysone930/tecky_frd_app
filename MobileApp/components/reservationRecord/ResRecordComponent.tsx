@@ -40,7 +40,11 @@ export const ResRecordComponent = (props: Props) => {
                                     {item.payment.payment_status ? "(已付款)" : "(待付款中)"} 
                                 </Text>
                             } */}
-                            { (item.approval_status === "wait_for_payment" || item.approval_status === "done") && item.payment_status !== null && (
+                            { 
+                            (item.approval_status === "wait_for_payment" || item.approval_status === "done") 
+                            && item.payment_status !== null
+                            && item.status !== "cancel"
+                            && (
                                 <>
                                 <Text style={[styles.contentFont, { color: 'red' }]}>
                                     {item.payment_status ? "(已付款)" : "(待付款中)"} 
