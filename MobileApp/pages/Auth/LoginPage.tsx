@@ -101,6 +101,8 @@ export const LoginPage = (props: any) => {
             toast.show({
                 description: "已送出驗證碼"
             })
+
+            setValue("loginSMS", code+"")
             toast.show({
                 duration: 12000,
                 description: `SMS Code: ${code}`
@@ -114,6 +116,7 @@ export const LoginPage = (props: any) => {
                 return
             }
 
+            setValue("loginSMS", code+"")
             toast.show({
                 duration: 12000,
                 description: `SMS Code: ${code}`
@@ -227,7 +230,8 @@ export const LoginPage = (props: any) => {
                     <Text style={styles.subTitle}>獲取一次性短訊驗證碼</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
-                        <Controller control={control}
+                        <Controller 
+                            control={control}
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <TextInput 
                                     keyboardType={'numeric'} 
