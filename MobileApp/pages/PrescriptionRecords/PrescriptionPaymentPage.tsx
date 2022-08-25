@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, SafeAreaView, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import Config from 'react-native-config';
-import { requestOneTimePayment } from 'react-native-paypal';
+import { requestOneTimePayment, requestDeviceData } from 'react-native-paypal';
 import { useSelector } from 'react-redux';
 import { useToast } from 'native-base';
 
@@ -71,6 +71,8 @@ export const PrescriptionPaymentPage = (props: any) => {
             );
             console.log(nonce, payerId, email, firstName, lastName, phone);
 
+            const { deviceData } = await requestDeviceData(`${Config.PAYPAL}`);
+
             return { 
                 status: 'success',
                 data: {
@@ -80,7 +82,8 @@ export const PrescriptionPaymentPage = (props: any) => {
                     'email': email,
                     "firstName": firstName,
                     "lastName": lastName,
-                    "phone": phone
+                    "phone": phone,
+                    "deviceData" : deviceData
                 }
             }
 
@@ -128,7 +131,8 @@ export const PrescriptionPaymentPage = (props: any) => {
                         payment_status: true,
                         type: "prescription",
                         payment_type: "paypal",   
-                        bill: fetchData.bill[0]
+                        bill: fetchData.bill[0],
+                        deviceData: paypalRes.data.deviceData,
                     },
                     newPres: {
                         pres_code: prescriptionDetail.prescription.pres_code,
