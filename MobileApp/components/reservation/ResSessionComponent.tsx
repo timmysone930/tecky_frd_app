@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { CheckIcon, Select } from 'native-base'
 import { useGetRosterSessionQuery } from '../../API/DoctorAPI';
-import moment from 'moment-timezone';
+// import moment from 'moment-timezone';
 
 interface Props {
     onChange: (value:string) => void,
