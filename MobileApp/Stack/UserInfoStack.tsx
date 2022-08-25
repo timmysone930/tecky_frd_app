@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AccountInfoPage } from '../pages/AccountInfo/AccountInfoPage';
 import { InfoEditPage } from '../pages/AccountInfo/InfoEditPage';
+import { AccountDeletionPage } from '../pages/AccountInfo/AccountDeletion';
 
 const UserInfoStack = createStackNavigator();
 
@@ -16,6 +17,7 @@ export const UserInfoStacks = () => {
         >
             <UserInfoStack.Screen name="我的資料" component={AccountInfoPage} options={{ headerShown: true}}/>
             <UserInfoStack.Screen name="變更帳戶資料" component={InfoEditPage} options={{ headerShown: true }}/>
+            <UserInfoStack.Screen name="刪除帳號" component={AccountDeletionPage} options={{ headerShown: true}}/>
         </UserInfoStack.Navigator>
     )
 }
