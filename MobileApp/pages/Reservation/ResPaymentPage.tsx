@@ -7,7 +7,7 @@ import { useGetReservedSessionByIdQuery, useGetRosterByIdQuery } from '../../API
 import { usePostPatientRegisterMutation, usePostPatientReservationMutation, usePutEnableSessionMutation, usePutHoldSessionMutation } from '../../API/PatientAPI';
 import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { store } from '../../redux/store';
-import { requestOneTimePayment } from 'react-native-paypal';
+import { requestOneTimePayment, requestDeviceData } from 'react-native-paypal';
 import { useToast } from 'native-base';
 import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
 import { setMemberCode } from '../../redux/slice';
@@ -82,6 +82,8 @@ export const PaymentPage = (props: any) => {
                 }
             );
 
+            const { deviceData } = await requestDeviceData(`${Config.PAYPAL}`);
+
             return { 
                 status: 'success', 
                 data: {
@@ -91,7 +93,8 @@ export const PaymentPage = (props: any) => {
                     'email': email, 
                     "firstName": firstName, 
                     "lastName": lastName, 
-                    "phone": phone 
+                    "phone": phone,
+                    "deviceData": deviceData,
                 } 
             }
 
@@ -231,7 +234,8 @@ export const PaymentPage = (props: any) => {
                                         "type": "reservation",
                                         "payment_type": "paypal",
                                         "res_code": reservationRes.data,
-                                        "session_id": formData.reservedSession
+                                        "session_id": formData.reservedSession,
+                                        "deviceData": paypalRes.data.deviceData
                                     }
                                     
                                     const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
