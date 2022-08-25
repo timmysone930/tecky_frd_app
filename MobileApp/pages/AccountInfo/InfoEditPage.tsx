@@ -246,6 +246,10 @@ export function InfoEditPage({ navigation }: any) {
         }
     }
 
+    const deleteAcc = () => {
+        navigation.navigate('刪除帳號')
+    };
+
     return (
         <SafeAreaView style={{ backgroundColor: 'white' }}>
             <ScrollView>
@@ -367,7 +371,7 @@ export function InfoEditPage({ navigation }: any) {
                                 </FormControl>
                             </View>
 
-                            <View justifyContent={"center"} height={50} marginY={5} >
+                            <View justifyContent={"center"} height={100} marginY={5} >
                                 <Button
                                     alignSelf={'center'}
                                     marginX={2}
@@ -379,6 +383,19 @@ export function InfoEditPage({ navigation }: any) {
                                     onPress={save}
                                 >
                                     儲存變更
+                                </Button>
+                                <Button
+                                    colorScheme={"danger"}
+                                    alignSelf={'center'}
+                                    marginX={2}
+                                    marginBottom={5}
+                                    padding={1}
+                                    height={10}
+                                    width={200}
+                                    size={"lg"}
+                                    onPress={deleteAcc}
+                                >
+                                    刪除帳號
                                 </Button>
                             </View>
                         </>
