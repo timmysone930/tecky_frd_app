@@ -94,7 +94,7 @@ export const ResPaymentConfirmPage = (props: any) => {
                             </View>
                             <View style={{ marginTop: 20, }}>
                                 <Text style={[styles.contentText]}>預約編號：{props.route.params.resCode}</Text>
-                                <Text style={[styles.contentText]}>收據已發送到你的電郵</Text>
+                                <Text style={[styles.contentText]}>待付款完成後，正式收據會發送至您的會員電郵地址。</Text>
                                 <TouchableOpacity style={styles.button} onPress={() => props.navigation.navigate({ name: '搜尋醫生' })}>
                                     <Text style={styles.buttonText}>返回</Text></TouchableOpacity>
                             </View>
