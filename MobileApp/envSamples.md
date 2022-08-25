@@ -1,0 +1,13 @@
+REACT_APP_API_SERVER=http://192.168.168.161:3001
+PAYPAL=sandbox_4x4hy2m2_wg73kn5yk8kwn7qt
+
+ONESIGNAL=b34ca072-a526-462b-b192-efefbf9a4004
+OneSignal_REST_KEY=N2ZlODkwYzYtYjZkYS00ZDFkLTlmZmItYjhmNTIyMzU0ZTVj
+Res_code = 100
+VERSION_NUM=2.21
+
+
+NOT_RELATED=
+REACT_APP_API_SERVER_DEVELOPMENT=http://localhost:3001
+REACT_APP_API_SERVER_PRODUCTIONS=https://telemedicine.onesolution.hk:3001
+PAYPAL_OURS=sandbox_v2wcsz62_4f9xyp2kmsgdt7d9

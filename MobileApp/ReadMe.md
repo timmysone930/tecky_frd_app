@@ -33,17 +33,16 @@ npx react-native run-android
 Follow https://reactnative.dev/docs/environment-setup and https://reactnative.dev/docs/signed-apk-android for generate the my-upload-key.keystore  
 Warning: Before generate the key, Please see the ```android/gradle.properties``` for the password and make sure the key name is ```my-release-key.keystore```  NOT ```my-upload-key.keystore```
 
-Make sure you are inside of the root of "MobileApp" to run those script
-Install:
-1. Python
-2. firebase cli with 
-``` npm install -g firebase-tools```
-Afetr you are installed, type ```firebase login``` to login first
+Make sure you are inside of the root of "MobileApp" to run those script  
+Need to Install (Optional if you not going to build and upload to google play / ios):  
+1. Python ```pip install PyDrive``` ```pip install argparse```  
+2. firebase cli with ``` npm install -g firebase-tools```  
+Afetr you are installed, type ```firebase login``` to login first  
 
-cicd.py: Auto upload apk to google drive  
-incVersion.py: Auto increase the version code in the file ```./android/app/build.gradle```
+cicd.py: Auto upload apk to google drive    
+incVersion.py: Auto increase the version code in the file ```./android/app/build.gradle```   
 
-build APK  
+build APK    
 ```
 yarn run buildAndroidAPK
 yarn run buildAndroidAAB
@@ -67,27 +66,9 @@ yarn run buildAndroidAPKFull
 ## Firebase cli upload
 1. firebase login
    
-2. firebase appdistribution:distribute ./android/app/build/outputs/apk/release/app-release.apk --app 1:33402240354:android:93f8e0f395a9ce01f9403b --release-notes "Bug fixes and improvements" --groups "internal-group"
+2. Type ```firebase appdistribution:distribute ./android/app/build/outputs/apk/release/app-release.apk --app 1:367116338304:android:40aeb36aee3c01dff99265 --release-notes \"Bug fixes and improvements\" --groups \"internaltestgp\"``` in the terminal at the ./MobileApp root  
 
 ## Remark
 version id in ```c19-frd-project-03-tw\MobileApp\android\app\build.gradle```   
 
-1.04    
-Added firebase core, performances and crashed report plugins  
-
-1.06  
-Fixed the apps will crashed after a re-login actions with try catch compoments  
-
-1.07  
-Fixed camera not active in physical devices due to permission issues  
-https://stackoverflow.com/questions/72248267/launchcamera-in-react-native-image-picker-doesnt-open-anything-when-installed  
-  
-1.08  
-Fixed email display issues and notifications to phone
-
-
 yarn react-native generate-bootsplash images/telemedicineLogo.png --background-color=FFFFFF --logo-width=100 --assets-path=assets --flavor=main
-
-https://developer.paypal.com/api/rest/authentication/
-
-curl -v -X POST "https://api-m.sandbox.paypal.com/v1/oauth2/token" -u "AaEw72ZqVvA71FfmlZRmj6k-rSJrfD1CJsKe-j7tZk_O_fgRHKbZOFVo3A77vjTAeToR8damXiWGnloO:EAAQX3S73WjUwj3klcXAMFgWvqzVHPsjkf37lKRnxxg_17wSbbYtCUvcKKAB2sgLkSxZ1Dmu2NKH4Gna" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=client_credentials"
