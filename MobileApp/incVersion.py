@@ -32,7 +32,6 @@ def readVersion(gradle_path = "./android/app/build.gradle"):
     incEnvCode(".env.production", new_version_ref[0])
     incEnvCode(".env.setting", new_version_ref[0])
 
-
 def incEnvCode(env_path, code_version):
 
     if os.path.exists(os.path.join(os. getcwd(),env_path)):
@@ -47,12 +46,10 @@ def incEnvCode(env_path, code_version):
                 strs[i] = "VERSION_NUM=" + str(code_version)
                 break
         
-        
         f = open(env_path, "w")
         f.write("\n".join(strs))
         f.close()
         print(f"VERSION_NUM increased in {env_path}")
-    
     
 if __name__ == "__main__":
     readVersion()
