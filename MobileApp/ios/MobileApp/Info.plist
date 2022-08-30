@@ -55,10 +55,6 @@
 	<string>App需要您的同意,才能訪問相機</string>
 	<key>NSContactsUsageDescription</key>
 	<string>App需要您的同意,才能訪問通訊錄</string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>App需要您的同意,才能訪問健康分享</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>App需要您的同意,才能訪問健康更新</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>App需要您的同意,才能始終訪問位置</string>
 	<key>NSLocationUsageDescription</key>

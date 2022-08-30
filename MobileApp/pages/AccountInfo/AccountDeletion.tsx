@@ -1,6 +1,6 @@
+import { styles } from '../../styles/GeneralStyles';
 import React, { useEffect, useState, useRef } from 'react';
 import { SafeAreaView, ScrollView, Text } from 'react-native';
-import { styles } from '../../styles/GeneralStyles';
 
 // Native-base
 import { View, Button, useToast, HStack, Spinner } from 'native-base';
@@ -22,7 +22,7 @@ export function AccountDeletionPage({ navigation }: any) {
     const toast = useToast()
 
     // Data fetching
-    const [memberCode, setMemberCode] = useState(null as any)
+    const [memberCode, setMemberCode] = useState<null | number>(null)
 
     const infoFetching = async () => {
         const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/profile`, {
@@ -47,13 +47,23 @@ export function AccountDeletionPage({ navigation }: any) {
     // Delete client
     const deleteClient = async () => {
 
+        if(memberCode === null){
+            toast.show({
+                description: "Invalid user data."
+            })
+            
+            return;
+        }
+
         const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/delete-profile`, {
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${userToken}`,
                 'content-type': 'application/json'
             },
-            body: JSON.stringify({member_code: memberCode})
+            body: JSON.stringify({
+                member_code: memberCode
+            })
         });
 
         if (resp.status == 200) {
