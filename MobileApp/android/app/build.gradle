@@ -143,7 +143,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 5
-        versionName "2.23"
+        versionName "2.22"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
         // config
         resValue "string", "build_config_package", "com.onesolution.telemedicine"
