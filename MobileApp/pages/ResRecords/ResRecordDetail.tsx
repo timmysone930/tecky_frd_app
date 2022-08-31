@@ -286,11 +286,10 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             else {
                 time = time - 10
             }
-
-            emailReceipt(reservationData.res_code)
-
+            
             let pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
             setNotification(reservationData.res_date, userCode, pushTime, reservationData.res_code, userToken)
+            emailReceipt(reservationData.res_code)
 
             props.navigation.navigate({ name: '預約記錄' })
         } else {

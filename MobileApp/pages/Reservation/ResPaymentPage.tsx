@@ -215,6 +215,8 @@ export const PaymentPage = (props: any) => {
                                 token: userToken
                             })
 
+                            console.log(reservationRes?.data)
+
                             if (reservationRes?.data) {
 
                                 // payment
