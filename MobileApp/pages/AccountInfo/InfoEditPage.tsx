@@ -115,7 +115,7 @@ export function InfoEditPage({ navigation }: any) {
 
             if(backData.status){
                 toast.show({
-                    description: `已送出驗證碼\n驗證碼: ${backData.msg}`
+                    description: `已送出驗證碼，請查閱短訊`
                 })
             }
             else{

@@ -99,13 +99,13 @@ export const LoginPage = (props: any) => {
             }
 
             toast.show({
-                description: "已送出驗證碼"
+                description: "已送出驗證碼，請查閱短訊"
             })
 
             setValue("loginSMS", code+"")
             toast.show({
                 duration: 12000,
-                description: `SMS Code: ${code}`
+                description: `已送出驗證碼，請查閱短訊`
             })
 
         } catch (e: any) {
@@ -119,7 +119,7 @@ export const LoginPage = (props: any) => {
             setValue("loginSMS", code+"")
             toast.show({
                 duration: 12000,
-                description: `SMS Code: ${code}`
+                description: `已送出驗證碼，請查閱短訊`
             })
         }
     }
