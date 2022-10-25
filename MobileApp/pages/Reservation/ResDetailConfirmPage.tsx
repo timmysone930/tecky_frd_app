@@ -43,7 +43,7 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
         // console.log("docInfo", docInfo.docData.video_diag_fee)
         reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}`
         rowCellArr = [
-            `$ ${docInfo.docData.video_diag_fee || 9999}`,
+            `$ ${docInfo.docData.video_diag_fee === 0 ? 0 : docInfo.docData.video_diag_fee || 9999}`,
             formData.reservedDate,
             reserveSession,
             formData.name,

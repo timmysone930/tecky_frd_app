@@ -245,7 +245,7 @@ export const ReservationPage = (props: any) => {
                                 }}
                             >
                                 <Text style={styles.subTitle}>
-                                    暫定問診費用： ${docData.video_diag_fee || 9999}
+                                    暫定問診費用： ${docData.video_diag_fee === 0 ? 0 : docData.video_diag_fee || 9999}
                                 </Text>
                                 <Text style={styles.infoText}>
                                     （此費用不包括醫生處方藥物)
