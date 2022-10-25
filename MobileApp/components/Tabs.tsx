@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // redux
 import { store } from '../redux/store';
-import { checkStatus } from '../redux/AuthSlice';
+import { checkStatus, logoutAction } from '../redux/AuthSlice';
 import { setUserInfo } from '../redux/AuthSlice';
 
 // pages && components
@@ -24,6 +24,7 @@ import { LoginStacks } from '../Stack/LoginStack';
 
 // import icon for FontAwesome
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Config from 'react-native-config';
 // import Config from 'react-native-config';
 
 // Bottom Tabs
@@ -47,10 +48,22 @@ export const Tabs = () => {
                         phone: string;
                         member_code: string;
                         token: string;
-                    } = JSON.parse(jsonValue)
-                    store.dispatch(checkStatus({ status: true, phone: result.phone }))
-                    store.dispatch(setUserInfo({ member_code: result.member_code, token: result.token }))
-                    return result
+                    } = JSON.parse(jsonValue);
+
+                    const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/profile`, {
+                        headers: {
+                            "Authorization": `Bearer ${result.token}`,
+                        }
+                    })
+                    
+                    if (resp.status === 200) {
+                        store.dispatch(checkStatus({ status: true, phone: result.phone }))
+                        store.dispatch(setUserInfo({ member_code: result.member_code, token: result.token }));
+                        return result;
+                    } else {
+                        store.dispatch(logoutAction);
+                        return null;
+                    }
                 }
 
                 return null;
