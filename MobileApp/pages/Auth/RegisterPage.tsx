@@ -90,10 +90,10 @@ export const RegisterPage = (props: any) => {
             const res: QueryReturnValue = await getNotUserSMS({ 'phone':  parseInt(phoneString) })
             console.log('SMSres',res);
             toast.show({
-                description: "已送出驗證碼"
+                description: "已送出驗證碼，請查閱短訊"
             })
             toast.show({
-                description: `SMS Code: ${res.data}`,
+                description: `已送出驗證碼，請查閱短訊`,
                 duration: 12000
             })
         } catch (e) {
