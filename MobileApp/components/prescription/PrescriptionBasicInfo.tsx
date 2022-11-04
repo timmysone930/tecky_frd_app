@@ -34,7 +34,8 @@ export const PrescriptionBasicInfo = (props: any) => {
                     "應診者": "patient_name",
                     "身份證": "patient_id",
                     "物流狀態": "status",
-                    "送貨地址": "address"
+                    "送貨地址": "address",
+                    "快遞公司": "courier_name"
                 } : {
                     "醫生": "doctor",
                     "專科": "profession",

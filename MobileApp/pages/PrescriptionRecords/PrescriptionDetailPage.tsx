@@ -48,6 +48,10 @@ export function PrescriptionDetailPage({ navigation }: any) {
             const prescriptionSelecting = reduxData.prescriptionSelecting;
             const data = prescriptionSelecting
             console.log(data);
+
+            const res = await fetch(`${Config.REACT_APP_API_SERVER}/courier/search?column=code&where=${data.prescription.courier_code}`)
+            const result = await res.json();
+            const name = result[0] ? result[0].courier_name : '';
             // const prescriptionCode = reduxData.prescriptionCode ;
             // const costResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/search?column=id&where=${data.prescription.payment}`, init)
             // const cost = (await costResp.json())[0].amount
@@ -63,7 +67,7 @@ export function PrescriptionDetailPage({ navigation }: any) {
             // console.log({...data, payment_amount: cost, clinic_phone: clinicPhone, treatmentItems});
 
             // setFetchData({...data, payment_amount: cost, clinic_phone: clinicPhone, treatmentItems})
-            setFetchData(data)
+            setFetchData({ ...data, courier_name: name })
         }
 
         const goToPay = () => {
@@ -113,9 +117,10 @@ export function PrescriptionDetailPage({ navigation }: any) {
                                         status_chinese[fetchData.prescription.order_status] :
                                     ''}
                                 pay_status={fetchData.prescription.payment_status}
+                                courier_name={fetchData.courier_name}
                             />
 
-                            {/* <Button title={'click'} onPress={() => console.log(fetchData)} /> */}
+                            <Button title={'click'} onPress={() => console.log(fetchData)} />
 
                             {/* Component */}
                             <CostDisplay cost={fetchData.bill[0].totel_amount} />
