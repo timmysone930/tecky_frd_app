@@ -23,14 +23,35 @@ import { styles } from '../../styles/GeneralStyles'
 
 export const PrescriptionBasicInfo = (props: any) => {
 
-    const contentItemToDisplay: any = {
-        "醫生": "doctor",
-        "專科": "profession",
-        "開藥日期": "created_at",
-        "療程": "course_of_treatment",
-        "應診者": "patient_name",
-        "身份證": "patient_id"
-    };
+    const contentItemToDisplay: any =
+        (props.pay_status !== 'cancel' && props.pay_status !== 'waiting') ?
+            props.is_delivery ?
+                {
+                    "醫生": "doctor",
+                    "專科": "profession",
+                    "開藥日期": "created_at",
+                    "療程": "course_of_treatment",
+                    "應診者": "patient_name",
+                    "身份證": "patient_id",
+                    "物流狀態": "status",
+                    "送貨地址": "address"
+                } : {
+                    "醫生": "doctor",
+                    "專科": "profession",
+                    "開藥日期": "created_at",
+                    "療程": "course_of_treatment",
+                    "應診者": "patient_name",
+                    "身份證": "patient_id",
+                    "取貨狀態": "status",
+                    "取貨地址": "address"
+                } : {
+                "醫生": "doctor",
+                "專科": "profession",
+                "開藥日期": "created_at",
+                "療程": "course_of_treatment",
+                "應診者": "patient_name",
+                "身份證": "patient_id",
+            };
 
     return (
         <>
