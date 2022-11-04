@@ -120,7 +120,7 @@ export function PrescriptionDetailPage({ navigation }: any) {
                                 courier_name={fetchData.courier_name}
                             />
 
-                            <Button title={'click'} onPress={() => console.log(fetchData)} />
+                            {/* <Button title={'click'} onPress={() => console.log(fetchData)} /> */}
 
                             {/* Component */}
                             <CostDisplay cost={fetchData.bill[0].totel_amount} />
