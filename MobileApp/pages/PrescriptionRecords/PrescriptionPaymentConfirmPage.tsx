@@ -14,6 +14,7 @@ import { PayButton } from '../../components/prescription/PayButton';
 
 // Config
 import Config from 'react-native-config';
+import { statueDisplay } from '../../components/prescription/PrescriptionList';
 
 
 export const PrescriptionPaymentConfirm = ({navigation}:any) => {
@@ -90,7 +91,8 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
                             patient_id={fetchData.hkid}
                             orderStatusShow={false}
                             pres_code={fetchData.prescription.pres_code}
-                            payment_status={fetchData.prescription.payment_status}
+                            pay_status={fetchData.prescription.payment_status}
+                            payment_status={statueDisplay[fetchData.prescription.payment_status]}
                         />
                         {/* Component */}
                         <PrescriptionDetail treatmentItems={fetchData.treatmentItems}/>
@@ -133,10 +135,10 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
                                             {deliverAddress.area}&nbsp;
                                             {deliverAddress.district}&nbsp;
                                         </Text>
-                                        <Text style={[styles.subTitle]}>
+                                        <Text style={[styles.subTitle, { width: '60%' }]}>
                                             {deliverAddress.address.split("/nl/")[0]}
                                         </Text>
-                                        <Text style={[styles.subTitle]}>
+                                        <Text style={[styles.subTitle, { width: '60%' }]}>
                                             {deliverAddress.address.split("/nl/")[1]}
                                         </Text>
                                     </>

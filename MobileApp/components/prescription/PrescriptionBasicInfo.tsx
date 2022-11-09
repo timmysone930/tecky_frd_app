@@ -24,7 +24,7 @@ import { styles } from '../../styles/GeneralStyles'
 export const PrescriptionBasicInfo = (props: any) => {
 
     const contentItemToDisplay: any =
-        (props.pay_status !== 'cancel' && props.pay_status !== 'waiting') ?
+        (props.pay_status !== 'waiting' && props.pay_status !== 'cancel') ?
             props.is_delivery ?
                 {
                     "醫生": "doctor",
@@ -45,7 +45,8 @@ export const PrescriptionBasicInfo = (props: any) => {
                     "身份證": "patient_id",
                     "取貨狀態": "status",
                     "取貨地址": "address"
-                } : {
+                }
+            : {
                 "醫生": "doctor",
                 "專科": "profession",
                 "開藥日期": "created_at",
@@ -68,7 +69,7 @@ export const PrescriptionBasicInfo = (props: any) => {
                             <Text style={[{ width: 95 }, styles.contentText]}>
                                 {key}：
                             </Text>
-                            <Text style={[styles.subTitle]}>
+                            <Text style={[styles.subTitle, { maxWidth: '65%' }]}>
                                 {props[contentItemToDisplay[key]]}
                             </Text>
                         </View>

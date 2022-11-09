@@ -110,7 +110,11 @@ export function PrescriptionDetailPage({ navigation }: any) {
                                 payment_status={statueDisplay[fetchData.prescription.payment_status]}
                                 is_delivery={fetchData.prescription.is_delivery}
                                 address={(fetchData.prescription.payment_status !== 'waiting' && fetchData.prescription.payment_status !== 'cancel') ?
-                                    fetchData.prescription.area + fetchData.prescription.district + fetchData.prescription.address?.split("/nl/")[0] : ''}
+                                    fetchData.prescription.area + ' ' +
+                                    fetchData.prescription.district + ' ' +
+                                    fetchData.prescription.address?.split("/nl/")[0] + ' ' +
+                                    fetchData.prescription.address?.split("/nl/")[1] :
+                                    ''}
                                 status={(fetchData.prescription.payment_status !== 'waiting' && fetchData.prescription.payment_status !== 'cancel') ?
                                     fetchData.prescription.is_delivery ?
                                         delivery_status_chinese[fetchData.prescription.order_status] :
