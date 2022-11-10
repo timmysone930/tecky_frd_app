@@ -10,6 +10,7 @@ import { HStack, Spinner, useToast } from 'native-base';
 import { store } from '../../redux/store';
 import { setPrescriptionCode } from '../../redux/slice';
 import { useSelector } from 'react-redux';
+import Config from 'react-native-config';
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -17,8 +18,8 @@ export const PrescriptionPaymentSuccessPage = (props: any) => {
 
     const userToken = useSelector((state: any) => state.getUserStatus.token);
     const init = {
-        headers:{
-            "Authorization":`Bearer ${userToken}`,
+        headers: {
+            "Authorization": `Bearer ${userToken}`,
         }
     };
     // white background
@@ -32,14 +33,14 @@ export const PrescriptionPaymentSuccessPage = (props: any) => {
     const [result, setResult] = useState(null as any)
     const [pres_code, setPres_code] = useState(null as any)
 
-    const redux = useSelector((state:any)=> state.getPrescriptionCode);
+    const redux = useSelector((state: any) => state.getPrescriptionCode);
     const prescriptionDetail = redux.prescriptionDetail
     console.log(redux);
-    
-    
+
+
     const [fetched, setFetched] = useState(false)
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         if (redux != null) {
             const pres_code = redux.prescriptionDetail.prescription.pres_code
             const payment_status = redux.payment_status
@@ -47,8 +48,52 @@ export const PrescriptionPaymentSuccessPage = (props: any) => {
             setPres_code(pres_code)
             setFetched(true)
         }
-        return ()=>{store.dispatch(setPrescriptionCode({payment_status: null}))}
-      },[])
+        return () => { store.dispatch(setPrescriptionCode({ payment_status: null })) }
+    }, [])
+
+    useEffect(() => {
+        if (!result) return;
+        getCourier();
+    }, [result])
+
+    const getCourier = async () => {
+        const pres_code = redux.prescriptionDetail.prescription.pres_code;
+        const res = await fetch(`${Config.REACT_APP_API_SERVER}/prescription/search?column=courier_code_courier_code&where=${pres_code}`, {
+            method: 'GET',
+        });
+        const result = await res.json();
+        console.log('result ', result)
+        if (result[0].courier_code === null) {
+            let whiteLocRes = await fetch(`${Config.REACT_APP_API_SERVER}/courier/whitelist/white_loc/${result[0].district}`, {
+                method: 'GET',
+            })
+
+            let whiteLocResult = await whiteLocRes.json();
+
+            if (whiteLocResult && Array.isArray(whiteLocResult) && whiteLocResult.length > 0) {
+                const data = {
+                    pres_code: pres_code,
+                    courier_name: whiteLocResult[0]['courier_name']
+                }
+                const setCourier = await fetch(`${Config.REACT_APP_API_SERVER}/prescription/edit/courier`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data),
+                    headers: {
+                        // Authorization: `Bearer ${token}`,
+                        'content-type': 'application/json'
+                    }
+
+                })
+                const courierSet = await setCourier.json();
+                console.log('set courier', courierSet);
+                return;
+            } else {
+                console.log('failed')
+                return;
+            }
+        }
+    }
+
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <View style={{ paddingTop: windowHeight * (1 / 7) }}>

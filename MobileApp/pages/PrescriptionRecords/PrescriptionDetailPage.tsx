@@ -113,7 +113,7 @@ export function PrescriptionDetailPage({ navigation }: any) {
                                     fetchData.prescription.area + ' ' +
                                     fetchData.prescription.district + ' ' +
                                     fetchData.prescription.address?.split("/nl/")[0] + ' ' +
-                                    fetchData.prescription.address?.split("/nl/")[1] :
+                                    (fetchData.prescription.address?.split("/nl/").length === 2 ? fetchData.prescription.address?.split("/nl/")[1] : '')  :
                                     ''}
                                 status={(fetchData.prescription.payment_status !== 'waiting' && fetchData.prescription.payment_status !== 'cancel') ?
                                     fetchData.prescription.is_delivery ?
@@ -122,6 +122,7 @@ export function PrescriptionDetailPage({ navigation }: any) {
                                     ''}
                                 pay_status={fetchData.prescription.payment_status}
                                 courier_name={fetchData.courier_name}
+                                cost={fetchData.bill[0].totel_amount}
                             />
 
                             {/* Component */}

@@ -24,7 +24,7 @@ import { styles } from '../../styles/GeneralStyles'
 export const PrescriptionBasicInfo = (props: any) => {
 
     const contentItemToDisplay: any =
-        (props.pay_status !== 'waiting' && props.pay_status !== 'cancel') ?
+        (props.pay_status !== 'waiting' && props.pay_status !== 'cancel' && props.cost) ?
             props.is_delivery ?
                 {
                     "醫生": "doctor",
