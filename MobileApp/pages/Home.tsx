@@ -11,6 +11,7 @@ import { NewsCard } from '../components/home/NewsCard';
 import { TipsCard } from '../components/home/TipsCard';
 
 import Config from "react-native-config";
+import { Button } from 'react-native-paper';
 console.log(Config.REACT_APP_API_SERVER)
 
 export const Home =  () => {
@@ -30,6 +31,7 @@ export const Home =  () => {
                     source={{uri: `${Config.REACT_APP_API_SERVER}/banner_01.jpeg`,}} 
                 />
                 <View style={backgroundStyle}>
+                    <Button>pay</Button>
                     {/* Tips Card component */}
                     <TipsCard />
                     {/* Latest News Card component */}
