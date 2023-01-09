@@ -266,22 +266,6 @@ export const LoginPage = (props: any) => {
 
 
                     </View>
-                    <Text>{JSON.stringify(Config.REACT_APP_API_SERVER)}</Text>
-                    <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={async ()=>{
-                        console.log('pressed!');
-                        
-                        let res = await fetch(`${Config.REACT_APP_API_SERVER}/payment/test`, {
-                            method:'POST',
-                            body: JSON.stringify({
-                                testing: '123'
-                            })
-                        })
-                        let result = await res.json()
-                        console.log(result);
-                        
-                    }}>
-                        <Text style={styles.buttonText}>pay</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity style={[styles.button, { backgroundColor: '#325C80' }]} onPress={handleSubmit(onLoginPress)}>
                         <Text style={styles.buttonText}>登入</Text>
                     </TouchableOpacity>

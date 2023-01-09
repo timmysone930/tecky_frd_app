@@ -11,6 +11,7 @@ import { InnerPrescriptionStacks } from './Stack/PrescriptionStack';
 
 import { NativeBaseProvider } from 'native-base';
 import { StripeProvider } from '@stripe/stripe-react-native';
+import Config from 'react-native-config';
 // import RNBootSplash from "react-native-bootsplash";
 
 const Stack = createStackNavigator();
@@ -20,7 +21,7 @@ const App = () => {
     <Provider store={store}>
       <NativeBaseProvider>
       <StripeProvider
-      publishableKey="pk_test_51MMTHkCM2jfI75vMGEoPUWKmNgt8aPxxhpLLWEV80Cjxq5s6pqH91yi88C3IWkC07uHulCXB5Wyk7IQn9NHPiAge00nMHCAJJH"
+      publishableKey={Config.STRIPE_PUBLIC_KEY}
       // urlScheme="your-url-scheme" // required for 3D Secure and bank redirects
       // merchantIdentifier="merchant.com.{{YOUR_APP_NAME}}" // required for Apple Pay
     >

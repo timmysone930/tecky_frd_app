@@ -17,6 +17,7 @@ import { useToast } from 'native-base';
 import { setNotification } from '../Reservation/ResPaymentConfirmPage';
 import { useSelector } from 'react-redux';
 import { useStripe } from '@stripe/stripe-react-native';
+import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
 
 const rowTitleArr = ['預約編號：', '預約醫生：', '預約日期：', '預約時間：']
 enum ButtonText {
@@ -32,6 +33,9 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
     const toast = useToast()
     const userToken = useSelector((state: any) => state.getUserStatus.token);
+    const userData = useGetUserInfoQuery(userToken)
+    console.log(userData);
+    console.log('NAME AHHHHH' , userData.data.name_en);
     const init = {
         headers:{
             "Authorization":`Bearer ${userToken}`,
@@ -300,18 +304,27 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         }
 
     }
+
+    // stripe implementation
+
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
     const [loading, setLoading] = useState(false);
+    const [paymentId, setPaymentId] = useState("")
   
+    let finalPayFee = data && data.item && data.item.final_res_fee ? data.item.final_res_fee+"" : "9999";
     const fetchPaymentSheetParams = async () => {
-      const response = await fetch(`${Config.REACT_APP_API_SERVER}/payment-sheet`, {
+      const response = await fetch(`${Config.REACT_APP_API_SERVER}/payment/payment-sheet`, {
         method: 'POST',
+        body: JSON.stringify({
+                "amount": finalPayFee,
+
+        }),
         headers: {
           'Content-Type': 'application/json',
         },
       });
       const { paymentIntent, ephemeralKey, customer,publishableKey} = await response.json();
-  
+    setPaymentId(paymentIntent)
       return {
         paymentIntent,
         ephemeralKey,
@@ -329,7 +342,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
       } = await fetchPaymentSheetParams();
   
       const { error } = await initPaymentSheet({
-        merchantDisplayName: "Example, Inc.",
+        merchantDisplayName: "Telemedicine",
         customerId: customer,
         customerEphemeralKeySecret: ephemeralKey,
         paymentIntentClientSecret: paymentIntent,
@@ -337,7 +350,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
         //methods that complete payment after a delay, like SEPA Debit and Sofort.
         allowsDelayedPaymentMethods: true,
         defaultBillingDetails: {
-          name: 'Jane Doe',
+          name: userData.data.name_en,
         }
       });
       if (!error) {
@@ -349,10 +362,60 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
       // see below
       const { error } = await presentPaymentSheet();
 
-      if (error) {
-        Alert.alert(`Error code: ${error.code}`, error.message);
-      } else {
-        Alert.alert('Success', 'Your order is confirmed!');
+      if (!error) {
+                // Alert.alert('Success', 'Your order is confirmed!');
+                    toast.show({
+                description: "付款成功"
+            })
+
+            // create payment table
+            let paymentData = { 
+                "gateway": "stripe",
+                "payment_id": paymentId,
+                "amount": finalPayFee,
+                "payment_status": true,
+                "type": "reservation",
+                "payment_type": "stripe",
+                "res_code": reservationData.res_code,
+                "session_id": reservationData.session_id 
+            }
+
+            console.log({paymentData});
+            
+
+            const paymentRes: any = await postNewPayment({
+                data: paymentData,
+                token: userToken
+            })
+            
+            console.log('paymentRes', paymentRes)
+
+            if (paymentRes.error) {
+                console.log('有error');
+                
+                console.log(paymentRes.error.data.message);
+                
+            }
+            
+            let time = parseInt(data.item.res_time.replace(':', ''), 10)
+            if(time % 100 - 10 < 0){
+                time = time - 50 
+            }
+            else {
+                time = time - 10
+            }
+            
+            let pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
+            setNotification(reservationData.res_date, userCode, pushTime, reservationData.res_code, userToken)
+            emailReceipt(reservationData.res_code)
+
+            props.navigation.navigate({ name: '預約記錄' })
+
+        } else {
+            toast.show({
+                description: "付款失敗: " + error.code+': '+ error.message
+            })
+
       }
     };
   
@@ -426,17 +489,18 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 && reservationData.status !== 'cancel' 
                 &&
                     <>
-                        <TouchableOpacity style={styles.fullButton} onPress={onClickPaypal}>
+                        {/* <TouchableOpacity style={styles.fullButton} onPress={onClickPaypal}>
                             <Text style={styles.buttonText}>
                                 進行付款
                             </Text>
+                        </TouchableOpacity> */}
+  
+
+                             <TouchableOpacity style={styles.fullButton} disabled={!loading} onPress={openPaymentSheet}>
+                            <Text style={styles.buttonText}>
+                            進行付款
+                            </Text>
                         </TouchableOpacity>
-                        <Button
-        // variant="primary"
-        disabled={!loading}
-        title="Checkout"
-        onPress={openPaymentSheet}
-      />
                         <Text style={[styles.warning, styles.textCenter, { marginVertical: 10, }]}>
                             *請於創建預約後十五分鐘內付款，否則預約會被取消
                         </Text>

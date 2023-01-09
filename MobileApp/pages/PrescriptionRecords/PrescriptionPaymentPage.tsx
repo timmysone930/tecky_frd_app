@@ -10,10 +10,20 @@ import { useToast } from 'native-base';
 import { store } from '../../redux/store';
 import { setPrescriptionCode } from '../../redux/slice';
 import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
+import { useStripe } from '@stripe/stripe-react-native';
+import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
 
 export const PrescriptionPaymentPage = (props: any) => {
 
     const userToken = useSelector((state: any) => state.getUserStatus.token);
+    const userInfo = useSelector((state: any) => state.getUserInfo);
+        // get current users profile
+    const userData = useGetUserInfoQuery(userToken)
+    console.log(userData);
+    console.log('NAME AHHHHH' , userData.data.name_en);
+    
+    
+
     // white background
     const backgroundStyle = {
         backgroundColor: 'white',
@@ -23,12 +33,16 @@ export const PrescriptionPaymentPage = (props: any) => {
     const toast = useToast()
 
     const [fetchData, setFetchData] = useState(null as any)
+    const [finalPayFee, setFinalPayFee] = useState(9999+"")
     const redux = useSelector((state: any) => state.getPrescriptionCode);
     const prescriptionDetail = redux.prescriptionDetail
     useEffect(() => {
         console.log(prescriptionDetail);
         if (fetchData == null) {
             setFetchData(prescriptionDetail)
+        }
+        if (Array.isArray(prescriptionDetail.bill)) {
+            setFinalPayFee(prescriptionDetail.bill[0].totel_amount+"")
         }
         console.log(fetchData);
     }, [])
@@ -194,6 +208,142 @@ export const PrescriptionPaymentPage = (props: any) => {
 
     }
 
+       // stripe implementation
+
+       const { initPaymentSheet, presentPaymentSheet } = useStripe();
+       const [loading, setLoading] = useState(false);
+       const [paymentId, setPaymentId] = useState("")
+
+     
+       const fetchPaymentSheetParams = async () => {
+         const response = await fetch(`${Config.REACT_APP_API_SERVER}/payment/payment-sheet`, {
+           method: 'POST',
+           body: JSON.stringify({
+                   "amount": Array.isArray(prescriptionDetail.bill)?prescriptionDetail.bill[0].totel_amount+'':9999+'',
+   
+           }),
+           headers: {
+             'Content-Type': 'application/json',
+           },
+         });
+         const { paymentIntent, ephemeralKey, customer,publishableKey} = await response.json();
+       setPaymentId(paymentIntent)
+         return {
+           paymentIntent,
+           ephemeralKey,
+           customer,
+           publishableKey
+         };
+       };
+     
+       const initializePaymentSheet = async () => {
+         const {
+           paymentIntent,
+           ephemeralKey,
+           customer,
+           publishableKey,
+         } = await fetchPaymentSheetParams();
+     
+         const { error } = await initPaymentSheet({
+           merchantDisplayName: "Telemedicine",
+           customerId: customer,
+           customerEphemeralKeySecret: ephemeralKey,
+           paymentIntentClientSecret: paymentIntent,
+           // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
+           //methods that complete payment after a delay, like SEPA Debit and Sofort.
+           allowsDelayedPaymentMethods: true,
+           defaultBillingDetails: {
+             name: userData.data.name_en,
+           }
+         });
+         if (!error) {
+           setLoading(true);
+         }
+       };
+     
+       const openPaymentSheet = async () => {
+         // see below
+         const { error } = await presentPaymentSheet();
+   
+         if (!error) {   
+               // create payment table
+               const editPaymentResp = await fetch(`${Config.REACT_APP_API_SERVER}/payment/pay-pres`, {
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    payment: {
+                        id: fetchData.prescription.payment,
+                        payment_id: paymentId,
+                        gateway: "stripe",
+                        amount: finalPayFee,
+                        payment_status: true,
+                        type: "prescription",
+                        payment_type: "stripe",   
+                        bill: fetchData.bill[0],
+                    },
+                    newPres: {
+                        pres_code: prescriptionDetail.prescription.pres_code,
+                        address: prescriptionDetail.prescription.address,
+                        area: prescriptionDetail.prescription.area,
+                        courier_code: prescriptionDetail.prescription.courier_code,
+                        delivery_contact: prescriptionDetail.prescription.delivery_contact,
+                        delivery_phone: prescriptionDetail.prescription.delivery_phone,
+                        district: prescriptionDetail.prescription.district,
+                        is_delivery: prescriptionDetail.prescription.is_delivery,
+                        payment: prescriptionDetail.prescription.payment,
+                        pick_up_store: prescriptionDetail.prescription.pick_up_store,
+                        pres_details: prescriptionDetail.prescription.pres_details,
+                        payment_status: "paid",
+                    }
+                })
+            })
+            const email = await fetch(`${Config.REACT_APP_API_SERVER}/payment/receipt/diagnosis`, {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${userToken}`,
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify({
+                    pres_code: prescriptionDetail.prescription.pres_code
+                })
+            })
+
+            console.log(email);
+            
+
+
+            // "payment_id": paypalRes.data.nonce
+            // const editPaymentResult = editPaymentResp.status == 200 ? (await editPaymentResp.json()) : null;
+            console.log(editPaymentResp.status);
+            console.log(await editPaymentResp.text());
+            if (editPaymentResp.status == 200) {
+                setRedux(true)
+                toast.show({
+                    description: "付款完成"
+                })
+            } else {
+                setRedux(false)
+                toast.show({
+                    description: "更新失敗，如已付款請聯絡客服"
+                })
+            }
+
+            props.navigation.navigate({ name: '付款完成' })
+       } else {
+        setRedux(false)
+        toast.show({
+            description: "付款失敗"
+        })
+        props.navigation.navigate({ name: '付款完成' })
+    }
+    }
+       useEffect(() => {
+         initializePaymentSheet();
+       }, []);
+
     // Radio Button
     const [radioValue, setRadioValue] = React.useState('PayPal');
     return (
@@ -207,9 +357,13 @@ export const PrescriptionPaymentPage = (props: any) => {
                 }
                  {submitStatus ?
                 <RadioButton.Group onValueChange={value => { setRadioValue(value) }} value={radioValue}>
-                    <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start' }} onPress={() => setRadioValue("PayPal")}>
+                    {/* <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start' }} onPress={() => setRadioValue("PayPal")}>
                         <RadioButton.Item label="" value="PayPal" mode='android' color='#6d7f99' style={{ paddingTop: 30 }} />
                         <Image style={{ width: 200, height: 100, }} resizeMode="contain" resizeMethod="scale" source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_PayPal.png` }} />
+                    </TouchableOpacity> */}
+                    <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'flex-start' }} onPress={() => setRadioValue("stripe")}>
+                        <RadioButton.Item label="" value="PayPal" mode='android' color='#6d7f99' style={{ paddingTop: 30 }} />
+                        <Image style={{ width: 200, height: 100, }} resizeMode="contain" resizeMethod="scale" source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_stripe.png` }} />
                     </TouchableOpacity>
                 </RadioButton.Group>
                 :
@@ -223,7 +377,7 @@ export const PrescriptionPaymentPage = (props: any) => {
                     <Text style={styles.buttonText}>返回主頁</Text></TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.button, { backgroundColor: '#325C80' }]}
-                    onPress={nextStep}
+                    onPress={openPaymentSheet}
                     disabled={!submitStatus}
                 >
                     <Text style={styles.buttonText}>下一步</Text>

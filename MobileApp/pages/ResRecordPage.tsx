@@ -5,6 +5,7 @@ import { SpinnerComponent } from '../components/utils/SpinnerComponent';
 import { ResRecordComponent } from '../components/reservationRecord/ResRecordComponent';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import { useGetUserInfoQuery } from '../API/UserInfoAPI';
 // white background
 const backgroundStyle = { backgroundColor: 'white', };
 
@@ -15,6 +16,8 @@ export const wait = (timeout: number) => {
 export const ResRecordPage = (props: any) => {
 
     const userToken = useSelector((state: any) => state.getUserStatus.token);
+    const userData = useGetUserInfoQuery(userToken)
+    console.log(userData);
     
     // fetch the resRecord
     let recordData = useGetReservationListQuery(userToken);
