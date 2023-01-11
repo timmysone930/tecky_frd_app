@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, SafeAreaView, ScrollView, TouchableOpacity, Image, Platform } from 'react-native';
 import Config from 'react-native-config';
 import { RadioButton } from 'react-native-paper';
@@ -13,16 +13,22 @@ import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
 import { setMemberCode } from '../../redux/slice';
 import { styles } from '../../styles/GeneralStyles'
 import { SpinnerComponent } from '../../components/utils/SpinnerComponent';
+import { useStripe } from '@stripe/stripe-react-native';
+import { useGetUserInfoQuery } from '../../API/UserInfoAPI';
 // white background
 const backgroundStyle = { backgroundColor: 'white', };
 
 export const PaymentPage = (props: any) => {
     // get JWT token
     const userToken = useSelector((state: any) => state.getUserStatus.token);
+    const userInfo = useSelector((state: any) => state.getUserInfo);
+    const userData = useGetUserInfoQuery(userToken)
+
+
     const toast = useToast();
 
     // Radio Button
-    const [radioValue, setRadioValue] = React.useState('PayPal');
+    const [radioValue, setRadioValue] = React.useState('stripe');
     // get form data
     const formData = useSelector((state: any) => state.getFormData);
     // selected doctor id
@@ -120,6 +126,64 @@ export const PaymentPage = (props: any) => {
         console.log(email);
     }
 
+           // stripe implementation
+
+           console.log('HAHA',JSON.stringify(props));
+           
+
+           const { initPaymentSheet, presentPaymentSheet } = useStripe();
+           const [loading, setLoading] = useState(false);
+           const [paymentId, setPaymentId] = useState("")
+    
+         
+           const fetchPaymentSheetParams = async () => {
+             const response = await fetch(`${Config.REACT_APP_API_SERVER}/payment/payment-sheet`, {
+               method: 'POST',
+               body: JSON.stringify({
+                "amount": docInfo.docData.video_diag_fee === 0 ? 0 : docInfo.docData.video_diag_fee || 9999,
+
+                    //    "amount": Array.isArray(prescriptionDetail.bill)?prescriptionDetail.bill[0].totel_amount+'':9999+'',
+       
+               }),
+               headers: {
+                 'Content-Type': 'application/json',
+               },
+             });
+             const { paymentIntent, ephemeralKey, customer,publishableKey} = await response.json();
+           setPaymentId(paymentIntent)
+             return {
+               paymentIntent,
+               ephemeralKey,
+               customer,
+               publishableKey
+             };
+           };
+         
+           const initializePaymentSheet = async () => {
+             const {
+               paymentIntent,
+               ephemeralKey,
+               customer,
+               publishableKey,
+             } = await fetchPaymentSheetParams();
+         
+             const { error } = await initPaymentSheet({
+               merchantDisplayName: "Telemedicine",
+               customerId: customer,
+               customerEphemeralKeySecret: ephemeralKey,
+               paymentIntentClientSecret: paymentIntent,
+               // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
+               //methods that complete payment after a delay, like SEPA Debit and Sofort.
+               allowsDelayedPaymentMethods: true,
+               defaultBillingDetails: {
+                 name: userData.data.name_en,
+               }
+             });
+             if (!error) {
+               setLoading(true);
+             }
+           };
+
     // submit
     const onPress = async () => {
         setSubmitStatus(false)
@@ -153,6 +217,8 @@ export const PaymentPage = (props: any) => {
         // refetch
         rosterSession.refetch();
         rosterClinicCode.refetch();
+
+        
 
         // check session status
         if (rosterClinicCode.isSuccess) {
@@ -220,26 +286,39 @@ export const PaymentPage = (props: any) => {
                             if (reservationRes?.data) {
 
                                 // payment
-                                const paypalRes = await redirectPaypal(docInfo.docData.video_diag_fee+"" || "9999");
+                                // const paypalRes = await redirectPaypal(docInfo.docData.video_diag_fee+"" || "9999");
+                                const { error } = await presentPaymentSheet();
+   
+                       
 
-                                if (paypalRes.status === 'success') {
+                                // if (paypalRes.status === 'success') {
+                                    if (!error){
                                     toast.show({
                                         description: "付款成功"
                                     })
 
                                     // create payment table
-                                    let paymentData = { 
-                                        "gateway": "paypal", 
-                                        "payment_id": paypalRes.data.nonce,
-                                        "amount": paypalRes.data.payAmount,
+                                    // let paymentData = { 
+                                    //     "gateway": "paypal", 
+                                    //     "payment_id": paypalRes.data.nonce,
+                                    //     "amount": paypalRes.data.payAmount,
+                                    //     "payment_status": true,
+                                    //     "type": "reservation",
+                                    //     "payment_type": "paypal",
+                                    //     "res_code": reservationRes.data,
+                                    //     "session_id": formData.reservedSession,
+                                    //     "deviceData": paypalRes.data.deviceData
+                                    // }
+                                                                        let paymentData = { 
+                                        "gateway": "stripe", 
+                                        "payment_id": paymentId,
+                                        "amount": docInfo.docData.video_diag_fee === 0 ? 0 + '' : docInfo.docData.video_diag_fee+'' || 9999 + '',
                                         "payment_status": true,
                                         "type": "reservation",
-                                        "payment_type": "paypal",
+                                        "payment_type": "stripe",
                                         "res_code": reservationRes.data,
                                         "session_id": formData.reservedSession,
-                                        "deviceData": paypalRes.data.deviceData
                                     }
-                                    
                                     const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
                                     console.log('paymentRes', paymentRes)
                                     
@@ -296,6 +375,10 @@ export const PaymentPage = (props: any) => {
         }
     }
 
+    useEffect(() => {
+        initializePaymentSheet();
+      }, []);
+
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
             <ScrollView 
@@ -316,7 +399,7 @@ export const PaymentPage = (props: any) => {
                             onValueChange={value => { setRadioValue(value) }} 
                             value={radioValue}
                         >
-                            <TouchableOpacity 
+                            {/* <TouchableOpacity 
                                 style={{ flexDirection: 'row', justifyContent: 'flex-start' }} 
                                 onPress={() => setRadioValue("PayPal")}
                             >
@@ -326,6 +409,18 @@ export const PaymentPage = (props: any) => {
                                     resizeMode="contain" 
                                     resizeMethod="scale" 
                                     source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_PayPal.png`, }} 
+                                />
+                            </TouchableOpacity> */}
+                            <TouchableOpacity 
+                                style={{ flexDirection: 'row', justifyContent: 'flex-start' }} 
+                                onPress={() => setRadioValue("stripe")}
+                            >
+                                <RadioButton.Item label="" value="stripe" mode='android' color='#6d7f99' style={{ paddingTop: 30 }} />
+                                <Image 
+                                    style={{ width: 200, height: 100, }} 
+                                    resizeMode="contain" 
+                                    resizeMethod="scale" 
+                                    source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_stripe.png`, }} 
                                 />
                             </TouchableOpacity>
                         </RadioButton.Group>
