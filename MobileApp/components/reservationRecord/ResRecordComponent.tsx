@@ -64,7 +64,7 @@ export const ResRecordComponent = (props: Props) => {
 
                         </View>
                         <View>
-                            <ResRecordStatus resStatus={item.status} />
+                            <ResRecordStatus resStatus={item.status} approval_status={item.approval_status} />
                         </View>
                     </TouchableOpacity>
                 )

@@ -7,6 +7,7 @@ interface statusType {
 
 interface Props {
   resStatus: string
+  approval_status: string
 }
 
 const statusColor: statusType = {
@@ -24,7 +25,15 @@ const statusText:statusType = {
 export const ResRecordStatus = (props: Props) => {
   return (
     <>    
-      {Object.keys(statusColor).map((key , idx)=> (
+      { props.approval_status=="cancel"? 
+      <View 
+      style={[styles.resStatus, {backgroundColor: "#ff3333"}]} 
+    >
+      <Text style={[styles.resStatusFont]}>已取消</Text>
+      </View>
+
+      :
+      Object.keys(statusColor).map((key , idx)=> (
         props.resStatus == key && 
         <View 
           style={[styles.resStatus, {backgroundColor: statusColor[key as keyof statusType]}]} 
