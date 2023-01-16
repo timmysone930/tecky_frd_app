@@ -115,11 +115,14 @@ export function PrescriptionDetailPage({ navigation }: any) {
                                     fetchData.prescription.address?.split("/nl/")[0] + ' ' +
                                     (fetchData.prescription.address?.split("/nl/").length === 2 ? fetchData.prescription.address?.split("/nl/")[1] : '')  :
                                     ''}
-                                status={(fetchData.prescription.payment_status !== 'waiting' && fetchData.prescription.payment_status !== 'cancel') ?
+                                status={
+                                    (fetchData.prescription.payment_status !== 'waiting' || fetchData.prescription.payment_status !== 'cancel') ?
                                     fetchData.prescription.is_delivery ?
                                         delivery_status_chinese[fetchData.prescription.order_status] :
                                         status_chinese[fetchData.prescription.order_status] :
-                                    ''}
+                                        fetchData.prescription.payment_status !== 'cancel' ? 
+                                        '已取消' : "待付款"
+                                }
                                 pay_status={fetchData.prescription.payment_status}
                                 courier_name={fetchData.courier_name}
                                 cost={fetchData.bill[0].totel_amount}

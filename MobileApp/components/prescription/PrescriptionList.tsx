@@ -21,13 +21,16 @@ interface Props {
 export const statueDisplay: any = {
     paid: "已付款",
     waiting: "待付款",
+    pending: "待發貨",
     cancel: "已取消",
     sent: "已送出",
     received: "已取"
 }
 
 export const PrescriptionList = (props: Props) => {
-    console.log("JNIKJNIJNIJNI", props.data);
+    // console.log("JNIKJNIJNIJNI", props.data);
+    // console.log("PRESCRIPTION ONLY", props.data.map(item=>item.prescription));
+
 
     return (
         <FlatList
@@ -53,7 +56,14 @@ export const PrescriptionList = (props: Props) => {
                             </Text>
                         </View>
                         <View>
-                            <DisplayPaymentStatus paymentStatus={statueDisplay[item.prescription.payment_status]} />
+                        {
+                                item.prescription.payment_status == "waiting" ?
+                            <DisplayPaymentStatus 
+                            paymentStatus={statueDisplay[item.prescription.payment_status]} /> :
+                                <DisplayPaymentStatus 
+                                paymentStatus={statueDisplay[item.prescription.order_status]} /> 
+
+                            }
                         </View>
                     </TouchableOpacity>
                 )

@@ -320,7 +320,7 @@ PODS:
     - react-native-config/App (= 1.4.6)
   - react-native-config/App (1.4.6):
     - React-Core
-  - react-native-image-picker (4.8.5):
+  - react-native-image-picker (5.0.0):
     - React-Core
   - react-native-onesignal (4.4.0):
     - OneSignalXCFramework (= 3.11.2)
@@ -686,7 +686,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 218a2503198ff28a085f8e16622a8d8f507c8019
   React-logger: f79dd3cc0f9b44f5611c6c7862badd891a862cf8
   react-native-config: 7cd105e71d903104e8919261480858940a6b9c0e
-  react-native-image-picker: cd420f97f6ed6ff74fc4686d27dbcfdbd051db91
+  react-native-image-picker: 9160f95f836aae4a9afb90a7b2ab78b2b534e5bd
   react-native-onesignal: dd51f7c4771983f0169a6f06df12a4cf096ca28e
   react-native-safe-area-context: 6c12e3859b6f27b25de4fee8201cfb858432d8de
   React-perflogger: 30ab8d6db10e175626069e742eead3ebe8f24fd5

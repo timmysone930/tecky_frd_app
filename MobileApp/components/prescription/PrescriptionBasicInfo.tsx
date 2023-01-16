@@ -22,6 +22,8 @@ import { styles } from '../../styles/GeneralStyles'
 
 
 export const PrescriptionBasicInfo = (props: any) => {
+    // console.log('propsssss', props);
+    
 
     const contentItemToDisplay: any =
         (props.pay_status !== 'waiting' && props.pay_status !== 'cancel' && props.cost) ?
