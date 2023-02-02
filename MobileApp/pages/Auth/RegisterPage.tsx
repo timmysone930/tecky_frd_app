@@ -453,10 +453,13 @@ export const RegisterPage = (props: any) => {
             render={({field: {value}}) => (
               <Checkbox.Group
                 onChange={values => {
+                  console.log(values);
                   setGroupValues(values || []);
                   setValue('regPolicyOne', values || []);
-                  setGroupValues2(values || []);
-                  setValue('regPolicyTwo', values || []);
+                  if (groupValues2.length < 0) {
+                    setGroupValues2(values || []);
+                    setValue('regPolicyTwo', values || []);
+                  }
                 }}
                 value={groupValues}
                 accessibilityLabel="agree policy"
@@ -481,8 +484,8 @@ export const RegisterPage = (props: any) => {
               <Checkbox.Group
                 onChange={values => {
                   console.log('this field is useless');
-                  //   setGroupValues2(values || []);
-                  //   setValue('regPolicyTwo', values || []);
+                  setGroupValues2(values || []);
+                  setValue('regPolicyTwo', values || []);
                 }}
                 value={groupValues2}
                 accessibilityLabel="agree policy"
