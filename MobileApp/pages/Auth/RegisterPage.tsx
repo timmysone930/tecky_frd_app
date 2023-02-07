@@ -94,9 +94,9 @@ export const RegisterPage = (props: any) => {
     isDisable: false,
   });
 
-  useEffect(() => {
-    console.log(groupValues2);
-  }, [groupValues2]);
+  // useEffect(() => {
+  //   console.log(groupValues2);
+  // }, [groupValues2]);
 
   const intervalId = useRef(0 as any);
   const onSMSPress = async (inputData: any) => {
@@ -456,10 +456,6 @@ export const RegisterPage = (props: any) => {
                   console.log(values);
                   setGroupValues(values || []);
                   setValue('regPolicyOne', values || []);
-                  if (groupValues2.length < 0) {
-                    setGroupValues2(values || []);
-                    setValue('regPolicyTwo', values || []);
-                  }
                 }}
                 value={groupValues}
                 accessibilityLabel="agree policy"
@@ -479,11 +475,13 @@ export const RegisterPage = (props: any) => {
           )}
           <Controller
             control={control}
-            rules={{required: true}}
+            rules={{required: false}}
             render={({field: {value}}) => (
               <Checkbox.Group
                 onChange={values => {
                   console.log('this field is useless');
+                  console.log(values);
+
                   setGroupValues2(values || []);
                   setValue('regPolicyTwo', values || []);
                 }}
@@ -516,7 +514,13 @@ export const RegisterPage = (props: any) => {
                   : '#325C80',
             },
           ]}
-          onPress={handleSubmit(onSubmit)}
+          onPress={handleSubmit(async data => {
+            try {
+              await onSubmit(data);
+            } catch (error) {
+              console.log(error);
+            }
+          })}
           disabled={
             Object.keys(dirtyFields).length < 6 ||
             getValues('regPolicyOne').length === 0
