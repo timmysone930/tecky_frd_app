@@ -15,7 +15,7 @@
     "buildAndroidAPK": "python3 incVersion.py && set ENVFILE=.env.production && cd android && ./gradlew assembleRelease",
     "buildAndroidAPKDeploy": "python incVersion.py && SET ENVFILE=.env.production && cd android && ./gradlew assembleRelease && cd .. && firebase appdistribution:distribute ./android/app/build/outputs/apk/release/app-release.apk --app 1:367116338304:android:40aeb36aee3c01dff99265 --release-notes \"Bug fixes and improvements\" --groups \"internaltestgp\"",
     "buildAndroidAPKFull": "python incVersion.py && SET ENVFILE=.env.production && cd android && ./gradlew assembleRelease && cd .. && firebase appdistribution:distribute ./android/app/build/outputs/apk/release/app-release.apk --app 1:367116338304:android:40aeb36aee3c01dff99265 --release-notes \"Bug fixes and improvements\" --groups \"internaltestgp\" && python cicd.py",
-    "buildAndroidAPKHalf": "python incVersion.py && SET ENVFILE=.env.production && cd android && ./gradlew assembleRelease && cd .. && python cicd.py",
+    "buildAndroidAPKHalf": "python3 incVersion.py && set ENVFILE=.env.production && cd android && ./gradlew assembleRelease && cd .. && python3 cicd.py",
     "deployG": "python cicd.py",
     "inc": "python incVersion.py",
     "start": "react-native start",
