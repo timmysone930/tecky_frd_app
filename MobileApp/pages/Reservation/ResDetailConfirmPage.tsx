@@ -132,7 +132,8 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
           style={[styles.button, {backgroundColor: '#325C80'}]}
           onPress={() =>
             props.navigation.navigate(
-              docInfo.docData.approve_needed === 1 ? '確認審批預約' : '付款',
+              // docInfo.docData.approve_needed === 1 ? '確認審批預約' : '付款',
+              docInfo.docData.video_diag_fee === 0 ? '確認審批預約' : '付款',
               {isNewPatient: props.route.params.isNewPatient},
             )
           }
@@ -141,7 +142,8 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
           // })}
         >
           <Text style={styles.buttonText}>
-            {docInfo.docData.approve_needed === 1 ? '前往預約' : '前往付款'}
+            {/* {docInfo.docData.approve_needed === 1 ? '前往預約' : '前往付款'} */}
+            {docInfo.docData.video_diag_fee === 0 ? '前往預約' : '前往付款'}
           </Text>
         </TouchableOpacity>
       </View>
