@@ -21,13 +21,6 @@ target 'MobileApp' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
-
-
-  # paypal
-  pod 'Braintree', '~> 4'
-  pod 'Braintree/DataCollector'
-
-
   target 'MobileAppTests' do
     inherit! :complete
     # Pods for testing
