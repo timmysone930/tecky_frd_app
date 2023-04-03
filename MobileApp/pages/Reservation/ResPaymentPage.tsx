@@ -215,92 +215,104 @@ export const PaymentPage = (props: any) => {
                             }
 
                             // create reservation data
-                            const reservationRes: any = await postPatientReservation({
-                                data: resData,
-                                token: userToken
-                            })
+                            // const reservationRes: any = await postPatientReservation({
+                            //     data: resData,
+                            //     token: userToken
+                            // })
 
                             //console.log(reservationRes?.data)
 
-                            if (reservationRes?.data) {
+                            // if (reservationRes?.data) {
 
-                                // payment
-                                // const paypalRes = await redirectPaypal(docInfo.docData.video_diag_fee+"" || "9999");
-                                const { error } = await presentPaymentSheet();
+                            // payment
+                            // const paypalRes = await redirectPaypal(docInfo.docData.video_diag_fee+"" || "9999");
+                            const { error } = await presentPaymentSheet();
 
-
-
-                                // if (paypalRes.status === 'success') {
-                                if (!error) {
-                                    toast.show({
-                                        description: "付款成功"
-                                    })
-
-                                    // create payment table
-                                    // let paymentData = { 
-                                    //     "gateway": "paypal", 
-                                    //     "payment_id": paypalRes.data.nonce,
-                                    //     "amount": paypalRes.data.payAmount,
-                                    //     "payment_status": true,
-                                    //     "type": "reservation",
-                                    //     "payment_type": "paypal",
-                                    //     "res_code": reservationRes.data,
-                                    //     "session_id": formData.reservedSession,
-                                    //     "deviceData": paypalRes.data.deviceData
-                                    // }
-                                    let paymentData = {
-                                        "gateway": "stripe",
-                                        "payment_id": paymentId,
-                                        "amount": docInfo.docData.video_diag_fee === 0 ? 0 + '' : docInfo.docData.video_diag_fee + '' || 9999 + '',
-                                        "payment_status": true,
-                                        "type": "reservation",
-                                        "payment_type": "stripe",
-                                        "res_code": reservationRes.data,
-                                        "session_id": formData.reservedSession,
-                                    }
-                                    const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
-                                    //console.log('paymentRes', paymentRes)
-
-                                    emailReceipt(reservationRes.data)
-
-                                    store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
-                                    store.dispatch(setMemberCode({ memberCode: '' }))
-
-                                    props.navigation.navigate({
-                                        name: '預約確認',
-                                        params: {
-                                            'resCode': reservationRes.data,
-                                            'res_date': formData.reservedDate,
-                                            'res_time': `${rosterSession.data.start_at}`
-                                        }
-                                    })
-
-                                }
-                                else {
-                                    toast.show({
-                                        description: "付款失敗"
-                                    })
-
-                                    store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
-                                    store.dispatch(setMemberCode({ memberCode: '' }))
-                                    props.navigation.navigate({ name: '預約確認' })
-                                }
-                            }
-                            else if (reservationRes.error.data.message === "This patient already have resrvation.") {
+                            // if (paypalRes.status === 'success') {
+                            if (!error) {
                                 toast.show({
-                                    description: "已有預約記錄，無法再次預約"
+                                    description: "付款成功"
                                 })
 
-                                // enable the session 
-                                const enableRes = await putEnableSession(formData.reservedSession)
-                                //console.log('enalbeResult', enableRes)
+                                const reservationRes: any = await postPatientReservation({
+                                    data: resData,
+                                    token: userToken
+                                })
 
-                                store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
+                                // create payment table
+                                // let paymentData = { 
+                                //     "gateway": "paypal", 
+                                //     "payment_id": paypalRes.data.nonce,
+                                //     "amount": paypalRes.data.payAmount,
+                                //     "payment_status": true,
+                                //     "type": "reservation",
+                                //     "payment_type": "paypal",
+                                //     "res_code": reservationRes.data,
+                                //     "session_id": formData.reservedSession,
+                                //     "deviceData": paypalRes.data.deviceData
+                                // }
+                                let paymentData = {
+                                    "gateway": "stripe",
+                                    "payment_id": paymentId,
+                                    "amount": docInfo.docData.video_diag_fee === 0 ? 0 + '' : docInfo.docData.video_diag_fee + '' || 9999 + '',
+                                    "payment_status": true,
+                                    "type": "reservation",
+                                    "payment_type": "stripe",
+                                    "res_code": reservationRes.data,
+                                    "session_id": formData.reservedSession,
+                                }
+                                await postNewPayment({ data: paymentData, token: userToken })
+                                //console.log('paymentRes', paymentRes)
+
+                                emailReceipt(reservationRes.data)
+
+                                store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
+                                store.dispatch(setMemberCode({ memberCode: '' }))
+
+                                props.navigation.navigate({
+                                    name: '預約確認',
+                                    params: {
+                                        'resCode': reservationRes.data,
+                                        'res_date': formData.reservedDate,
+                                        'res_time': `${rosterSession.data.start_at}`
+                                    }
+                                })
+
+                            }
+                            else {
+                                if (!docInfo.docData.approve_needed) {
+                                    await fetch(`${Config.REACT_APP_API_SERVER}/roster/session-revert/${formData.reservedSession}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            "Authorization": `Bearer ${userToken}`,
+                                        }
+                                    });
+                                }
+
+                                toast.show({
+                                    description: "付款失敗"
+                                })
+
+                                store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
                                 store.dispatch(setMemberCode({ memberCode: '' }))
                                 props.navigation.navigate({ name: '預約確認' })
                             }
                         }
+                        // else if (reservationRes.error.data.message === "This patient already have resrvation.") {
+                        //     toast.show({
+                        //         description: "已有預約記錄，無法再次預約"
+                        //     })
+
+                        //     // enable the session 
+                        //     const enableRes = await putEnableSession(formData.reservedSession)
+                        //     //console.log('enalbeResult', enableRes)
+
+                        //     store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
+                        //     store.dispatch(setMemberCode({ memberCode: '' }))
+                        //     props.navigation.navigate({ name: '預約確認' })
+                        // }
                     }
+                    // }
                 }
                 catch (err) {
                     //console.log(err)
