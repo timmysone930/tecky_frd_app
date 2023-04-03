@@ -118,7 +118,7 @@ export const LoginPage = (props: any) => {
         : res.error.data;
       // let code = (res.error && res.error.data) ? res.error.data.message ? res.error.data.message : res.error.data : ( res.data ? res.data : null);
 
-      console.log(res);
+      //console.log(res);
 
       if (code === 'Phone number not found') {
         props.navigation.navigate({name: '註冊界面'});

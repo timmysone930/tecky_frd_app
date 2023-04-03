@@ -188,7 +188,7 @@ export function InfoEditPage({ navigation }: any) {
             else {
                 // const phoneNum = input.areaCode + input.phone
 
-                // console.log(originalPhone);
+                // //console.log(originalPhone);
                 const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/phone`, {
                     method: "POST",
                     headers: {
@@ -201,7 +201,7 @@ export function InfoEditPage({ navigation }: any) {
                         originalPhone: "852" + originalPhone
                     })
                 })
-                // console.log(resp.status);
+                // //console.log(resp.status);
 
                 if (resp.status != 201) {
                     toast.show({
@@ -219,7 +219,7 @@ export function InfoEditPage({ navigation }: any) {
             phone: input.areaCode + input.phone,
         }
 
-        console.log(newInfo)
+        //console.log(newInfo)
 
         const resp = await fetch(`${Config.REACT_APP_API_SERVER}/client/edit-profile`, {
             method: "PUT",

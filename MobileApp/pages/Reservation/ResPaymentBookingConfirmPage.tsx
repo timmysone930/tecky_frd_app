@@ -62,14 +62,14 @@ export const ResPaymentBookingConfirmPage = (props: any) => {
   // create payment
 
   // useEffect(() => {
-  //   console.log('isNewPatient', props.route.params);
+  //   //console.log('isNewPatient', props.route.params);
   // }, []);
 
   // submit
   const onPress = async () => {
-    console.log('before submitting dlgh', formData);
-    console.log('will user ah dlgh', wtf);
-    console.log('isNewPatient', props.route.params.isNewPatient);
+    //console.log('before submitting dlgh', formData);
+    //console.log('will user ah dlgh', wtf);
+    //console.log('isNewPatient', props.route.params.isNewPatient);
 
     // setSubmitStatus(false)
     // non member
@@ -90,7 +90,7 @@ export const ResPaymentBookingConfirmPage = (props: any) => {
       const res: any = await postPatientRegister(submitData);
 
       if (res.error) {
-        console.log('member', res.error);
+        //console.log('member', res.error);
         store.dispatch(checkRosterStatus({paymentRoster: 'error'}));
         store.dispatch(setMemberCode({memberCode: ''}));
         props.navigation.navigate({name: '預約確認'});
@@ -117,7 +117,7 @@ export const ResPaymentBookingConfirmPage = (props: any) => {
         try {
           // hold session
           const holdRes: any = await putHoldSession(formData.reservedSession);
-          console.log('holderes', holdRes);
+          //console.log('holderes', holdRes);
 
           if (holdRes !== undefined) {
             if (holdRes.error && holdRes?.error.status === 400) {
@@ -130,7 +130,7 @@ export const ResPaymentBookingConfirmPage = (props: any) => {
                 description: '載入中',
               });
 
-              console.log(docInfo);
+              //console.log(docInfo);
 
               // member
               // reservation data
@@ -158,7 +158,7 @@ export const ResPaymentBookingConfirmPage = (props: any) => {
                   isCold: formData.isCold || false,
                 },
               };
-              console.log(resData);
+              //console.log(resData);
 
               const res = await fetch(
                 `${Config.REACT_APP_API_SERVER}/reserve/addApprove`,
@@ -173,13 +173,13 @@ export const ResPaymentBookingConfirmPage = (props: any) => {
               );
               const result = await res.json();
 
-              console.log('RESULT', result);
+              //console.log('RESULT', result);
 
               if (res.status === 200) {
                 toast.show({
                   description: '預約成功',
                 });
-                // console.log("first")
+                // //console.log("first")
 
                 store.dispatch(checkRosterStatus({paymentRoster: 'true'}));
                 store.dispatch(setMemberCode({memberCode: ''}));
@@ -206,7 +206,7 @@ export const ResPaymentBookingConfirmPage = (props: any) => {
             }
           }
         } catch (err) {
-          console.log(err);
+          //console.log(err);
         }
       }
     } else if (rosterClinicCode.isError) {

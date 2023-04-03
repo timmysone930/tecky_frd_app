@@ -35,17 +35,17 @@ export function PrescriptionNewAddrPage({ navigation }:any) {
 
     const save = async () => {
 
-        console.log("oh___no")
+        //console.log("oh___no")
 
         if (!formFilled) {
-            console.log("oh no")
+            //console.log("oh no")
             return
         }
 
         const hkIdResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/profile`);
         const hkId = (await hkIdResp.json()).id_number;
         
-        console.log(hkId);
+        //console.log(hkId);
 
         const resp = await fetch (`${Config.REACT_APP_API_SERVER}/client/new-addr-book`, {
             headers: {
@@ -59,7 +59,7 @@ export function PrescriptionNewAddrPage({ navigation }:any) {
             })
         });
 
-        console.log(resp.status);
+        //console.log(resp.status);
         navigation.navigate("地址確認")
 
         toast.show({

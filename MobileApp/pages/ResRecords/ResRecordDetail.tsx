@@ -33,8 +33,8 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
     const toast = useToast()
     const userToken = useSelector((state: any) => state.getUserStatus.token);
     const userData = useGetUserInfoQuery(userToken)
-    console.log(userData);
-    console.log('NAME AHHHHH', userData.data.name_en);
+    //console.log(userData);
+    //console.log('NAME AHHHHH', userData.data.name_en);
     const init = {
         headers: {
             "Authorization": `Bearer ${userToken}`,
@@ -48,13 +48,13 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
     const [reservationData, setReservationData] = useState(data.item)
 
     useEffect(() => {
-        console.log("reservationDatareservationData", reservationData)
+        //console.log("reservationDatareservationData", reservationData)
     }, [reservationData]);
 
     // let recordData = useGetReservationListQuery();
     // get doctor name
     const docData = useGetOneDoctorQuery({ docCode: docCode, token: userToken });
-    // console.log('docData',docData)
+    // //console.log('docData',docData)
     let rowCellArr: [string, string, string, string]; // code, doctorName, resDate, restime
     if (docData.isSuccess) {
         rowCellArr = [
@@ -68,7 +68,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
 
     // useEffect(() => {
-    //     console.log("YOOOO", data.item.final_res_fee);
+    //     //console.log("YOOOO", data.item.final_res_fee);
     // }, [data.item]);
 
     const isInRange = (value: any, range: any) => {
@@ -115,10 +115,10 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
 
         // Check if current time in the time range
         const range = [resStart, resEnd];
-        // console.log(rowCellArr[0]);
-        console.log(currentFullTime, range);
-        console.log(reservationData);
-        console.log(fullDate, resFullDate)
+        // //console.log(rowCellArr[0]);
+        //console.log(currentFullTime, range);
+        //console.log(reservationData);
+        //console.log(fullDate, resFullDate)
 
         // if(reservationData.video_url !== null){
         //     setButtonText(ButtonText.start);
@@ -176,7 +176,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
     }, [navigation])
     // create payment 
     const [postNewPayment] = usePostNewPaymentMutation()
-    console.log('reservationData', reservationData.session_id)
+    //console.log('reservationData', reservationData.session_id)
 
     async function emailReceipt(res_code: string) {
         const email = await fetch(`${Config.REACT_APP_API_SERVER}/payment/receipt/reserve`, {
@@ -190,7 +190,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
             })
         })
 
-        console.log(email);
+        //console.log(email);
     }
 
     // stripe implementation
@@ -268,7 +268,7 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 "session_id": reservationData.session_id
             }
 
-            console.log({ paymentData });
+            //console.log({ paymentData });
 
 
             const paymentRes: any = await postNewPayment({
@@ -276,12 +276,12 @@ export const ResRecordDetail = (props: any, { navigation }: any) => {
                 token: userToken
             })
 
-            console.log('paymentRes', paymentRes)
+            //console.log('paymentRes', paymentRes)
 
             if (paymentRes.error) {
-                console.log('有error');
+                //console.log('有error');
 
-                console.log(paymentRes.error.data.message);
+                //console.log(paymentRes.error.data.message);
 
             }
 

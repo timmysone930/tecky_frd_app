@@ -30,7 +30,7 @@ export const PrescriptionPaymentPage = (props: any) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [paymentId, setPaymentId] = useState('');
-  // console.log(userData);
+  // //console.log(userData);
 
   // white background
   const backgroundStyle = {
@@ -47,14 +47,14 @@ export const PrescriptionPaymentPage = (props: any) => {
   const redux = useSelector((state: any) => state.getPrescriptionCode);
   const prescriptionDetail = redux.prescriptionDetail;
   useEffect(() => {
-    console.log(prescriptionDetail);
+    //console.log(prescriptionDetail);
     if (fetchData == null) {
       setFetchData(prescriptionDetail);
     }
     if (Array.isArray(prescriptionDetail.bill)) {
       setFinalPayFee(prescriptionDetail.bill[0].totel_amount + '');
     }
-    console.log(fetchData);
+    //console.log(fetchData);
   }, []);
 
   const setRedux = (payment_status: boolean) => {
@@ -88,7 +88,7 @@ export const PrescriptionPaymentPage = (props: any) => {
     );
     const { paymentIntent, ephemeralKey, customer, publishableKey } =
       await response.json();
-    console.log('wt did i get?', paymentIntent);
+    //console.log('wt did i get?', paymentIntent);
 
     setPaymentId(paymentIntent);
     return {
@@ -102,7 +102,7 @@ export const PrescriptionPaymentPage = (props: any) => {
   const initializePaymentSheet = async () => {
     const { paymentIntent, ephemeralKey, customer, publishableKey } =
       await fetchPaymentSheetParams();
-    console.log('wt did i get?', paymentIntent);
+    //console.log('wt did i get?', paymentIntent);
 
     setPaymentId(paymentIntent);
 
@@ -121,7 +121,7 @@ export const PrescriptionPaymentPage = (props: any) => {
     if (!error) {
       setLoading(true);
     }
-    console.log('wt did i get?', paymentIntent);
+    //console.log('wt did i get?', paymentIntent);
 
     setPaymentId(paymentIntent);
   };
@@ -134,7 +134,7 @@ export const PrescriptionPaymentPage = (props: any) => {
     const { error } = await presentPaymentSheet();
 
     if (!error) {
-      console.log('payment id please ok', paymentId);
+      //console.log('payment id please ok', paymentId);
 
       // create payment table
       const editPaymentResp = await fetch(
@@ -188,12 +188,12 @@ export const PrescriptionPaymentPage = (props: any) => {
         },
       );
 
-      console.log(email);
+      //console.log(email);
 
       // "payment_id": paypalRes.data.nonce
       // const editPaymentResult = editPaymentResp.status == 200 ? (await editPaymentResp.json()) : null;
-      console.log(editPaymentResp.status);
-      console.log(await editPaymentResp.text());
+      //console.log(editPaymentResp.status);
+      //console.log(await editPaymentResp.text());
       if (editPaymentResp.status == 200) {
         setRedux(true);
         toast.show({

@@ -29,7 +29,7 @@ export const ResPolicyPage: React.FC = (props: any) => {
 
   // check Roster Status
   const onPress = async () => {
-    console.log(props.route);
+    //console.log(props.route);
 
     props.navigation.navigate('確認預約資料', {
       isNewPatient: props.route.params

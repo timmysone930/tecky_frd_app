@@ -50,7 +50,7 @@ export const ResDateComponent = (props: Props) => {
                     return a.from_time.substring(0, 2) - b.from_time.substring(0, 2);
                 });
 
-                console.log(numbersCopy);
+                //console.log(numbersCopy);
                 selectFunction = numbersCopy.map((item: dataMapType, idx: number) => {
                     return (
                         <Select.Item 

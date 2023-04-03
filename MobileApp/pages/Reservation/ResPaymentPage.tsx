@@ -64,12 +64,12 @@ export const PaymentPage = (props: any) => {
             })
         })
 
-        console.log(email);
+        //console.log(email);
     }
 
     // stripe implementation
 
-    console.log('HAHA', JSON.stringify(props));
+    //console.log('HAHA', JSON.stringify(props));
 
 
     const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -146,7 +146,7 @@ export const PaymentPage = (props: any) => {
 
 
             if (res.error) {
-                console.log('member', res.error)
+                //console.log('member', res.error)
                 store.dispatch(checkRosterStatus({ paymentRoster: 'error' }))
                 store.dispatch(setMemberCode({ memberCode: '' }))
                 props.navigation.navigate({ name: '預約確認' })
@@ -172,7 +172,7 @@ export const PaymentPage = (props: any) => {
                 try {
                     // hold session
                     const holdRes: any = await putHoldSession(formData.reservedSession)
-                    console.log('holderes', holdRes)
+                    //console.log('holderes', holdRes)
 
                     if (holdRes !== undefined) {
 
@@ -187,7 +187,7 @@ export const PaymentPage = (props: any) => {
                                 description: "載入中"
                             })
 
-                            console.log(docInfo)
+                            //console.log(docInfo)
 
                             // member
                             // reservation data
@@ -220,7 +220,7 @@ export const PaymentPage = (props: any) => {
                                 token: userToken
                             })
 
-                            console.log(reservationRes?.data)
+                            //console.log(reservationRes?.data)
 
                             if (reservationRes?.data) {
 
@@ -259,7 +259,7 @@ export const PaymentPage = (props: any) => {
                                         "session_id": formData.reservedSession,
                                     }
                                     const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
-                                    console.log('paymentRes', paymentRes)
+                                    //console.log('paymentRes', paymentRes)
 
                                     emailReceipt(reservationRes.data)
 
@@ -293,7 +293,7 @@ export const PaymentPage = (props: any) => {
 
                                 // enable the session 
                                 const enableRes = await putEnableSession(formData.reservedSession)
-                                console.log('enalbeResult', enableRes)
+                                //console.log('enalbeResult', enableRes)
 
                                 store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
                                 store.dispatch(setMemberCode({ memberCode: '' }))
@@ -303,7 +303,7 @@ export const PaymentPage = (props: any) => {
                     }
                 }
                 catch (err) {
-                    console.log(err)
+                    //console.log(err)
                 }
             }
         }

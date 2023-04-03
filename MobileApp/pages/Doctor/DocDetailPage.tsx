@@ -25,7 +25,7 @@ export const DocDetailPage: React.FC = (props: any) => {
         // Check dr roaster time
         const rosterData = useGetRosterListByDocCodeQuery(id);
 
-        // console.log(rosterData);
+        // //console.log(rosterData);
 
         return (
             <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
@@ -66,7 +66,7 @@ export const DocDetailPage: React.FC = (props: any) => {
 
         useEffect(() => {
             if(props && props.navigation){
-                console.log("Yeah");
+                //console.log("Yeah");
                 props.navigation.navigate({ name: '搜尋醫生' })
             }
         }, []);

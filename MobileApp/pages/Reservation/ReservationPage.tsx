@@ -50,7 +50,7 @@ const checkPatient = async (id: string, token: string) => {
 
     if (response.status === 200) {
       const json = await response.json();
-      // console.log('json', json)
+      // //console.log('json', json)
       return {message: 'Found', memberCode: json.member_code};
     } else {
       return {message: 'Not Found'};
@@ -137,7 +137,7 @@ export const ReservationPage = (props: any) => {
 
   // Form data submit and navigate
   const onSubmit = async (data: ReservationType) => {
-    console.log('wtf', data);
+    //console.log('wtf', data);
 
     let patientStatus:
       | ReservationSubmitType1
@@ -169,7 +169,7 @@ export const ReservationPage = (props: any) => {
       setValue('reservedSession', '');
       wait(2000).then(() => setRefreshing(false));
     } catch (e) {
-      console.log(e);
+      //console.log(e);
     }
   }, []);
 
@@ -189,7 +189,7 @@ export const ReservationPage = (props: any) => {
   useEffect(() => {
     const updateUserInfo = async () => {
       if (userData.isSuccess && userData.data) {
-        // console.log(userData.data);
+        // //console.log(userData.data);
 
         setValue('name', userData.data.name);
         setValue('idNumber', userData.data.id_number);

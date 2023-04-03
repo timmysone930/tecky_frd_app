@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { store } from '../../redux/store';
 import { logoutAction } from '../../redux/AuthSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import OneSignal from 'react-native-onesignal';
 
 export function AccountDeletionPage({ navigation }: any) {
 
@@ -67,6 +68,9 @@ export function AccountDeletionPage({ navigation }: any) {
         });
 
         if (resp.status == 200) {
+            OneSignal.removeExternalUserId((results: any) => {
+                console.log(`Results of removing external user id ${results}`)
+            })
             logOut();
         }
     }

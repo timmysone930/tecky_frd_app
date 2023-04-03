@@ -17,7 +17,7 @@ export const ResRecordPage = (props: any) => {
 
     const userToken = useSelector((state: any) => state.getUserStatus.token);
     const userData = useGetUserInfoQuery(userToken)
-    console.log(userData);
+    //console.log(userData);
     
     // fetch the resRecord
     let recordData = useGetReservationListQuery(userToken);
@@ -28,11 +28,11 @@ export const ResRecordPage = (props: any) => {
         try {
             setRefreshing(true);
             recordData.refetch();
-            // console.log('recordData.data', recordData);
+            // //console.log('recordData.data', recordData);
             wait(2000).then(() => setRefreshing(false));
 
         } catch (e) {
-            console.log(e)
+            //console.log(e)
         }
     }, []);
     

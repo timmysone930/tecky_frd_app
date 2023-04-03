@@ -28,8 +28,8 @@ export const statueDisplay: any = {
 }
 
 export const PrescriptionList = (props: Props) => {
-    // console.log("JNIKJNIJNIJNI", props.data);
-    // console.log("PRESCRIPTION ONLY", props.data.map(item=>item.prescription));
+    // //console.log("JNIKJNIJNIJNI", props.data);
+    // //console.log("PRESCRIPTION ONLY", props.data.map(item=>item.prescription));
 
 
     return (

@@ -25,6 +25,7 @@ import { LoginStacks } from '../Stack/LoginStack';
 // import icon for FontAwesome
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Config from 'react-native-config';
+import OneSignal from 'react-native-onesignal';
 // import Config from 'react-native-config';
 
 // Bottom Tabs
@@ -36,7 +37,7 @@ export const Tabs = () => {
 
     // get user status
     useEffect(() => {
-        // console.log("hi Tab");
+        // //console.log("hi Tab");
 
         const getData = (async () => {
             try {
@@ -61,6 +62,9 @@ export const Tabs = () => {
                         store.dispatch(setUserInfo({ member_code: result.member_code, token: result.token }));
                         return result;
                     } else {
+                        OneSignal.removeExternalUserId((results: any) => {
+                            console.log(`Results of removing external user id ${results}`)
+                        })
                         store.dispatch(logoutAction);
                         return null;
                     }
@@ -69,12 +73,12 @@ export const Tabs = () => {
                 return null;
 
             } catch (e) {
-                console.log(e);
+                //console.log(e);
                 return null;
             }
         })()
         
-        console.log(getData);
+        //console.log(getData);
     }, [])
 
     const isLogin = useSelector((state: any) => state.getUserStatus.isLogin);

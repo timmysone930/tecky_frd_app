@@ -52,13 +52,13 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
   });
 
   useEffect(() => {
-    console.log('fuccccccccccc');
-    console.log(props.route.params);
+    //console.log('fuccccccccccc');
+    //console.log(props.route.params);
   }, []);
 
   if (rosterSession.isSuccess) {
-    // console.log(formData)
-    // console.log("docInfo", docInfo.docData.video_diag_fee)
+    // //console.log(formData)
+    // //console.log("docInfo", docInfo.docData.video_diag_fee)
     reserveSession = `${rosterSession.currentData['start_at']} - ${rosterSession.currentData['end_at']}`;
     rowCellArr = [
       `$ ${
@@ -77,7 +77,7 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
   }
 
   useEffect(() => {
-    console.log('rosterSession', rosterSession);
+    //console.log('rosterSession', rosterSession);
     if (rosterSession.isError) {
       store.dispatch(checkRosterStatus({paymentRoster: 'full'}));
       store.dispatch(setMemberCode({memberCode: ''}));
@@ -88,7 +88,7 @@ export const ResDetailConfirmPage: React.FC = (props: any) => {
   }, [rosterSession]);
 
   useEffect(() => {
-    console.log(docInfo.docData);
+    //console.log(docInfo.docData);
   }, []);
 
   return (

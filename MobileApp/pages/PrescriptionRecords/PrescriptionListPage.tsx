@@ -48,7 +48,7 @@ export const PrescriptionListPage = ({navigation}:any) => {
         return () => {unsubscribe}
     },[navigation])
   
-    console.log(fetchData);
+    //console.log(fetchData);
   
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>

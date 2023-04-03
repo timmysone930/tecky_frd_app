@@ -69,7 +69,7 @@ export const AddressForm = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    // console.log("Onh noooo")
+    // //console.log("Onh noooo")
     if (
       props.name.length > 0 &&
       props.phone.length == 11 &&
@@ -89,8 +89,8 @@ export const AddressForm = (props: Props) => {
       `${Config.REACT_APP_API_SERVER}/locations/by_area`,
     );
     let area = await result.json();
-    console.log('dllm', area);
-    console.log('dllm haha', area[2]);
+    //console.log('dllm', area);
+    //console.log('dllm haha', area[2]);
 
     setDistrictData(area);
   }

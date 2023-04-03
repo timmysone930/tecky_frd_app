@@ -84,10 +84,10 @@ export const DeliveryOptionPage = ({navigation}:any)=> {
             is_default: false
         });
 
-        console.log("PICKUP store", result.pickUpStores)
+        //console.log("PICKUP store", result.pickUpStores)
 
         setAllowPickUp(result.pickUpStores != null ? result.pickUpStores : [])
-        console.log(result.pickUpStores);
+        //console.log(result.pickUpStores);
     }
 
     const submitHandler = () => {
