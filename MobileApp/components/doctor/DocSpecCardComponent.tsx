@@ -34,7 +34,7 @@ export const DocSpecCardComponent = (props: any) => {
       spec.refetch();
       wait(2000).then(() => setRefreshing(false));
     } catch (e) {
-      console.log(e);
+      //console.log(e);
     }
   }, []);
 

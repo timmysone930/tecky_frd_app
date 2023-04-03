@@ -12,7 +12,7 @@ import { TipsCard } from '../components/home/TipsCard';
 
 import Config from "react-native-config";
 import { Button } from 'react-native-paper';
-console.log(Config.REACT_APP_API_SERVER)
+//console.log(Config.REACT_APP_API_SERVER)
 
 export const Home =  () => {
     const backgroundStyle = {

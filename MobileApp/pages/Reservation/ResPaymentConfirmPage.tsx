@@ -29,7 +29,7 @@ export const setNotification = async (res_date: string, userCode: string, pushTi
         },
         body: JSON.stringify(data)
     })
-    
+
     const json = await res.json();
 
     let submitData:any = { 
@@ -56,14 +56,13 @@ export const ResPaymentConfirmPage = (props: any) => {
         const userToken = useSelector((state: any) => state.getUserStatus.token);
 
         useEffect(() => {
-            console.log(rosterStatus.paymentRoster)
+            //console.log(rosterStatus.paymentRoster)
         }, [rosterStatus.paymentRoster]);
     
         if (rosterStatus.paymentRoster === 'true') {
             // To get the param passing from the previous screen
             const { resCode, res_date, res_time } = props.route.params;
     
-            console.log('resCode', resCode)
             let time = parseInt(res_time.replace(':', ''), 10)
             if(time % 100 - 10 < 0){
                 time = time - 50 
@@ -79,7 +78,6 @@ export const ResPaymentConfirmPage = (props: any) => {
             else{
                 pushTime = `${time.toString().substring(0,2)}:${time.toString().substring(2, 4)}`
             }
-            console.log(pushTime)
             setNotification(res_date, userCode, pushTime, resCode, userToken);
         }
     

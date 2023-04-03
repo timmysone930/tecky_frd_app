@@ -33,8 +33,8 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
 
     let deliverAddress: any = null
     deliverAddress = useSelector((state:any)=>state.getPrescriptionPaymentPreset).deliverAddress
-    // console.log(fetchData.prescription);
-    // console.log(deliveryMethod,"deliveryMethod*************",pickUpStore, deliverAddress);
+    // //console.log(fetchData.prescription);
+    // //console.log(deliveryMethod,"deliveryMethod*************",pickUpStore, deliverAddress);
 
     useEffect(()=>{
 
@@ -66,7 +66,7 @@ export const PrescriptionPaymentConfirm = ({navigation}:any) => {
         }
         const prescriptionDetail = {...fetchData}
         prescriptionDetail.prescription = presEditData
-        console.log(prescriptionDetail);
+        //console.log(prescriptionDetail);
         store.dispatch(setPrescriptionCode({
             prescriptionCode,
             prescriptionSelecting, 

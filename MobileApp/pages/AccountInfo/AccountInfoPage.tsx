@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // .env
 import Config from "react-native-config";
+import OneSignal from 'react-native-onesignal';
 
 const widthSidespacing = 96;
 
@@ -74,6 +75,9 @@ export function AccountInfoPage({ navigation }: any) {
     }
 
     const logOut = async () => {
+        OneSignal.removeExternalUserId((results: any) => {
+            console.log(`Results of removing external user id ${results}`)
+        })
         // store.dispatch(checkStatus({ isLogin: false, phone: null }))
         // store.dispatch(setUserInfo({ member_code: '', token: '' }))
         store.dispatch(logoutAction())

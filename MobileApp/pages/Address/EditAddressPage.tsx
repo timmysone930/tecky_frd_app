@@ -56,7 +56,7 @@ export function EditAddressPage({navigation}:any) {
                 method: "POST",
                 body: JSON.stringify(input),
             })
-            console.log(toFetchResp.status);
+            //console.log(toFetchResp.status);
 
         } else {
             toFetchResp = await fetch (`${Config.REACT_APP_API_SERVER}/client/edit-addr-book`, {

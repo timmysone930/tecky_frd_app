@@ -22,7 +22,7 @@ import { styles } from '../../styles/GeneralStyles'
 
 
 export const PrescriptionBasicInfo = (props: any) => {
-    // console.log('propsssss', props);
+    // //console.log('propsssss', props);
     
 
     const contentItemToDisplay: any =

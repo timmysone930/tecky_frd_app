@@ -69,7 +69,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
 
   // Next page
   const isUploaded = async (data: AddInfoSubmitType) => {
-    console.log('is new patient?', props.route.params.isNewPatient);
+    //console.log('is new patient?', props.route.params.isNewPatient);
 
     if (response === null) {
       toast.show({
@@ -96,7 +96,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
 
   // auto input login users info once
   useEffect(() => {
-    console.log(userData.data);
+    //console.log(userData.data);
     const updateUserInfo = async () => {
       if (userData.isSuccess) {
         await setValue('phone', userData.data.phone);
@@ -295,7 +295,7 @@ export const ResAddInfoPage: React.FC = (props: any) => {
             setResponse={onSetResponse}
           />
 
-          {/* {response?.assets && response?.assets.map(({ uri }: any) => (console.log(uri)))} */}
+          {/* {response?.assets && response?.assets.map(({ uri }: any) => (//console.log(uri)))} */}
         </View>
       </ScrollView>
       {/* Button to go back and next page */}

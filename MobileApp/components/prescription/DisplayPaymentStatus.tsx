@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const DisplayPaymentStatus = (props: Props) => {
-    console.log(props);
+    //console.log(props);
     
     const statusColor: any = {
         "已付款": "#3333ff",

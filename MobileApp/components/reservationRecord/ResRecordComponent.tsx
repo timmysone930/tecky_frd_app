@@ -12,7 +12,7 @@ interface Props {
 }
 
 export const ResRecordComponent = (props: Props) => {
-    // console.log("props.data", props.data)
+    // //console.log("props.data", props.data)
     return (
         <FlatList 
             data={props.data}

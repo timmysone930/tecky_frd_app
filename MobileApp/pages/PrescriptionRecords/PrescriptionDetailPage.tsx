@@ -47,7 +47,7 @@ export function PrescriptionDetailPage({ navigation }: any) {
         const dataFetching = async () => {
             const prescriptionSelecting = reduxData.prescriptionSelecting;
             const data = prescriptionSelecting
-            console.log(data);
+            //console.log(data);
 
             const res = await fetch(`${Config.REACT_APP_API_SERVER}/courier/search?column=code&where=${data.prescription.courier_code}`)
             const result = await res.json();
@@ -58,13 +58,13 @@ export function PrescriptionDetailPage({ navigation }: any) {
 
             // const clinicPhoneResp = await fetch(`${Config.REACT_APP_API_SERVER}/clinics/search?column=code&where=${data.clinic_code}`, init)
             // const clinicPhone = (await clinicPhoneResp.json())[0].clinic_phone
-            // console.log(data.prescription.pres_code);
+            // //console.log(data.prescription.pres_code);
 
             // const getTreatmentResp = await fetch(`${Config.REACT_APP_API_SERVER}/prescription/treatment/${data.prescription.pres_code}`, init)
             // const treatmentItems = (await getTreatmentResp.json())
-            // console.log(treatmentItems);
+            // //console.log(treatmentItems);
 
-            // console.log({...data, payment_amount: cost, clinic_phone: clinicPhone, treatmentItems});
+            // //console.log({...data, payment_amount: cost, clinic_phone: clinicPhone, treatmentItems});
 
             // setFetchData({...data, payment_amount: cost, clinic_phone: clinicPhone, treatmentItems})
             setFetchData({ ...data, courier_name: name })
@@ -84,8 +84,8 @@ export function PrescriptionDetailPage({ navigation }: any) {
                 dataFetching()
                 setFetched(true)
             }
-            // console.log("fetchData", fetchData);
-            // console.log(fetchData.prescription.order_status)
+            // //console.log("fetchData", fetchData);
+            // //console.log(fetchData.prescription.order_status)
         }, [])
 
         // const fetchData = FakeData
@@ -157,7 +157,7 @@ export function PrescriptionDetailPage({ navigation }: any) {
         );
     }
     catch (error: any) {
-        console.log(error.message);
+        //console.log(error.message);
 
         return (
             <SafeAreaView>

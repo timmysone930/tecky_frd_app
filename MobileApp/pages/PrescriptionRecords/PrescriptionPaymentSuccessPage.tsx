@@ -35,7 +35,7 @@ export const PrescriptionPaymentSuccessPage = (props: any) => {
 
     const redux = useSelector((state: any) => state.getPrescriptionCode);
     const prescriptionDetail = redux.prescriptionDetail
-    console.log(redux);
+    //console.log(redux);
 
 
     const [fetched, setFetched] = useState(false)
@@ -62,7 +62,7 @@ export const PrescriptionPaymentSuccessPage = (props: any) => {
             method: 'GET',
         });
         const result = await res.json();
-        console.log('result ', result)
+        //console.log('result ', result)
         if (result[0].courier_code === null) {
             let whiteLocRes = await fetch(`${Config.REACT_APP_API_SERVER}/courier/whitelist/white_loc/${result[0].district}`, {
                 method: 'GET',
@@ -85,10 +85,10 @@ export const PrescriptionPaymentSuccessPage = (props: any) => {
 
                 })
                 const courierSet = await setCourier.json();
-                console.log('set courier', courierSet);
+                //console.log('set courier', courierSet);
                 return;
             } else {
-                console.log('failed')
+                //console.log('failed')
                 return;
             }
         }

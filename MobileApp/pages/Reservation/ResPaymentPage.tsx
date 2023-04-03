@@ -7,7 +7,6 @@ import { useGetReservedSessionByIdQuery, useGetRosterByIdQuery } from '../../API
 import { usePostPatientRegisterMutation, usePostPatientReservationMutation, usePutEnableSessionMutation, usePutHoldSessionMutation } from '../../API/PatientAPI';
 import { checkRosterStatus } from '../../redux/PaymentSlice';
 import { store } from '../../redux/store';
-import { requestOneTimePayment, requestDeviceData } from 'react-native-paypal';
 import { useToast } from 'native-base';
 import { usePostNewPaymentMutation } from '../../API/PaymentAPI';
 import { setMemberCode } from '../../redux/slice';
@@ -53,65 +52,7 @@ export const PaymentPage = (props: any) => {
     const [submitStatus, setSubmitStatus] = React.useState(true);
     // redirect to paypal
 
-    const redirectPaypal = async (totalPay:string) => {
-        try { 
-
-            if(!totalPay){
-                throw new Error("No input amount")
-            }
-
-            // now just assume the payment is always success (06/07/2022)
-            // return { 
-            //     status: 'success', 
-            //     data: { 
-            //         'nonce': "DummyDummyDummyDummy", 
-            //         'payerId': "4124-4242-4242-4242", 
-            //         'email': "dummy@gmail.com", 
-            //         "firstName": "dummy", 
-            //         "lastName": "Chan", 
-            //         "phone": "85298765432" 
-            //     } 
-            // }
-
-            // const totalPay = docInfo.docData.video_diag_fee+"" || "9999"
-            // For one time payments
-            const { nonce, payerId, email, firstName, lastName, phone } = await requestOneTimePayment(
-                `${Config.PAYPAL}`
-                // `sandbox_v2wcsz62_4f9xyp2kmsgdt7d9`
-                , {
-                    amount: totalPay, // required
-                    currency: 'HKD',
-                    localeCode: 'zh_HK',
-                    shippingAddressRequired: false,
-                    userAction: 'commit', // display 'Pay Now' on the PayPal review page
-                    intent: 'authorize',
-                }
-            );
-
-            const { deviceData } = await requestDeviceData(`${Config.PAYPAL}`);
-
-            return { 
-                status: 'success', 
-                data: {
-                    'payAmount': totalPay,
-                    'nonce': nonce, 
-                    'payerId': payerId, 
-                    'email': email, 
-                    "firstName": firstName, 
-                    "lastName": lastName, 
-                    "phone": phone,
-                    "deviceData": deviceData,
-                } 
-            }
-
-        } catch (error) {
-            console.error(error);
-            console.log('error' + JSON.stringify(error));
-            return { status: 'error', data: { error } }
-        }
-    }
-
-    async function emailReceipt(res_code:string) {
+    async function emailReceipt(res_code: string) {
         const email = await fetch(`${Config.REACT_APP_API_SERVER}/payment/receipt/reserve`, {
             method: "POST",
             headers: {
@@ -122,67 +63,67 @@ export const PaymentPage = (props: any) => {
                 res_code: res_code
             })
         })
-    
-        console.log(email);
+
+        //console.log(email);
     }
 
-           // stripe implementation
+    // stripe implementation
 
-           console.log('HAHA',JSON.stringify(props));
-           
+    //console.log('HAHA', JSON.stringify(props));
 
-           const { initPaymentSheet, presentPaymentSheet } = useStripe();
-           const [loading, setLoading] = useState(false);
-           const [paymentId, setPaymentId] = useState("")
-    
-         
-           const fetchPaymentSheetParams = async () => {
-             const response = await fetch(`${Config.REACT_APP_API_SERVER}/payment/payment-sheet`, {
-               method: 'POST',
-               body: JSON.stringify({
+
+    const { initPaymentSheet, presentPaymentSheet } = useStripe();
+    const [loading, setLoading] = useState(false);
+    const [paymentId, setPaymentId] = useState("")
+
+
+    const fetchPaymentSheetParams = async () => {
+        const response = await fetch(`${Config.REACT_APP_API_SERVER}/payment/payment-sheet`, {
+            method: 'POST',
+            body: JSON.stringify({
                 "amount": docInfo.docData.video_diag_fee === 0 ? 0 : docInfo.docData.video_diag_fee || 9999,
 
-                    //    "amount": Array.isArray(prescriptionDetail.bill)?prescriptionDetail.bill[0].totel_amount+'':9999+'',
-       
-               }),
-               headers: {
-                 'Content-Type': 'application/json',
-               },
-             });
-             const { paymentIntent, ephemeralKey, customer,publishableKey} = await response.json();
-           setPaymentId(paymentIntent)
-             return {
-               paymentIntent,
-               ephemeralKey,
-               customer,
-               publishableKey
-             };
-           };
-         
-           const initializePaymentSheet = async () => {
-             const {
-               paymentIntent,
-               ephemeralKey,
-               customer,
-               publishableKey,
-             } = await fetchPaymentSheetParams();
-         
-             const { error } = await initPaymentSheet({
-               merchantDisplayName: "Telemedicine",
-               customerId: customer,
-               customerEphemeralKeySecret: ephemeralKey,
-               paymentIntentClientSecret: paymentIntent,
-               // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
-               //methods that complete payment after a delay, like SEPA Debit and Sofort.
-               allowsDelayedPaymentMethods: true,
-               defaultBillingDetails: {
-                 name: userData.data.name_en,
-               }
-             });
-             if (!error) {
-               setLoading(true);
-             }
-           };
+                //    "amount": Array.isArray(prescriptionDetail.bill)?prescriptionDetail.bill[0].totel_amount+'':9999+'',
+
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const { paymentIntent, ephemeralKey, customer, publishableKey } = await response.json();
+        setPaymentId(paymentIntent)
+        return {
+            paymentIntent,
+            ephemeralKey,
+            customer,
+            publishableKey
+        };
+    };
+
+    const initializePaymentSheet = async () => {
+        const {
+            paymentIntent,
+            ephemeralKey,
+            customer,
+            publishableKey,
+        } = await fetchPaymentSheetParams();
+
+        const { error } = await initPaymentSheet({
+            merchantDisplayName: "Telemedicine",
+            customerId: customer,
+            customerEphemeralKeySecret: ephemeralKey,
+            paymentIntentClientSecret: paymentIntent,
+            // Set `allowsDelayedPaymentMethods` to true if your business can handle payment
+            //methods that complete payment after a delay, like SEPA Debit and Sofort.
+            allowsDelayedPaymentMethods: true,
+            defaultBillingDetails: {
+                name: userData.data.name_en,
+            }
+        });
+        if (!error) {
+            setLoading(true);
+        }
+    };
 
     // submit
     const onPress = async () => {
@@ -205,7 +146,7 @@ export const PaymentPage = (props: any) => {
 
 
             if (res.error) {
-                console.log('member', res.error)
+                //console.log('member', res.error)
                 store.dispatch(checkRosterStatus({ paymentRoster: 'error' }))
                 store.dispatch(setMemberCode({ memberCode: '' }))
                 props.navigation.navigate({ name: '預約確認' })
@@ -218,8 +159,6 @@ export const PaymentPage = (props: any) => {
         rosterSession.refetch();
         rosterClinicCode.refetch();
 
-        
-
         // check session status
         if (rosterClinicCode.isSuccess) {
 
@@ -228,12 +167,12 @@ export const PaymentPage = (props: any) => {
                 store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
                 store.dispatch(setMemberCode({ memberCode: '' }))
                 props.navigation.navigate({ name: '預約確認' })
-            } 
+            }
             else {
                 try {
                     // hold session
                     const holdRes: any = await putHoldSession(formData.reservedSession)
-                    console.log('holderes', holdRes)
+                    //console.log('holderes', holdRes)
 
                     if (holdRes !== undefined) {
 
@@ -241,14 +180,14 @@ export const PaymentPage = (props: any) => {
                             store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
                             store.dispatch(setMemberCode({ memberCode: '' }))
                             props.navigation.navigate({ name: '預約確認' })
-                        } 
+                        }
                         else if (holdRes.data && holdRes?.data.status === 'hold') {
                             // selected session are available
                             toast.show({
                                 description: "載入中"
                             })
 
-                            console.log(docInfo)
+                            //console.log(docInfo)
 
                             // member
                             // reservation data
@@ -276,98 +215,110 @@ export const PaymentPage = (props: any) => {
                             }
 
                             // create reservation data
-                            const reservationRes: any = await postPatientReservation({ 
-                                data: resData,
-                                token: userToken
-                            })
+                            // const reservationRes: any = await postPatientReservation({
+                            //     data: resData,
+                            //     token: userToken
+                            // })
 
-                            console.log(reservationRes?.data)
+                            //console.log(reservationRes?.data)
 
-                            if (reservationRes?.data) {
+                            // if (reservationRes?.data) {
 
-                                // payment
-                                // const paypalRes = await redirectPaypal(docInfo.docData.video_diag_fee+"" || "9999");
-                                const { error } = await presentPaymentSheet();
-   
-                       
+                            // payment
+                            // const paypalRes = await redirectPaypal(docInfo.docData.video_diag_fee+"" || "9999");
+                            const { error } = await presentPaymentSheet();
 
-                                // if (paypalRes.status === 'success') {
-                                    if (!error){
-                                    toast.show({
-                                        description: "付款成功"
-                                    })
-
-                                    // create payment table
-                                    // let paymentData = { 
-                                    //     "gateway": "paypal", 
-                                    //     "payment_id": paypalRes.data.nonce,
-                                    //     "amount": paypalRes.data.payAmount,
-                                    //     "payment_status": true,
-                                    //     "type": "reservation",
-                                    //     "payment_type": "paypal",
-                                    //     "res_code": reservationRes.data,
-                                    //     "session_id": formData.reservedSession,
-                                    //     "deviceData": paypalRes.data.deviceData
-                                    // }
-                                                                        let paymentData = { 
-                                        "gateway": "stripe", 
-                                        "payment_id": paymentId,
-                                        "amount": docInfo.docData.video_diag_fee === 0 ? 0 + '' : docInfo.docData.video_diag_fee+'' || 9999 + '',
-                                        "payment_status": true,
-                                        "type": "reservation",
-                                        "payment_type": "stripe",
-                                        "res_code": reservationRes.data,
-                                        "session_id": formData.reservedSession,
-                                    }
-                                    const paymentRes: any = await postNewPayment({ data: paymentData, token: userToken })
-                                    console.log('paymentRes', paymentRes)
-                                    
-                                    emailReceipt(reservationRes.data)
-
-                                    store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
-                                    store.dispatch(setMemberCode({ memberCode: '' }))
-
-                                    props.navigation.navigate({ 
-                                        name: '預約確認',
-                                        params: { 
-                                            'resCode': reservationRes.data,
-                                            'res_date': formData.reservedDate,
-                                            'res_time': `${rosterSession.data.start_at}`
-                                        }
-                                    })
-
-                                } 
-                                else {
-                                    toast.show({
-                                        description: "付款失敗"
-                                    })
-
-                                    store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
-                                    store.dispatch(setMemberCode({ memberCode: '' }))
-                                    props.navigation.navigate({ name: '預約確認' })
-                                }
-                            }
-                            else if (reservationRes.error.data.message === "This patient already have resrvation.") {
+                            // if (paypalRes.status === 'success') {
+                            if (!error) {
                                 toast.show({
-                                    description: "已有預約記錄，無法再次預約"
+                                    description: "付款成功"
                                 })
 
-                                // enable the session 
-                                const enableRes = await putEnableSession(formData.reservedSession)
-                                console.log('enalbeResult', enableRes)
+                                const reservationRes: any = await postPatientReservation({
+                                    data: resData,
+                                    token: userToken
+                                })
 
-                                store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
+                                // create payment table
+                                // let paymentData = { 
+                                //     "gateway": "paypal", 
+                                //     "payment_id": paypalRes.data.nonce,
+                                //     "amount": paypalRes.data.payAmount,
+                                //     "payment_status": true,
+                                //     "type": "reservation",
+                                //     "payment_type": "paypal",
+                                //     "res_code": reservationRes.data,
+                                //     "session_id": formData.reservedSession,
+                                //     "deviceData": paypalRes.data.deviceData
+                                // }
+                                let paymentData = {
+                                    "gateway": "stripe",
+                                    "payment_id": paymentId,
+                                    "amount": docInfo.docData.video_diag_fee === 0 ? 0 + '' : docInfo.docData.video_diag_fee + '' || 9999 + '',
+                                    "payment_status": true,
+                                    "type": "reservation",
+                                    "payment_type": "stripe",
+                                    "res_code": reservationRes.data,
+                                    "session_id": formData.reservedSession,
+                                }
+                                await postNewPayment({ data: paymentData, token: userToken })
+                                //console.log('paymentRes', paymentRes)
+
+                                emailReceipt(reservationRes.data)
+
+                                store.dispatch(checkRosterStatus({ paymentRoster: 'true' }))
+                                store.dispatch(setMemberCode({ memberCode: '' }))
+
+                                props.navigation.navigate({
+                                    name: '預約確認',
+                                    params: {
+                                        'resCode': reservationRes.data,
+                                        'res_date': formData.reservedDate,
+                                        'res_time': `${rosterSession.data.start_at}`
+                                    }
+                                })
+
+                            }
+                            else {
+                                if (!docInfo.docData.approve_needed) {
+                                    await fetch(`${Config.REACT_APP_API_SERVER}/roster/session-revert/${formData.reservedSession}`, {
+                                        method: 'PUT',
+                                        headers: {
+                                            "Authorization": `Bearer ${userToken}`,
+                                        }
+                                    });
+                                }
+
+                                toast.show({
+                                    description: "付款失敗"
+                                })
+
+                                store.dispatch(checkRosterStatus({ paymentRoster: 'false' }))
                                 store.dispatch(setMemberCode({ memberCode: '' }))
                                 props.navigation.navigate({ name: '預約確認' })
                             }
                         }
+                        // else if (reservationRes.error.data.message === "This patient already have resrvation.") {
+                        //     toast.show({
+                        //         description: "已有預約記錄，無法再次預約"
+                        //     })
+
+                        //     // enable the session 
+                        //     const enableRes = await putEnableSession(formData.reservedSession)
+                        //     //console.log('enalbeResult', enableRes)
+
+                        //     store.dispatch(checkRosterStatus({ paymentRoster: 'booked' }))
+                        //     store.dispatch(setMemberCode({ memberCode: '' }))
+                        //     props.navigation.navigate({ name: '預約確認' })
+                        // }
                     }
-                } 
+                    // }
+                }
                 catch (err) {
-                    console.log(err)
+                    //console.log(err)
                 }
             }
-        } 
+        }
         else if (rosterClinicCode.isError) {
             store.dispatch(checkRosterStatus({ paymentRoster: 'full' }))
             store.dispatch(setMemberCode({ memberCode: '' }))
@@ -377,12 +328,20 @@ export const PaymentPage = (props: any) => {
 
     useEffect(() => {
         initializePaymentSheet();
-      }, []);
+    }, []);
+
+    useEffect(() => {
+        if (paymentId !== '') {
+            setSubmitStatus(true)
+        } else {
+            setSubmitStatus(false);
+        };
+    }, [paymentId])
 
     return (
         <SafeAreaView style={[backgroundStyle, { flex: 1 }]}>
-            <ScrollView 
-                contentInsetAdjustmentBehavior="automatic" 
+            <ScrollView
+                contentInsetAdjustmentBehavior="automatic"
                 style={{ backgroundColor: 'white', marginBottom: 2, marginLeft: 5 }}
             >
                 {submitStatus ?
@@ -395,8 +354,8 @@ export const PaymentPage = (props: any) => {
                                 如在十五分鐘內沒有完成交易，系統會視之為逾期，客户需重新進行預約
                             </Text>
                         </View>
-                        <RadioButton.Group 
-                            onValueChange={value => { setRadioValue(value) }} 
+                        <RadioButton.Group
+                            onValueChange={value => { setRadioValue(value) }}
                             value={radioValue}
                         >
                             {/* <TouchableOpacity 
@@ -411,16 +370,16 @@ export const PaymentPage = (props: any) => {
                                     source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_PayPal.png`, }} 
                                 />
                             </TouchableOpacity> */}
-                            <TouchableOpacity 
-                                style={{ flexDirection: 'row', justifyContent: 'flex-start' }} 
+                            <TouchableOpacity
+                                style={{ flexDirection: 'row', justifyContent: 'flex-start' }}
                                 onPress={() => setRadioValue("stripe")}
                             >
                                 <RadioButton.Item label="" value="stripe" mode='android' color='#6d7f99' style={{ paddingTop: 30 }} />
-                                <Image 
-                                    style={{ width: 200, height: 100, }} 
-                                    resizeMode="contain" 
-                                    resizeMethod="scale" 
-                                    source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_stripe.png`, }} 
+                                <Image
+                                    style={{ width: 200, height: 100, }}
+                                    resizeMode="contain"
+                                    resizeMethod="scale"
+                                    source={{ uri: `${Config.REACT_APP_API_SERVER}/logo_stripe.png`, }}
                                 />
                             </TouchableOpacity>
                         </RadioButton.Group>
@@ -435,16 +394,16 @@ export const PaymentPage = (props: any) => {
             {/* Button to go back and next page */}
             <View style={{ flexDirection: 'row' }}>
 
-                <TouchableOpacity 
-                    style={styles.button} 
+                <TouchableOpacity
+                    style={styles.button}
                     onPress={() => props.navigation.navigate({ name: '醫生' })}
                 >
                     <Text style={styles.buttonText}>返回主頁</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity 
-                    style={[styles.button, { backgroundColor: '#325C80' }]} 
-                    onPress={onPress} 
+                <TouchableOpacity
+                    style={[styles.button, { backgroundColor: '#325C80' }]}
+                    onPress={onPress}
                     disabled={!submitStatus}
                 >
                     <Text style={styles.buttonText}>下一步</Text>

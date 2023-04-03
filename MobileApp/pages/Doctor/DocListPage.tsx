@@ -61,7 +61,7 @@ export const DocListPage: React.FC = (prop: any) => {
     // set dbLIst
     useEffect( () => {
         setDbList(data.data)
-        console.log("DATA", data.data)
+        //console.log("DATA", data.data)
     },[data.isFetching])
 
 
@@ -84,7 +84,7 @@ export const DocListPage: React.FC = (prop: any) => {
             data.refetch();
             wait(2000).then(() => setRefreshing(false));
         } catch (e) {
-            console.log(e)
+            //console.log(e)
         }
     }, []);
 

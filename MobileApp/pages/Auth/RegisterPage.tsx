@@ -95,7 +95,7 @@ export const RegisterPage = (props: any) => {
   });
 
   // useEffect(() => {
-  //   console.log(groupValues2);
+  //   //console.log(groupValues2);
   // }, [groupValues2]);
 
   const intervalId = useRef(0 as any);
@@ -123,7 +123,7 @@ export const RegisterPage = (props: any) => {
       const res: QueryReturnValue = await getNotUserSMS({
         phone: parseInt(phoneString),
       });
-      console.log('SMSres', res);
+      //console.log('SMSres', res);
       toast.show({
         description: '已送出驗證碼，請查閱短訊',
       });
@@ -132,7 +132,7 @@ export const RegisterPage = (props: any) => {
         duration: 12000,
       });
     } catch (e) {
-      console.log(e);
+      //console.log(e);
     }
   };
   // const onSMSPress = async () => {
@@ -140,13 +140,13 @@ export const RegisterPage = (props: any) => {
   //         let phoneString = getValues('phoneCode') + getValues('regPhone')
   //         const res: QueryReturnValue = await getLoginSMS({ 'phone': parseInt(phoneString) })
   //     } catch (e) {
-  //         console.log(e)
+  //         //console.log(e)
   //     }
   // }
   // Register
   const [postRegisterInfo] = usePostRegisterInfoMutation();
   const onSubmit = async (data: RegisterSubmitProp) => {
-    console.log('submitting...');
+    //console.log('submitting...');
 
     let registerData = {
       id_type: data.regIDType,
@@ -177,7 +177,7 @@ export const RegisterPage = (props: any) => {
         });
       }
     } else {
-      console.log('register', res);
+      //console.log('register', res);
       toast.show({description: '成功註冊'});
       store.dispatch(
         checkStatus({status: true, phone: data.phoneCode + data.regPhone}),
@@ -192,7 +192,7 @@ export const RegisterPage = (props: any) => {
       props.navigation.navigate({name: '註冊成功'});
       OneSignal.setExternalUserId(externalUserId, results => {
         // The results will contain push and email success statuses
-        console.log('Results of setting external user id', results);
+        //console.log('Results of setting external user id', results);
       });
     }
   };
@@ -322,7 +322,7 @@ export const RegisterPage = (props: any) => {
             rules={{
               required: true,
               validate: value => {
-                // console.log("Date", value)
+                // //console.log("Date", value)
                 let today = new Date();
 
                 let dateSplit: string[] = value.split('-');
@@ -453,7 +453,7 @@ export const RegisterPage = (props: any) => {
             render={({field: {value}}) => (
               <Checkbox.Group
                 onChange={values => {
-                  console.log(values);
+                  //console.log(values);
                   setGroupValues(values || []);
                   setValue('regPolicyOne', values || []);
                 }}
@@ -479,8 +479,8 @@ export const RegisterPage = (props: any) => {
             render={({field: {value}}) => (
               <Checkbox.Group
                 onChange={values => {
-                  console.log('this field is useless');
-                  console.log(values);
+                  //console.log('this field is useless');
+                  //console.log(values);
 
                   setGroupValues2(values || []);
                   setValue('regPolicyTwo', values || []);
@@ -518,7 +518,7 @@ export const RegisterPage = (props: any) => {
             try {
               await onSubmit(data);
             } catch (error) {
-              console.log(error);
+              //console.log(error);
             }
           })}
           disabled={
